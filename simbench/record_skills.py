@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Record one demo mp4 per ATOMIC skill (the granularity audit output).
+"""Record one demo mp4 per REGISTERED skill (atoms AND composites).
 
-    MUJOCO_GL=egl python -m simbench.record_skills [--skills exec_move,..]
+    MUJOCO_GL=egl python -m simbench.record_skills [--skills move,insert,..]
     MUJOCO_GL=egl python -m simbench.record_skills --all
 
-Each demo shows the atomic skill's typical pre-state, its execution
-(through the REGISTERED atom via REGISTRY.run -- never the composite
-wrappers), and its result overlaid as banner text (metrics / OK-NG).
-Pure computation / verdict atoms (detect, inspect, lift_verify,
-plan_grasp_pose, plan_path) get a visualisation leg (e.g. the EEF drives
-to the detected / planned pose) plus a metrics overlay so "what it did"
-is visible.  Videos land in ``results/skill_videos/<cat>_<name>.mp4``
-(exec_*/plan_*/trans_*/ext_*), and the skill->video index is written to
-``results/skill_videos/index.md`` and ``docs/skill_videos_index.md``.
+Each demo shows the skill's typical pre-state, its execution (through the
+REGISTERED skill via REGISTRY.run -- never bypassing the contract layer),
+and its result overlaid as banner text (metrics / OK-NG).  Pure
+computation / verdict skills (detect, inspect, lift_verify,
+plan_grasp_pose, plan_path) get a visualisation leg plus a metrics
+overlay so "what it did" is visible.  Videos land in
+``results/skill_videos/<cat>_<name>.mp4`` (exec_*/plan_*/trans_*/ext_*),
+and the skill->video index is written to ``results/skill_videos/index.md``
+and ``docs/skill_videos_index.md``.
 """
 import argparse
 import os
@@ -33,20 +33,23 @@ from simbench.skills import REGISTRY, base          # noqa: E402
 
 SCENE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                      "scenes", "taskA_gearbox.xml")
+PEG_SCENE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "scenes", "peg_in_hole.xml")
 OUT_DIR = os.path.join(_REPO, "results", "skill_videos")
 CUBE = "test_cube"
 CUBE_XY = np.array([-0.02, 0.24])
 CUBE_Z = 0.8155
+CUBE_PLACE = np.array([-0.12, 0.24])
 
 
 class Harness:
     """One scene + recorder for one skill demo."""
 
-    def __init__(self, skill, cat):
+    def __init__(self, skill, cat, scene=None):
         os.makedirs(OUT_DIR, exist_ok=True)
         self.skill, self.cat = skill, cat
         self.path = os.path.join(OUT_DIR, f"{cat}_{skill}.mp4")
-        self.ctx = MjContext(SCENE)
+        self.ctx = MjContext(scene or SCENE)
         self.ctx.reset()
         self.arm = CartesianController(self.ctx)
         self.gripper = Gripper(self.ctx)
@@ -392,6 +395,131 @@ def demo_wipe(h):
     return res.ok
 
 
+# =====================================================================
+# COMPOSITE skills (granularity=composite): recorded through the same
+# REGISTRY.run entry -- they demonstrate the measured-stable recipes the
+# A/B/C production chains use (their atom decompositions are listed in
+# the inventory).
+# =====================================================================
+def demo_grasp(h):
+    h.stage("grasp test_cube (composite pick)")
+    res = h.run_atom("grasp", part=CUBE, press=0.0025)
+    h.settle()
+    d = res.metrics.get("held_dist", 9.9)
+    h.stage(f"result: cube held (eef-obj {d*1000:.0f}mm) "
+            f"{'OK' if res.ok else 'NG'}")
+    h.hold(1.5)
+    h.result(res.ok)
+    return res.ok
+
+
+def demo_place(h):
+    if not _pick_cube(h):
+        return False
+    h.stage("place: carry + align + release onto seat")
+    res = h.run_atom("place", part=CUBE, at=CUBE_PLACE, target_z=CUBE_Z,
+                     carry_style="safe_z", align=True, release="slew",
+                     settle_steps=30)
+    h.settle(0.8)
+    pos = h.ctx.obj_pos(CUBE)
+    h.stage(f"result: cube at ({pos[0]:.3f},{pos[1]:.3f}) "
+            f"{'OK' if res.ok else 'NG'}")
+    h.hold(1.5)
+    h.result(res.ok)
+    return res.ok
+
+
+def demo_insert(h):
+    if not _pick_cube(h):
+        return False
+    # press-fit the held cube down onto its seat (press mode: descend to
+    # a target EEF point and hold -- the registered insert atom)
+    off = h.ctx.eef_pos() - h.ctx.obj_pos(CUBE)
+    target_eef = np.array([h.ctx.eef_pos()[0], h.ctx.eef_pos()[1],
+                           CUBE_Z + off[2]])
+    h.stage("insert press: drive held cube to seat + hold")
+    res = h.run_atom("insert", part=CUBE, mode="press",
+                     target_eef=target_eef, tol=0.004, press_steps=20)
+    h.settle(0.6)
+    z = h.ctx.obj_pos(CUBE)[2]
+    h.stage(f"result: cube z={z:.3f} (seat {CUBE_Z:.3f}) "
+            f"{'OK' if res.ok else 'NG'}")
+    h.hold(1.5)
+    # tidy: retreat the eef clear of the seated cube
+    h.run_atom("retreat_lift", height=0.10)
+    h.hold(0.6)
+    h.result(res.ok)
+    return res.ok
+
+
+def demo_approach(h):
+    h.stage("approach: hover + descend to grasp height (no close)")
+    res = h.run_atom("approach", part=CUBE, hover_lift=0.08, tol=0.004)
+    h.settle()
+    z = res.metrics.get("eef_z", h.ctx.eef_pos()[2])
+    h.stage(f"result: eef_z={z:.3f} over cube {'OK' if res.ok else 'NG'}")
+    h.hold(1.5)
+    h.run_atom("retreat_lift", height=0.10)
+    h.hold(0.6)
+    h.result(res.ok)
+    return res.ok
+
+
+def demo_return_home(h):
+    _move_eef(h, np.array([CUBE_XY[0], CUBE_XY[1], 0.95]), style="safe_z",
+              tol=0.008)
+    h.hold(0.4)
+    h.stage("return_home: open gripper + joint sweep to HOME")
+    res = h.run_atom("return_home", open_gripper=True)
+    h.settle(0.6)
+    e = h.ctx.eef_pos()
+    h.stage(f"result: eef=({e[0]:.3f},{e[1]:.3f},{e[2]:.3f}) "
+            f"{'OK' if res.ok else 'NG'}")
+    h.hold(1.5)
+    h.result(res.ok)
+    return res.ok
+
+
+def demo_peg_insert(_h=None):
+    """Self-contained: peg_in_hole scene + the RL/IL insertion policy.
+
+    Runs the registered peg_insert(mode='policy') composite: the learned
+    policy (auto-loaded checkpoint) steers the held peg into the bore
+    with contact/jam/tilt feedback.  Retries a few seeds (the policy is
+    ~95% seated); records the successful attempt.
+    """
+    from simbench.skills.learned.insert_env import InsertEnv
+    env = InsertEnv(randomize=True)
+    ctx, arm, grip = env.ctx, env.arm, env.gripper
+    os.makedirs(OUT_DIR, exist_ok=True)
+    path = os.path.join(OUT_DIR, "ext_peg_insert.mp4")
+    rec = VideoRecorder(ctx, path, title="ext peg_insert",
+                        camera="agentview", every=2, repeat=3)
+    ctx.on_control_step = rec
+    rec.set_stage("prep: hold peg above bore")
+    res = None
+    for seed in (3, 7, 11, 13, 17):
+        obs, info = env.reset(seed=seed)
+        if not info["held"]:
+            continue
+        rec.set_stage("peg_insert: RL/IL policy insertion")
+        res = REGISTRY.run("peg_insert", ctx, arm, grip, name="peg",
+                           hole_xy=env.hole_xy, to_z=env.to_z,
+                           mode="policy", half=env.half, max_steps=200)
+        settle(ctx, max_steps=10)
+        if res.ok:
+            break
+    ok = bool(res is not None and res.ok)
+    depth = res.metrics.get("depth_m", 0.0) if res else 0.0
+    lat = res.metrics.get("lateral", 0.0) if res else 0.0
+    rec.set_stage(f"result: depth={depth*1000:.0f}mm lat={lat*1000:.0f}mm "
+                  f"{'OK' if ok else 'NG'}")
+    for _ in range(80):
+        ctx.step()
+    rec.close()
+    return ok
+
+
 DEMOS = [
     ("exec", "detect", demo_detect, "感知零件位姿（单次判定）"),
     ("exec", "inspect", demo_inspect, "落座质量判定 OK/NG（NG 紧容差 + OK 规格容差两例）"),
@@ -402,18 +530,24 @@ DEMOS = [
     ("exec", "release", demo_release, "张开夹爪原地释放持件"),
     ("exec", "lift_verify", demo_lift_verify, "举升校验：判零件被抬升达标（纯判定）"),
     ("exec", "push", demo_push, "并指刃状推动零件 5cm"),
-    ("exec", "transport", demo_transport, "持件沿航点搬运（组合，视频演示其效果）"),
+    ("exec", "transport", demo_transport, "组合：持件沿航点搬运（move+持件校验）"),
+    ("exec", "grasp", demo_grasp, "组合：完整抓取（detect→approach→grip_close→lift_verify）"),
+    ("exec", "place", demo_place, "组合：搬运+对中+释放落位（transport→pre_align→descend→release）"),
+    ("exec", "insert", demo_insert, "组合：把持件压入座面并保压（press 模式）"),
     ("plan", "plan_grasp_pose", demo_plan_grasp_pose, "多候选抓取位姿生成/评分/选优（EEF 走向所选位姿可视化）"),
     ("plan", "plan_path", demo_plan_path, "多候选路径规划 + 碰撞门（EEF 沿所选航点行进可视化）"),
     ("trans", "retreat_lift", demo_retreat_lift, "垂直抬升退避 0.12m"),
     ("trans", "pre_align", demo_pre_align, "持件对中到目标 xy（3cm 偏置收敛）"),
+    ("trans", "approach", demo_approach, "组合：悬停+精降接近（move→descend，不闭合）"),
+    ("trans", "return_home", demo_return_home, "组合：开爪+回 HOME（关节回扫）"),
     ("ext", "pull", demo_pull, "抓持后沿方向拖拽并释放"),
-    ("ext", "wipe", demo_wipe, "并指压表+力带扫掠擦拭"),
+    ("ext", "wipe", demo_wipe, "并指压面+力带扫掠擦拭"),
+    ("ext", "peg_insert", demo_peg_insert, "组合：RL/IL 学习策略插销（自动加载策略 checkpoint，含接触/卡滞/姿态反馈）"),
 ]
 
 
 def write_index(results):
-    lines = ["# 原子技能演示视频索引（Skill Videos Index）", "",
+    lines = ["# 技能演示视频索引（Skill Videos Index，原子 + 组合）", "",
              "> 与 `docs/skill_inventory.md` 一一对应；由 "
              "`simbench/record_skills.py` 生成。视频文件位于本目录"
              "（results/，不入库）。", ""]
@@ -446,6 +580,19 @@ def main():
     results = {}
     for cat, name, fn, desc in DEMOS:
         if name not in names:
+            continue
+        if name == "peg_insert":
+            # self-contained demo (own scene + recorder)
+            print(f"== recording ext_peg_insert ...", flush=True)
+            try:
+                ok = fn(None)
+                results[name] = bool(ok)
+                print(f"   -> {'PASS' if ok else 'FAIL'} "
+                      f"{os.path.join(OUT_DIR, 'ext_peg_insert.mp4')}",
+                      flush=True)
+            except Exception as exc:
+                results[name] = False
+                print(f"   -> EXCEPTION {exc}", flush=True)
             continue
         h = Harness(name, cat)
         print(f"== recording {cat}_{name} ...", flush=True)
