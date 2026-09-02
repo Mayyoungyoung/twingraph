@@ -57,6 +57,9 @@ def retreat_lift(ctx, arm, gripper, height=0.07, tol=0.012, gain=10.0,
           preconditions=["场景已加载"],
           postconditions=[],
           failure_policy="continue", impl=base.IMPL_SCRIPT,
+          granularity=base.GRAN_COMPOSITE,
+          decomposes=["grip_open(open_gripper=True 时)", "move(可选抬升)",
+                      "关节回扫 HOME"],
           deps=["Gripper.open", "CartesianController.home",
                 "motion.move_eef"])
 def return_home(ctx, arm, gripper, open_gripper=True, retreat_z=None,
@@ -134,6 +137,8 @@ def pre_align(ctx, arm, gripper, at, part=None, tol=0.0015, gain=6.0,
           preconditions=["零件存在"],
           postconditions=[],
           failure_policy="continue", impl=base.IMPL_SCRIPT,
+          granularity=base.GRAN_COMPOSITE,
+          decomposes=["move(悬停) -> descend(精降)"],
           deps=["perception.estimate_grasp_pose", "motion.move_eef"])
 def approach(ctx, arm, gripper, part, grasp_pos=None, hover_lift=0.07,
              tol=0.004, gain=6.0, verbose=False):

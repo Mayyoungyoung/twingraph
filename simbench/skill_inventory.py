@@ -73,26 +73,49 @@ def to_markdown(rows):
                  "（`SkillSpec` + `SkillRegistry.run`）→ **L3** 组合"
                  "（`run_chain` 与 planner/executor 的 plan→exec 工件握手）。")
     lines.append("")
-    lines.append(f"**技能总数：{n}**　"
+    lines.append(f"**技能总数：{n}**（原子 {sum(1 for r in rows if r.get('granularity', 'atomic') == 'atomic')} + 组合 "
+                 f"{sum(1 for r in rows if r.get('granularity') == 'composite')}）　"
                  + "　".join(f"{S.CAT_CN[c]}：{len(by_cat[c])}"
                              for c in CAT_ORDER))
+    lines.append("")
+    lines.append("**粒度约定**：`原子` = 单一最小职责（一次夹爪动作 / 一段运动 / "
+                 "一次判定 / 一次计算），内部不含多步工作流；`组合` = 由多个原子"
+                 "编排的复合行为（保留给 A/B/C 生产链的实测稳定配方），其分解见下方"
+                 "「组合技能分解」。组合只允许出现在组合层（run_chain / planner），"
+                 "不得注册成 atomic 名字。")
     lines.append("")
     # ---- flat summary table
     lines.append("## 汇总表")
     lines.append("")
-    lines.append("| 技能名称 | 类别 | 功能描述 | 输入 | 输出 | 实现方式 "
+    lines.append("| 技能名称 | 类别 | 粒度 | 功能描述 | 输入 | 输出 | 实现方式 "
                  "| 依赖项 | 已封装 | 验证方式 / 成功标准 |")
-    lines.append("|---|---|---|---|---|---|---|---|---|")
+    lines.append("|---|---|---|---|---|---|---|---|---|---|")
     for c in CAT_ORDER:
         for r in by_cat[c]:
+            dec = r.get('decomposes') or []
             lines.append(
                 f"| `{r['name']}` | {r['category_cn']} "
-                f"| {_clean(r['description'])} "
+                f"| {r.get('granularity_cn', '原子')}"
+                + (f"<br>↳ {'→'.join(str(d) for d in dec)}" if dec else "")
+                + f" | {_clean(r['description'])} "
                 f"| {_keys(r['inputs'])} | {_keys(r['outputs'])} "
                 f"| {r['impl']} | {_clean(', '.join(r['deps']))} "
                 f"| {'是' if r['wrapped'] else '否'} "
                 f"| {_cond(r['postconditions'])} |")
     lines.append("")
+    # ---- composite decomposition section
+    comps = [r for r in rows if r.get('granularity') == 'composite']
+    if comps:
+        lines.append("## 组合技能分解（composite → 原子链）")
+        lines.append("")
+        lines.append("组合技能保留实测稳定的内部配方（A/B/C 生产链使用）；"
+                     "其等价原子链（可由 `run_chain` 编排）如下：")
+        lines.append("")
+        for r in comps:
+            lines.append(f"- **`{r['name']}`** → "
+                         + " → ".join(f"`{d}`" if d in {x['name'] for x in rows} else str(d)
+                                      for d in (r.get('decomposes') or [])))
+        lines.append("")
     # ---- per-skill detail
     lines.append("## 技能明细（契约）")
     for c in CAT_ORDER:
@@ -103,6 +126,10 @@ def to_markdown(rows):
             lines.append(f"#### `{r['name']}`")
             lines.append(f"- **功能描述**：{_clean(r['description'])}")
             lines.append(f"- **实现方式**：{r['impl']}")
+            lines.append(f"- **粒度**：{r.get('granularity_cn', '原子')}")
+            if r.get('decomposes'):
+                lines.append(f"- **原子分解**："
+                             + " → ".join(str(d) for d in r['decomposes']))
             lines.append(f"- **失败策略**：{r['failure_policy']}")
             lines.append(f"- **是否已封装**：{'是' if r['wrapped'] else '否'}")
             lines.append(f"- **依赖项**：{_clean(', '.join(r['deps']))}")

@@ -43,6 +43,9 @@ DEFAULT_INSERT_POLICY = os.path.join(
           postconditions=["零件底面到达 to_z 附近（以 depth_m 判定）"],
           failure_policy="abort",
           impl=f"{base.IMPL_SCRIPT}/{base.IMPL_RL}/{base.IMPL_IL}",
+          granularity=base.GRAN_COMPOSITE,
+          decomposes=["grasp", "insert(thread/press) 或 policy(RL/IL 逐步循环)",
+                      "release"],
           deps=["grasp", "manipulation.insert",
                 "skills.learned.insert_env",
                 "skills.learned.load_policy (mode=policy)"])

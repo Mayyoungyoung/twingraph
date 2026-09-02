@@ -39,7 +39,8 @@ from . import library
 from .base import (REGISTRY, SkillSpec, SkillResult, ChainResult,  # noqa: F401
                    register, inventory, run_chain,
                    CAT_EXEC, CAT_PLAN, CAT_TRANS, CAT_CN,
-                   IMPL_SCRIPT, IMPL_MOTION, IMPL_OPT, IMPL_IL, IMPL_RL)
+                   IMPL_SCRIPT, IMPL_MOTION, IMPL_OPT, IMPL_IL, IMPL_RL,
+                   GRAN_ATOMIC, GRAN_COMPOSITE, GRAN_CN)
 
 __all__ = [
     "base", "perception", "planning", "motion", "manipulation", "settle",
@@ -48,4 +49,5 @@ __all__ = [
     "register", "inventory", "run_chain",
     "CAT_EXEC", "CAT_PLAN", "CAT_TRANS", "CAT_CN",
     "IMPL_SCRIPT", "IMPL_MOTION", "IMPL_OPT", "IMPL_IL", "IMPL_RL",
+    "GRAN_ATOMIC", "GRAN_COMPOSITE", "GRAN_CN",
 ]

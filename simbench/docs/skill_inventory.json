@@ -22,7 +22,43 @@
       "perception.estimate_grasp_pose",
       "motion.move_eef"
     ],
+    "granularity": "composite",
+    "decomposes": [
+      "move(悬停) -> descend(精降)"
+    ],
     "category_cn": "过渡类",
+    "granularity_cn": "组合",
+    "wrapped": true
+  },
+  {
+    "name": "descend",
+    "category": "exec",
+    "description": "垂直下降（最小原子）：保持当前 xy，把 EEF 下降到目标 z（或给定 xyz）。接近后/放置前的精降原语，是 grasp/place/insert 分解中的下降步。",
+    "inputs": {
+      "to_z": "目标 world z（保持 xy）",
+      "to": "可选完整 xyz 目标",
+      "gain": "P 增益",
+      "tol": "到位容差 (m)"
+    },
+    "outputs": {
+      "reached": "是否到位",
+      "eef_z": "终态 EEF z"
+    },
+    "preconditions": [
+      "场景已加载，机器人可控"
+    ],
+    "postconditions": [
+      "EEF z 到达 to_z（以 reached 判定）"
+    ],
+    "failure_policy": "retry",
+    "impl": "运动规划",
+    "deps": [
+      "CartesianController.move_eef"
+    ],
+    "granularity": "atomic",
+    "decomposes": [],
+    "category_cn": "执行类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -32,8 +68,7 @@
     "inputs": {
       "part": "零件名（body）",
       "faults": "可选 FailureModel（漏检/误检/噪声源）",
-      "step": "可选步序号（供故障模型归因）",
-      "retries": "漏检重试次数（默认 0）"
+      "step": "可选步序号（供故障模型归因）"
     },
     "outputs": {
       "found": "是否检测到",
@@ -42,7 +77,7 @@
       "outcome": "ok|miss|false"
     },
     "preconditions": [
-      "<function part_exists at 0x7f3f1b9b11b0>"
+      "<function part_exists at 0x7f0b66840f70>"
     ],
     "postconditions": [
       "检测到则 outcome!=miss 且 pos 非空"
@@ -53,7 +88,10 @@
       "perception.detect_part",
       "faults.FailureModel(可选)"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "执行类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -74,7 +112,7 @@
       "held_dist": "EEF-零件距离 (m)"
     },
     "preconditions": [
-      "<function part_exists at 0x7f3f1b9b11b0>"
+      "<function part_exists at 0x7f0b66840f70>"
     ],
     "postconditions": [
       "零件被抬升 >= VERIFY_LIFT（以 ok 判定）"
@@ -87,7 +125,76 @@
       "Gripper.close_on_part",
       "plan_grasp_pose(可选)"
     ],
+    "granularity": "composite",
+    "decomposes": [
+      "detect",
+      "plan_grasp_pose",
+      "approach",
+      "grip_close",
+      "retreat_lift",
+      "lift_verify"
+    ],
     "category_cn": "执行类",
+    "granularity_cn": "组合",
+    "wrapped": true
+  },
+  {
+    "name": "grip_close",
+    "category": "exec",
+    "description": "闭合夹爪（最小原子）：仅将手指闭到指定开度/压入量/接触力，不做接近或感知。三种口径：给 part/outer_d 按外径+press 闭合并过冲咬合；给 span 闭到该 pad 间距；给 force_stop 闭到 pad 接触力达标。即“grasp 只负责闭合夹爪”的那个原子。",
+    "inputs": {
+      "part": "可选零件名（用其外径闭合）",
+      "outer_d": "可选外径 (m)",
+      "span": "可选目标 pad 间距 (m)",
+      "press": "压入量 (m)",
+      "force_stop": "可选：闭到该接触力 (N)"
+    },
+    "outputs": {
+      "span": "闭合后 pad 间距 (m)",
+      "pad_force": "pad 接触力 (N)"
+    },
+    "preconditions": [],
+    "postconditions": [
+      "手指已闭合（以 span/pad_force 度量）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "Gripper.close_on_part",
+      "Gripper.close_to_span",
+      "perception.part_meta(可选)"
+    ],
+    "granularity": "atomic",
+    "decomposes": [],
+    "category_cn": "执行类",
+    "granularity_cn": "原子",
+    "wrapped": true
+  },
+  {
+    "name": "grip_open",
+    "category": "exec",
+    "description": "张开夹爪（最小原子）：仅将手指伺服到全开，不做任何移动或感知。释放/接近前的手指原语。",
+    "inputs": {
+      "max_steps": "开爪 slew 最大步数"
+    },
+    "outputs": {
+      "span": "张开后 pad 间距 (m)"
+    },
+    "preconditions": [
+      "场景已加载，夹爪可控"
+    ],
+    "postconditions": [
+      "pad 间距达到全开（以 span 度量）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "Gripper.open"
+    ],
+    "granularity": "atomic",
+    "decomposes": [],
+    "category_cn": "执行类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -107,7 +214,7 @@
       "bot_z": "终态零件底面 z"
     },
     "preconditions": [
-      "<function held_part at 0x7f3ee8cd1990>"
+      "<function held_part at 0x7f0b33b51a20>"
     ],
     "postconditions": [
       "零件底面到达 to_z 附近（thread 模式）"
@@ -119,41 +226,91 @@
       "perception.part_meta",
       "CartesianController.move_eef"
     ],
+    "granularity": "composite",
+    "decomposes": [
+      "pre_align",
+      "descend(thread+抗卡摆动)",
+      "release"
+    ],
     "category_cn": "执行类",
+    "granularity_cn": "组合",
     "wrapped": true
   },
   {
     "name": "inspect",
     "category": "exec",
-    "description": "质量检测：对（已就位的）零件做 seat 几何判定——测量 xy 位置误差、z 高度误差与倾斜角，与容差比较给出 OK/NG 结论，可叠加传感器测量噪声。用于阶段终检或中段纠偏触发。",
+    "description": "质量判定（原子）：对（已就位的）零件做一次几何检查并给出 OK/NG 结论，不驱动任何运动。kind='seat' 测 xy/z 落位误差与倾斜角；kind='pin_engage' 测底部进入孔的深度与孔轴偏差。可叠加传感器测量噪声。检查的是“装配质量”（落座/压入是否达标），不是“零件存在性”（那是 detect）。",
     "inputs": {
       "part": "被检零件名",
-      "target_xy": "名义 world xy",
-      "target_z": "可选名义 world z",
-      "xy_tol": "xy 容差 (m)",
-      "z_tol": "z 容差 (m)",
+      "kind": "seat|pin_engage",
+      "target_xy": "seat: 名义 world xy",
+      "target_z": "seat: 可选名义 z",
+      "xy_tol": "seat: xy 容差 (m)",
+      "z_tol": "seat: z 容差 (m)",
       "tilt_tol": "倾斜容差 (deg)",
+      "axis_xy": "pin_engage: 孔轴 xy",
+      "top_ref_z": "pin_engage: 孔口参考 z",
+      "half": "pin_engage: 零件半高",
+      "min_depth": "pin_engage: 最小啮合深度 (m)",
+      "bot_off_tol": "pin_engage: 底端偏移容差 (m)",
       "noise_std": "可选测量噪声 std (m)"
     },
     "outputs": {
-      "xy_err": "xy 误差 (m)",
-      "z_err": "z 误差 (m)",
+      "ok": "判定结论",
       "tilt": "倾斜角 (deg)",
-      "ok": "判定结论"
+      "xy_err": "seat: xy 误差 (m)",
+      "z_err": "seat: z 误差 (m)",
+      "depth": "pin_engage: 啮合深度 (m)",
+      "bot_off": "pin_engage: 底端偏移 (m)"
     },
     "preconditions": [
-      "<function part_exists at 0x7f3f1b9b11b0>"
+      "<function part_exists at 0x7f0b66840f70>"
     ],
     "postconditions": [
-      "metrics 含 xy_err/tilt 且 ok 反映容差判定"
+      "metrics 含判定量且 ok 反映容差判定"
     ],
     "failure_policy": "continue",
     "impl": "规则脚本",
     "deps": [
       "MjContext.obj_pos",
-      "MjContext.obj_tilt"
+      "MjContext.obj_tilt",
+      "MjContext.obj_axis"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "执行类",
+    "granularity_cn": "原子",
+    "wrapped": true
+  },
+  {
+    "name": "lift_verify",
+    "category": "exec",
+    "description": "举升校验（最小原子，纯判定）：比较零件当前 z 与参考 z，确认已被抬升 >= min_lift，判抓取是否抓稳。不驱动任何运动，是 grasp 分解的收尾校验原语。",
+    "inputs": {
+      "part": "零件名",
+      "z_ref": "抬升前参考 z (m)",
+      "min_lift": "最小抬升量 (m)"
+    },
+    "outputs": {
+      "ok": "抬升达标",
+      "z_now": "当前零件 z",
+      "lift": "实测抬升量"
+    },
+    "preconditions": [
+      "<function part_exists at 0x7f0b66840f70>"
+    ],
+    "postconditions": [
+      "z_now - z_ref >= min_lift（以 ok 判定）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "MjContext.obj_pos"
+    ],
+    "granularity": "atomic",
+    "decomposes": [],
+    "category_cn": "执行类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -185,7 +342,10 @@
       "planning.plan_path",
       "CartesianController.move_eef"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "执行类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -205,7 +365,7 @@
       "bot_z": "终态零件底面 z"
     },
     "preconditions": [
-      "<function held_part at 0x7f3ee8cd1990>"
+      "<function held_part at 0x7f0b33b51a20>"
     ],
     "postconditions": [
       "零件底面到达 to_z 附近（以 depth_m 判定）"
@@ -218,7 +378,14 @@
       "skills.learned.insert_env",
       "skills.learned.load_policy (mode=policy)"
     ],
+    "granularity": "composite",
+    "decomposes": [
+      "grasp",
+      "insert(thread/press) 或 policy(RL/IL 逐步循环)",
+      "release"
+    ],
     "category_cn": "扩展类",
+    "granularity_cn": "组合",
     "wrapped": true
   },
   {
@@ -240,7 +407,7 @@
       "pos": "终态零件 xyz"
     },
     "preconditions": [
-      "<function held_part at 0x7f3ee8cd1990>"
+      "<function held_part at 0x7f0b33b51a20>"
     ],
     "postconditions": [
       "零件 xy 与目标距离 < 0.012m（以 ok 判定）"
@@ -252,7 +419,16 @@
       "motion.move_eef",
       "Gripper.open"
     ],
+    "granularity": "composite",
+    "decomposes": [
+      "transport",
+      "pre_align",
+      "descend",
+      "release",
+      "retreat_lift"
+    ],
     "category_cn": "执行类",
+    "granularity_cn": "组合",
     "wrapped": true
   },
   {
@@ -273,7 +449,7 @@
       "candidates": "候选分支摘要"
     },
     "preconditions": [
-      "<function part_exists at 0x7f3f1b9b11b0>"
+      "<function part_exists at 0x7f0b66840f70>"
     ],
     "postconditions": [
       "至少一个可行候选（否则 ok=False，估计失败）"
@@ -285,7 +461,10 @@
       "perception.part_meta",
       "perception.detect"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "规划类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -321,7 +500,10 @@
       "planning.check_path",
       "planning.seg_aabb_hit"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "规划类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -346,7 +528,10 @@
     "deps": [
       "CartesianController.move_eef"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "过渡类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -376,7 +561,10 @@
       "manipulation._drive_along",
       "Gripper"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "扩展类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -395,7 +583,7 @@
       "moved": "实测位移向量"
     },
     "preconditions": [
-      "<function part_exists at 0x7f3f1b9b11b0>"
+      "<function part_exists at 0x7f0b66840f70>"
     ],
     "postconditions": [
       "零件沿方向位移 >= 70% 请求量（以 ok 判定）"
@@ -407,7 +595,37 @@
       "motion.move_eef",
       "Gripper"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "执行类",
+    "granularity_cn": "原子",
+    "wrapped": true
+  },
+  {
+    "name": "release",
+    "category": "exec",
+    "description": "释放（最小原子）：张开夹爪让持件原地落下并静置，不做抬升退避（退避见过渡类 retreat_lift）。是 place 分解的释放原语。",
+    "inputs": {
+      "settle_steps": "释放后静置步数"
+    },
+    "outputs": {
+      "ok": "已释放",
+      "span": "张开后 pad 间距"
+    },
+    "preconditions": [],
+    "postconditions": [
+      "夹爪全开（以 span 度量）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "Gripper.open",
+      "settle"
+    ],
+    "granularity": "atomic",
+    "decomposes": [],
+    "category_cn": "执行类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -434,7 +652,10 @@
       "motion.move_eef",
       "settle"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "过渡类",
+    "granularity_cn": "原子",
     "wrapped": true
   },
   {
@@ -459,13 +680,20 @@
       "CartesianController.home",
       "motion.move_eef"
     ],
+    "granularity": "composite",
+    "decomposes": [
+      "grip_open(open_gripper=True 时)",
+      "move(可选抬升)",
+      "关节回扫 HOME"
+    ],
     "category_cn": "过渡类",
+    "granularity_cn": "组合",
     "wrapped": true
   },
   {
     "name": "transport",
     "category": "exec",
-    "description": "搬运：持件沿给定航点（或到目标点的规划航点）低速平移到目标上方悬停，供后续 place/insert 精降。全程监控仍持件，滑脱即失败。衔接规划与放置的搬运腿。",
+    "description": "搬运（组合）：把持件沿给定航点（或到目标点的规划航点）低速平移到目标上方悬停，供后续 place/insert 精降；全程监控仍持件，滑脱即失败。由原子 move（航点执行）与持件校验组合而成。",
     "inputs": {
       "part": "零件名",
       "waypoints": "航点列表 (world xyz)",
@@ -479,7 +707,7 @@
       "held": "搬运后是否仍持件"
     },
     "preconditions": [
-      "<function held_part at 0x7f3ee8cd1990>"
+      "<function held_part at 0x7f0b33b51a20>"
     ],
     "postconditions": [
       "搬运后 EEF-零件 xy 距离 < 0.03m（以 held 判定）"
@@ -491,7 +719,13 @@
       "motion.move_eef",
       "plan_path(可选)"
     ],
+    "granularity": "composite",
+    "decomposes": [
+      "move(低速航点执行)",
+      "持件校验(谓词，滑脱即败)"
+    ],
     "category_cn": "执行类",
+    "granularity_cn": "组合",
     "wrapped": true
   },
   {
@@ -522,7 +756,10 @@
       "Gripper.close_to_span",
       "motion.move_eef"
     ],
+    "granularity": "atomic",
+    "decomposes": [],
     "category_cn": "扩展类",
+    "granularity_cn": "原子",
     "wrapped": true
   }
 ]

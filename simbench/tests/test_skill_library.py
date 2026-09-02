@@ -58,8 +58,53 @@ def test_registry_complete():
     for expected in ("detect", "inspect", "move", "grasp", "place",
                      "plan_grasp_pose", "plan_path", "approach",
                      "pre_align", "retreat_lift", "return_home",
-                     "peg_insert", "wipe", "pull"):
+                     "peg_insert", "wipe", "pull", "grip_open",
+                     "grip_close", "descend", "lift_verify", "release"):
         assert reg.has(expected), f"missing expected skill {expected}"
+
+
+def test_granularity_audit():
+    """Atomic skills are single-responsibility; the workflow skills that
+    A/B/C depend on are explicitly marked composite with a documented
+    atom decomposition (never registered as plain atoms)."""
+    rows = S.REGISTRY.inventory()
+    atoms = [r for r in rows if r["granularity"] == "atomic"]
+    comps = [r for r in rows if r["granularity"] == "composite"]
+    assert atoms and comps
+    for r in comps:
+        assert r["decomposes"], f"composite {r['name']} lacks decomposes"
+    # minimal primitives must be atoms
+    for name in ("grip_open", "grip_close", "descend", "lift_verify",
+                 "release", "detect", "inspect", "move", "pre_align",
+                 "retreat_lift", "plan_grasp_pose", "plan_path"):
+        assert S.REGISTRY.get(name)[0].granularity == "atomic", name
+    # multi-step workflow skills must be composites, not atoms
+    for name in ("grasp", "place", "insert", "transport", "approach",
+                 "return_home", "peg_insert"):
+        assert S.REGISTRY.get(name)[0].granularity == "composite", name
+
+
+def test_atomic_grasp_chain_runs():
+    """Composition seam: a full pick is built from ATOMS only via
+    run_chain (move -> descend -> grip_close -> retreat_lift ->
+    lift_verify) with the plan_grasp_pose artifact handed over as a
+    literal -- no composite grasp skill involved."""
+    ctx, arm, grip = _taskA()
+    gp = base.REGISTRY.run("plan_grasp_pose", ctx, arm, grip,
+                           part="test_cube", n_yaw=4)
+    assert gp.ok, gp.reason
+    gpos = gp.metrics["grasp_pose"]["pos"]
+    hover = np.asarray(gpos) + np.array([0.0, 0.0, 0.07])
+    z_ref = float(ctx.obj_pos("test_cube")[2])
+    chain = base.run_chain(base.REGISTRY, ctx, arm, grip, [
+        ("move", {"to": hover, "style": "safe_z", "tol": 0.006}),
+        ("descend", {"to": gpos, "gain": 6.0, "tol": 0.004}),
+        ("grip_close", {"part": "test_cube", "press": 0.002}),
+        ("retreat_lift", {"height": 0.08}),
+        ("lift_verify", {"part": "test_cube", "z_ref": z_ref,
+                          "min_lift": 0.03}),
+    ])
+    assert chain.ok, chain.metrics()
 
 
 def test_inventory_rows_have_deliverable_fields():

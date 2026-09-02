@@ -5,11 +5,13 @@
 >
 > **2026-09-02 分层可组合技能库封装 + 学习类插销技能（本次会话）**：
 > - **技能库分层与契约化**：`skills/base.py` 的 `SkillRegistry`/`SkillSpec`/`SkillResult` 落地为统一契约层（类别 / 输入输出 / 前后置条件 / 失败策略 / 实现方式 / 依赖），新增 `run_chain` 组合 API；`skills/__init__.py` 接线使 `import simbench.skills` 即填充注册表；`executor._dispatch` 增加 REGISTRY 兜底分派（纯增量，既有 A/B/C 分派表优先，无回归）。分层：L0 原语 → L1 四类原子技能 → L2 契约门控 → L3 组合（run_chain + plan→exec 工件握手）。
-> - **四类共 17 个原子技能**（`skills/library.py` 新注册 exec/plan；transitions/extension 已注册 trans/ext）：执行类 8（detect/inspect/move/grasp/place/transport/push/insert）、规划类 2（plan_grasp_pose/plan_path，多候选生成 + 可行性过滤 + 评分 + 最优选择）、过渡类 4（approach/pre_align/retreat_lift/return_home）、扩展类 3（peg_insert/pull/wipe）。
+> - **四类技能注册与契约化**（`skills/library.py` 新注册 exec/plan；transitions/extension 已注册 trans/ext；初版 17 个，粒度审计后扩为 22 = 15 原子 + 7 组合，见下方审计条目）：规划类 2（plan_grasp_pose/plan_path，多候选生成 + 可行性过滤 + 评分 + 最优选择）。
 > - **学习类插销（强化学习 + 模仿学习）**：新增 `skills/learned/`——`insert_env.py`（场景无关 8 维观测 `build_obs` + 3 维动作 `action_to_delta` + gymnasium `InsertEnv`，奖励显式含接触/卡滞/姿态偏差反馈，且排除夹持力只留销-孔接触）、`policy_torch.py`（torch `MLPGaussianPolicy` + `load_policy`）、`train_insert.py`（自包含 torch PPO+GAE 与脚本专家行为克隆 BC）、`scenes/gen_insert_scene.py`→`peg_in_hole.xml`（最小训练场景）。训练结果：**BC 评估落座率 95%（~28 步）、PPO 评估落座率 93%（train 100%）**；`peg_insert(mode='policy')` 自动加载 `checkpoints/peg_insert.pt`，端到端部署 6/6 落座。A/B/C 生产链仍用实测稳定的 `mode='thread'`（零回归）。
 > - **交付物**：结构化技能清单 `simbench/docs/skill_inventory.md`(+`.json`)，由 `python -m simbench.skill_inventory` 从注册表契约自动生成（技能名称 / 类别 / 功能描述 / 输入输出 / 实现方式 / 依赖 / 是否已封装 / 成功标准）。
-> - **验证**：`pytest simbench/tests` **20 过**（含新增 `test_skill_library.py` 14 项：注册表完整性 / 多候选规划 / 执行+过渡技能 / run_chain 组合 / executor 兜底 / 学习层 build_obs+InsertEnv+torch 策略+peg_insert 落座）；`test_skills.py` M2 **PASS**；Task A `none` 档 **9/9**（89s，无回归，实测 plan_path “best of 9 candidates”）。
+> - **验证**：`pytest simbench/tests` **22 过**（含 `test_skill_library.py` 16 项：注册表完整性 / 粒度审计 / 纯原子抓取链 run_chain / 多候选规划 / 执行+过渡技能 / run_chain 组合 / executor 兜底 / 学习层 build_obs+InsertEnv+torch 策略+peg_insert 落座）；`test_skills.py` M2 **PASS**；Task A `none` 档 **9/9**（89s，无回归，实测 plan_path “best of 9 candidates”）。
 > - **依赖**：conda 环境 `turbovla-libero`（py3.10）新增 `gymnasium==0.29.1`（附加，未改 torch/mujoco/numpy）；torch 2.3.1、mujoco 2.3.2 沿用。
+> - **粒度审计与原子化重构（用户验收项）**：新增 `SkillSpec.granularity`（原子/组合）+ `decomposes` 字段。注册表现为 **22 技能 = 15 原子 + 7 组合**：原子均为单一最小职责（手指基元 grip_open/grip_close/release、单段运动 move/descend/retreat_lift、单次判定 detect/inspect/lift_verify、单次计算 plan_grasp_pose/plan_path、对中 pre_align、操作动词 push/pull/wipe）；复合行为（grasp/place/insert/transport/approach/return_home/peg_insert）保留实测稳定配方但显式标记 composite 并列出原子分解（如 grasp → detect→plan_grasp_pose→approach→grip_close→retreat_lift→lift_verify），组合只能出现在 run_chain/planner 组合层。`test_atomic_grasp_chain_runs` 验证纯原子链（move→descend→grip_close→retreat_lift→lift_verify）可真实抓起 test_cube。清单按“原子/组合 × 四类”重排（docs/skill_inventory.md/.json）。
+> - **每个原子技能一段实现视频（用户验收项）**：新增 `simbench/record_skills.py`，headless EGL + VideoRecorder 为 16 个原子各录一段演示 mp4（前置状态→经 REGISTRY.run 执行原子→结果/度量叠字，纯计算/判定类配可视化腿与指标标注），归档 `results/skill_videos/{exec,plan,trans,ext}_*.mp4`；索引 `docs/skill_videos_index.md`（+results/skill_videos/index.md）与清单一一对应（技能→路径→演示概述，全部 16 段已录制且逐帧验证非空）。
 > - **仓库**：初始化 Git 并推送到 `git@github.com:Mayyoungyoung/twingraph.git`（源码+文档+模型资产+学习 checkpoint；`.gitignore` 排除 results/ 运行数据与视频、缓存、*.mp4）。
 >
 > **2026-09-01 Task A 两类原子动作重构与故障注入（本次会话）**：
@@ -300,6 +302,8 @@ MUJOCO_GL=egl python -m simbench.skills.learned.train_insert --algo bc --episode
     --out simbench/skills/learned/checkpoints/peg_insert.pt
 # 技能库验收（注册表完整性 / 多候选规划 / 组合 / 学习层 / peg_insert 落座）
 MUJOCO_GL=egl python -m pytest simbench/tests/test_skill_library.py -v
+# 为每个原子技能录制演示视频（16 段，headless EGL；索引写入 docs/ + results/）
+MUJOCO_GL=egl python -m simbench.record_skills --all
 ```
 
 历史命令（robosuite 链，文件已清理，仅存档）：

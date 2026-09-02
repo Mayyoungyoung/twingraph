@@ -32,6 +32,7 @@ from . import perception
 from . import planning
 from . import manipulation
 from .motion import move_eef
+from .settle import settle
 from .base import SkillResult, register
 
 _IMPL = base.IMPL_SCRIPT
@@ -54,8 +55,7 @@ def _part(params_part=None, name=None):
                       "消费。是执行链的感知入口。",
           inputs={"part": "零件名（body）",
                   "faults": "可选 FailureModel（漏检/误检/噪声源）",
-                  "step": "可选步序号（供故障模型归因）",
-                  "retries": "漏检重试次数（默认 0）"},
+                  "step": "可选步序号（供故障模型归因）"},
           outputs={"found": "是否检测到", "pos": "world xyz 观测",
                    "yaw": "偏航观测 (rad)", "outcome": "ok|miss|false"},
           preconditions=[base.part_exists],
@@ -63,18 +63,16 @@ def _part(params_part=None, name=None):
           failure_policy="retry", impl=_IMPL,
           deps=["perception.detect_part", "faults.FailureModel(可选)"])
 def detect(ctx, arm, gripper, part=None, name=None, faults=None, step=None,
-           retries=0, verbose=False):
-    """Detect a part under the failure model (perception entry point)."""
+           verbose=False):
+    """Detect a part under the failure model (single perception).
+
+    One-shot by design: a missed/false outcome is REPORTED (outcome in
+    metrics), and retries belong to the composition layer (failure_policy
+    = "retry" lets run_chain / the planner re-invoke the atom).
+    """
     pname = _part(part, name)
-    attempts = int(retries) + 1
-    last = (False, None, None, "miss")
-    for _ in range(attempts):
-        found, pos, yaw, outcome = perception.detect_part(
-            ctx, pname, faults=faults, step=step)
-        last = (found, pos, yaw, outcome)
-        if found:
-            break
-    found, pos, yaw, outcome = last
+    found, pos, yaw, outcome = perception.detect_part(
+        ctx, pname, faults=faults, step=step)
     metrics = dict(found=bool(found), outcome=outcome)
     if found:
         metrics["pos"] = np.asarray(pos, dtype=float)
@@ -87,24 +85,33 @@ def detect(ctx, arm, gripper, part=None, name=None, faults=None, step=None,
 
 
 @register(name="inspect", category=base.CAT_EXEC,
-          description="质量检测：对（已就位的）零件做 seat 几何判定——测量 "
-                      "xy 位置误差、z 高度误差与倾斜角，与容差比较给出 "
-                      "OK/NG 结论，可叠加传感器测量噪声。用于阶段终检或"
-                      "中段纠偏触发。",
-          inputs={"part": "被检零件名", "target_xy": "名义 world xy",
-                  "target_z": "可选名义 world z", "xy_tol": "xy 容差 (m)",
-                  "z_tol": "z 容差 (m)", "tilt_tol": "倾斜容差 (deg)",
+          description="质量判定（原子）：对（已就位的）零件做一次几何检查并"
+                      "给出 OK/NG 结论，不驱动任何运动。kind='seat' 测 xy/z "
+                      "落位误差与倾斜角；kind='pin_engage' 测底部进入孔的深度"
+                      "与孔轴偏差。可叠加传感器测量噪声。检查的是“装配质量”"
+                      "（落座/压入是否达标），不是“零件存在性”（那是 detect）。",
+          inputs={"part": "被检零件名", "kind": "seat|pin_engage",
+                  "target_xy": "seat: 名义 world xy", "target_z": "seat: 可选名义 z",
+                  "xy_tol": "seat: xy 容差 (m)", "z_tol": "seat: z 容差 (m)",
+                  "tilt_tol": "倾斜容差 (deg)", "axis_xy": "pin_engage: 孔轴 xy",
+                  "top_ref_z": "pin_engage: 孔口参考 z", "half": "pin_engage: 零件半高",
+                  "min_depth": "pin_engage: 最小啮合深度 (m)",
+                  "bot_off_tol": "pin_engage: 底端偏移容差 (m)",
                   "noise_std": "可选测量噪声 std (m)"},
-          outputs={"xy_err": "xy 误差 (m)", "z_err": "z 误差 (m)",
-                   "tilt": "倾斜角 (deg)", "ok": "判定结论"},
+          outputs={"ok": "判定结论", "tilt": "倾斜角 (deg)",
+                   "xy_err": "seat: xy 误差 (m)", "z_err": "seat: z 误差 (m)",
+                   "depth": "pin_engage: 啮合深度 (m)", "bot_off": "pin_engage: 底端偏移 (m)"},
           preconditions=[base.part_exists],
-          postconditions=["metrics 含 xy_err/tilt 且 ok 反映容差判定"],
+          postconditions=["metrics 含判定量且 ok 反映容差判定"],
           failure_policy="continue", impl=_IMPL,
-          deps=["MjContext.obj_pos", "MjContext.obj_tilt"])
-def inspect(ctx, arm, gripper, part=None, name=None, target_xy=None,
-            target_z=None, xy_tol=0.005, z_tol=0.005, tilt_tol=8.0,
-            noise_std=0.0, rng=None, verbose=False):
-    """Seat-geometry quality inspection of a part (OK/NG verdict)."""
+          deps=["MjContext.obj_pos", "MjContext.obj_tilt",
+                "MjContext.obj_axis"])
+def inspect(ctx, arm, gripper, part=None, name=None, kind="seat",
+            target_xy=None, target_z=None, xy_tol=0.005, z_tol=0.005,
+            tilt_tol=8.0, axis_xy=None, top_ref_z=None, half=0.0,
+            min_depth=0.0, bot_off_tol=0.006, noise_std=0.0, rng=None,
+            verbose=False):
+    """Single quality verdict on an (already seated) part; no motion."""
     pname = _part(part, name)
     r = np.random if rng is None else rng
     pos = np.asarray(ctx.obj_pos(pname), dtype=float)
@@ -113,7 +120,20 @@ def inspect(ctx, arm, gripper, part=None, name=None, target_xy=None,
     tilt = float(ctx.obj_tilt(pname))
     metrics = dict(tilt=tilt, pos=pos)
     ok = tilt < tilt_tol
-    if target_xy is not None:
+    if kind == "pin_engage":
+        if half <= 0.0 or axis_xy is None or top_ref_z is None:
+            return SkillResult(ok=False, reason="inspect pin_engage needs "
+                                                "axis_xy/top_ref_z/half",
+                               metrics=metrics)
+        axis = ctx.obj_axis(pname)
+        bot = pos - float(half) * axis
+        depth = float(top_ref_z) - bot[2]
+        bot_off = float(np.linalg.norm(bot[:2]
+                                      - np.asarray(axis_xy)[:2]))
+        metrics["depth"] = depth
+        metrics["bot_off"] = bot_off
+        ok = depth >= min_depth and bot_off < bot_off_tol
+    elif target_xy is not None:
         txy = np.asarray(target_xy, dtype=float)[:2]
         xy_err = float(np.linalg.norm(pos[:2] - txy))
         metrics["xy_err"] = xy_err
@@ -123,8 +143,8 @@ def inspect(ctx, arm, gripper, part=None, name=None, target_xy=None,
             metrics["z_err"] = z_err
             ok = ok and abs(z_err) <= z_tol
     if verbose:
-        print(f"  [inspect {pname}] tilt={tilt:.2f}deg "
-              f"xy_err={metrics.get('xy_err', 0)*1000:.2f}mm "
+        print(f"  [inspect {pname}] kind={kind} "
+              f"{ {k: (round(v, 5) if isinstance(v, float) else v) for k, v in metrics.items()} } "
               f"{'OK' if ok else 'NG'}")
     return SkillResult(ok=bool(ok), metrics=metrics)
 
@@ -156,6 +176,146 @@ def move(ctx, arm, gripper, to=None, style="safe_z", tol=0.008, gain=None,
                                     eef=ctx.eef_pos().copy()))
 
 
+# =====================================================================
+# MINIMAL EXECUTION ATOMS: single-responsibility primitives that the
+# composite skills (grasp / place / insert) decompose into.  Each does
+# ONE thing (close fingers / descend / verify lift / ...) with no
+# bundled perception or motion, so a planner can compose them freely.
+# =====================================================================
+
+@register(name="grip_open", category=base.CAT_EXEC,
+          description="张开夹爪（最小原子）：仅将手指伺服到全开，不做任何"
+                      "移动或感知。释放/接近前的手指原语。",
+          inputs={"max_steps": "开爪 slew 最大步数"},
+          outputs={"span": "张开后 pad 间距 (m)"},
+          preconditions=["场景已加载，夹爪可控"],
+          postconditions=["pad 间距达到全开（以 span 度量）"],
+          failure_policy="continue", impl=_IMPL,
+          deps=["Gripper.open"])
+def grip_open(ctx, arm, gripper, max_steps=80, verbose=False):
+    """Open the fingers (minimal finger primitive)."""
+    gripper.open(max_steps=max_steps)
+    span = gripper.span()
+    if verbose:
+        print(f"  [grip_open] span={(span or 0)*1000:.1f}mm")
+    return SkillResult(ok=True, metrics=dict(span=span))
+
+
+@register(name="grip_close", category=base.CAT_EXEC,
+          description="闭合夹爪（最小原子）：仅将手指闭到指定开度/压入量/"
+                      "接触力，不做接近或感知。三种口径：给 part/outer_d 按"
+                      "外径+press 闭合并过冲咬合；给 span 闭到该 pad 间距；"
+                      "给 force_stop 闭到 pad 接触力达标。即“grasp 只负责闭合"
+                      "夹爪”的那个原子。",
+          inputs={"part": "可选零件名（用其外径闭合）", "outer_d": "可选外径 (m)",
+                  "span": "可选目标 pad 间距 (m)", "press": "压入量 (m)",
+                  "force_stop": "可选：闭到该接触力 (N)"},
+          outputs={"span": "闭合后 pad 间距 (m)", "pad_force": "pad 接触力 (N)"},
+          preconditions=[],
+          postconditions=["手指已闭合（以 span/pad_force 度量）"],
+          failure_policy="continue", impl=_IMPL,
+          deps=["Gripper.close_on_part", "Gripper.close_to_span",
+                "perception.part_meta(可选)"])
+def grip_close(ctx, arm, gripper, part=None, name=None, outer_d=None,
+               span=None, press=0.0015, force_stop=None, verbose=False):
+    """Close the fingers (minimal finger primitive)."""
+    if force_stop is not None:
+        gripper.close_to_span(span if span is not None else 0.012,
+                              force_stop=force_stop)
+    elif span is not None:
+        gripper.close_to_span(span)
+    else:
+        pname = _part(part, name)
+        od = outer_d
+        if od is None and pname is not None:
+            od = perception.part_meta(ctx, pname)["outer_d"]
+        if od is None:
+            gripper.close_to_span(0.012)
+        else:
+            gripper.close_on_part(od, press=press)
+    sp = gripper.span()
+    try:
+        f = (ctx.geom_contact_force("finger1_pad_collision")
+             + ctx.geom_contact_force("finger2_pad_collision"))
+    except ValueError:
+        f = 0.0
+    if verbose:
+        print(f"  [grip_close] span={(sp or 0)*1000:.1f}mm padF={f:.2f}N")
+    return SkillResult(ok=True, metrics=dict(span=sp, pad_force=float(f)))
+
+
+@register(name="descend", category=base.CAT_EXEC,
+          description="垂直下降（最小原子）：保持当前 xy，把 EEF 下降到目标 "
+                      "z（或给定 xyz）。接近后/放置前的精降原语，是 grasp/"
+                      "place/insert 分解中的下降步。",
+          inputs={"to_z": "目标 world z（保持 xy）", "to": "可选完整 xyz 目标",
+                  "gain": "P 增益", "tol": "到位容差 (m)"},
+          outputs={"reached": "是否到位", "eef_z": "终态 EEF z"},
+          preconditions=["场景已加载，机器人可控"],
+          postconditions=["EEF z 到达 to_z（以 reached 判定）"],
+          failure_policy="retry", impl=_MOTION,
+          deps=["CartesianController.move_eef"])
+def descend(ctx, arm, gripper, to_z=None, to=None, gain=6.0, tol=0.002,
+            max_steps=200, verbose=False):
+    """Vertical descent holding xy (minimal motion primitive)."""
+    if to is not None:
+        target = np.asarray(to, dtype=float)
+    elif to_z is not None:
+        e = ctx.eef_pos()
+        target = np.array([e[0], e[1], float(to_z)])
+    else:
+        return SkillResult(ok=False, reason="descend requires to_z or to",
+                           metrics=dict())
+    ok = arm.move_eef(target, gain=gain, tol=tol, max_steps=max_steps)
+    return SkillResult(ok=bool(ok),
+                       metrics=dict(reached=bool(ok),
+                                    eef_z=float(ctx.eef_pos()[2])))
+
+
+@register(name="lift_verify", category=base.CAT_EXEC,
+          description="举升校验（最小原子，纯判定）：比较零件当前 z 与参考 "
+                      "z，确认已被抬升 >= min_lift，判抓取是否抓稳。不驱动"
+                      "任何运动，是 grasp 分解的收尾校验原语。",
+          inputs={"part": "零件名", "z_ref": "抬升前参考 z (m)",
+                  "min_lift": "最小抬升量 (m)"},
+          outputs={"ok": "抬升达标", "z_now": "当前零件 z", "lift": "实测抬升量"},
+          preconditions=[base.part_exists],
+          postconditions=["z_now - z_ref >= min_lift（以 ok 判定）"],
+          failure_policy="continue", impl=_IMPL,
+          deps=["MjContext.obj_pos"])
+def lift_verify(ctx, arm, gripper, part=None, name=None, z_ref=None,
+                min_lift=0.03, verbose=False):
+    """Verify a part was lifted (minimal predicate; no motion)."""
+    pname = _part(part, name)
+    z_now = float(ctx.obj_pos(pname)[2])
+    if z_ref is None:
+        return SkillResult(ok=False, reason="lift_verify requires z_ref",
+                           metrics=dict(z_now=z_now))
+    lift = z_now - float(z_ref)
+    ok = lift >= float(min_lift)
+    if verbose:
+        print(f"  [lift_verify {pname}] lift={lift*1000:.1f}mm "
+              f"{'ok' if ok else 'FAIL'}")
+    return SkillResult(ok=bool(ok), metrics=dict(z_now=z_now, lift=lift))
+
+
+@register(name="release", category=base.CAT_EXEC,
+          description="释放（最小原子）：张开夹爪让持件原地落下并静置，不做"
+                      "抬升退避（退避见过渡类 retreat_lift）。是 place 分解的"
+                      "释放原语。",
+          inputs={"settle_steps": "释放后静置步数"},
+          outputs={"ok": "已释放", "span": "张开后 pad 间距"},
+          preconditions=[],
+          postconditions=["夹爪全开（以 span 度量）"],
+          failure_policy="continue", impl=_IMPL,
+          deps=["Gripper.open", "settle"])
+def release(ctx, arm, gripper, settle_steps=20, verbose=False):
+    """Open the gripper and let the held part drop in place (minimal)."""
+    gripper.open()
+    settle(ctx, max_steps=settle_steps)
+    return SkillResult(ok=True, metrics=dict(span=gripper.span()))
+
+
 @register(name="grasp", category=base.CAT_EXEC,
           description="抓取：检测/估计（或消费 plan_grasp_pose 工件）→ 接近"
                       "→ 下降 → 闭爪 → 举升校验的闭环抓取。前置零件存在，"
@@ -168,6 +328,9 @@ def move(ctx, arm, gripper, to=None, style="safe_z", tol=0.008, gain=None,
           preconditions=[base.part_exists],
           postconditions=["零件被抬升 >= VERIFY_LIFT（以 ok 判定）"],
           failure_policy="retry", impl=_IMPL,
+          granularity=base.GRAN_COMPOSITE,
+          decomposes=["detect", "plan_grasp_pose", "approach",
+                      "grip_close", "retreat_lift", "lift_verify"],
           deps=["perception.estimate_grasp_pose", "motion.move_eef",
                 "Gripper.close_on_part", "plan_grasp_pose(可选)"])
 def grasp(ctx, arm, gripper, part=None, name=None, **kw):
@@ -196,6 +359,9 @@ def grasp(ctx, arm, gripper, part=None, name=None, **kw):
           preconditions=[base.held_part],
           postconditions=["零件 xy 与目标距离 < 0.012m（以 ok 判定）"],
           failure_policy="continue", impl=_IMPL,
+          granularity=base.GRAN_COMPOSITE,
+          decomposes=["transport", "pre_align", "descend", "release",
+                      "retreat_lift"],
           deps=["manipulation.place", "motion.move_eef", "Gripper.open"])
 def place(ctx, arm, gripper, part=None, name=None, at=None, target_xy=None,
           **kw):
@@ -214,9 +380,10 @@ def place(ctx, arm, gripper, part=None, name=None, at=None, target_xy=None,
 
 
 @register(name="transport", category=base.CAT_EXEC,
-          description="搬运：持件沿给定航点（或到目标点的规划航点）低速"
-                      "平移到目标上方悬停，供后续 place/insert 精降。全程"
-                      "监控仍持件，滑脱即失败。衔接规划与放置的搬运腿。",
+          description="搬运（组合）：把持件沿给定航点（或到目标点的规划航点）"
+                      "低速平移到目标上方悬停，供后续 place/insert 精降；全程"
+                      "监控仍持件，滑脱即失败。由原子 move（航点执行）与持件"
+                      "校验组合而成。",
           inputs={"part": "零件名", "waypoints": "航点列表 (world xyz)",
                   "to": "可选：目标 xyz（缺 waypoints 时按 style 规划）",
                   "style": "航点风格", "carry_speed": "搬运速度上限",
@@ -225,6 +392,8 @@ def place(ctx, arm, gripper, part=None, name=None, at=None, target_xy=None,
           preconditions=[base.held_part],
           postconditions=["搬运后 EEF-零件 xy 距离 < 0.03m（以 held 判定）"],
           failure_policy="continue", impl=_MOTION,
+          granularity=base.GRAN_COMPOSITE,
+          decomposes=["move(低速航点执行)", "持件校验(谓词，滑脱即败)"],
           deps=["CartesianController.move_eef", "motion.move_eef",
                 "plan_path(可选)"])
 def transport(ctx, arm, gripper, part=None, name=None, waypoints=None,
@@ -293,6 +462,8 @@ def push(ctx, arm, gripper, part=None, name=None, **kw):
           preconditions=[base.held_part],
           postconditions=["零件底面到达 to_z 附近（thread 模式）"],
           failure_policy="abort", impl=_OPT,
+          granularity=base.GRAN_COMPOSITE,
+          decomposes=["pre_align", "descend(thread+抗卡摆动)", "release"],
           deps=["manipulation.insert", "perception.part_meta",
                 "CartesianController.move_eef"])
 def insert(ctx, arm, gripper, part=None, name=None, mode="press", half=None,

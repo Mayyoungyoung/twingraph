@@ -39,6 +39,15 @@ IMPL_OPT = "优化"
 IMPL_IL = "模仿学习"
 IMPL_RL = "强化学习"
 
+# granularity: an ATOMIC skill is a single minimal responsibility (e.g.
+# grip_close = just close the fingers); a COMPOSITE skill is a tuned
+# composition of atoms (e.g. grasp = detect -> approach -> grip_close ->
+# lift -> lift_verify).  The inventory reports both and documents each
+# composite's decomposition.
+GRAN_ATOMIC = "atomic"
+GRAN_COMPOSITE = "composite"
+GRAN_CN = {GRAN_ATOMIC: "原子", GRAN_COMPOSITE: "组合"}
+
 
 # ------------------------------------------------------------------ result
 @dataclass
@@ -69,10 +78,13 @@ class SkillSpec:
     failure_policy: str = "continue"  # retry / abort / continue
     impl: str = IMPL_SCRIPT          # script / motion_planning / ...
     deps: list = field(default_factory=list)   # depended-on skills/parts
+    granularity: str = GRAN_ATOMIC   # atomic / composite
+    decomposes: list = field(default_factory=list)  # composite: atom chain
 
     def as_dict(self):
         d = asdict(self)
         d["category_cn"] = CAT_CN.get(self.category, self.category)
+        d["granularity_cn"] = GRAN_CN.get(self.granularity, self.granularity)
         return d
 
 
