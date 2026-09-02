@@ -1,0 +1,528 @@
+[
+  {
+    "name": "approach",
+    "category": "trans",
+    "description": "抓取前接近：先到抓取点上方悬停，再垂直下降至抓取高度（不闭合）。与 grasp(approach_direct=True) 组合即标准两段式抓取接近，避免 grasp 内部 safe_z 二次抬升的下降-上升-抽搐。",
+    "inputs": {
+      "part": "目标零件名",
+      "grasp_pos": "可选：预计算抓取点（plan_grasp_pose 工件），缺省时现场估计",
+      "hover_lift": "悬停高度 (m)",
+      "tol": "下降容差 (m)"
+    },
+    "outputs": {
+      "eef_z": "下降后 EEF 高度"
+    },
+    "preconditions": [
+      "零件存在"
+    ],
+    "postconditions": [],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "perception.estimate_grasp_pose",
+      "motion.move_eef"
+    ],
+    "category_cn": "过渡类",
+    "wrapped": true
+  },
+  {
+    "name": "detect",
+    "category": "exec",
+    "description": "零件检测：在失败模型下感知零件位姿（位置+偏航），可注入高斯噪声/漏检/误检，输出观测供 plan_grasp_pose 消费。是执行链的感知入口。",
+    "inputs": {
+      "part": "零件名（body）",
+      "faults": "可选 FailureModel（漏检/误检/噪声源）",
+      "step": "可选步序号（供故障模型归因）",
+      "retries": "漏检重试次数（默认 0）"
+    },
+    "outputs": {
+      "found": "是否检测到",
+      "pos": "world xyz 观测",
+      "yaw": "偏航观测 (rad)",
+      "outcome": "ok|miss|false"
+    },
+    "preconditions": [
+      "<function part_exists at 0x7f3f1b9b11b0>"
+    ],
+    "postconditions": [
+      "检测到则 outcome!=miss 且 pos 非空"
+    ],
+    "failure_policy": "retry",
+    "impl": "规则脚本",
+    "deps": [
+      "perception.detect_part",
+      "faults.FailureModel(可选)"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "grasp",
+    "category": "exec",
+    "description": "抓取：检测/估计（或消费 plan_grasp_pose 工件）→ 接近→ 下降 → 闭爪 → 举升校验的闭环抓取。前置零件存在，后置以举升量判定抓稳。是操作链的核心执行技能。",
+    "inputs": {
+      "part": "零件名",
+      "grasp_pose": "可选预估计抓取位姿工件",
+      "press": "压入量 (m)",
+      "lift": "举升高度 (m)",
+      "tol": "下降容差 (m)",
+      "squeeze": "力反馈深咬 (N)",
+      "approach_yaw": "接近前腕部偏航"
+    },
+    "outputs": {
+      "ok": "举升校验通过",
+      "held_dist": "EEF-零件距离 (m)"
+    },
+    "preconditions": [
+      "<function part_exists at 0x7f3f1b9b11b0>"
+    ],
+    "postconditions": [
+      "零件被抬升 >= VERIFY_LIFT（以 ok 判定）"
+    ],
+    "failure_policy": "retry",
+    "impl": "规则脚本",
+    "deps": [
+      "perception.estimate_grasp_pose",
+      "motion.move_eef",
+      "Gripper.close_on_part",
+      "plan_grasp_pose(可选)"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "insert",
+    "category": "exec",
+    "description": "插入装配：mode='press' 到点压入并保压；mode='thread' 底部导向螺旋下降（比例纠偏+抗卡摆动），把持件装入孔/轴。前置仍持件。是插销/套轴等装配的执行原语（学习版见扩展类 peg_insert mode='policy'）。",
+    "inputs": {
+      "part": "零件名",
+      "mode": "press|thread",
+      "target_eef": "press 模式目标 EEF xyz",
+      "ref_axis": "thread 模式参考轴 (callable/xy)",
+      "to_z": "thread 模式零件底面目标 z",
+      "half": "零件半高"
+    },
+    "outputs": {
+      "ok": "插入完成",
+      "bot_z": "终态零件底面 z"
+    },
+    "preconditions": [
+      "<function held_part at 0x7f3ee8cd1990>"
+    ],
+    "postconditions": [
+      "零件底面到达 to_z 附近（thread 模式）"
+    ],
+    "failure_policy": "abort",
+    "impl": "优化",
+    "deps": [
+      "manipulation.insert",
+      "perception.part_meta",
+      "CartesianController.move_eef"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "inspect",
+    "category": "exec",
+    "description": "质量检测：对（已就位的）零件做 seat 几何判定——测量 xy 位置误差、z 高度误差与倾斜角，与容差比较给出 OK/NG 结论，可叠加传感器测量噪声。用于阶段终检或中段纠偏触发。",
+    "inputs": {
+      "part": "被检零件名",
+      "target_xy": "名义 world xy",
+      "target_z": "可选名义 world z",
+      "xy_tol": "xy 容差 (m)",
+      "z_tol": "z 容差 (m)",
+      "tilt_tol": "倾斜容差 (deg)",
+      "noise_std": "可选测量噪声 std (m)"
+    },
+    "outputs": {
+      "xy_err": "xy 误差 (m)",
+      "z_err": "z 误差 (m)",
+      "tilt": "倾斜角 (deg)",
+      "ok": "判定结论"
+    },
+    "preconditions": [
+      "<function part_exists at 0x7f3f1b9b11b0>"
+    ],
+    "postconditions": [
+      "metrics 含 xy_err/tilt 且 ok 反映容差判定"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "MjContext.obj_pos",
+      "MjContext.obj_tilt"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "move",
+    "category": "exec",
+    "description": "末端移动：按规划航点风格（direct/safe_z/clearance）把 EEF 移动到 world xyz 目标，可选梯形速度顺滑。是执行类的通用位移原语，消费 plan_path 的航点风格。",
+    "inputs": {
+      "to": "目标 world xyz",
+      "style": "航点风格",
+      "tol": "到位容差 (m)",
+      "gain": "P 增益",
+      "max_speed": "速度上限 (m/s)",
+      "smooth": "梯形顺滑"
+    },
+    "outputs": {
+      "reached": "是否到位",
+      "eef": "终态 EEF xyz"
+    },
+    "preconditions": [
+      "场景已加载，机器人可控"
+    ],
+    "postconditions": [
+      "EEF 与目标距离 <= tol（以 reached 判定）"
+    ],
+    "failure_policy": "retry",
+    "impl": "运动规划",
+    "deps": [
+      "motion.move_eef",
+      "planning.plan_path",
+      "CartesianController.move_eef"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "peg_insert",
+    "category": "ext",
+    "description": "插销：把持件插入指定孔口。mode='press' 为到点压入，mode='thread' 为底部导向螺旋下降（抗卡摆动，规则闭环），mode='policy' 由学习策略（模仿学习/强化学习）输出插入动作序列，输入孔心 xy 与孔底 z，奖励显式考虑接触、卡滞与姿态偏差。",
+    "inputs": {
+      "name": "被插零件名（已由 grasp 抓持）",
+      "hole_xy": "孔心 world xy",
+      "to_z": "零件底面目标 z（孔底/座面）",
+      "mode": "press | thread | policy",
+      "policy": "可选：学习策略对象（mode='policy' 时必填）",
+      "max_steps": "策略/闭环最大步数"
+    },
+    "outputs": {
+      "depth_m": "实测插入深度 (m)",
+      "bot_z": "终态零件底面 z"
+    },
+    "preconditions": [
+      "<function held_part at 0x7f3ee8cd1990>"
+    ],
+    "postconditions": [
+      "零件底面到达 to_z 附近（以 depth_m 判定）"
+    ],
+    "failure_policy": "abort",
+    "impl": "规则脚本/强化学习/模仿学习",
+    "deps": [
+      "grasp",
+      "manipulation.insert",
+      "skills.learned.insert_env",
+      "skills.learned.load_policy (mode=policy)"
+    ],
+    "category_cn": "扩展类",
+    "wrapped": true
+  },
+  {
+    "name": "place",
+    "category": "exec",
+    "description": "放置：把持件搬运到目标 xy/z 并释放落位。基于持件时实测的 EEF-零件偏移推导落点，抵消抓取检测噪声；支持对中/低空搬运/腕部扶正/多种释放策略。前置仍持件，后置以落位 xy 容差判定。",
+    "inputs": {
+      "part": "零件名",
+      "at": "目标 world xy",
+      "target_z": "可选目标 z",
+      "align": "落前对中",
+      "live_align": "活体比例对中",
+      "release": "释放策略",
+      "carry_style": "搬运航点风格",
+      "low_carry": "低空搬运"
+    },
+    "outputs": {
+      "ok": "落位 xy 在容差内",
+      "pos": "终态零件 xyz"
+    },
+    "preconditions": [
+      "<function held_part at 0x7f3ee8cd1990>"
+    ],
+    "postconditions": [
+      "零件 xy 与目标距离 < 0.012m（以 ok 判定）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "manipulation.place",
+      "motion.move_eef",
+      "Gripper.open"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "plan_grasp_pose",
+    "category": "plan",
+    "description": "抓取位姿估计（多候选）：由检测观测+零件元数据生成 n_yaw 个接近角候选抓取位姿，按接近线碰撞/零件类型做可行性过滤，按行程+偏航失配+碰撞惩罚评分，排序选最优作为抓取工件（保留全部候选分支用于归因/数据导出）。",
+    "inputs": {
+      "part": "零件名",
+      "detect_result": "可选外部观测 (found,pos,yaw,outcome)",
+      "noise_std": "检测噪声 std",
+      "n_yaw": "候选接近角数量（2=旧两轴）",
+      "obstacles": "可选静态障碍 AABB 列表",
+      "yaw": "可选指定偏航"
+    },
+    "outputs": {
+      "grasp_pose": "选中的抓取工件 {pos,yaw,outer_d,...}",
+      "n_candidates": "候选数",
+      "candidates": "候选分支摘要"
+    },
+    "preconditions": [
+      "<function part_exists at 0x7f3f1b9b11b0>"
+    ],
+    "postconditions": [
+      "至少一个可行候选（否则 ok=False，估计失败）"
+    ],
+    "failure_policy": "retry",
+    "impl": "运动规划",
+    "deps": [
+      "planning.grasp_pose_candidates",
+      "perception.part_meta",
+      "perception.detect"
+    ],
+    "category_cn": "规划类",
+    "wrapped": true
+  },
+  {
+    "name": "plan_path",
+    "category": "plan",
+    "description": "路径规划（多候选）：由起点到目标生成多个航点候选（高度变体×侧向 via 偏移），对每个候选做线段-AABB 碰撞门过滤，按路径长+航点数评分，选最优可行路径；全碰撞时换 style 重规划。产出 waypoints 工件供 move/transport 消费。",
+    "inputs": {
+      "to": "目标 world xyz",
+      "cur": "可选起点（默认 EEF）",
+      "style": "direct|safe_z|clearance",
+      "lift": "抬升量 (m)",
+      "safe_z": "clearance 绝对高度",
+      "obstacles": "静态障碍 AABB",
+      "via_offsets": "侧向 via 偏移候选"
+    },
+    "outputs": {
+      "waypoints": "选中路径航点",
+      "style": "路径风格",
+      "score": "路径评分",
+      "n_candidates": "候选数",
+      "candidates": "候选分支+碰撞命中摘要"
+    },
+    "preconditions": [
+      "场景已加载，机器人可控"
+    ],
+    "postconditions": [
+      "至少一个无碰撞候选（否则 ok=False，需重规划）"
+    ],
+    "failure_policy": "retry",
+    "impl": "运动规划",
+    "deps": [
+      "planning.path_candidates",
+      "planning.check_path",
+      "planning.seg_aabb_hit"
+    ],
+    "category_cn": "规划类",
+    "wrapped": true
+  },
+  {
+    "name": "pre_align",
+    "category": "trans",
+    "description": "下降前预对齐：在当前位置高度上，将持件（或空爪 EEF）对中到目标 xy，供后续垂直下降/放置直接衔接（gain/迭代沿用 place 实测配方）。",
+    "inputs": {
+      "at": "目标 xy (world)",
+      "part": "可选：被持零件名（None=对齐 EEF 本身）",
+      "tol": "收敛容差 (m)",
+      "max_iters": "比例纠偏最大迭代数"
+    },
+    "outputs": {
+      "resid": "收敛后的 xy 残差 (m)"
+    },
+    "preconditions": [
+      "场景已加载"
+    ],
+    "postconditions": [],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "CartesianController.move_eef"
+    ],
+    "category_cn": "过渡类",
+    "wrapped": true
+  },
+  {
+    "name": "pull",
+    "category": "ext",
+    "description": "拉动：抓持零件后沿指定方向向机器人侧拖拽（与 push 反向的闭环位移技能）。若未持件则先轻咬合抓取并验证举升；拖动全程监控零件随动，滑脱即停。",
+    "inputs": {
+      "name": "被拉零件名",
+      "delta": "位移向量 (dx, dy)",
+      "to_target": "可选：绝对目标 xy（优先于 delta）",
+      "release": "结束后是否原位释放",
+      "speed": "拖拽速度 (m/s)"
+    },
+    "outputs": {
+      "moved_m": "零件沿方向实测位移 (m)"
+    },
+    "preconditions": [
+      "零件存在"
+    ],
+    "postconditions": [
+      "位移 >= 70% 请求量（以 moved_m 判定）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "grasp",
+      "manipulation._drive_along",
+      "Gripper"
+    ],
+    "category_cn": "扩展类",
+    "wrapped": true
+  },
+  {
+    "name": "push",
+    "category": "exec",
+    "description": "推动：并指成刃，从零件背后沿方向闭环推抵，实时监测零件随动位移，卡滞即停（不硬磨）。用于纠偏/送料等非抓持的水平位移。以位移达请求量 70% 判定成功。",
+    "inputs": {
+      "part": "零件名",
+      "delta": "位移 (dx,dy)",
+      "to_target": "可选绝对目标 xy（优先）",
+      "push_z": "推动线 world z",
+      "speed": "推动速度"
+    },
+    "outputs": {
+      "ok": "位移 >= 70% 请求量",
+      "moved": "实测位移向量"
+    },
+    "preconditions": [
+      "<function part_exists at 0x7f3f1b9b11b0>"
+    ],
+    "postconditions": [
+      "零件沿方向位移 >= 70% 请求量（以 ok 判定）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "manipulation.push",
+      "motion.move_eef",
+      "Gripper"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "retreat_lift",
+    "category": "trans",
+    "description": "放置/释放后垂直抬升退避：从当前 EEF 位置爬升指定高度并静置，避免 pads 扫掠已就位零件。",
+    "inputs": {
+      "height": "抬升高度 (m, 默认 0.07)",
+      "tol": "抬升到位容差 (m)",
+      "settle_steps": "抬升后静置步数"
+    },
+    "outputs": {
+      "lift_m": "实测爬升量 (m)"
+    },
+    "preconditions": [
+      "场景已加载，机器人可控"
+    ],
+    "postconditions": [
+      "EEF 爬升量 >= height（skill 以 lift_m 度量判定）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "motion.move_eef",
+      "settle"
+    ],
+    "category_cn": "过渡类",
+    "wrapped": true
+  },
+  {
+    "name": "return_home",
+    "category": "trans",
+    "description": "回初始位：开爪（可选）+ 关节空间回 HOME。可选先爬升到安全高度再回扫，规避关节回扫扫飞已装配件（Task B 实测教训）。",
+    "inputs": {
+      "open_gripper": "回位前是否开爪",
+      "retreat_z": "可选：先平移到该绝对 z 高度再回扫"
+    },
+    "outputs": {
+      "eef": "回位后 EEF 位置"
+    },
+    "preconditions": [
+      "场景已加载"
+    ],
+    "postconditions": [],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "Gripper.open",
+      "CartesianController.home",
+      "motion.move_eef"
+    ],
+    "category_cn": "过渡类",
+    "wrapped": true
+  },
+  {
+    "name": "transport",
+    "category": "exec",
+    "description": "搬运：持件沿给定航点（或到目标点的规划航点）低速平移到目标上方悬停，供后续 place/insert 精降。全程监控仍持件，滑脱即失败。衔接规划与放置的搬运腿。",
+    "inputs": {
+      "part": "零件名",
+      "waypoints": "航点列表 (world xyz)",
+      "to": "可选：目标 xyz（缺 waypoints 时按 style 规划）",
+      "style": "航点风格",
+      "carry_speed": "搬运速度上限",
+      "tol": "航点到位容差"
+    },
+    "outputs": {
+      "ok": "到达且仍持件",
+      "held": "搬运后是否仍持件"
+    },
+    "preconditions": [
+      "<function held_part at 0x7f3ee8cd1990>"
+    ],
+    "postconditions": [
+      "搬运后 EEF-零件 xy 距离 < 0.03m（以 held 判定）"
+    ],
+    "failure_policy": "continue",
+    "impl": "运动规划",
+    "deps": [
+      "CartesianController.move_eef",
+      "motion.move_eef",
+      "plan_path(可选)"
+    ],
+    "category_cn": "执行类",
+    "wrapped": true
+  },
+  {
+    "name": "wipe",
+    "category": "ext",
+    "description": "擦拭：并指成刃，轻压贴面后在目标面上沿直线扫掠，全程监控 pad 接触力处于目标力带（既保证贴实又不压穿/挑翻被擦面），可作触垫预清洁等语义。",
+    "inputs": {
+      "at": "擦拭区域中心 xy",
+      "direction": "扫掠方向单位向量",
+      "length": "扫掠长度 (m)",
+      "z": "EEF 扫掠高度 (world z，通常=面高+pad 偏移)",
+      "f_band": "(f_lo, f_hi) 目标接触力带 (N)"
+    },
+    "outputs": {
+      "force_mean": "扫掠全程平均接触力 (N)",
+      "force_max": "扫掠峰值接触力 (N)",
+      "swept_m": "实测扫掠位移 (m)"
+    },
+    "preconditions": [
+      "场景已加载"
+    ],
+    "postconditions": [
+      "接触力处于力带且扫掠完成（以 force_max 判定）"
+    ],
+    "failure_policy": "continue",
+    "impl": "规则脚本",
+    "deps": [
+      "Gripper.close_to_span",
+      "motion.move_eef"
+    ],
+    "category_cn": "扩展类",
+    "wrapped": true
+  }
+]
