@@ -13,7 +13,7 @@ from .library import Session, GRASP
 PIN_TARGET = np.array([0.04, 0.05, 0.855])
 
 
-def build_demo_scene(kind, directory):
+def build_demo_scene(kind, directory, view="overview"):
     root = ET.parse(SCENE).getroot()
     root.set("model", "isolated_skill_" + kind)
     assets = SCENE.parent.parent / "assets" / "panda"
@@ -100,6 +100,31 @@ def build_demo_scene(kind, directory):
     camera.set("pos", fmt(eye))
     camera.set("xyaxes", fmt(np.r_[x, np.cross(z, x)]))
     camera.set("fovy", "42")
+    if view == "front":
+        # Fixed front-oblique close-ups: both jaws and the target remain visible.
+        profiles = {
+            "cube": ([0.40, -0.45, 1.16], [-0.18, -0.18, 0.90], 36),
+            "perception": ([0.63, -0.62, 1.20], [-0.04, -0.10, 0.86], 40),
+            "obstacle": ([0.66, -0.55, 1.30], [-0.02, -0.07, 1.01], 42),
+            "pin": ([0.46, -0.22, 1.09], [0.04, 0.05, 0.895], 34),
+            "rail": ([0.43, -0.28, 1.08], [0.065, 0.085, 0.86], 38),
+        }
+        eye, target, fovy = profiles[kind]
+        eye, target = np.asarray(eye), np.asarray(target)
+        z = (eye - target) / np.linalg.norm(eye - target)
+        x = np.cross([0, 0, 1], z)
+        x /= np.linalg.norm(x)
+        camera.set("pos", fmt(eye))
+        camera.set("xyaxes", fmt(np.r_[x, np.cross(z, x)]))
+        camera.set("fovy", str(fovy))
+        quality = root.find("visual/quality")
+        quality.set("shadowsize", "4096")
+        quality.set("offsamples", "8")
+        headlight = root.find("visual/headlight")
+        headlight.set("ambient", ".4 .4 .4")
+        headlight.set("diffuse", ".55 .55 .55")
+    elif view != "overview":
+        raise ValueError(f"unknown camera profile {view}")
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / (kind + ".xml")
@@ -108,8 +133,8 @@ def build_demo_scene(kind, directory):
     return path, parts, specs
 
 
-def make_demo_session(kind, directory):
-    path, parts, specs = build_demo_scene(kind, directory)
+def make_demo_session(kind, directory, view="overview"):
+    path, parts, specs = build_demo_scene(kind, directory, view=view)
     ctx = MjContext(path, control_freq=50)
     ctx.reset()
     ctx.data.qpos[ctx.arm_qadr] = HOME

@@ -26,13 +26,19 @@ python -m simbench.assembly.candidate_demo --out results/candidate_demo
 python -m simbench.assembly.graph --out results/skill_graph.json
 ```
 
-## 新的放置演示
+## 11 个原子技能近景演示
 
 ```bash
-python -m simbench.assembly.atomic_demo --record --out results/atomic_place
+python -m simbench.assembly.atomic_demos --out results/atomic_closeup
+python -m simbench.assembly.atomic_demos --only plan_path move --out results/path_closeup
+python -m simbench.assembly.atomic_demos --no-record --out results/atomic_checks
 ```
 
-只录制支撑位置处的释放及落稳检查，准备动作在录制前完成。默认技能列表及输入输出见 [原子技能清单](atomic-skills.md)。
+默认录制全部 11 项，也可以指定技能子集。每次输出到独立目录；输出包括 `skills/*.mp4`、`previews/*.png`、准备场景和 `verification.json`。视频采用 1600 × 1000、25 fps、固定近景，不切镜头。计算技能用 5 秒展示计算结果，不推进仿真时间。
+
+准备阶段调用原有控制器；视频从指定技能的就绪状态开始。例如抓取从方块两侧闭爪开始，放置从已到达支撑面的释放开始，搬运和接近仍属于移动。插入使用已有行为克隆策略。
+
+默认技能列表及输入输出见 [原子技能清单](atomic-skills.md)，直接播放见 [视频索引](demos/INDEX.md)。旧单独放置入口 `atomic_demo` 继续兼容。
 
 ## 兼容组件演示
 

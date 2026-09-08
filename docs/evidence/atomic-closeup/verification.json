@@ -1,0 +1,744 @@
+[
+  {
+    "atom": "detect",
+    "label": "检测",
+    "success": true,
+    "scene": "perception.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.0,
+    "sim_seconds": 0.0,
+    "computation_only": true,
+    "overlay_pixels": 31490,
+    "metrics": {
+      "detected": [
+        "cube",
+        "cube_green",
+        "cube_orange"
+      ],
+      "backend": "simulator pose observations",
+      "noise_std_m": 0.0
+    },
+    "results": [
+      {
+        "index": 0,
+        "skill": "observe_parts",
+        "interface": "detect",
+        "atom": "detect",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "cube",
+            "cube_green",
+            "cube_orange"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "reason": "",
+        "sim_seconds": 0.0,
+        "wall_seconds": 0.0003122739726677537
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/detect.mp4",
+    "sha256": "bd75775051d361540b4b9c240d35385d37281dadd24e9b7db02bc65625abaa9b",
+    "decoded_frames": 150,
+    "qa_frame_indices": [
+      0,
+      80,
+      149
+    ],
+    "visible_change_pixels": 31633,
+    "all_frame_change_pixels": 34649,
+    "visually_reviewed_frames": [
+      0,
+      80,
+      149
+    ]
+  },
+  {
+    "atom": "estimate_pose",
+    "label": "物体位姿估计",
+    "success": true,
+    "scene": "perception.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.0,
+    "sim_seconds": 0.0,
+    "computation_only": true,
+    "overlay_pixels": 6620,
+    "metrics": {
+      "position_m": [
+        -0.18,
+        -0.18,
+        0.8199829565938745
+      ],
+      "quaternion_wxyz": [
+        1.0,
+        1.5424840914644564e-17,
+        -4.186224947341896e-19,
+        6.420873474394172e-32
+      ]
+    },
+    "results": [
+      {
+        "index": 1,
+        "skill": "estimate_pose",
+        "interface": "estimate_pose",
+        "atom": "estimate_pose",
+        "params": {
+          "part": "cube",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.18,
+            -0.18,
+            0.8199829565938745
+          ],
+          "quaternion_wxyz": [
+            1.0,
+            1.5424840914644564e-17,
+            -4.186224947341896e-19,
+            6.420873474394172e-32
+          ]
+        },
+        "reason": "",
+        "sim_seconds": 0.0,
+        "wall_seconds": 0.0005255650030449033
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/estimate_pose.mp4",
+    "sha256": "0bda7c8cd6e891c53a8160efddcecaa3e3e20bff9c509a8b3d975aad5833acc5",
+    "decoded_frames": 150,
+    "qa_frame_indices": [
+      0,
+      80,
+      149
+    ],
+    "visible_change_pixels": 6685,
+    "all_frame_change_pixels": 9804,
+    "visually_reviewed_frames": [
+      0,
+      80,
+      149
+    ]
+  },
+  {
+    "atom": "estimate_grasp",
+    "label": "抓取位姿估计",
+    "success": true,
+    "scene": "perception.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.0,
+    "sim_seconds": 0.0,
+    "computation_only": true,
+    "overlay_pixels": 7003,
+    "metrics": {
+      "feasible_candidates": 2,
+      "unknown_candidates": 0
+    },
+    "results": [
+      {
+        "index": 2,
+        "skill": "propose_grasps",
+        "interface": "estimate_grasp",
+        "atom": "estimate_grasp",
+        "params": {
+          "part": "cube",
+          "artifact": "pose",
+          "as_": "grasps"
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 2,
+          "unknown_candidates": 0
+        },
+        "reason": "",
+        "sim_seconds": 0.0,
+        "wall_seconds": 0.012935083941556513
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/estimate_grasp.mp4",
+    "sha256": "baa8dcbaedcd4e1736bf3bf54b3ca92cefbab9efe4b12e5f8ff81cbe0a458a53",
+    "decoded_frames": 150,
+    "qa_frame_indices": [
+      0,
+      80,
+      149
+    ],
+    "visible_change_pixels": 7197,
+    "all_frame_change_pixels": 10704,
+    "visually_reviewed_frames": [
+      0,
+      80,
+      149
+    ]
+  },
+  {
+    "atom": "plan_path",
+    "label": "路径规划",
+    "success": true,
+    "scene": "obstacle.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.0,
+    "sim_seconds": 0.0,
+    "computation_only": true,
+    "overlay_pixels": 55285,
+    "metrics": {
+      "waypoints": 3,
+      "clearance_m": 1.08,
+      "collision_checks": [
+        {
+          "route_id": "free:route:0",
+          "valid": true,
+          "samples": 52,
+          "resolution_rad": 0.035
+        },
+        {
+          "route_id": "free:route:1",
+          "valid": true,
+          "samples": 64,
+          "resolution_rad": 0.035
+        },
+        {
+          "route_id": "free:route:2",
+          "valid": true,
+          "samples": 73,
+          "resolution_rad": 0.035
+        }
+      ],
+      "candidate_count": 3,
+      "selected_id": "free:route:0"
+    },
+    "results": [
+      {
+        "index": 0,
+        "skill": "plan_transfer",
+        "interface": "plan_path",
+        "atom": "plan_path",
+        "params": {
+          "target": [
+            0.14,
+            0.09,
+            0.96
+          ],
+          "as_": "transfer",
+          "clearance": 1.08,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.08,
+          "collision_checks": [
+            {
+              "route_id": "free:route:0",
+              "valid": true,
+              "samples": 52,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "free:route:1",
+              "valid": true,
+              "samples": 64,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "free:route:2",
+              "valid": true,
+              "samples": 73,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "free:route:0"
+        },
+        "reason": "",
+        "sim_seconds": 0.0,
+        "wall_seconds": 0.054345638025552034
+      }
+    ],
+    "route_count": 3,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/plan_path.mp4",
+    "sha256": "90fb2949f80bc8cf41fcb776afda90a07a66d33ed1b001abd080deed0fbf2418",
+    "decoded_frames": 150,
+    "qa_frame_indices": [
+      0,
+      80,
+      149
+    ],
+    "visible_change_pixels": 55584,
+    "all_frame_change_pixels": 62603,
+    "visually_reviewed_frames": [
+      0,
+      80,
+      149
+    ]
+  },
+  {
+    "atom": "move",
+    "label": "移动",
+    "success": true,
+    "scene": "obstacle.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 9.84,
+    "sim_seconds": 6.640000000000716,
+    "computation_only": false,
+    "overlay_pixels": 13973,
+    "metrics": {
+      "target_error_m": 3.12148387101483e-05
+    },
+    "results": [
+      {
+        "index": 1,
+        "skill": "execute_joint_path",
+        "interface": "move",
+        "atom": "move",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 3.12148387101483e-05
+        },
+        "reason": "",
+        "sim_seconds": 6.640000000000716,
+        "wall_seconds": 6.968543826020323
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/move.mp4",
+    "sha256": "c4c2ef96366b4ca4f6eeececca378c967a9504238a0626b5bda5c733baf5d3ed",
+    "decoded_frames": 246,
+    "qa_frame_indices": [
+      0,
+      108,
+      245
+    ],
+    "visible_change_pixels": 240227,
+    "all_frame_change_pixels": 242899,
+    "visually_reviewed_frames": [
+      0,
+      108,
+      245
+    ]
+  },
+  {
+    "atom": "grasp",
+    "label": "抓取",
+    "success": true,
+    "scene": "cube.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.48,
+    "sim_seconds": 3.2800000000010954,
+    "computation_only": false,
+    "overlay_pixels": 1894,
+    "metrics": {
+      "held": true,
+      "left_n": 3.3959205989355383,
+      "right_n": 3.3958030176245395
+    },
+    "results": [
+      {
+        "index": 7,
+        "skill": "close_gripper",
+        "interface": "grasp",
+        "atom": "grasp",
+        "params": {
+          "part": "cube",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.3959205989355383,
+          "right_n": 3.3958030176245395
+        },
+        "reason": "",
+        "sim_seconds": 3.2800000000010954,
+        "wall_seconds": 2.89737652905751
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/grasp.mp4",
+    "sha256": "3751fb8dc794ea9d489548838a5c23ec9a5c1faeefef3d64c55110e95d8ccd0c",
+    "decoded_frames": 162,
+    "qa_frame_indices": [
+      0,
+      66,
+      161
+    ],
+    "visible_change_pixels": 9818,
+    "all_frame_change_pixels": 11803,
+    "visually_reviewed_frames": [
+      0,
+      66,
+      161
+    ]
+  },
+  {
+    "atom": "place",
+    "label": "放置",
+    "success": true,
+    "scene": "cube.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 4.48,
+    "sim_seconds": 1.299999999999331,
+    "computation_only": false,
+    "overlay_pixels": 3040,
+    "metrics": {
+      "position_error_m": 5.559952359006364e-09,
+      "tilt_deg": 0.0,
+      "support_force_n": 0.439489861793922,
+      "jaw_span_m": 0.08531910057393892
+    },
+    "results": [
+      {
+        "index": 8,
+        "skill": "open_gripper",
+        "interface": "open_gripper",
+        "atom": "place",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08480977899230255
+        },
+        "reason": "",
+        "sim_seconds": 0.9999999999994973,
+        "wall_seconds": 0.8902171769877896
+      },
+      {
+        "index": 9,
+        "skill": "place_object",
+        "interface": "place",
+        "atom": "place",
+        "params": {
+          "part": "cube",
+          "target": [
+            -0.1799999998769594,
+            -0.17999997483832073,
+            0.8199829565722996
+          ],
+          "tol": 0.0015,
+          "settle": 0.3,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 5.559952359006364e-09,
+          "tilt_deg": 0.0,
+          "support_force_n": 0.439489861793922,
+          "jaw_span_m": 0.08531910057393892
+        },
+        "reason": "",
+        "sim_seconds": 1.299999999999331,
+        "wall_seconds": 1.1423108440358192
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/place.mp4",
+    "sha256": "a19be8fabe2551e71adf96094da8ed1f4832866f498dfedb0d0c8ce69fa2fb23",
+    "decoded_frames": 112,
+    "qa_frame_indices": [
+      0,
+      41,
+      111
+    ],
+    "visible_change_pixels": 9674,
+    "all_frame_change_pixels": 11758,
+    "visually_reviewed_frames": [
+      0,
+      41,
+      111
+    ]
+  },
+  {
+    "atom": "insert",
+    "label": "插入",
+    "success": true,
+    "scene": "pin.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 18.24,
+    "sim_seconds": 15.060000000010305,
+    "computation_only": false,
+    "overlay_pixels": 7902,
+    "metrics": {
+      "position_error_m": 0.0007983281746743675,
+      "peak_force_n": 0.0,
+      "checkpoint": "/home/jia/RAL/simbench/assembly/checkpoints/insert_bc.pt"
+    },
+    "results": [
+      {
+        "index": 13,
+        "skill": "learned_insert",
+        "interface": "insert",
+        "atom": "insert",
+        "params": {
+          "part": "pin_left",
+          "artifact": "insert",
+          "policy": "/home/jia/RAL/simbench/assembly/checkpoints/insert_bc.pt",
+          "max_steps": 1000
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0007983281746743675,
+          "peak_force_n": 0.0,
+          "checkpoint": "/home/jia/RAL/simbench/assembly/checkpoints/insert_bc.pt"
+        },
+        "reason": "",
+        "sim_seconds": 15.060000000010305,
+        "wall_seconds": 17.184357036021538
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/insert.mp4",
+    "sha256": "038a1a006ad7506ccb29b1052a2e070b4a4333e5f3dd603bc740003f112acfab",
+    "decoded_frames": 456,
+    "qa_frame_indices": [
+      0,
+      213,
+      455
+    ],
+    "visible_change_pixels": 284145,
+    "all_frame_change_pixels": 288365,
+    "visually_reviewed_frames": [
+      0,
+      213,
+      455
+    ]
+  },
+  {
+    "atom": "press",
+    "label": "压靠",
+    "success": true,
+    "scene": "pin.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.0,
+    "sim_seconds": 2.800000000003422,
+    "computation_only": false,
+    "overlay_pixels": 1864,
+    "metrics": {
+      "height_error_m": 8.566980237723065e-05,
+      "contact_force_n": 1.365272370533212
+    },
+    "results": [
+      {
+        "index": 15,
+        "skill": "press_seat",
+        "interface": "press",
+        "atom": "press",
+        "params": {
+          "part": "pin_left",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 8.566980237723065e-05,
+          "contact_force_n": 1.365272370533212
+        },
+        "reason": "",
+        "sim_seconds": 2.800000000003422,
+        "wall_seconds": 2.7808776679448783
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/press.mp4",
+    "sha256": "8e3dc73ef37b4caab9d64314727cf0fe0dd33fbb9fc66098682c46d379a8fccb",
+    "decoded_frames": 150,
+    "qa_frame_indices": [
+      0,
+      60,
+      149
+    ],
+    "visible_change_pixels": 74351,
+    "all_frame_change_pixels": 76085,
+    "visually_reviewed_frames": [
+      0,
+      60,
+      149
+    ]
+  },
+  {
+    "atom": "measure",
+    "label": "测量",
+    "success": true,
+    "scene": "rail.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.0,
+    "sim_seconds": 0.0,
+    "computation_only": true,
+    "overlay_pixels": 6292,
+    "metrics": {
+      "quantity": "clearance",
+      "value": 0.00399713371641949,
+      "unit": "m"
+    },
+    "results": [
+      {
+        "index": 19,
+        "skill": "measure_value",
+        "interface": "measure",
+        "atom": "measure",
+        "params": {
+          "quantity": "clearance",
+          "part": "carriage",
+          "as_": "measurement"
+        },
+        "ok": true,
+        "metrics": {
+          "quantity": "clearance",
+          "value": 0.00399713371641949,
+          "unit": "m"
+        },
+        "reason": "",
+        "sim_seconds": 0.0,
+        "wall_seconds": 0.00011522299610078335
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/measure.mp4",
+    "sha256": "daa8421b6e0ee9c31bc5878bd3a47102105c6e302cb4143e46736d14e3a94472",
+    "decoded_frames": 150,
+    "qa_frame_indices": [
+      0,
+      80,
+      149
+    ],
+    "visible_change_pixels": 78028,
+    "all_frame_change_pixels": 84558,
+    "visually_reviewed_frames": [
+      0,
+      80,
+      149
+    ]
+  },
+  {
+    "atom": "inspect",
+    "label": "检查",
+    "success": true,
+    "scene": "pin.xml",
+    "camera": "fixed_front_closeup",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "fps": 25,
+    "seconds": 6.0,
+    "sim_seconds": 0.0,
+    "computation_only": true,
+    "overlay_pixels": 4972,
+    "metrics": {
+      "position_error_m": 0.0005923120125487263,
+      "tilt_deg": 0.003834412079256349
+    },
+    "results": [
+      {
+        "index": 19,
+        "skill": "inspect_seat",
+        "interface": "inspect",
+        "atom": "inspect",
+        "params": {
+          "part": "pin_left",
+          "target": [
+            0.04,
+            0.05,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0005923120125487263,
+          "tilt_deg": 0.003834412079256349
+        },
+        "reason": "",
+        "sim_seconds": 0.0,
+        "wall_seconds": 0.00019627402070909739
+      }
+    ],
+    "route_count": 0,
+    "line_scale": 2.8,
+    "video": "docs/demos/atoms/inspect.mp4",
+    "sha256": "55bddb4325b2b4b6178f17a59456b379f239c40e7a8221885ffab1e66c0af36e",
+    "decoded_frames": 150,
+    "qa_frame_indices": [
+      0,
+      80,
+      149
+    ],
+    "visible_change_pixels": 0,
+    "all_frame_change_pixels": 5696,
+    "visually_reviewed_frames": [
+      0,
+      80,
+      149
+    ]
+  }
+]

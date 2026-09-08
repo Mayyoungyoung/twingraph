@@ -33,3 +33,5 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+!docs/demos/atoms/*.mp4
