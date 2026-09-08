@@ -23,6 +23,10 @@ results/
 *.avi
 *.mov
 
+# Curated, current demonstrations only. Intermediate recordings stay ignored.
+!docs/demos/*.mp4
+!docs/demos/skills/*.mp4
+
 # ---- OS / editor ----
 .DS_Store
 Thumbs.db

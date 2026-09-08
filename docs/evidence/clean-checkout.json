@@ -1,0 +1,22 @@
+{
+  "source_tree": "ec5ef10406d3997e206cac5f48208fc43b57fa37",
+  "method": "git checkout-index into a new empty directory; no ignored results copied",
+  "checks": {
+    "tests": {
+      "passed": true,
+      "returncode": 0
+    },
+    "assembly": {
+      "passed": true,
+      "returncode": 0,
+      "success": true,
+      "component_calls": 120,
+      "robot_actuators": 9
+    },
+    "recording": {
+      "passed": true,
+      "returncode": 0
+    }
+  },
+  "bundled_policy_used": true
+}

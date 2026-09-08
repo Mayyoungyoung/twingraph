@@ -14,6 +14,7 @@ coordinates the skills execute against are read from the scene (sites),
 never hard-coded here.
 """
 import os
+import copy
 
 import mujoco
 import numpy as np
@@ -44,6 +45,8 @@ class MjContext:
         self.on_control_step = None
         self.n_control_steps = 0
         self.n_physics_steps = 0
+        self._hook_substeps = 0
+        self._state_clients = {}
 
         # robot references (fail fast when the scene forgot the Panda)
         def jid(name):
@@ -88,10 +91,64 @@ class MjContext:
         """One control step = ``nsub`` physics steps + hook dispatch."""
         if nsub is None:
             nsub = self.nsub
-        self.phys_step(nsub)
-        self.n_control_steps += 1
-        if self.on_control_step is not None:
-            self.on_control_step(self)
+        self.step_physics_observed(nsub)
+
+    def step_physics_observed(self, n=1):
+        """Physics-rate feedback with the same sampling clock as normal motion."""
+        for _ in range(int(n)):
+            self.phys_step()
+            self._hook_substeps += 1
+            if self._hook_substeps >= self.nsub:
+                self._hook_substeps = 0
+                self.n_control_steps += 1
+                if self.on_control_step is not None:
+                    self.on_control_step(self)
+
+    def register_state_client(self, name, getter, setter):
+        self._state_clients[name] = (getter, setter)
+
+    def snapshot(self):
+        """Replay checkpoint: integration inputs AND controller memory.
+
+        Model parameters must be identical on restore; randomised model arrays
+        are captured too so candidate comparisons cannot inherit another run.
+        Legacy get_state remains a kinematics-only compatibility interface.
+        """
+        fields = ('qpos', 'qvel', 'act', 'ctrl', 'qacc_warmstart',
+                  'qfrc_applied', 'xfrc_applied', 'mocap_pos', 'mocap_quat',
+                  'userdata', 'eq_active', 'plugin_state')
+        model_fields = ('geom_friction', 'body_mass', 'body_inertia',
+                        'dof_damping', 'eq_active')
+        return dict(version=1, scene_path=self.scene_path,
+                    numpy_rng=copy.deepcopy(np.random.get_state()),
+                    data={k: getattr(self.data, k).copy() for k in fields
+                          if hasattr(self.data, k)}, time=float(self.data.time),
+                    model={k: getattr(self.model, k).copy() for k in model_fields
+                           if hasattr(self.model, k)},
+                    clock=(self.n_control_steps, self.n_physics_steps,
+                           self._hook_substeps),
+                    clients={k: copy.deepcopy(g()) for k, (g, _) in
+                             self._state_clients.items()})
+
+    def restore(self, state):
+        if state.get('version') != 1 or state['scene_path'] != self.scene_path:
+            raise ValueError('checkpoint version/scene mismatch')
+        for name, value in state['model'].items():
+            getattr(self.model, name)[:] = value
+        for name, value in state['data'].items():
+            getattr(self.data, name)[:] = value
+        self.data.time = state['time']
+        if 'numpy_rng' in state:
+            np.random.set_state(state['numpy_rng'])
+        self.n_control_steps, self.n_physics_steps, self._hook_substeps = state['clock']
+        mujoco.mj_forward(self.model, self.data)
+        # mj_forward may consume/overwrite solver warm starts. Preserve the
+        # exact integration input from the branch point after the forward pass.
+        self.data.qacc_warmstart[:] = state['data']['qacc_warmstart']
+        for name, value in state['clients'].items():
+            if name not in self._state_clients:
+                raise ValueError(f'missing checkpoint client: {name}')
+            self._state_clients[name][1](copy.deepcopy(value))
 
     # --------------------------------------------------------- name lookups
     def body_id(self, name):
@@ -297,3 +354,19 @@ class MjContext:
                 mujoco.mj_contactForce(self.model, self.data, i, buf)
                 f += float(np.linalg.norm(buf[:3]))
         return f
+
+    def grasp_contacts(self, body_name, min_force=0.05):
+        """Bilateral pad contact with the requested body, excluding table contact."""
+        bid = self.body_id(body_name)
+        pads = [self.geom_id(f'finger{i}_pad_collision') for i in (1, 2)]
+        forces = np.zeros(2)
+        buf = np.zeros(6)
+        for i in range(self.data.ncon):
+            c = self.data.contact[i]
+            for j, pad in enumerate(pads):
+                other = c.geom2 if c.geom1 == pad else c.geom1 if c.geom2 == pad else -1
+                if other >= 0 and self.model.geom_bodyid[other] == bid:
+                    mujoco.mj_contactForce(self.model, self.data, i, buf)
+                    forces[j] += max(0.0, float(buf[0]))
+        return dict(held=bool(np.all(forces >= min_force)),
+                    left_n=float(forces[0]), right_n=float(forces[1]))

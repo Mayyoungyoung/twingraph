@@ -7,7 +7,7 @@
          stack is a plain position-servo robot driven directly by mujoco;
        - the gripper is merged in (right_gripper under right_hand);
        - visual geoms use the MuJoCo Menagerie franka_emika_panda OBJ
-         meshes (Apache-2.0) for a realistic multi-material look -- the
+         meshes (Apache-2.0) for a realistic multi-material look — the
          menagerie link frames are kinematically identical to this
          chain, so they drop in untouched; collision geoms stay the
          coarse robosuite link*.stl (validated physics, unchanged);
@@ -16,11 +16,11 @@
      Robot placement: base sits directly ON the table top (z=0.8);
      link0 bottom face is at base-frame z=0 so it rests flush on the
      table.  Lowering the base 0.112 m vs the old robosuite mount
-     (z=0.912) shifts the whole arm workspace down -- task chains
+     (z=0.912) shifts the whole arm workspace down — task chains
      that bake in absolute world heights must be re-tuned.
 -->
 <mujoco model="panda">
-  <!-- NOTE: no <compiler> here -- the including scene must set
+  <!-- NOTE: no <compiler> here — the including scene must set
        meshdir="../assets/panda" so the mesh paths below resolve. -->
   <asset>
     <!-- Menagerie panda materials -->
@@ -156,7 +156,7 @@
         <!-- collision geoms live in group 3 (hidden by default): with
              them in group 0 they rendered ON TOP of the visual meshes
              (mujoco draws every enabled group), which made the arm look
-             speckled gray.  Group is visualization-only -- physics
+             speckled gray.  Group is visualization-only — physics
              (contype/conaffinity) is unchanged. -->
         <geom type="mesh" group="3" mesh="link0" name="link0_collision"/>
         <body name="link1" pos="0 0 0.333">

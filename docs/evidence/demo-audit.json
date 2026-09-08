@@ -1,0 +1,962 @@
+{
+  "skill_count": 30,
+  "all_skills_passed": true,
+  "all_overlays_read_only": true,
+  "cube_example": {
+    "frames": 532,
+    "fps": 25.0,
+    "seconds": 21.28,
+    "decoded_first_middle_last": true,
+    "sha256": "43fe9d3db29f9a3fd1598560ac87821e864cae13e8e4a0ba0298d288d964f08b"
+  },
+  "skills": [
+    {
+      "skill": "observe_parts",
+      "label": "检测零件",
+      "scene": "perception.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "detected": [
+          "cube",
+          "cube_green",
+          "cube_orange"
+        ],
+        "backend": "simulator pose observations",
+        "noise_std_m": 0.0
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 12671,
+      "visualization": "半透明彩球＝检测中心；每个目标独立着色（仿真位姿观测）",
+      "target": null,
+      "video": "skills/observe_parts.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 6,
+      "sha256": "2cd902fd5ddcfec3e7b1f72e9081cf5578e134feeef18a5eeb789c4bbe40d607",
+      "source_directory": "results/standalone_skills/preview_perception",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "2cd902fd5ddcfec3e7b1f72e9081cf5578e134feeef18a5eeb789c4bbe40d607"
+      }
+    },
+    {
+      "skill": "estimate_pose",
+      "label": "估计零件位姿",
+      "scene": "perception.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "position_m": [
+          -0.18,
+          -0.18,
+          0.8199829565938745
+        ],
+        "quaternion_wxyz": [
+          1.0,
+          1.6317972758255028e-17,
+          -4.186224947341896e-19,
+          6.420910862902223e-32
+        ]
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 975,
+      "visualization": "红 / 绿 / 蓝箭头＝估计的 X / Y / Z 轴；球心＝位置估计",
+      "target": null,
+      "video": "skills/estimate_pose.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 4,
+      "sha256": "6e98b73b286fab9063fb31b699b3c8422e275e1be1909bfc4b368e259f7b2b5c",
+      "source_directory": "results/standalone_skills/preview_perception",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "6e98b73b286fab9063fb31b699b3c8422e275e1be1909bfc4b368e259f7b2b5c"
+      }
+    },
+    {
+      "skill": "propose_grasps",
+      "label": "生成抓取候选",
+      "scene": "perception.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "feasible_candidates": 2
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 1632,
+      "visualization": "青 / 橙夹爪框＝两个实际生成的抓取候选；箭头＝接近方向",
+      "target": null,
+      "video": "skills/propose_grasps.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 8,
+      "sha256": "2a51ca38079e70f5a81f72d5515e9c2659c9984983eba267ad1f0a3619a8bd72",
+      "source_directory": "results/standalone_skills/preview_perception",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "2a51ca38079e70f5a81f72d5515e9c2659c9984983eba267ad1f0a3619a8bd72"
+      }
+    },
+    {
+      "skill": "select_grasp",
+      "label": "选择可达抓取",
+      "scene": "perception.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "chosen_index": 0,
+        "yaw_rad": 0.0,
+        "jaw_width_m": 0.04
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 1619,
+      "visualization": "绿色夹爪框＝选中的抓取位姿；灰色＝另一候选",
+      "target": null,
+      "video": "skills/select_grasp.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 8,
+      "sha256": "1c5ae67f28549927869d1a05564fbddb67bed7c9bd5307f7d7dc9dd7d9b74fa5",
+      "source_directory": "results/standalone_skills/preview_perception",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "1c5ae67f28549927869d1a05564fbddb67bed7c9bd5307f7d7dc9dd7d9b74fa5"
+      }
+    },
+    {
+      "skill": "plan_transfer",
+      "label": "规划避让搬运路径",
+      "scene": "obstacle.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "waypoints": 3,
+        "clearance_m": 1.08,
+        "collision_checks": [
+          {
+            "valid": true,
+            "samples": 52,
+            "resolution_rad": 0.035
+          }
+        ]
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 3950,
+      "visualization": "青线＝关节规划经正运动学得到的末端轨迹；绿球＝终点",
+      "target": [
+        0.14,
+        0.09,
+        0.96
+      ],
+      "video": "skills/plan_transfer.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 95,
+      "sha256": "e6ca40b8eab8dd7fbb0b30df8f62a775728ba73525600218b66585bbee5d0e89",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "e6ca40b8eab8dd7fbb0b30df8f62a775728ba73525600218b66585bbee5d0e89"
+      }
+    },
+    {
+      "skill": "plan_linear",
+      "label": "规划直线操作路径",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "length_m": 0.24601829200285089,
+        "ik_samples": 12
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 2753,
+      "visualization": "青线＝已求解逆运动学的直线路径；绿球＝目标位置",
+      "target": [
+        0.04994621780990535,
+        -0.10001086336644534,
+        0.9749496528828391
+      ],
+      "video": "skills/plan_linear.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 51,
+      "sha256": "68afff1918bd07e23db20da84c654af5629059df0f3086b89d5fead0438d7c19",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "68afff1918bd07e23db20da84c654af5629059df0f3086b89d5fead0438d7c19"
+      }
+    },
+    {
+      "skill": "execute_joint_path",
+      "label": "执行关节搬运路径",
+      "scene": "obstacle.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "target_error_m": 3.121483869932869e-05
+      },
+      "sim_seconds": 6.640000000000716,
+      "overlay_pixels": 3590,
+      "visualization": "青线＝计划轨迹；黄线＝机械臂实际末端轨迹；灰块＝障碍物",
+      "target": [
+        0.14,
+        0.09,
+        0.96
+      ],
+      "video": "skills/execute_joint_path.mp4",
+      "seconds": 9.12,
+      "annotation_geoms_max": 274,
+      "sha256": "874e553fa2166b540abbac8331f423ccfcceb9f40d0a8bde5a3bef876e180c49",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 332,
+      "video_audit": {
+        "frames": 228,
+        "fps": 25.0,
+        "seconds": 9.12,
+        "decoded_first_middle_last": true,
+        "sha256": "874e553fa2166b540abbac8331f423ccfcceb9f40d0a8bde5a3bef876e180c49"
+      }
+    },
+    {
+      "skill": "execute_cartesian_path",
+      "label": "执行直线操作路径",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "target_error_m": 7.82985323973739e-05
+      },
+      "sim_seconds": 9.840000000001748,
+      "overlay_pixels": 2058,
+      "visualization": "青线＝直线计划；黄线＝实际末端运动；绿球＝终点",
+      "target": [
+        0.04994621780990535,
+        -0.10001086336644534,
+        0.9749496528828391
+      ],
+      "video": "skills/execute_cartesian_path.mp4",
+      "seconds": 12.32,
+      "annotation_geoms_max": 225,
+      "sha256": "97b2a2f5f3029ba3f8e4d0f1a69eb4b7f2d442d70d4fe7607974bc6772c31fb0",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 492,
+      "video_audit": {
+        "frames": 308,
+        "fps": 25.0,
+        "seconds": 12.32,
+        "decoded_first_middle_last": true,
+        "sha256": "97b2a2f5f3029ba3f8e4d0f1a69eb4b7f2d442d70d4fe7607974bc6772c31fb0"
+      }
+    },
+    {
+      "skill": "open_gripper",
+      "label": "张开夹爪 / 释放",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "jaw_span_m": 0.08480977899230262
+      },
+      "sim_seconds": 0.9999999999994458,
+      "overlay_pixels": 149,
+      "visualization": "释放桌上的小方块；绿色点＝真实指垫接触",
+      "target": null,
+      "video": "skills/open_gripper.mp4",
+      "seconds": 3.48,
+      "annotation_geoms_max": 12,
+      "sha256": "b0ce7049132bdf6564744697212bc03cb97443a1b167dc6aac985033feeb7a83",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 50,
+      "video_audit": {
+        "frames": 87,
+        "fps": 25.0,
+        "seconds": 3.48,
+        "decoded_first_middle_last": true,
+        "sha256": "b0ce7049132bdf6564744697212bc03cb97443a1b167dc6aac985033feeb7a83"
+      }
+    },
+    {
+      "skill": "approach",
+      "label": "接近抓取位姿",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "position_error_m": 9.36194654763636e-05
+      },
+      "sim_seconds": 5.560000000001759,
+      "overlay_pixels": 2578,
+      "visualization": "绿色夹持目标；青线＝接近方向；黄线＝实际末端运动",
+      "target": [
+        -0.18,
+        -0.18,
+        0.8199829565938745
+      ],
+      "video": "skills/approach.mp4",
+      "seconds": 8.04,
+      "annotation_geoms_max": 206,
+      "sha256": "87abf2f0106646644c18483c33569e5c1e6d0f89f192275bec1b211ab2c1e5a9",
+      "source_directory": "results/standalone_skills/render_visibility",
+      "trace_samples": 278,
+      "video_audit": {
+        "frames": 201,
+        "fps": 25.0,
+        "seconds": 8.04,
+        "decoded_first_middle_last": true,
+        "sha256": "87abf2f0106646644c18483c33569e5c1e6d0f89f192275bec1b211ab2c1e5a9"
+      }
+    },
+    {
+      "skill": "close_gripper",
+      "label": "接触反馈夹持",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "held": true,
+        "left_n": 3.3959118102031693,
+        "right_n": 3.3958118063563445
+      },
+      "sim_seconds": 3.280000000000543,
+      "overlay_pixels": 329,
+      "visualization": "夹住 40 mm 方块；绿色点＝真实指垫接触",
+      "target": null,
+      "video": "skills/close_gripper.mp4",
+      "seconds": 5.76,
+      "annotation_geoms_max": 12,
+      "sha256": "410bf0b65f948f8c0309d88b5755314dcfa121ed9409cebcb7dd7efa26205844",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 164,
+      "video_audit": {
+        "frames": 144,
+        "fps": 25.0,
+        "seconds": 5.76,
+        "decoded_first_middle_last": true,
+        "sha256": "410bf0b65f948f8c0309d88b5755314dcfa121ed9409cebcb7dd7efa26205844"
+      }
+    },
+    {
+      "skill": "verify_grasp",
+      "label": "验证夹持接触",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "held": true,
+        "left_n": 3.3959198806930173,
+        "right_n": 3.395820079285596
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 329,
+      "visualization": "验证左右指垫都接触同一方块；绿色点＝真实接触点",
+      "target": null,
+      "video": "skills/verify_grasp.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 12,
+      "sha256": "35b25103218a611b4f031c977e104e73468564cd87e3d92f2b739e4128a4a8a6",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "35b25103218a611b4f031c977e104e73468564cd87e3d92f2b739e4128a4a8a6"
+      }
+    },
+    {
+      "skill": "lift",
+      "label": "保持夹持并抬升",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "object_lift_m": 0.14975424275396465,
+        "held": true
+      },
+      "sim_seconds": 5.239999999997096,
+      "overlay_pixels": 751,
+      "visualization": "青箭头＝目标抬升；黄线＝被夹方块的实际运动",
+      "target": [
+        -0.18,
+        -0.18,
+        0.9699829565938746
+      ],
+      "video": "skills/lift.mp4",
+      "seconds": 7.72,
+      "annotation_geoms_max": 174,
+      "sha256": "641d2de7c0b848cb339e63ca8af07aeebe9a77d21d11a643cc91d0cb34444043",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 262,
+      "video_audit": {
+        "frames": 193,
+        "fps": 25.0,
+        "seconds": 7.72,
+        "decoded_first_middle_last": true,
+        "sha256": "641d2de7c0b848cb339e63ca8af07aeebe9a77d21d11a643cc91d0cb34444043"
+      }
+    },
+    {
+      "skill": "lower",
+      "label": "受控下移至预接触高度",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "distance_m": 0.1
+      },
+      "sim_seconds": 5.919999999996719,
+      "overlay_pixels": 782,
+      "visualization": "青箭头＝目标下移；黄线＝被夹方块的实际运动",
+      "target": [
+        -0.17994021222396545,
+        -0.17998404389607672,
+        0.8697371992889106
+      ],
+      "video": "skills/lower.mp4",
+      "seconds": 8.4,
+      "annotation_geoms_max": 183,
+      "sha256": "2b1bf45f12ee672e2d5e3ff54214652f65e53fda56db79a8416cc6deff9f08f2",
+      "source_directory": "results/standalone_skills/render_visibility",
+      "trace_samples": 296,
+      "video_audit": {
+        "frames": 210,
+        "fps": 25.0,
+        "seconds": 8.4,
+        "decoded_first_middle_last": true,
+        "sha256": "2b1bf45f12ee672e2d5e3ff54214652f65e53fda56db79a8416cc6deff9f08f2"
+      }
+    },
+    {
+      "skill": "retreat",
+      "label": "空夹爪退出操作区",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "height_m": 0.9399762942207984
+      },
+      "sim_seconds": 2.7599999999984703,
+      "overlay_pixels": 1194,
+      "visualization": "释放后空夹爪上撤；青箭头＝退出方向；黄线＝实际末端运动",
+      "target": [
+        -0.18000001564736123,
+        -0.17999991590083272,
+        0.9400765848929202
+      ],
+      "video": "skills/retreat.mp4",
+      "seconds": 5.24,
+      "annotation_geoms_max": 133,
+      "sha256": "84cf1591bafaa5cc86f7bc05e3054f785dc9043ca40b17f9b4669b62d0fd6b36",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 138,
+      "video_audit": {
+        "frames": 131,
+        "fps": 25.0,
+        "seconds": 5.24,
+        "decoded_first_middle_last": true,
+        "sha256": "84cf1591bafaa5cc86f7bc05e3054f785dc9043ca40b17f9b4669b62d0fd6b36"
+      }
+    },
+    {
+      "skill": "home",
+      "label": "机械臂回位",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "joint_error_rad": 5.846231221351417e-08
+      },
+      "sim_seconds": 3.020000000000911,
+      "overlay_pixels": 2607,
+      "visualization": "绿球＝初始关节位姿对应的末端位置；黄线＝实际回位轨迹",
+      "target": [
+        -0.17540693327905016,
+        -3.1906407215597505e-24,
+        1.2743555064104302
+      ],
+      "video": "skills/home.mp4",
+      "seconds": 5.48,
+      "annotation_geoms_max": 149,
+      "sha256": "ebbbcc40906b9ea4c00287ef5715681703802ec9c636d120761b03ea9fd88bad",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 151,
+      "video_audit": {
+        "frames": 137,
+        "fps": 25.0,
+        "seconds": 5.48,
+        "decoded_first_middle_last": true,
+        "sha256": "ebbbcc40906b9ea4c00287ef5715681703802ec9c636d120761b03ea9fd88bad"
+      }
+    },
+    {
+      "skill": "orient_wrist",
+      "label": "调整末端朝向",
+      "scene": "cube.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "yaw_rad": 1.0471975511965976
+      },
+      "sim_seconds": 4.259999999997639,
+      "overlay_pixels": 72,
+      "visualization": "红 / 绿 / 蓝＝末端坐标轴；保持位置并转动手腕 60°",
+      "target": null,
+      "video": "skills/orient_wrist.mp4",
+      "seconds": 6.72,
+      "annotation_geoms_max": 176,
+      "sha256": "f99a97475440e6e6df09376f638bdb1c1324f67aaed844610aaa4f741dc062c7",
+      "source_directory": "results/standalone_skills/render_basic",
+      "trace_samples": 213,
+      "video_audit": {
+        "frames": 168,
+        "fps": 25.0,
+        "seconds": 6.72,
+        "decoded_first_middle_last": true,
+        "sha256": "f99a97475440e6e6df09376f638bdb1c1324f67aaed844610aaa4f741dc062c7"
+      }
+    },
+    {
+      "skill": "align_axis",
+      "label": "持物轴线精对准",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "object_error_m": 9.606829532893922e-05
+      },
+      "sim_seconds": 1.1399999999993682,
+      "overlay_pixels": 2880,
+      "visualization": "绿线＝孔的目标轴线；黄线＝插销实际位置；消除横向偏差",
+      "target": [
+        0.04,
+        0.05,
+        0.9239999999999999
+      ],
+      "video": "skills/align_axis.mp4",
+      "seconds": 3.6,
+      "annotation_geoms_max": 98,
+      "sha256": "54993a639468adbb2d157ae77aa7973e26a02ad15d93217fb7533179d255811a",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 57,
+      "video_audit": {
+        "frames": 90,
+        "fps": 25.0,
+        "seconds": 3.6,
+        "decoded_first_middle_last": true,
+        "sha256": "54993a639468adbb2d157ae77aa7973e26a02ad15d93217fb7533179d255811a"
+      }
+    },
+    {
+      "skill": "plan_insertion",
+      "label": "规划接触插入参数",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "target_m": [
+          0.04,
+          0.05,
+          0.855
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "speed_m_s": 0.008,
+        "force_limit_n": 12.0
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 2227,
+      "visualization": "绿线＝孔轴；青线＝插入参数给定的目标方向与深度",
+      "target": [
+        0.04,
+        0.05,
+        0.855
+      ],
+      "video": "skills/plan_insertion.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 91,
+      "sha256": "e039c0b9cb75524eb222f6d663a7ce28e5641a4624d823ec1a4db8c6ed273b23",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "e039c0b9cb75524eb222f6d663a7ce28e5641a4624d823ec1a4db8c6ed273b23"
+      }
+    },
+    {
+      "skill": "slide_insert",
+      "label": "沿导轨约束插入",
+      "scene": "rail.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "error_m": 0.000719154115169516,
+        "travel_m": 0.18496451953467463,
+        "peak_force_n": 0.0
+      },
+      "sim_seconds": 14.40000000001362,
+      "overlay_pixels": 640,
+      "visualization": "青线＝导轨插入方向；黄线＝滑块实际运动",
+      "target": [
+        0.105,
+        0.085,
+        0.8255
+      ],
+      "video": "skills/slide_insert.mp4",
+      "seconds": 16.88,
+      "annotation_geoms_max": 230,
+      "sha256": "4100d4bed4792329ee7aaa4c00c826d98aa12cc57770abab067a4c91ade27f63",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 720,
+      "video_audit": {
+        "frames": 422,
+        "fps": 25.0,
+        "seconds": 16.88,
+        "decoded_first_middle_last": true,
+        "sha256": "4100d4bed4792329ee7aaa4c00c826d98aa12cc57770abab067a4c91ade27f63"
+      }
+    },
+    {
+      "skill": "guarded_descent",
+      "label": "接触保护下降",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "z_m": 0.9016978754667759,
+        "peak_contact_n": 2.0927163737813705,
+        "travel_m": 0.022412178897496693,
+        "stopped_by": "contact"
+      },
+      "sim_seconds": 3.9600000000016777,
+      "overlay_pixels": 2726,
+      "visualization": "插销故意偏离孔口；橙点＝碰到孔座；达到力阈值停止下降",
+      "target": [
+        0.04,
+        0.05,
+        0.855
+      ],
+      "video": "skills/guarded_descent.mp4",
+      "seconds": 6.44,
+      "annotation_geoms_max": 274,
+      "sha256": "b6dda4e63add23d7cc50b8e1e545f7a1cad92c9b2940f163152c8272355b5290",
+      "source_directory": "results/standalone_skills/render_guard",
+      "trace_samples": 198,
+      "video_audit": {
+        "frames": 161,
+        "fps": 25.0,
+        "seconds": 6.44,
+        "decoded_first_middle_last": true,
+        "sha256": "b6dda4e63add23d7cc50b8e1e545f7a1cad92c9b2940f163152c8272355b5290"
+      }
+    },
+    {
+      "skill": "press_seat",
+      "label": "肩面压靠到位",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "height_error_m": 7.710752605050164e-05,
+        "contact_force_n": 1.5409600738674079
+      },
+      "sim_seconds": 2.800000000003422,
+      "overlay_pixels": 1456,
+      "visualization": "肩面压靠孔座；橙点＝真实支撑接触；同时检查高度与接触",
+      "target": [
+        0.04,
+        0.05,
+        0.855
+      ],
+      "video": "skills/press_seat.mp4",
+      "seconds": 5.28,
+      "annotation_geoms_max": 190,
+      "sha256": "043b83b7c9ea4d6462e247ee2e4ddac00179e654d00d2dc0aa20a547d7412ae7",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 140,
+      "video_audit": {
+        "frames": 132,
+        "fps": 25.0,
+        "seconds": 5.28,
+        "decoded_first_middle_last": true,
+        "sha256": "043b83b7c9ea4d6462e247ee2e4ddac00179e654d00d2dc0aa20a547d7412ae7"
+      }
+    },
+    {
+      "skill": "inspect_seat",
+      "label": "检查零件装配位置",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "position_error_m": 0.0002707031097609106,
+        "tilt_deg": 0.0037958236705927474
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 2937,
+      "visualization": "绿球 / 轴线＝装配目标；检查真实位置误差与倾角",
+      "target": [
+        0.04,
+        0.05,
+        0.855
+      ],
+      "video": "skills/inspect_seat.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 42,
+      "sha256": "8df83ce4b591e45d63336d0b96354bd66dea745ee05875b15200e1172e87cb68",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "8df83ce4b591e45d63336d0b96354bd66dea745ee05875b15200e1172e87cb68"
+      }
+    },
+    {
+      "skill": "move_constrained",
+      "label": "沿已装导轨运动",
+      "scene": "rail.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "error_m": 0.00019375421354549628,
+        "travel_m": 0.06972842365153857,
+        "peak_force_n": 5.599454670973205,
+        "cross_axis_m": 7.290687348663503e-06
+      },
+      "sim_seconds": 3.659999999998284,
+      "overlay_pixels": 295,
+      "visualization": "青线＝目标行程；黄线＝滑块沿真实导轨的受约束运动",
+      "target": [
+        0.034999999999999996,
+        0.08499252478416368,
+        0.8239829566061015
+      ],
+      "video": "skills/move_constrained.mp4",
+      "seconds": 6.12,
+      "annotation_geoms_max": 209,
+      "sha256": "1f591b0f82298b78285acbf3cf1101e5af646f211bd0c07fdf14aedd04c5c3bc",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 183,
+      "video_audit": {
+        "frames": 153,
+        "fps": 25.0,
+        "seconds": 6.12,
+        "decoded_first_middle_last": true,
+        "sha256": "1f591b0f82298b78285acbf3cf1101e5af646f211bd0c07fdf14aedd04c5c3bc"
+      }
+    },
+    {
+      "skill": "verify_stroke",
+      "label": "验证产品往复行程",
+      "scene": "rail.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "measured_range_m": 0.09965358961473006,
+        "required_range_m": 0.09
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 202,
+      "visualization": "青线＝要求区间；黄线＝前序往复运动的实测记录",
+      "target": null,
+      "video": "skills/verify_stroke.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 211,
+      "sha256": "2d041920f3541101b42a2dcc4c137659a0ee925f5af89143bf293d3a6e12bab1",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 437,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "2d041920f3541101b42a2dcc4c137659a0ee925f5af89143bf293d3a6e12bab1"
+      }
+    },
+    {
+      "skill": "measure_clearance",
+      "label": "测量导轨剩余间隙",
+      "scene": "rail.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "lateral_margin_m": 0.00399252636617357
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 212,
+      "visualization": "黄色点＝滑块边缘；绿色点＝导轨内缘；青线连接实际余量",
+      "target": null,
+      "video": "skills/measure_clearance.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 8,
+      "sha256": "ae54a464085deb395700ecae1404feff5eaa58e9657502800073b2f5f1bb2128",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "ae54a464085deb395700ecae1404feff5eaa58e9657502800073b2f5f1bb2128"
+      }
+    },
+    {
+      "skill": "plan_recovery",
+      "label": "规划有预算的接触恢复",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "retreat_m": 0.018,
+        "retry_budget": 1
+      },
+      "sim_seconds": 0.0,
+      "overlay_pixels": 2052,
+      "visualization": "青箭头＝当前接触状态下规划的上撤方向；绿球＝恢复目标",
+      "target": [
+        0.052036027154947165,
+        0.04852448057769716,
+        0.9196987820825763
+      ],
+      "video": "skills/plan_recovery.mp4",
+      "seconds": 4.8,
+      "annotation_geoms_max": 2,
+      "sha256": "4d5060ff1049b5a4df3ca52b9170a481b7e3050beb4777bebb3419046fd96fc6",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 0,
+      "video_audit": {
+        "frames": 120,
+        "fps": 25.0,
+        "seconds": 4.8,
+        "decoded_first_middle_last": true,
+        "sha256": "4d5060ff1049b5a4df3ca52b9170a481b7e3050beb4777bebb3419046fd96fc6"
+      }
+    },
+    {
+      "skill": "retract_contact",
+      "label": "从接触中撤回",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "eef_height_m": 0.9255350457623521
+      },
+      "sim_seconds": 1.8600000000022732,
+      "overlay_pixels": 2329,
+      "visualization": "从真实孔口接触中上撤；青箭头＝目标；黄线＝实际运动",
+      "target": [
+        0.052036027154947165,
+        0.04852448057769716,
+        0.9196987820825763
+      ],
+      "video": "skills/retract_contact.mp4",
+      "seconds": 4.32,
+      "annotation_geoms_max": 96,
+      "sha256": "5293585c055f0a10de097de96a1c1f854c712fc33a0f71aa709d4257c24b49ca",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 93,
+      "video_audit": {
+        "frames": 108,
+        "fps": 25.0,
+        "seconds": 4.32,
+        "decoded_first_middle_last": true,
+        "sha256": "5293585c055f0a10de097de96a1c1f854c712fc33a0f71aa709d4257c24b49ca"
+      }
+    },
+    {
+      "skill": "spiral_search",
+      "label": "接触引导螺旋寻孔",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "entry_depth_m": 0.004024709596593179,
+        "peak_force_n": 0.5179172687438106
+      },
+      "sim_seconds": 5.700000000006966,
+      "overlay_pixels": 2321,
+      "visualization": "绿线＝孔轴；黄线＝真实寻孔路径；橙点＝外部接触",
+      "target": [
+        0.04,
+        0.05,
+        0.855
+      ],
+      "video": "skills/spiral_search.mp4",
+      "seconds": 8.16,
+      "annotation_geoms_max": 223,
+      "sha256": "ab329ff384b5375c1ccfdbd0ffc714e284149b22edd933c360d20de68fc1e32e",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 285,
+      "video_audit": {
+        "frames": 204,
+        "fps": 25.0,
+        "seconds": 8.16,
+        "decoded_first_middle_last": true,
+        "sha256": "ab329ff384b5375c1ccfdbd0ffc714e284149b22edd933c360d20de68fc1e32e"
+      }
+    },
+    {
+      "skill": "learned_insert",
+      "label": "学习策略插销",
+      "scene": "pin.xml",
+      "success": true,
+      "error": "",
+      "metrics": {
+        "position_error_m": 0.0007725571505144101,
+        "peak_force_n": 0.0,
+        "checkpoint": "results/tabletop/learned_insertion/insert_bc.pt"
+      },
+      "sim_seconds": 15.000000000017195,
+      "overlay_pixels": 1416,
+      "visualization": "模仿学习策略闭环插销；绿线＝目标孔轴；黄线＝实际运动",
+      "target": [
+        0.04,
+        0.05,
+        0.855
+      ],
+      "video": "skills/learned_insert.mp4",
+      "seconds": 17.48,
+      "annotation_geoms_max": 222,
+      "sha256": "7a5d508d442ffa56998287fabc28114eaa481af1d5f66efe00b5f74ce10943b7",
+      "source_directory": "results/standalone_skills/render_contact",
+      "trace_samples": 750,
+      "video_audit": {
+        "frames": 437,
+        "fps": 25.0,
+        "seconds": 17.48,
+        "decoded_first_middle_last": true,
+        "sha256": "7a5d508d442ffa56998287fabc28114eaa481af1d5f66efe00b5f74ce10943b7"
+      }
+    }
+  ]
+}

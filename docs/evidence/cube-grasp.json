@@ -1,0 +1,59 @@
+{
+  "success": true,
+  "composite_of": [
+    "approach",
+    "close_gripper",
+    "lift"
+  ],
+  "seconds": 21.28,
+  "results": [
+    {
+      "index": 6,
+      "skill": "approach",
+      "params": {
+        "part": "cube",
+        "artifact": "grasp"
+      },
+      "ok": true,
+      "metrics": {
+        "position_error_m": 9.361947143864057e-05
+      },
+      "reason": "",
+      "sim_seconds": 5.560000000001759,
+      "wall_seconds": 5.697298584040254
+    },
+    {
+      "index": 7,
+      "skill": "close_gripper",
+      "params": {
+        "part": "cube",
+        "force": 3.0
+      },
+      "ok": true,
+      "metrics": {
+        "held": true,
+        "left_n": 3.395911808459613,
+        "right_n": 3.395811808100558
+      },
+      "reason": "",
+      "sim_seconds": 3.280000000000543,
+      "wall_seconds": 3.4646951720351353
+    },
+    {
+      "index": 8,
+      "skill": "lift",
+      "params": {
+        "part": "cube",
+        "height": 0.15
+      },
+      "ok": true,
+      "metrics": {
+        "object_lift_m": 0.149754242754906,
+        "held": true
+      },
+      "reason": "",
+      "sim_seconds": 5.239999999997096,
+      "wall_seconds": 5.830203364021145
+    }
+  ]
+}
