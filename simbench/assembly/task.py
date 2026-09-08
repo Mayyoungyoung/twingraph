@@ -17,20 +17,23 @@ PIN_L = np.r_[CENTER + [-0.092, -0.032], 0.855]
 PIN_R = np.r_[CENTER + [-0.092, 0.032], 0.855]
 
 
-def pick(s, part, lift=True):
-    s.call("observe_parts")
+def pick(s, part, lift=True, candidate_id=None, terminal_targets=None):
+    from .candidates import (
+        build_pick_candidates,
+        choose_candidate,
+        execute_pick_candidate,
+        save_batch,
+    )
+
+    s.call("observe")
     s.call("estimate_pose", part=part)
     s.call("propose_grasps", part=part)
-    s.call("select_grasp", part=part, index=1 if part.startswith("pin_") else 0)
-    s.call("open_gripper")
-    goal = s.artifacts["grasp"]
-    s.call("plan_transfer", target=goal["xyz"] + [0, 0, 0.10], yaw=goal["yaw"])
-    s.call("execute_joint_path")
-    s.call("approach", part=part)
-    s.call("close_gripper", part=part)
-    s.call("verify_grasp", part=part)
-    if lift:
-        s.call("lift", part=part)
+    # Open before construction: candidates all start at this actual shared state.
+    s.call("gripper", mode="open")
+    candidates = build_pick_candidates(s, part, lift, terminal_targets=terminal_targets)
+    chosen = choose_candidate(candidates, candidate_id)
+    save_batch(s, candidates, chosen)
+    execute_pick_candidate(s, chosen)
 
 
 def transfer_part(s, part, xyz):
@@ -43,13 +46,22 @@ def transfer_part(s, part, xyz):
 
 
 def release(s):
-    s.call("open_gripper")
+    from .candidates import release_template
+
+    steps = release_template()
+    s.call(steps[0]["skill"], **steps[0]["params"])
     s.hold(0.3)
-    s.call("retreat")
+    s.call(steps[1]["skill"], **steps[1]["params"])
 
 
 def assemble(s, policy=None):
-    pick(s, "carriage")
+    pick(
+        s,
+        "carriage",
+        terminal_targets=[
+            dict(id="seated", part="carriage", xyz=np.r_[CENTER + [0.030, 0], CAR_Z])
+        ],
+    )
     entry = np.r_[CENTER + [-0.155, 0], CAR_Z + 0.030]
     transfer_part(s, "carriage", entry)
     s.call("lower", part="carriage", height=0.030)
@@ -68,7 +80,7 @@ def assemble(s, policy=None):
     s.call("inspect_seat", part="carriage", target=np.r_[carriage_target[:2], CAR_Z])
     s.call("measure_clearance")
 
-    pick(s, "end_stop")
+    pick(s, "end_stop", terminal_targets=[dict(id="seated", part="end_stop", xyz=STOP)])
     transfer_part(s, "end_stop", STOP + [0, 0, 0.045])
     s.call("plan_linear", target=s.arm.part_target("end_stop", STOP + [0, 0, 0.010]))
     s.call("execute_cartesian_path")
@@ -79,7 +91,7 @@ def assemble(s, policy=None):
     s.call("inspect_seat", part="end_stop", target=STOP)
 
     for part, target in [("pin_left", PIN_L), ("pin_right", PIN_R)]:
-        pick(s, part)
+        pick(s, part, terminal_targets=[dict(id="seated", part=part, xyz=target)])
         transfer_part(s, part, target + [0, 0, 0.069])
         s.call("align_axis", part=part, target=target + [0, 0, 0.069])
         s.call("plan_insertion", part=part, target=target, speed=0.006)
@@ -95,14 +107,27 @@ def assemble(s, policy=None):
         release(s)
         s.call("inspect_seat", part=part, target=target)
 
-    pick(s, "carriage", lift=False)
+    pick(
+        s,
+        "carriage",
+        lift=False,
+        terminal_targets=[
+            dict(
+                id="stroke_end", part="carriage", xyz=np.r_[CENTER + [0.060, 0], CAR_Z]
+            )
+        ],
+    )
     s.call("move_constrained", part="carriage", target_x=float(CENTER[0] - 0.04))
     s.call("move_constrained", part="carriage", target_x=float(CENTER[0] + 0.060))
     s.call("verify_stroke", minimum=0.09)
     release(s)
 
-    pick(s, "handle")
     handle_target = s.ctx.obj_pos("carriage") + [0, 0, 0.048]
+    pick(
+        s,
+        "handle",
+        terminal_targets=[dict(id="seated", part="handle", xyz=handle_target)],
+    )
     transfer_part(s, "handle", handle_target + [0, 0, 0.045])
     s.call("align_axis", part="handle", target=handle_target + [0, 0, 0.023])
     s.call(

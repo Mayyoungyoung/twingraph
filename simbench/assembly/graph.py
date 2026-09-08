@@ -1,143 +1,136 @@
-"""Conditional skill graph and pre-execution checking of JSON skeletons."""
+"""Contract-derived dependency graph and conservative whole-skeleton validation."""
 
 import argparse
+import copy
 from dataclasses import asdict
 import inspect
 import json
 from pathlib import Path
-from .library import CATALOG, Session, PARTS, SkillFailure
+from .library import CATALOG, Session, PARTS, DEFAULT_CAPABILITIES, SkillFailure
+from .contracts import State, check, apply_effects
+from .interfaces import resolve, INTERFACES
 
 
-def validate_skeleton(steps, initial_held=None, initial_artifacts=None):
+def validate_skeleton(
+    steps,
+    initial_held=None,
+    initial_artifacts=None,
+    parts=PARTS,
+    initial_seen=(),
+    capabilities=None,
+    grasp_epoch=None,
+):
+    state = State(
+        tuple(parts),
+        initial_held,
+        set(initial_seen),
+        copy.deepcopy(initial_artifacts or {}),
+        (
+            capabilities
+            if capabilities is not None
+            else {
+                p: DEFAULT_CAPABILITIES[p] for p in parts if p in DEFAULT_CAPABILITIES
+            }
+        ),
+    )
+    state.grasp_epoch = grasp_epoch
+    errors, unknown, bindings, checked = [], [], [], []
     if not steps:
-        return dict(valid=False, errors=["empty skeleton"])
-    held = initial_held
-    seen = set()
-    artifacts = dict(initial_artifacts or {})
-    errors = []
-    bindings = []
+        errors.append(dict(step=-1, reason="empty skeleton"))
     for i, row in enumerate(steps):
-        name = row.get("skill")
-        params = row.get("params", {})
-        if name not in CATALOG:
-            errors.append(dict(step=i, reason="unknown skill"))
-            break
         try:
+            name, params = resolve(row.get("skill"), row.get("params", {}))
+            if name not in CATALOG:
+                raise ValueError("unknown skill")
             bound = inspect.signature(getattr(Session, name)).bind(None, **params)
             bound.apply_defaults()
-        except TypeError as exc:
+            params = dict(bound.arguments)
+            params.pop("self")
+        except (ValueError, TypeError) as exc:
             errors.append(dict(step=i, reason=str(exc)))
             break
-        p = dict(bound.arguments)
-        p.pop("self")
-        part = p.get("part")
         spec = CATALOG[name]
-        if part is not None and part not in PARTS:
-            errors.append(dict(step=i, reason="unknown part"))
+        verdict = check(spec, params, state)
+        errors.extend(dict(step=i, reason=x) for x in verdict["conflicts"])
+        unknown.extend(dict(step=i, reason=x) for x in verdict["unknown"])
+        if verdict["conflicts"]:
             break
+        checked.append(dict(step=i, component=name, checks=list(spec.requires)))
         for requirement in spec.requires:
-            reason = None
-            if requirement == "held" and held != part:
-                reason = f"held({part}) required; currently {held}"
-            if requirement == "empty" and held is not None:
-                reason = "empty gripper required"
-            if requirement == "seen" and part not in seen:
-                reason = "observation missing"
-            if requirement == "pin" and part not in ("pin_left", "pin_right"):
-                reason = "pin geometry required"
             if requirement.startswith("artifact:"):
-                artifact = artifacts.get(p.get("artifact"))
-                kind = requirement.split(":", 1)[1]
-                if artifact is None or artifact["type"] != kind:
-                    reason = f"{kind} artifact missing"
-                elif part is not None and artifact.get("part") not in (None, part):
-                    reason = "artifact bound to a different part"
-                else:
-                    bindings.append(
-                        dict(
-                            producer=artifact.get("step", -1),
-                            consumer=i,
-                            type=kind,
-                            part=part,
-                        )
+                item = state.artifacts[params["artifact"]]
+                bindings.append(
+                    dict(
+                        producer=item.get("step", -1),
+                        consumer=i,
+                        type=item["type"],
+                        part=item.get("part"),
                     )
-            if reason:
-                errors.append(dict(step=i, reason=reason))
-        if errors:
-            break
-        if name == "observe_parts":
-            seen = set(PARTS)
-        if name == "close_gripper":
-            held = part
-        if name == "open_gripper":
-            held = None
-        if spec.produces and "as_" in p:
-            artifacts[p["as_"]] = dict(type=spec.produces, part=part, step=i)
+                )
+        apply_effects(spec, params, state, step=i)
     return dict(
         valid=not errors,
+        status="conflict" if errors else ("unknown" if unknown else "necessary_pass"),
+        necessary_checks_passed=not errors,
         errors=errors,
+        unknown=unknown,
+        checked=checked,
         artifact_edges=bindings,
-        note="Structural necessary conditions; live contact gates and continuous planning remain required.",
+        final_state=dict(held=state.held, seen=sorted(state.seen)),
+        note="Success-conditional structural propagation; unknown obligations require solver/physics verification.",
     )
 
 
 def execute_skeleton(session, steps):
-    verdict = validate_skeleton(steps, session.held, session.artifacts)
+    verdict = validate_skeleton(
+        steps,
+        session.held,
+        session.artifacts,
+        session.parts,
+        session.observations,
+        session.capabilities,
+        session.grasp_epoch,
+    )
     if not verdict["valid"]:
         raise SkillFailure(str(verdict["errors"]))
     for row in steps:
         session.call(row["skill"], **row.get("params", {}))
+    return verdict
 
 
 def catalog_graph():
+    from .candidates import TEMPLATES
+
     edges = []
     for a, source in CATALOG.items():
+        supplied = set(source.effects)
         if source.produces:
-            for b, target in CATALOG.items():
-                if "artifact:" + source.produces in target.requires:
-                    edges.append(
-                        dict(
-                            source=a,
-                            target=b,
-                            condition=source.produces + "(same object)",
-                        )
+            supplied.add("artifact:" + source.produces)
+        for b, target in CATALOG.items():
+            needs = set(target.requires)
+            supported = supplied & needs
+            for effect, predicate in (
+                ("held:part", "held"),
+                ("held:empty", "empty"),
+                ("seen:all", "seen"),
+            ):
+                if effect in supplied and predicate in needs:
+                    supported.add(predicate)
+            if supported:
+                edges.append(
+                    dict(
+                        source=a,
+                        target=b,
+                        supplies=sorted(supported),
+                        condition="same object binding; all remaining contracts still required",
                     )
-    handoffs = {
-        "observe_parts": ["estimate_pose"],
-        "select_grasp": ["plan_transfer"],
-        "execute_joint_path": ["approach", "align_axis", "lower"],
-        "approach": ["close_gripper"],
-        "close_gripper": ["verify_grasp", "lift", "move_constrained"],
-        "verify_grasp": ["lift", "plan_insertion"],
-        "lift": ["plan_transfer", "orient_wrist"],
-        "orient_wrist": ["plan_transfer"],
-        "lower": ["align_axis", "guarded_descent"],
-        "align_axis": ["plan_insertion", "guarded_descent"],
-        "slide_insert": ["open_gripper", "inspect_seat"],
-        "guarded_descent": ["press_seat", "plan_recovery"],
-        "retract_contact": ["plan_insertion"],
-        "spiral_search": ["learned_insert", "guarded_descent"],
-        "learned_insert": ["press_seat"],
-        "press_seat": ["open_gripper"],
-        "open_gripper": ["retreat"],
-        "retreat": ["inspect_seat", "observe_parts", "home"],
-        "inspect_seat": ["measure_clearance", "observe_parts"],
-        "move_constrained": ["verify_stroke", "open_gripper"],
-        "verify_stroke": ["open_gripper"],
-    }
-    for a, targets in handoffs.items():
-        for b in targets:
-            edges.append(
-                dict(
-                    source=a,
-                    target=b,
-                    condition="all destination contracts + continuous feasibility",
                 )
-            )
     return dict(
         nodes=[asdict(x) for x in CATALOG.values()],
         edges=edges,
-        note="Conditional composability, not unconditional pairwise reachability. Data/resource bindings are checked on complete skeletons.",
+        interfaces=INTERFACES,
+        templates=[dict(name=n, kind="macro") for n in TEMPLATES],
+        note="Edges show provided facts/data, not sufficient feasibility. Validate the entire bound skeleton.",
     )
 
 

@@ -1,0 +1,24 @@
+{
+  "skill": "lift",
+  "label": "保持夹持并抬升",
+  "scene": "cube.xml",
+  "success": true,
+  "error": "",
+  "metrics": {
+    "object_lift_m": 0.14975424275396465,
+    "held": true
+  },
+  "sim_seconds": 5.239999999997096,
+  "trace_samples": 262,
+  "overlay_pixels": 1444,
+  "visualization": "青箭头＝目标抬升；黄线＝被夹方块的实际运动",
+  "target": [
+    -0.18,
+    -0.18,
+    0.9699829565938746
+  ],
+  "video": "skills/lift.mp4",
+  "seconds": 7.72,
+  "annotation_geoms_max": 176,
+  "sha256": "f2a06d0603c46fac0b4b662ffac808c99a504ff9c4e3d2ad5970e0670840dc1b"
+}

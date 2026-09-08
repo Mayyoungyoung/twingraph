@@ -1,0 +1,24 @@
+{
+  "base_commit": "5f9a2884252678816af77457ba42f1fbd9c18c88",
+  "source_sha256": {
+    "simbench/assembly/contracts.py": "3a8ae1bafeb86340839681a665bf3530761ce53eb135c84c7dada298c9c61fea",
+    "simbench/assembly/interfaces.py": "eb38740f7abbb67288e46e3a8fe6ee9fec4f4ef2ddd425d557da547b2d06fe26",
+    "simbench/assembly/candidates.py": "94a8ae29072c8bf61f1ea93358d3ca905ea24d85e20f5286327e0e0b531b5189",
+    "simbench/assembly/library.py": "82559f71122804c66ce05464fe16a1f9cf6bacf51c7be515c25c39f074b417da",
+    "simbench/assembly/graph.py": "933e57d6892212ad8db32179828c4c5bcb74def7307b268d4b58e5c9117927bc",
+    "simbench/assembly/task.py": "125b96e8b653e2dbf0a4b202ec1bb29a00c4596d1036ba28579169f0b8794c7e",
+    "simbench/assembly/candidate_demo.py": "b5d37ba14aac11878de1be709da1618d5668c5989009cf0477074083d5e12215"
+  },
+  "controller_unchanged_sha256": "36bdaf48c81b32ce026145b3d9ca7e15fbf7aeb5c56d71ab2aa3eda400802139",
+  "limitations": [
+    "candidate rollouts verify pick prefixes only",
+    "ranker is geometric, not learned",
+    "assembly perturbations are small regression samples",
+    "recording smoke verifies one component; existing curated videos are retained"
+  ],
+  "pre_proxy_observed_failure": {
+    "stage": "pin_left release",
+    "jaw_span_m": 0.06412420922014071,
+    "required_span_m": 0.075
+  }
+}

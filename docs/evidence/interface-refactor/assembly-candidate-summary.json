@@ -1,0 +1,98 @@
+[
+  {
+    "selected_id": "carriage:yaw:0.000000:pose:477847f48ad6:route:0:control:0:terminal:0",
+    "candidates": 6,
+    "statuses": {
+      "necessary_pass": 6,
+      "unknown": 0,
+      "conflict": 0
+    },
+    "grasps": 2,
+    "continuations": [
+      {
+        "prefix_id": "carriage:yaw:0.000000:pose:477847f48ad6:route:0:control:0:terminal:0",
+        "selected_id": "carriage:yaw:0.000000:pose:477847f48ad6:route:0",
+        "candidates": 3
+      }
+    ]
+  },
+  {
+    "selected_id": "end_stop:yaw:0.000000:pose:551defe078b5:route:0:control:0:terminal:0",
+    "candidates": 6,
+    "statuses": {
+      "necessary_pass": 6,
+      "unknown": 0,
+      "conflict": 0
+    },
+    "grasps": 2,
+    "continuations": [
+      {
+        "prefix_id": "end_stop:yaw:0.000000:pose:551defe078b5:route:0:control:0:terminal:0",
+        "selected_id": "end_stop:yaw:0.000000:pose:551defe078b5:route:0",
+        "candidates": 3
+      }
+    ]
+  },
+  {
+    "selected_id": "pin_left:yaw:1.570796:pose:60d56417bb04:route:0:control:0:terminal:0",
+    "candidates": 6,
+    "statuses": {
+      "necessary_pass": 6,
+      "unknown": 0,
+      "conflict": 0
+    },
+    "grasps": 2,
+    "continuations": [
+      {
+        "prefix_id": "pin_left:yaw:1.570796:pose:60d56417bb04:route:0:control:0:terminal:0",
+        "selected_id": "pin_left:yaw:1.570796:pose:60d56417bb04:route:0",
+        "candidates": 3
+      }
+    ]
+  },
+  {
+    "selected_id": "pin_right:yaw:1.570796:pose:1cf553883990:route:0:control:0:terminal:0",
+    "candidates": 6,
+    "statuses": {
+      "necessary_pass": 6,
+      "unknown": 0,
+      "conflict": 0
+    },
+    "grasps": 2,
+    "continuations": [
+      {
+        "prefix_id": "pin_right:yaw:1.570796:pose:1cf553883990:route:0:control:0:terminal:0",
+        "selected_id": "pin_right:yaw:1.570796:pose:1cf553883990:route:0",
+        "candidates": 3
+      }
+    ]
+  },
+  {
+    "selected_id": "carriage:yaw:1.570796:pose:6a3ad35bf3d5:route:0:control:0:terminal:0",
+    "candidates": 6,
+    "statuses": {
+      "necessary_pass": 6,
+      "unknown": 0,
+      "conflict": 0
+    },
+    "grasps": 2,
+    "continuations": []
+  },
+  {
+    "selected_id": "handle:yaw:1.570796:pose:a13e9d60a696:route:0:control:0:terminal:0",
+    "candidates": 6,
+    "statuses": {
+      "necessary_pass": 6,
+      "unknown": 0,
+      "conflict": 0
+    },
+    "grasps": 2,
+    "continuations": [
+      {
+        "prefix_id": "handle:yaw:1.570796:pose:a13e9d60a696:route:0:control:0:terminal:0",
+        "selected_id": "handle:yaw:1.570796:pose:a13e9d60a696:route:0",
+        "candidates": 3
+      }
+    ]
+  }
+]

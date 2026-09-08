@@ -1,0 +1,376 @@
+[
+  {
+    "skill": "observe_parts",
+    "scene": "perception.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "detected": [
+        "cube",
+        "cube_green",
+        "cube_orange"
+      ],
+      "backend": "simulator pose observations",
+      "noise_std_m": 0.0
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "estimate_pose",
+    "scene": "perception.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "position_m": [
+        -0.18,
+        -0.18,
+        0.8199829565938745
+      ],
+      "quaternion_wxyz": [
+        1.0,
+        1.6317972758255028e-17,
+        -4.186224947341896e-19,
+        6.420910862902223e-32
+      ]
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "propose_grasps",
+    "scene": "perception.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "feasible_candidates": 2,
+      "unknown_candidates": 0
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "select_grasp",
+    "scene": "perception.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "chosen_index": 0,
+      "yaw_rad": 0.0,
+      "jaw_width_m": 0.04
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "approach",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "position_error_m": 9.36194654763636e-05
+    },
+    "sim_seconds": 5.560000000001759
+  },
+  {
+    "skill": "close_gripper",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "held": true,
+      "left_n": 3.3959118102031693,
+      "right_n": 3.3958118063563445
+    },
+    "sim_seconds": 3.280000000000543
+  },
+  {
+    "skill": "verify_grasp",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "held": true,
+      "left_n": 3.3959198806930173,
+      "right_n": 3.395820079285596
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "open_gripper",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "jaw_span_m": 0.08480977899230262
+    },
+    "sim_seconds": 0.9999999999994458
+  },
+  {
+    "skill": "lift",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "object_lift_m": 0.14975424275396465,
+      "held": true
+    },
+    "sim_seconds": 5.239999999997096
+  },
+  {
+    "skill": "lower",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "distance_m": 0.1
+    },
+    "sim_seconds": 5.919999999996719
+  },
+  {
+    "skill": "orient_wrist",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "yaw_rad": 1.0471975511965976
+    },
+    "sim_seconds": 4.259999999997639
+  },
+  {
+    "skill": "retreat",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "height_m": 0.9399762942207984
+    },
+    "sim_seconds": 2.7599999999984703
+  },
+  {
+    "skill": "home",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "joint_error_rad": 5.846231221351417e-08
+    },
+    "sim_seconds": 3.020000000000911
+  },
+  {
+    "skill": "plan_linear",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "length_m": 0.24601829200285089,
+      "ik_samples": 12
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "execute_cartesian_path",
+    "scene": "cube.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "target_error_m": 7.82985323973739e-05
+    },
+    "sim_seconds": 9.840000000001748
+  },
+  {
+    "skill": "plan_transfer",
+    "scene": "obstacle.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "waypoints": 3,
+      "clearance_m": 1.08,
+      "collision_checks": [
+        {
+          "route_id": "free:route:0",
+          "valid": true,
+          "samples": 52,
+          "resolution_rad": 0.035
+        },
+        {
+          "route_id": "free:route:1",
+          "valid": true,
+          "samples": 64,
+          "resolution_rad": 0.035
+        },
+        {
+          "route_id": "free:route:2",
+          "valid": true,
+          "samples": 73,
+          "resolution_rad": 0.035
+        }
+      ],
+      "candidate_count": 3,
+      "selected_id": "free:route:0"
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "execute_joint_path",
+    "scene": "obstacle.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "target_error_m": 3.121483869932869e-05
+    },
+    "sim_seconds": 6.640000000000716
+  },
+  {
+    "skill": "align_axis",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "object_error_m": 9.873607033444244e-05
+    },
+    "sim_seconds": 1.159999999999357
+  },
+  {
+    "skill": "plan_insertion",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "target_m": [
+        0.04,
+        0.05,
+        0.855
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "speed_m_s": 0.008,
+      "force_limit_n": 12.0
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "guarded_descent",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "z_m": 0.9016251698358827,
+      "peak_contact_n": 2.15764387617746,
+      "travel_m": 0.022237624351181595,
+      "stopped_by": "contact"
+    },
+    "sim_seconds": 3.9599999999978053
+  },
+  {
+    "skill": "plan_recovery",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "retreat_m": 0.018,
+      "retry_budget": 1
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "retract_contact",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "eef_height_m": 0.9257130273469346
+    },
+    "sim_seconds": 1.8600000000014205
+  },
+  {
+    "skill": "spiral_search",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "entry_depth_m": 0.004045830159960628,
+      "peak_force_n": 0.5243493708172291
+    },
+    "sim_seconds": 5.680000000006942
+  },
+  {
+    "skill": "learned_insert",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "position_error_m": 0.0006948205701464731,
+      "peak_force_n": 0.0,
+      "checkpoint": "/home/jia/RAL/simbench/assembly/checkpoints/insert_bc.pt"
+    },
+    "sim_seconds": 13.240000000010355
+  },
+  {
+    "skill": "press_seat",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "height_error_m": 8.817570185870593e-05,
+      "contact_force_n": 1.3987388969004766
+    },
+    "sim_seconds": 2.800000000003422
+  },
+  {
+    "skill": "inspect_seat",
+    "scene": "pin.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "position_error_m": 9.796583211878147e-05,
+      "tilt_deg": 0.004043373469008952
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "slide_insert",
+    "scene": "rail.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "error_m": 0.000719154115169516,
+      "travel_m": 0.18496451953467463,
+      "peak_force_n": 0.0
+    },
+    "sim_seconds": 14.40000000001362
+  },
+  {
+    "skill": "measure_clearance",
+    "scene": "rail.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "lateral_margin_m": 0.00399252636617357
+    },
+    "sim_seconds": 0.0
+  },
+  {
+    "skill": "move_constrained",
+    "scene": "rail.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "error_m": 0.00019375421354549628,
+      "travel_m": 0.06972842365153857,
+      "peak_force_n": 5.599454670973205,
+      "cross_axis_m": 7.290687348663503e-06
+    },
+    "sim_seconds": 3.659999999998284
+  },
+  {
+    "skill": "verify_stroke",
+    "scene": "rail.xml",
+    "success": true,
+    "error": "",
+    "metrics": {
+      "measured_range_m": 0.09965358961473006,
+      "required_range_m": 0.09
+    },
+    "sim_seconds": 0.0
+  }
+]

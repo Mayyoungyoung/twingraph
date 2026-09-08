@@ -19,6 +19,13 @@ python -m simbench.assembly.evaluate --seeds 0,1,2,3,4,5,11,19 --out results/tab
 
 默认权重为仓库内的 `simbench/assembly/checkpoints/insert_bc.pt`。`--policy <路径>` 可指定另一个兼容的行为克隆模型。任务输出完整视频、步骤、验收和物理快照；不再从完整装配中自动切出旧的组件视频。
 
+任务同时输出 `candidates.json`：包含所有抓取候选，以及所选抓法在实际抓持状态下生成的多条搬运路线。`status=unknown` 不能解释为不可行。以下命令从同一初态复现两种方块抓取前缀，并将候选输入和仿真结果分开保存：
+
+```bash
+python -m simbench.assembly.candidate_demo --out results/candidate_demo
+python -m simbench.assembly.graph --out results/skill_graph.json
+```
+
 ## 独立演示
 
 ```bash

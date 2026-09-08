@@ -15,8 +15,11 @@ import numpy as np
 import mujoco
 from scipy.spatial.transform import Rotation
 from .control import PoseController, down, HOME
+from .contracts import check, apply_effects, session_state
+from .interfaces import resolve, family
 
 PARTS = ("carriage", "end_stop", "handle", "pin_left", "pin_right")
+DEFAULT_CAPABILITIES = {"pin_left": ("pin",), "pin_right": ("pin",)}
 GRASP = {
     "carriage": (0.027, 0.028),
     "end_stop": (0.023, 0.026),
@@ -35,6 +38,11 @@ class Spec:
     produces: str = ""
     implementation: str = "feedback"
     description: str = ""
+    kind: str = "executable"
+    family: str = ""
+    effects: tuple = ()
+    obligations: tuple = ()
+    output_bindings: tuple = (("part", "part"),)
 
 
 CATALOG = {}
@@ -48,6 +56,9 @@ def skill(
     produces="",
     implementation="feedback",
     description="",
+    effects=(),
+    obligations=None,
+    output_bindings=(("part", "part"),),
 ):
     def deco(fn):
         CATALOG[name] = Spec(
@@ -58,6 +69,23 @@ def skill(
             produces,
             implementation,
             description or label,
+            (
+                "generator"
+                if produces and name != "observe_parts"
+                else ("checker" if category == "verification" else "executable")
+            ),
+            family(name),
+            effects,
+            tuple(
+                obligations
+                if obligations is not None
+                else (
+                    ("closed-loop tracking/contact and success checks",)
+                    if not produces and category != "verification"
+                    else ("measurement or solver outcome",)
+                )
+            ),
+            output_bindings,
         )
         fn.spec = CATALOG[name]
         return fn
@@ -86,6 +114,7 @@ class Session:
         noise=0.0,
         parts=None,
         grasp_specs=None,
+        capabilities=None,
     ):
         self.ctx = ctx
         self.arm = PoseController(ctx)
@@ -103,34 +132,36 @@ class Session:
         # teaching objects without pretending a cube is an assembly carriage.
         self.parts = tuple(PARTS if parts is None else parts)
         self.grasp_specs = dict(GRASP if grasp_specs is None else grasp_specs)
+        self.capabilities = (
+            capabilities
+            if capabilities is not None
+            else {
+                p: DEFAULT_CAPABILITIES[p]
+                for p in self.parts
+                if p in DEFAULT_CAPABILITIES
+            }
+        )
+        self.candidate_batches = []
+        self.grasp_epoch = 0
+        self.active_candidate_id = None
 
     def call(self, name, **params):
-        if name not in CATALOG:
-            raise SkillFailure(f"unknown skill {name}")
-        bound = inspect.signature(getattr(self, name)).bind(**params)
-        bound.apply_defaults()
+        requested = name
+        try:
+            name, params = resolve(name, params)
+            if name not in CATALOG:
+                raise ValueError(f"unknown skill {name}")
+            bound = inspect.signature(getattr(self, name)).bind(**params)
+            bound.apply_defaults()
+        except (TypeError, ValueError) as exc:
+            raise SkillFailure(str(exc)) from exc
         params = dict(bound.arguments)
         spec = CATALOG[name]
         part = params.get("part")
-        for condition in spec.requires:
-            if condition == "empty" and self.held is not None:
-                raise SkillFailure(f"{name}: gripper occupied by {self.held}")
-            if condition == "held" and (
-                self.held != part or not self.ctx.grasp_contacts(part)["held"]
-            ):
-                raise SkillFailure(f"{name}: verified held({part}) required")
-            if condition == "seen" and part not in self.observations:
-                raise SkillFailure(f"{name}: observe {part} first")
-            if condition == "pin" and part not in ("pin_left", "pin_right"):
-                raise SkillFailure(f"{name}: cylindrical pin model required")
-            if condition.startswith("artifact:"):
-                key = params.get("artifact", "default")
-                expected = condition.split(":", 1)[1]
-                item = self.artifacts.get(key)
-                if item is None or item["type"] != expected:
-                    raise SkillFailure(f"{name}: requires {expected} artifact {key}")
-                if part is not None and item.get("part") not in (None, part):
-                    raise SkillFailure(f"{name}: artifact bound to wrong part")
+        state = session_state(self)
+        verdict = check(spec, params, state, contact=self.ctx.grasp_contacts)
+        if verdict["conflicts"]:
+            raise SkillFailure(f"{name}: " + "; ".join(verdict["conflicts"]))
         if self.rec:
             self.rec.set_skill(
                 name, f"{spec.label}  |  {name}" + (f"  ·  {part}" if part else "")
@@ -143,9 +174,14 @@ class Session:
             raise TypeError(f"{name} must return Result")
         if outcome.ok:
             outcome.reason = ""
+            state.artifacts = self.artifacts
+            apply_effects(spec, params, state, symbolic=False)
+            self.held = state.held
+            self.grasp_epoch = state.grasp_epoch
         row = dict(
             index=len(self.results),
             skill=name,
+            interface=requested,
             params=params,
             ok=bool(outcome.ok),
             metrics=outcome.metrics,
@@ -172,6 +208,18 @@ class Session:
         return outcome
 
     def artifact(self, name, kind, part=None, **data):
+        if (
+            kind in ("joint_path", "cartesian_path", "insertion", "recovery")
+            and "binding" not in data
+        ):
+            grasp = self.artifacts.get("grasp")
+            data["binding"] = dict(
+                held=self.held,
+                grasp_epoch=self.grasp_epoch,
+                grasp_artifact="grasp" if grasp else None,
+                grasp_id=grasp.get("id") if grasp else None,
+                prefix_id=self.active_candidate_id,
+            )
         self.artifacts[name] = dict(type=kind, part=part, **data)
 
     def hold(self, seconds=0.25):
@@ -190,6 +238,9 @@ class Session:
             observations=copy.deepcopy(self.observations),
             rotation=self.arm.rotation.copy(),
             stroke=list(self.stroke),
+            rng=copy.deepcopy(self.rng.bit_generator.state),
+            grasp_epoch=self.grasp_epoch,
+            active_candidate_id=self.active_candidate_id,
         )
 
     def restore(self, state):
@@ -204,6 +255,10 @@ class Session:
         self.observations = copy.deepcopy(state["observations"])
         self.arm.rotation = state["rotation"].copy()
         self.stroke = list(state["stroke"])
+        if "rng" in state:
+            self.rng.bit_generator.state = copy.deepcopy(state["rng"])
+        self.grasp_epoch = state.get("grasp_epoch", 0)
+        self.active_candidate_id = state.get("active_candidate_id")
 
     def external_force(self, part):
         bid = self.ctx.body_id(part)
@@ -263,6 +318,7 @@ class Session:
         "perception",
         produces="observations",
         implementation="sim_pose_sensor",
+        effects=("seen:all",),
     )
     def observe_parts(self):
         self.observations = {
@@ -306,6 +362,10 @@ class Session:
         pose = self.artifacts[artifact]
         dz, width = self.grasp_specs[part]
         candidates = []
+        unresolved = []
+        pose_id = hashlib.sha256(
+            np.asarray(pose["xyz"]).tobytes() + np.asarray(pose["quat"]).tobytes()
+        ).hexdigest()[:12]
         for yaw in (0.0, np.pi / 2):
             xyz = pose["xyz"] + np.array([0, 0, dz])
             try:
@@ -318,6 +378,7 @@ class Session:
                 )
                 candidates.append(
                     dict(
+                        id=f"{part}:yaw:{yaw:.6f}:pose:{pose_id}",
                         xyz=xyz,
                         yaw=yaw,
                         width=w,
@@ -325,12 +386,23 @@ class Session:
                         cost=float(np.linalg.norm(q - self.ctx.arm_qpos) + 2 * w),
                     )
                 )
-            except ValueError:
-                continue
-        self.artifact(as_, "grasps", part, candidates=candidates)
+            except ValueError as exc:
+                unresolved.append(
+                    dict(
+                        id=f"{part}:yaw:{yaw:.6f}:pose:{pose_id}",
+                        xyz=xyz,
+                        yaw=yaw,
+                        status="unknown",
+                        reason=str(exc),
+                    )
+                )
+        self.artifact(as_, "grasps", part, candidates=candidates, unresolved=unresolved)
         return Result(
-            bool(candidates),
-            {"feasible_candidates": len(candidates)},
+            bool(candidates or unresolved),
+            {
+                "feasible_candidates": len(candidates),
+                "unknown_candidates": len(unresolved),
+            },
             "no reachable grasp" if not candidates else "",
         )
 
@@ -341,11 +413,23 @@ class Session:
         ("artifact:grasps",),
         produces="grasp",
         implementation="candidate_scoring",
+        output_bindings=(("part", "part"), ("id", "candidate_id")),
     )
-    def select_grasp(self, part, artifact="grasps", as_="grasp", index=0):
+    def select_grasp(
+        self, part, artifact="grasps", as_="grasp", index=None, candidate_id=None
+    ):
         candidates = self.artifacts[artifact]["candidates"]
-        # Deterministic top-down face preference is part of the initial recipe;
-        # all alternatives remain available to the graph/value module.
+        if not candidates:
+            return Result(False, reason="no materialized grasp within solver budget")
+        if candidate_id is not None:
+            matches = [i for i, c in enumerate(candidates) if c["id"] == candidate_id]
+            if not matches:
+                return Result(False, reason="unknown grasp candidate id")
+            index = matches[0]
+        if index is None:
+            index = min(range(len(candidates)), key=lambda i: candidates[i]["cost"])
+        if index < 0 or index >= len(candidates):
+            return Result(False, reason="grasp index out of range")
         candidate = candidates[index]
         self.artifact(as_, "grasp", part, **candidate)
         return Result(
@@ -363,46 +447,52 @@ class Session:
         produces="joint_path",
         implementation="waypoint_ik",
     )
-    def plan_transfer(self, target, as_="transfer", clearance=0.98, yaw=0.0):
-        start = self.ctx.eef_pos()
-        target = np.asarray(target, float)
-        checks = []
-        joints = []
-        for height in (clearance, clearance + 0.07, clearance + 0.13):
-            points = [
-                np.r_[start[:2], max(height, start[2], target[2])],
-                np.r_[target[:2], max(height, start[2], target[2])],
-                target,
-            ]
-            q = self.ctx.arm_qpos.copy()
-            candidate = []
-            try:
-                for point in points:
-                    q = self.arm.ik(point, down(yaw), seed=q)
-                    candidate.append(q.copy())
-                check = self.arm.check_joint_path(candidate, self.held)
-                checks.append(check)
-                if check["valid"]:
-                    joints = candidate
-                    clearance = height
-                    break
-            except ValueError as exc:
-                checks.append(dict(valid=False, reason=str(exc)))
-        if not joints:
-            return Result(False, {"checks": checks}, "no checked transfer route")
-        self.artifact(
-            as_,
-            "joint_path",
-            start_q=self.ctx.arm_qpos.copy(),
-            joints=joints,
-            target=target,
-            rotation=down(yaw),
+    def plan_transfer(
+        self,
+        target,
+        as_="transfer",
+        clearance=0.98,
+        yaw=0.0,
+        candidate_id=None,
+        grasp_artifact="grasp",
+    ):
+        from .candidates import transfer_routes, record_continuation
+
+        grasp = self.artifacts.get(grasp_artifact)
+        routes, checks = transfer_routes(
+            self, target, clearance, yaw, grasp, grasp_artifact
         )
+        # Even when the budget finds no solution, unresolved solver attempts survive.
+        self.artifact(
+            as_ + "_candidates",
+            "joint_paths",
+            self.held,
+            candidates=routes,
+            attempts=checks,
+        )
+        ready = [r for r in routes if r["status"] == "necessary_pass"]
+        if not ready:
+            return Result(
+                False,
+                {"checks": checks, "status": "unknown"},
+                "no checked transfer route within budget",
+            )
+        chosen = (
+            next((r for r in ready if r["id"] == candidate_id), None)
+            if candidate_id
+            else min(ready, key=lambda r: r["cost"])
+        )
+        if chosen is None:
+            return Result(False, reason="requested route is not materialized")
+        self.artifacts[as_] = copy.deepcopy(chosen["path"])
+        record_continuation(self, routes, chosen)
         return Result(
             metrics={
-                "waypoints": len(joints),
-                "clearance_m": clearance,
+                "waypoints": len(chosen["path"]["joints"]),
+                "clearance_m": chosen["clearance"],
                 "collision_checks": checks,
+                "candidate_count": len(routes),
+                "selected_id": chosen["id"],
             }
         )
 
@@ -472,10 +562,9 @@ class Session:
             "linear servo tracking error" if not ok else "",
         )
 
-    @skill("open_gripper", "张开夹爪 / 释放", "gripper")
+    @skill("open_gripper", "张开夹爪 / 释放", "gripper", effects=("held:empty",))
     def open_gripper(self):
         ok = self.arm.open()
-        self.held = None
         return Result(ok, {"jaw_span_m": self.ctx.pad_span()})
 
     @skill("approach", "接近抓取位姿", "transition", ("empty", "artifact:grasp"))
@@ -492,11 +581,11 @@ class Session:
             "approach error" if not ok else "",
         )
 
-    @skill("close_gripper", "接触反馈夹持", "gripper", ("empty",))
+    @skill(
+        "close_gripper", "接触反馈夹持", "gripper", ("empty",), effects=("held:part",)
+    )
     def close_gripper(self, part, force=3.0):
         contact = self.arm.close(part, force=force)
-        if contact["held"]:
-            self.held = part
         return Result(
             contact["held"],
             contact,
@@ -689,7 +778,7 @@ class Session:
             "insufficient tested travel",
         )
 
-    @skill("measure_clearance", "测量导轨剩余间隙", "perception")
+    @skill("measure_clearance", "测量导轨剩余间隙", "verification")
     def measure_clearance(self, part="carriage"):
         from .scene import CENTER
 

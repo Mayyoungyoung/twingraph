@@ -1,0 +1,64 @@
+{
+  "success": true,
+  "error": "",
+  "steps": 108,
+  "unique_skills": [
+    "align_axis",
+    "approach",
+    "close_gripper",
+    "estimate_pose",
+    "execute_cartesian_path",
+    "execute_joint_path",
+    "guarded_descent",
+    "home",
+    "inspect_seat",
+    "learned_insert",
+    "lift",
+    "lower",
+    "measure_clearance",
+    "move_constrained",
+    "observe_parts",
+    "open_gripper",
+    "plan_insertion",
+    "plan_linear",
+    "plan_transfer",
+    "press_seat",
+    "propose_grasps",
+    "retreat",
+    "slide_insert",
+    "verify_grasp",
+    "verify_stroke"
+  ],
+  "robot_actuators": 9,
+  "objects": {
+    "carriage": [
+      0.1347099749272705,
+      0.08502029887806872,
+      0.8239772549938496
+    ],
+    "end_stop": [
+      -0.017186879720426134,
+      0.08499944165097864,
+      0.8359995364723889
+    ],
+    "pin_left": [
+      -0.01687153203039244,
+      0.052461895733415795,
+      0.8549947275241112
+    ],
+    "pin_right": [
+      -0.017284646554269808,
+      0.11690259518711792,
+      0.854994659895689
+    ],
+    "handle": [
+      0.1346638569412859,
+      0.08501071578105546,
+      0.8719764581711009
+    ]
+  },
+  "sim_seconds": 239.7800000004168,
+  "seed": 0,
+  "noise_std_m": 0.0,
+  "policy": "/home/jia/RAL/simbench/assembly/checkpoints/insert_bc.pt"
+}
