@@ -25,6 +25,17 @@ def check(spec, params, state, contact=None):
     if part is not None and part not in state.parts:
         conflicts.append(f"unknown part {part}")
     for requirement in spec.requires:
+        if requirement == "ownership":
+            # Optional part is an explicit promise: None means empty motion.
+            if state.held != part:
+                conflicts.append(
+                    f"move ownership mismatch: held={state.held}, part={part}"
+                )
+            elif part is not None:
+                if contact is None:
+                    unknown.append(f"live bilateral grasp contact({part})")
+                elif not contact(part)["held"]:
+                    conflicts.append(f"verified held({part}) required; contact lost")
         if requirement == "empty" and state.held is not None:
             conflicts.append(f"empty gripper required; occupied by {state.held}")
         elif requirement == "held":

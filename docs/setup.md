@@ -19,14 +19,22 @@ python -m simbench.assembly.evaluate --seeds 0,1,2,3,4,5,11,19 --out results/tab
 
 默认权重为仓库内的 `simbench/assembly/checkpoints/insert_bc.pt`。`--policy <路径>` 可指定另一个兼容的行为克隆模型。任务输出完整视频、步骤、验收和物理快照；不再从完整装配中自动切出旧的组件视频。
 
-任务同时输出 `candidates.json`：包含所有抓取候选，以及所选抓法在实际抓持状态下生成的多条搬运路线。`status=unknown` 不能解释为不可行。以下命令从同一初态复现两种方块抓取前缀，并将候选输入和仿真结果分开保存：
+任务同时输出 `atomic_skills.json`（11 个原子技能）及 `candidates.json`：包含所有抓取候选，以及所选抓法在实际抓持状态下生成的多条搬运路线。`status=unknown` 不能解释为不可行。以下命令从同一初态复现两种方块抓取前缀，并将候选输入和仿真结果分开保存：
 
 ```bash
 python -m simbench.assembly.candidate_demo --out results/candidate_demo
 python -m simbench.assembly.graph --out results/skill_graph.json
 ```
 
-## 独立演示
+## 新的放置演示
+
+```bash
+python -m simbench.assembly.atomic_demo --record --out results/atomic_place
+```
+
+只录制支撑位置处的释放及落稳检查，准备动作在录制前完成。默认技能列表及输入输出见 [原子技能清单](atomic-skills.md)。
+
+## 兼容组件演示
 
 ```bash
 python -m simbench.assembly.standalone_demos --record --out results/standalone_skills/all

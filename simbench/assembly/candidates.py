@@ -152,20 +152,20 @@ class Candidate:
 def pick_template(part, lift=True):
     """Expandable macro, not another primitive or another controller."""
     rows = [
-        dict(skill="move", params=dict(mode="joint_path", artifact="transfer")),
-        dict(skill="move", params=dict(mode="approach", part=part)),
-        dict(skill="gripper", params=dict(mode="close", part=part)),
-        dict(skill="verify_grasp", params=dict(part=part)),
+        dict(skill="move", params=dict(path="transfer")),
+        dict(skill="move", params=dict(grasp="grasp", part=part)),
+        dict(skill="grasp", params=dict(part=part)),
+        dict(skill="inspect", params=dict(what="grasp", part=part)),
     ]
     if lift:
-        rows.append(dict(skill="move", params=dict(mode="lift", part=part)))
+        rows.append(dict(skill="move", params=dict(delta=[0, 0, 0.10], part=part)))
     return rows
 
 
 def release_template(height=0.10):
     return [
         dict(skill="gripper", params=dict(mode="open")),
-        dict(skill="move", params=dict(mode="retreat", height=height)),
+        dict(skill="move", params=dict(delta=[0, 0, height])),
     ]
 
 
@@ -314,10 +314,12 @@ def execute_pick_candidate(session, candidate):
         candidate.path["rotation"], down(candidate.grasp["yaw"]), atol=1.0e-8
     ):
         raise SkillFailure("candidate path geometry disagrees with grasp")
+    from .interfaces import resolve
+
     close_rows = [
         r
         for r in candidate.steps
-        if r["skill"] == "gripper" and r["params"].get("mode") == "close"
+        if resolve(r["skill"], r["params"])[0] == "close_gripper"
     ]
     if len(close_rows) != 1 or close_rows[0]["params"].get(
         "force"

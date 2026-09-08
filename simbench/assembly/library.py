@@ -16,7 +16,7 @@ import mujoco
 from scipy.spatial.transform import Rotation
 from .control import PoseController, down, HOME
 from .contracts import check, apply_effects, session_state
-from .interfaces import resolve, family
+from .interfaces import resolve, family, PUBLIC_SKILLS
 
 PARTS = ("carriage", "end_stop", "handle", "pin_left", "pin_right")
 DEFAULT_CAPABILITIES = {"pin_left": ("pin",), "pin_right": ("pin",)}
@@ -46,6 +46,7 @@ class Spec:
 
 
 CATALOG = {}
+HANDLERS = {}
 
 
 def skill(
@@ -59,9 +60,10 @@ def skill(
     effects=(),
     obligations=None,
     output_bindings=(("part", "part"),),
+    legacy=True,
 ):
     def deco(fn):
-        CATALOG[name] = Spec(
+        HANDLERS[name] = Spec(
             name,
             label,
             category,
@@ -87,7 +89,9 @@ def skill(
             ),
             output_bindings,
         )
-        fn.spec = CATALOG[name]
+        if legacy:
+            CATALOG[name] = HANDLERS[name]
+        fn.spec = HANDLERS[name]
         return fn
 
     return deco
@@ -149,27 +153,37 @@ class Session:
         requested = name
         try:
             name, params = resolve(name, params)
-            if name not in CATALOG:
+            if name not in HANDLERS:
                 raise ValueError(f"unknown skill {name}")
             bound = inspect.signature(getattr(self, name)).bind(**params)
             bound.apply_defaults()
         except (TypeError, ValueError) as exc:
             raise SkillFailure(str(exc)) from exc
         params = dict(bound.arguments)
-        spec = CATALOG[name]
+        spec = HANDLERS[name]
         part = params.get("part")
+        previous_atom = getattr(self, "_active_atom", None)
+        atom = spec.family if spec.family in PUBLIC_SKILLS else previous_atom
         state = session_state(self)
         verdict = check(spec, params, state, contact=self.ctx.grasp_contacts)
         if verdict["conflicts"]:
             raise SkillFailure(f"{name}: " + "; ".join(verdict["conflicts"]))
         if self.rec:
-            self.rec.set_skill(
-                name, f"{spec.label}  |  {name}" + (f"  ·  {part}" if part else "")
+            display = PUBLIC_SKILLS.get(atom)
+            label = (
+                f"{display['label']}  |  {atom}"
+                if display
+                else f"内部准备：{spec.label}"
             )
+            self.rec.set_skill(atom, label + (f"  ·  {part}" if part else ""))
             self.rec.pause(0.4)
         start = self.ctx.data.time
         wall = time.perf_counter()
-        outcome = getattr(self, name)(**params)
+        self._active_atom = atom
+        try:
+            outcome = getattr(self, name)(**params)
+        finally:
+            self._active_atom = previous_atom
         if not isinstance(outcome, Result):
             raise TypeError(f"{name} must return Result")
         if outcome.ok:
@@ -182,6 +196,7 @@ class Session:
             index=len(self.results),
             skill=name,
             interface=requested,
+            atom=atom,
             params=params,
             ok=bool(outcome.ok),
             metrics=outcome.metrics,
@@ -562,6 +577,152 @@ class Session:
             "linear servo tracking error" if not ok else "",
         )
 
+    @skill("move_to", "移动", "motion", ("ownership",), legacy=False)
+    def move_to(self, target=None, delta=None, part=None, speed=0.06, tol=0.001):
+        if (target is None) == (delta is None) or speed <= 0 or tol <= 0:
+            return Result(
+                False, reason="provide one target or delta and positive speed/tolerance"
+            )
+        goal = np.asarray(target if target is not None else delta, dtype=float)
+        if goal.shape != (3,) or not np.all(np.isfinite(goal)):
+            return Result(False, reason="move requires three finite coordinates")
+        if delta is not None:
+            goal = self.ctx.eef_pos() + goal
+        # Use the existing planner/checker before the existing Cartesian controller.
+        q = self.ctx.arm_qpos.copy()
+        joints = []
+        for point in np.linspace(self.ctx.eef_pos(), goal, 12):
+            q = self.arm.ik(point, seed=q)
+            joints.append(q.copy())
+        collision = self.arm.check_joint_path(joints, part)
+        if not collision["valid"]:
+            return Result(False, {"collision": collision}, "move path collision")
+        ok = self.arm.move(goal, speed=speed, tol=tol)
+        retained = part is None or self.ctx.grasp_contacts(part)["held"]
+        return Result(
+            bool(ok and retained),
+            dict(
+                target_error_m=float(np.linalg.norm(self.ctx.eef_pos() - goal)),
+                held=retained,
+                collision=collision,
+            ),
+            "move tracking or retention failed",
+        )
+
+    @skill(
+        "place_object",
+        "放置",
+        "gripper",
+        ("held",),
+        effects=("held:empty",),
+        obligations=("support contact before release", "settled pose after release"),
+        legacy=False,
+    )
+    def place_object(self, part, target, tol=0.0015, settle=0.30, minimum_support=0.01):
+        """Release an already supported part; moving there is the Move atom's job."""
+        if tol <= 0 or settle < 0 or minimum_support <= 0:
+            return Result(False, reason="invalid placement tolerances")
+        pose = self.inspect_seat(part, target, tol)
+        if not pose.ok:
+            return Result(
+                False, pose.metrics, "move to the placement target before releasing"
+            )
+        support = 0.0
+        bid = self.ctx.body_id(part)
+        for i, c in enumerate(self.ctx.data.contact):
+            b1, b2 = map(int, self.ctx.model.geom_bodyid[[c.geom1, c.geom2]])
+            if bid not in (b1, b2):
+                continue
+            other = b2 if b1 == bid else b1
+            if "finger" in self.ctx.model.body(other).name:
+                continue
+            # Only an approximately vertical contact below the object can support it.
+            if abs(c.frame[2]) < 0.5 or c.pos[2] >= self.ctx.obj_pos(part)[2]:
+                continue
+            force = np.zeros(6)
+            mujoco.mj_contactForce(self.ctx.model, self.ctx.data, i, force)
+            support += max(0.0, float(force[0])) * abs(float(c.frame[2]))
+        if support < minimum_support:
+            return Result(
+                False,
+                {"support_force_n": support},
+                "no supporting contact; refusing air release",
+            )
+        # This call commits the same declared release effect even if the later
+        # settled-pose check fails. Never leave a released object marked held.
+        self.call("open_gripper")
+        self.hold(settle)
+        settled = self.inspect_seat(part, target, tol)
+        return Result(
+            settled.ok,
+            {
+                **settled.metrics,
+                "support_force_n": support,
+                "jaw_span_m": self.ctx.pad_span(),
+            },
+            "placement did not remain within tolerance",
+        )
+
+    @skill("measure_value", "测量", "perception", produces="measurement", legacy=False)
+    def measure_value(self, quantity, part=None, as_="measurement"):
+        if quantity in ("position", "force", "clearance") and part is None:
+            return Result(False, reason="this measurement requires an object")
+        if quantity == "position":
+            value, unit = self.ctx.obj_pos(part).copy(), "m"
+        elif quantity == "force":
+            value, unit = self.external_force(part), "N"
+        elif quantity == "stroke":
+            value, unit = (
+                max(self.stroke) - min(self.stroke) if self.stroke else 0.0
+            ), "m"
+        elif quantity == "clearance":
+            reading = self.measure_clearance(part)
+            if "lateral_margin_m" not in reading.metrics:
+                return reading
+            value, unit = reading.metrics["lateral_margin_m"], "m"
+        else:
+            return Result(
+                False, reason="quantity must be position, force, stroke or clearance"
+            )
+        self.artifact(
+            as_,
+            "measurement",
+            part,
+            quantity=quantity,
+            value=value,
+            unit=unit,
+            observed_at=float(self.ctx.data.time),
+        )
+        return Result(metrics={"quantity": quantity, "value": value, "unit": unit})
+
+    @skill(
+        "inspect_measurement",
+        "检查",
+        "verification",
+        ("artifact:measurement",),
+        legacy=False,
+    )
+    def inspect_measurement(self, artifact="measurement", minimum=None, maximum=None):
+        if minimum is None and maximum is None:
+            return Result(False, reason="inspection requires a threshold")
+        if minimum is not None and maximum is not None and minimum > maximum:
+            return Result(False, reason="minimum exceeds maximum")
+        reading = self.artifacts[artifact]
+        value = np.asarray(reading["value"])
+        ok = (minimum is None or np.all(value >= minimum)) and (
+            maximum is None or np.all(value <= maximum)
+        )
+        return Result(
+            bool(ok),
+            dict(
+                value=reading["value"],
+                unit=reading["unit"],
+                minimum=minimum,
+                maximum=maximum,
+            ),
+            "measurement outside required bounds",
+        )
+
     @skill("open_gripper", "张开夹爪 / 释放", "gripper", effects=("held:empty",))
     def open_gripper(self):
         ok = self.arm.open()
@@ -896,7 +1057,12 @@ class Session:
         )
 
 
-def export_catalog(out):
-    Path(out).write_text(
-        json.dumps([asdict(x) for x in CATALOG.values()], ensure_ascii=False, indent=2)
+def export_catalog(out, components=False):
+    from .graph import catalog_graph
+
+    nodes = (
+        [asdict(x) for x in HANDLERS.values()]
+        if components
+        else catalog_graph()["nodes"]
     )
+    Path(out).write_text(json.dumps(nodes, ensure_ascii=False, indent=2))

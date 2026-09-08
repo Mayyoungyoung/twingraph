@@ -25,9 +25,9 @@ def pick(s, part, lift=True, candidate_id=None, terminal_targets=None):
         save_batch,
     )
 
-    s.call("observe")
+    s.call("detect")
     s.call("estimate_pose", part=part)
-    s.call("propose_grasps", part=part)
+    s.call("estimate_grasp", part=part)
     # Open before construction: candidates all start at this actual shared state.
     s.call("gripper", mode="open")
     candidates = build_pick_candidates(s, part, lift, terminal_targets=terminal_targets)
@@ -38,20 +38,19 @@ def pick(s, part, lift=True, candidate_id=None, terminal_targets=None):
 
 def transfer_part(s, part, xyz):
     s.call(
-        "plan_transfer",
+        "plan_path",
         target=s.arm.part_target(part, xyz),
         yaw=s.artifacts["grasp"]["yaw"],
     )
-    s.call("execute_joint_path")
+    s.call("move", path="transfer")
 
 
 def release(s):
-    from .candidates import release_template
-
-    steps = release_template()
-    s.call(steps[0]["skill"], **steps[0]["params"])
-    s.hold(0.3)
-    s.call(steps[1]["skill"], **steps[1]["params"])
+    part = s.held
+    if part is None:
+        raise SkillFailure("release requires a held object")
+    s.call("place", part=part, target=s.ctx.obj_pos(part).copy(), tol=0.003)
+    s.call("move", delta=[0, 0, 0.10])
 
 
 def assemble(s, policy=None):
@@ -64,48 +63,62 @@ def assemble(s, policy=None):
     )
     entry = np.r_[CENTER + [-0.155, 0], CAR_Z + 0.030]
     transfer_part(s, "carriage", entry)
-    s.call("lower", part="carriage", height=0.030)
-    s.call("align_axis", part="carriage", target=np.r_[entry[:2], CAR_Z + 0.0015])
+    s.call("move", part="carriage", delta=[0, 0, -0.030])
+    s.call(
+        "move",
+        reference="object",
+        part="carriage",
+        target=np.r_[entry[:2], CAR_Z + 0.0015],
+    )
     carriage_target = np.r_[CENTER + [0.030, 0], CAR_Z + 0.0015]
     s.call(
-        "plan_insertion",
+        "plan_path",
+        method="contact",
         part="carriage",
         target=carriage_target,
         axis=(1, 0, 0),
         speed=0.025,
         force_limit=18.0,
     )
-    s.call("slide_insert", part="carriage")
+    s.call("insert", part="carriage")
+    s.call("press", part="carriage", target_z=CAR_Z)
     release(s)
-    s.call("inspect_seat", part="carriage", target=np.r_[carriage_target[:2], CAR_Z])
-    s.call("measure_clearance")
+    s.call("inspect", part="carriage", target=np.r_[carriage_target[:2], CAR_Z])
+    s.call("measure", quantity="clearance", part="carriage")
+    s.call("inspect", what="measurement", minimum=1.0e-12)
 
     pick(s, "end_stop", terminal_targets=[dict(id="seated", part="end_stop", xyz=STOP)])
     transfer_part(s, "end_stop", STOP + [0, 0, 0.045])
-    s.call("plan_linear", target=s.arm.part_target("end_stop", STOP + [0, 0, 0.010]))
-    s.call("execute_cartesian_path")
-    s.call("align_axis", part="end_stop", target=STOP + [0, 0, 0.010])
-    s.call("guarded_descent", part="end_stop", target_z=STOP[2])
-    s.call("press_seat", part="end_stop", target_z=STOP[2])
+    s.call(
+        "plan_path",
+        method="cartesian",
+        target=s.arm.part_target("end_stop", STOP + [0, 0, 0.010]),
+    )
+    s.call("move", path="linear", space="cartesian")
+    s.call("move", reference="object", part="end_stop", target=STOP + [0, 0, 0.010])
+    s.call("move", mode="guarded", part="end_stop", target_z=STOP[2])
+    s.call("press", part="end_stop", target_z=STOP[2])
     release(s)
-    s.call("inspect_seat", part="end_stop", target=STOP)
+    s.call("inspect", part="end_stop", target=STOP)
 
     for part, target in [("pin_left", PIN_L), ("pin_right", PIN_R)]:
         pick(s, part, terminal_targets=[dict(id="seated", part=part, xyz=target)])
         transfer_part(s, part, target + [0, 0, 0.069])
-        s.call("align_axis", part=part, target=target + [0, 0, 0.069])
-        s.call("plan_insertion", part=part, target=target, speed=0.006)
+        s.call("move", reference="object", part=part, target=target + [0, 0, 0.069])
+        s.call("plan_path", method="contact", part=part, target=target, speed=0.006)
         s.checkpoints[part] = s.snapshot()
         if s.out:
             with (s.out / f"{part}_checkpoint.pkl").open("wb") as f:
                 pickle.dump(s.checkpoints[part], f)
         if policy and part == "pin_right":
-            s.call("learned_insert", part=part, policy=str(policy))
+            s.call("insert", strategy="learned", part=part, policy=str(policy))
         else:
-            s.call("guarded_descent", part=part, target_z=target[2], force_stop=3.0)
-        s.call("press_seat", part=part, target_z=target[2])
+            s.call(
+                "move", mode="guarded", part=part, target_z=target[2], force_stop=3.0
+            )
+        s.call("press", part=part, target_z=target[2])
         release(s)
-        s.call("inspect_seat", part=part, target=target)
+        s.call("inspect", part=part, target=target)
 
     pick(
         s,
@@ -117,9 +130,13 @@ def assemble(s, policy=None):
             )
         ],
     )
-    s.call("move_constrained", part="carriage", target_x=float(CENTER[0] - 0.04))
-    s.call("move_constrained", part="carriage", target_x=float(CENTER[0] + 0.060))
-    s.call("verify_stroke", minimum=0.09)
+    s.call(
+        "move", mode="constrained", part="carriage", target_x=float(CENTER[0] - 0.04)
+    )
+    s.call(
+        "move", mode="constrained", part="carriage", target_x=float(CENTER[0] + 0.060)
+    )
+    s.call("inspect", what="stroke", minimum=0.09)
     release(s)
 
     handle_target = s.ctx.obj_pos("carriage") + [0, 0, 0.048]
@@ -129,21 +146,22 @@ def assemble(s, policy=None):
         terminal_targets=[dict(id="seated", part="handle", xyz=handle_target)],
     )
     transfer_part(s, "handle", handle_target + [0, 0, 0.045])
-    s.call("align_axis", part="handle", target=handle_target + [0, 0, 0.023])
     s.call(
-        "guarded_descent",
+        "move", reference="object", part="handle", target=handle_target + [0, 0, 0.023]
+    )
+    s.call(
+        "move",
+        mode="guarded",
         part="handle",
         target_z=float(handle_target[2]),
         force_stop=3.0,
     )
-    s.call(
-        "press_seat", part="handle", target_z=float(handle_target[2]), force_stop=2.0
-    )
+    s.call("press", part="handle", target_z=float(handle_target[2]), force_stop=2.0)
     release(s)
-    s.call("inspect_seat", part="handle", target=handle_target)
+    s.call("inspect", part="handle", target=handle_target)
     for part, target in [("end_stop", STOP), ("pin_left", PIN_L), ("pin_right", PIN_R)]:
-        s.call("inspect_seat", part=part, target=target)
-    s.call("home")
+        s.call("inspect", part=part, target=target)
+    s.call("move", target="home")
 
 
 def main():
@@ -175,6 +193,7 @@ def main():
             error=error,
             steps=len(s.results),
             unique_skills=sorted({r["skill"] for r in s.results}),
+            unique_atoms=sorted({r["atom"] for r in s.results if r.get("atom")}),
             robot_actuators=ctx.model.nu,
             objects={
                 p: ctx.obj_pos(p).tolist()
@@ -189,7 +208,7 @@ def main():
         if ok:
             with (out / "final_checkpoint.pkl").open("wb") as f:
                 pickle.dump(s.snapshot(), f)
-        export_catalog(out / "component_catalog.json")
+        export_catalog(out / "atomic_skills.json")
         if rec:
             rec.label = "装配与行程验收完成" if ok else "验收失败：" + error[:60]
             Image.fromarray(rec.frame()).save(out / "final.png")
