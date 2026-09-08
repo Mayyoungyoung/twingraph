@@ -1,0 +1,1158 @@
+{
+  "nodes": [
+    {
+      "name": "detect",
+      "label": "检测",
+      "kind": "information",
+      "inputs": "观测范围",
+      "outputs": "对象及观测",
+      "description": "发现场景中的对象",
+      "contracts": [
+        {
+          "name": "observe_parts",
+          "label": "检测零件",
+          "category": "perception",
+          "requires": [],
+          "produces": "observations",
+          "implementation": "sim_pose_sensor",
+          "description": "检测零件",
+          "kind": "executable",
+          "family": "detect",
+          "effects": [
+            "seen:all"
+          ],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "estimate_pose",
+      "label": "物体位姿估计",
+      "kind": "information",
+      "inputs": "对象观测",
+      "outputs": "物体位姿及不确定性",
+      "description": "估计物体在哪里、朝向如何",
+      "contracts": [
+        {
+          "name": "estimate_pose",
+          "label": "估计零件位姿",
+          "category": "perception",
+          "requires": [
+            "seen"
+          ],
+          "produces": "pose",
+          "implementation": "robust_estimator",
+          "description": "估计零件位姿",
+          "kind": "generator",
+          "family": "estimate_pose",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "estimate_grasp",
+      "label": "抓取位姿估计",
+      "kind": "information",
+      "inputs": "物体位姿、几何",
+      "outputs": "多个抓取候选",
+      "description": "给出夹爪应放在哪里、开多大",
+      "contracts": [
+        {
+          "name": "propose_grasps",
+          "label": "生成抓取候选",
+          "category": "planning",
+          "requires": [
+            "artifact:pose"
+          ],
+          "produces": "grasps",
+          "implementation": "geometry_and_ik",
+          "description": "生成抓取候选",
+          "kind": "generator",
+          "family": "estimate_grasp",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "select_grasp",
+          "label": "选择可达抓取",
+          "category": "planning",
+          "requires": [
+            "artifact:grasps"
+          ],
+          "produces": "grasp",
+          "implementation": "candidate_scoring",
+          "description": "选择可达抓取",
+          "kind": "generator",
+          "family": "estimate_grasp",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ],
+            [
+              "id",
+              "candidate_id"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "plan_path",
+      "label": "路径规划",
+      "kind": "information",
+      "inputs": "起点、目标、约束",
+      "outputs": "路径候选或接触运动参数",
+      "description": "生成运动参数，不移动机器人",
+      "contracts": [
+        {
+          "name": "plan_transfer",
+          "label": "规划避让搬运路径",
+          "category": "planning",
+          "requires": [],
+          "produces": "joint_path",
+          "implementation": "waypoint_ik",
+          "description": "规划避让搬运路径",
+          "kind": "generator",
+          "family": "plan_path",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "plan_linear",
+          "label": "规划直线操作路径",
+          "category": "planning",
+          "requires": [],
+          "produces": "cartesian_path",
+          "implementation": "cartesian_ik",
+          "description": "规划直线操作路径",
+          "kind": "generator",
+          "family": "plan_path",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "plan_insertion",
+          "label": "规划接触插入参数",
+          "category": "planning",
+          "requires": [
+            "held"
+          ],
+          "produces": "insertion",
+          "implementation": "geometry_constraints",
+          "description": "规划接触插入参数",
+          "kind": "generator",
+          "family": "plan_path",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "plan_wipe",
+          "label": "生成表面擦拭路径",
+          "category": "planning",
+          "requires": [
+            "held",
+            "capability:wipe"
+          ],
+          "produces": "wipe_path",
+          "implementation": "feedback",
+          "description": "生成表面擦拭路径",
+          "kind": "generator",
+          "family": "plan_path",
+          "effects": [],
+          "obligations": [
+            "surface geometry, tool clearance and force tracking require simulation"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "plan_recovery",
+          "label": "规划有预算的接触恢复",
+          "category": "planning",
+          "requires": [
+            "held"
+          ],
+          "produces": "recovery",
+          "implementation": "contact_state_rule",
+          "description": "规划有预算的接触恢复",
+          "kind": "generator",
+          "family": "plan_path",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "move",
+      "label": "移动",
+      "kind": "execution",
+      "inputs": "目标/位移/路径、持物对象及约束",
+      "outputs": "到达误差、抓持状态",
+      "description": "移动末端或持物；所有方向和搬运共用一个节点",
+      "contracts": [
+        {
+          "name": "execute_joint_path",
+          "label": "执行关节搬运路径",
+          "category": "motion",
+          "requires": [
+            "artifact:joint_path"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "执行关节搬运路径",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "execute_cartesian_path",
+          "label": "执行直线操作路径",
+          "category": "motion",
+          "requires": [
+            "artifact:cartesian_path"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "执行直线操作路径",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "move_to",
+          "label": "移动",
+          "category": "motion",
+          "requires": [
+            "ownership"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "移动",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "approach",
+          "label": "接近抓取位姿",
+          "category": "transition",
+          "requires": [
+            "empty",
+            "artifact:grasp"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "接近抓取位姿",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "lift",
+          "label": "保持夹持并抬升",
+          "category": "transition",
+          "requires": [
+            "held"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "保持夹持并抬升",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "lower",
+          "label": "受控下移至预接触高度",
+          "category": "transition",
+          "requires": [
+            "held"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "受控下移至预接触高度",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "retreat",
+          "label": "空夹爪退出操作区",
+          "category": "transition",
+          "requires": [
+            "empty"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "空夹爪退出操作区",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "home",
+          "label": "机械臂回位",
+          "category": "transition",
+          "requires": [
+            "empty"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "机械臂回位",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "orient_wrist",
+          "label": "调整末端朝向",
+          "category": "motion",
+          "requires": [],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "调整末端朝向",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "align_axis",
+          "label": "持物轴线精对准",
+          "category": "contact",
+          "requires": [
+            "held"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "持物轴线精对准",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "guarded_descent",
+          "label": "接触保护下降",
+          "category": "contact",
+          "requires": [
+            "held"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "接触保护下降",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "move_constrained",
+          "label": "沿已装导轨运动",
+          "category": "contact",
+          "requires": [
+            "held"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "沿已装导轨运动",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "retract_contact",
+          "label": "从接触中撤回",
+          "category": "recovery",
+          "requires": [
+            "held",
+            "artifact:recovery"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "从接触中撤回",
+          "kind": "executable",
+          "family": "move",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "grasp",
+      "label": "抓取",
+      "kind": "execution",
+      "inputs": "对象、夹持力",
+      "outputs": "双侧稳定抓持",
+      "description": "在已有抓取姿态处闭爪并建立抓持，不包含搬运",
+      "contracts": [
+        {
+          "name": "close_gripper",
+          "label": "接触反馈夹持",
+          "category": "gripper",
+          "requires": [
+            "empty"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "接触反馈夹持",
+          "kind": "executable",
+          "family": "grasp",
+          "effects": [
+            "held:part"
+          ],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "place",
+      "label": "放置",
+      "kind": "execution",
+      "inputs": "持物对象、支撑目标及容差",
+      "outputs": "释放且位置稳定",
+      "description": "在已有支撑位置释放并检查落稳，不包含远距离移动",
+      "contracts": [
+        {
+          "name": "place_object",
+          "label": "放置",
+          "category": "gripper",
+          "requires": [
+            "held"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "放置",
+          "kind": "executable",
+          "family": "place",
+          "effects": [
+            "held:empty"
+          ],
+          "obligations": [
+            "support contact before release",
+            "settled pose after release"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "insert",
+      "label": "插入",
+      "kind": "execution",
+      "inputs": "配合对象、插入参数、策略",
+      "outputs": "插入深度/误差/接触状态",
+      "description": "沿配合约束插入，可选反馈或学习策略",
+      "contracts": [
+        {
+          "name": "slide_insert",
+          "label": "沿导轨约束插入",
+          "category": "contact",
+          "requires": [
+            "held",
+            "artifact:insertion"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "沿导轨约束插入",
+          "kind": "executable",
+          "family": "insert",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "spiral_search",
+          "label": "接触引导螺旋寻孔",
+          "category": "contact",
+          "requires": [
+            "held",
+            "pin",
+            "artifact:insertion"
+          ],
+          "produces": "",
+          "implementation": "force_guided_search",
+          "description": "接触引导螺旋寻孔",
+          "kind": "executable",
+          "family": "insert",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        },
+        {
+          "name": "learned_insert",
+          "label": "学习策略插销",
+          "category": "contact",
+          "requires": [
+            "held",
+            "pin",
+            "artifact:insertion"
+          ],
+          "produces": "",
+          "implementation": "behavior_cloning",
+          "description": "学习策略插销",
+          "kind": "executable",
+          "family": "insert",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "press",
+      "label": "压靠",
+      "kind": "execution",
+      "inputs": "对象、压靠高度、力阈值",
+      "outputs": "接触力与压靠误差",
+      "description": "建立指定压靠接触；需要接触和高度同时满足",
+      "contracts": [
+        {
+          "name": "press_seat",
+          "label": "肩面压靠到位",
+          "category": "contact",
+          "requires": [
+            "held"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "肩面压靠到位",
+          "kind": "executable",
+          "family": "press",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "wipe",
+      "label": "擦拭",
+      "kind": "execution",
+      "inputs": "擦拭工具、表面路径、接触力与策略",
+      "outputs": "实际接触覆盖率、力与跟踪误差",
+      "description": "沿学习的覆盖轨迹保持表面接触；当前模拟擦拭，不模拟磨料去除",
+      "contracts": [
+        {
+          "name": "wipe_surface",
+          "label": "学习轨迹接触擦拭",
+          "category": "contact",
+          "requires": [
+            "held",
+            "capability:wipe",
+            "artifact:wipe_path"
+          ],
+          "produces": "",
+          "implementation": "trajectory_imitation_with_force_feedback",
+          "description": "学习轨迹接触擦拭",
+          "kind": "executable",
+          "family": "wipe",
+          "effects": [],
+          "obligations": [
+            "actual surface contact, force limit and coverage require simulation"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "detect",
+      "target": "estimate_pose",
+      "supplies": [
+        "seen"
+      ],
+      "variants": [
+        {
+          "source": "observe_parts",
+          "target": "estimate_pose",
+          "supplies": [
+            "seen"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "estimate_pose",
+      "target": "estimate_grasp",
+      "supplies": [
+        "artifact:pose"
+      ],
+      "variants": [
+        {
+          "source": "estimate_pose",
+          "target": "propose_grasps",
+          "supplies": [
+            "artifact:pose"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "estimate_grasp",
+      "target": "move",
+      "supplies": [
+        "artifact:grasp"
+      ],
+      "variants": [
+        {
+          "source": "select_grasp",
+          "target": "approach",
+          "supplies": [
+            "artifact:grasp"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "plan_path",
+      "target": "move",
+      "supplies": [
+        "artifact:cartesian_path",
+        "artifact:joint_path",
+        "artifact:recovery"
+      ],
+      "variants": [
+        {
+          "source": "plan_transfer",
+          "target": "execute_joint_path",
+          "supplies": [
+            "artifact:joint_path"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "plan_linear",
+          "target": "execute_cartesian_path",
+          "supplies": [
+            "artifact:cartesian_path"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "plan_recovery",
+          "target": "retract_contact",
+          "supplies": [
+            "artifact:recovery"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "place",
+      "target": "move",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "place_object",
+          "target": "approach",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "place_object",
+          "target": "retreat",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "place_object",
+          "target": "home",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "place",
+      "target": "grasp",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "place_object",
+          "target": "close_gripper",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "grasp",
+      "target": "place",
+      "supplies": [
+        "held"
+      ],
+      "variants": [
+        {
+          "source": "close_gripper",
+          "target": "place_object",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "grasp",
+      "target": "move",
+      "supplies": [
+        "held"
+      ],
+      "variants": [
+        {
+          "source": "close_gripper",
+          "target": "lift",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "lower",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "align_axis",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "guarded_descent",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "move_constrained",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "retract_contact",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "grasp",
+      "target": "plan_path",
+      "supplies": [
+        "held"
+      ],
+      "variants": [
+        {
+          "source": "close_gripper",
+          "target": "plan_insertion",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "plan_wipe",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "plan_recovery",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "grasp",
+      "target": "wipe",
+      "supplies": [
+        "held"
+      ],
+      "variants": [
+        {
+          "source": "close_gripper",
+          "target": "wipe_surface",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "grasp",
+      "target": "insert",
+      "supplies": [
+        "held"
+      ],
+      "variants": [
+        {
+          "source": "close_gripper",
+          "target": "slide_insert",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "spiral_search",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "close_gripper",
+          "target": "learned_insert",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "grasp",
+      "target": "press",
+      "supplies": [
+        "held"
+      ],
+      "variants": [
+        {
+          "source": "close_gripper",
+          "target": "press_seat",
+          "supplies": [
+            "held"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "plan_path",
+      "target": "insert",
+      "supplies": [
+        "artifact:insertion"
+      ],
+      "variants": [
+        {
+          "source": "plan_insertion",
+          "target": "slide_insert",
+          "supplies": [
+            "artifact:insertion"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "plan_insertion",
+          "target": "spiral_search",
+          "supplies": [
+            "artifact:insertion"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "plan_insertion",
+          "target": "learned_insert",
+          "supplies": [
+            "artifact:insertion"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "plan_path",
+      "target": "wipe",
+      "supplies": [
+        "artifact:wipe_path"
+      ],
+      "variants": [
+        {
+          "source": "plan_wipe",
+          "target": "wipe_surface",
+          "supplies": [
+            "artifact:wipe_path"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    }
+  ],
+  "atom_count": 10,
+  "templates": [
+    {
+      "name": "pick",
+      "kind": "macro"
+    },
+    {
+      "name": "release",
+      "kind": "macro"
+    }
+  ],
+  "note": "One node per atom. Edge variants are conditional alternatives; never combine their preconditions as one contract. Validate complete bound calls."
+}

@@ -663,7 +663,7 @@
     ],
     "route_count": 0,
     "line_scale": 2.8,
-    "video": "docs/demos/atoms/measure.mp4",
+    "video": "docs/demos/feedback/measure.mp4",
     "sha256": "daa8421b6e0ee9c31bc5878bd3a47102105c6e302cb4143e46736d14e3a94472",
     "decoded_frames": 150,
     "qa_frame_indices": [
@@ -725,7 +725,7 @@
     ],
     "route_count": 0,
     "line_scale": 2.8,
-    "video": "docs/demos/atoms/inspect.mp4",
+    "video": "docs/demos/feedback/inspect.mp4",
     "sha256": "55bddb4325b2b4b6178f17a59456b379f239c40e7a8221885ffab1e66c0af36e",
     "decoded_frames": 150,
     "qa_frame_indices": [

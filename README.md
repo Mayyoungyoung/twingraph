@@ -2,56 +2,48 @@
 
 基于 MuJoCo 与 Franka Panda 的桌面装配研究项目，探索**面向后续任务的终态价值**与**有限数字孪生预算下的候选计划筛选**。
 
-## 当前可运行内容
+## 当前演示
 
-- 手动直线滑台装配：滑块沿轨插入、端挡与双销安装、约 100 mm 往复检查、手柄安装。大方桌与被动零件，只有 Panda 的 9 个执行器。
-- 11 个原子技能独立近景视频：1600 × 1000、25 fps、固定正面偏侧视角；加粗路径、坐标轴和测量引线，底部显示技能名称与实时结果。场景为方块、障碍物、单孔插销座和短导轨。
-- 插销模仿学习：训练代码与可直接运行的行为克隆权重随仓库提供。
-- 结构契约验证：检查对象绑定、夹爪资源与规划数据依赖；尚不等于整链几何可行性证明。
+Panda 在大方桌上先抓取擦拭工具、清洁导轨底座、归还工具，再装配滑块、端挡、双销和手柄，并完成行程与终态验收。只有 Panda 的 9 个执行器，零件与擦拭工具都是被动物体。
 
-任务层统一为 **11 个原子技能**，既包含执行动作，也包含输出信息的计算：检测、物体位姿估计、抓取位姿估计、路径规划、移动、抓取、放置、插入、压靠、测量、检查。搬运、上移、下移、回位、退出都属于移动参数，不新增节点。参见 [原子技能清单](docs/atomic-skills.md)。旧控制器与演示入口保留兼容，默认图谱和导出的原子技能清单只显示这 11 项。
+- [完整成功视频](docs/demos/full_success.mp4)
+- [完整失败视频：右销目标偏移 8 mm](docs/demos/full_failure.mp4)
+- [擦拭近景视频](docs/demos/atoms/wipe.mp4)
+- [10 个原子技能视频索引](docs/demos/INDEX.md)
+- [技能图谱与条件解释](docs/skill-graph/README.md)
 
-![Panda 桌面滑台](docs/demos/tabletop.png)
+完整视频采用固定正面略向下镜头，1920 × 1200、25 fps，明确标注 2× 播放；底部显示当前技能。擦拭近景为 1×。没有网页前端。
 
-## 查看成品
+## 技能与方法
 
-- [完整滑台装配视频](docs/demos/assembly.mp4)
-- [小方块连续抓取](docs/demos/cube_grasp.mp4)
-- [检测目标球](docs/demos/atoms/detect.mp4) · [三条候选路径](docs/demos/atoms/plan_path.mp4) · [插入近景](docs/demos/atoms/insert.mp4)
-- [11 个原子技能新录像](docs/demos/INDEX.md)
+当前 **10 个原子技能**：检测、物体位姿估计、抓取位姿估计、路径规划、移动、抓取、放置、插入、压靠、擦拭。搬运、上下移、回位和退出是移动参数；多抓法、多路线和控制策略是候选的不同参数实例。**测量与检查是辅助反馈和验收工具，不再是技能节点**，原有安全、接触与成功检查继续执行。
 
-仓库只保存这一套精选成品。中间录像、运行日志、训练数据和缓存放在被忽略的 `results/` 中。
+擦拭采用 24 条程序化专家轨迹训练的 RBF 轨迹模仿策略，配合接触力反馈，复用已有 IK 与伺服控制。当前模拟接触擦拭和几何覆盖，不模拟抛光材料去除。完整展示的插销使用已有接触反馈分支；旧插销行为克隆权重继续保留。
+
+技能图谱由执行器共享的声明式契约生成，连线只表示部分数据或状态供给。完整绑定后的候选链仍需区分冲突、已通过必要检查与未知连续约束，再交给价值模块和数字孪生验证。
 
 ## 运行
-
-推荐 Python 3.10。在仓库根目录运行：
 
 ```bash
 python -m pip install -r requirements.txt
 export MUJOCO_GL=egl
 python -m pytest simbench/tests -q
-python -m simbench.assembly.atomic_demos --out results/atomic_closeup
-python -m simbench.assembly.candidate_demo --out results/candidate_demo
-python -m simbench.assembly.task --record --out results/tabletop/assembly
+python -m simbench.assembly.full_demos --record --out results/product_success
+python -m simbench.assembly.full_demos --record --failure --out results/product_failure
+python -m simbench.assembly.atomic_demos --out results/atomic_current
 ```
 
-默认使用仓库内的 `simbench/assembly/checkpoints/insert_bc.pt`，无需先生成旧场景或下载旧模型。Ubuntu 无头录制需要可用的 EGL/OpenGL 驱动及 Noto CJK 字体；详见 [运行指南](docs/setup.md)。
+推荐 Python 3.10。无头录像需要 EGL/OpenGL 及 Noto CJK 字体；详见 [运行指南](docs/setup.md)。训练权重随仓库提供，中间文件放在 Git 忽略的 `results/`。
 
 ## 文档
 
 | 文档 | 内容 |
 |---|---|
-| [原子技能清单](docs/atomic-skills.md) | 11 项技能、输入输出与调用示例 |
-| [架构设计](docs/architecture.md) | 技能粒度、规划多解、条件图与当前边界 |
-| [滑台任务](docs/tabletop.md) | 产品结构、流程、控制与评估 |
-| [独立演示](docs/standalone-skills.md) | 专用场景、可视化与重录 |
-| [价值模块设计](docs/value-module.md) | 价值定义、反事实采样、训练与 Top-k 评估 |
-| [清理记录](docs/maintenance.md) | 移除的旧代码与保留范围 |
+| [原子技能](docs/atomic-skills.md) | 当前 10 项接口与输入输出 |
+| [技能图谱](docs/skill-graph/README.md) | 共享契约、条件依赖与绑定 |
+| [擦拭学习](docs/wiping.md) | 专家数据、轨迹拟合与接触执行 |
+| [架构设计](docs/architecture.md) | 多解候选、图谱验证与边界 |
+| [价值模块设计](docs/value-module.md) | 反事实数据、训练与 Top-k 评估 |
+| [当前验证](docs/evidence/surface-assembly/README.md) | 回归、真实成功/失败与视频核验 |
 
-验证记录见 [docs/evidence](docs/evidence)。`docs/demos/atoms/` 是当前 11 项接口重新录制的独立近景视频；完整装配与兼容组件录像沿用此前版本。历史小样本结果为完整装配扰动测试 8/8、插销策略新起点测试 12/12，适用条件写在任务文档中；它们不是现实机器人或新价值模块的性能成绩。
-
-上轮接口整理回归：31 项测试、30 个独立组件执行、种子 0 完整装配（108 次调用）、种子 1/19 扰动装配、同初态两种抓取前缀均通过；另重录抬升组件确认字幕和轨迹显示。详见 [本轮验证记录](docs/evidence/interface-refactor/README.md)。
-
-当前 11 项接口版本：44 项回归测试通过；原 30 个兼容组件演示通过；完整装配通过支撑放置检查。种子 1/19 扰动装配也通过。最新定义以 [atomic-skills.md](docs/atomic-skills.md) 为准，[验证记录](docs/evidence/atomic-interface.json) 单独保存。
-
-近景演示：11/11 执行成功；检查计算技能不推进仿真时间、装饰不改变物理状态，并核对视频首帧、执行中帧与末帧。详见 [录制验证](docs/evidence/atomic-closeup/README.md)。
+历史验证保留于 `docs/evidence/`，包括旧 11 项接口与旧近景录像记录。它们不代表当前新增擦拭任务的鲁棒性统计。旧底层组件继续兼容；当前定义以上述 10 项为准。

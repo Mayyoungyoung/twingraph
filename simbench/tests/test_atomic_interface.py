@@ -10,7 +10,7 @@ from simbench.assembly.demo_scenes import make_demo_session
 from simbench.assembly.task import pick
 
 
-def test_graph_has_eleven_distinct_atoms_and_no_direction_or_solver_nodes():
+def test_graph_has_ten_distinct_atoms_and_no_direction_or_solver_nodes():
     graph = catalog_graph()
     expected = {
         "detect",
@@ -22,11 +22,10 @@ def test_graph_has_eleven_distinct_atoms_and_no_direction_or_solver_nodes():
         "place",
         "insert",
         "press",
-        "measure",
-        "inspect",
+        "wipe",
     }
     assert {n["name"] for n in graph["nodes"]} == expected == set(PUBLIC_SKILLS)
-    assert graph["atom_count"] == 11
+    assert graph["atom_count"] == 10
     assert (
         len(CATALOG) == 30
     )  # old demo entry points remain available, not public nodes

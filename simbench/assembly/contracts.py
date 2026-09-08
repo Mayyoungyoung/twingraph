@@ -52,6 +52,10 @@ def check(spec, params, state, contact=None):
         elif requirement == "pin":
             if "pin" not in state.capabilities.get(part, ()):
                 conflicts.append(f"pin geometry capability required for {part}")
+        elif requirement.startswith("capability:"):
+            capability = requirement.split(":", 1)[1]
+            if capability not in state.capabilities.get(part, ()):
+                conflicts.append(f"{capability} capability required for {part}")
         elif requirement.startswith("artifact:"):
             key = params.get("artifact", "default")
             item = state.artifacts.get(key)

@@ -1,4 +1,4 @@
-"""Eleven task-facing atoms. Direction, carrying and solver choices are parameters.
+"""Ten task-facing atoms. Direction, carrying and solver choices are parameters.
 
 Legacy names remain callable but are not additional skill-graph nodes.
 """
@@ -67,19 +67,12 @@ PUBLIC_SKILLS = {
         outputs="接触力与压靠误差",
         description="建立指定压靠接触；需要接触和高度同时满足",
     ),
-    "measure": dict(
-        label="测量",
-        kind="information",
-        inputs="量名、对象",
-        outputs="带单位的数值",
-        description="读取位置、接触力、行程或间隙，不以验收阈值判成功",
-    ),
-    "inspect": dict(
-        label="检查",
-        kind="check",
-        inputs="对象/测量结果及验收要求",
-        outputs="是否符合要求及残差",
-        description="按任务要求判定结果",
+    "wipe": dict(
+        label="擦拭",
+        kind="execution",
+        inputs="擦拭工具、表面路径、接触力与策略",
+        outputs="实际接触覆盖率、力与跟踪误差",
+        description="沿学习的覆盖轨迹保持表面接触；当前模拟擦拭，不模拟磨料去除",
     ),
 }
 
@@ -92,6 +85,7 @@ INTERFACES = {
         "cartesian": "plan_linear",
         "contact": "plan_insertion",
         "recovery": "plan_recovery",
+        "surface": "plan_wipe",
     },
     "move": {
         "joint_path": "execute_joint_path",
@@ -116,6 +110,11 @@ INTERFACES = {
         "learned": "learned_insert",
     },
     "press": {"seat": "press_seat"},
+    "wipe": {"learned": "wipe_surface"},
+}
+
+# Feedback and acceptance utilities remain callable, but are not skill nodes.
+AUXILIARY_INTERFACES = {
     "measure": {"value": "measure_value"},
     "inspect": {
         "pose": "inspect_seat",
@@ -188,7 +187,9 @@ def resolve(name, params):
         params["mode"] = params.pop("what", params.get("mode", "pose"))
     elif name == "insert":
         params["mode"] = params.pop("strategy", params.get("mode", "axis"))
-    modes = INTERFACES.get(name, LEGACY_INTERFACES.get(name))
+    modes = INTERFACES.get(
+        name, AUXILIARY_INTERFACES.get(name, LEGACY_INTERFACES.get(name))
+    )
     if modes is not None:
         mode = params.pop("mode", None)
         if mode is None and len(modes) == 1:
@@ -205,7 +206,9 @@ def family(component):
     if component in ("select_grasp", "propose_grasps"):
         return "estimate_grasp"
     if component == "measure_clearance":
-        return "measure"
+        return "auxiliary"
+    if any(component in modes.values() for modes in AUXILIARY_INTERFACES.values()):
+        return "auxiliary"
     if component in PUBLIC_SKILLS:
         return component
     return next(

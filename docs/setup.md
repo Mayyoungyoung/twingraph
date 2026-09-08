@@ -19,14 +19,14 @@ python -m simbench.assembly.evaluate --seeds 0,1,2,3,4,5,11,19 --out results/tab
 
 默认权重为仓库内的 `simbench/assembly/checkpoints/insert_bc.pt`。`--policy <路径>` 可指定另一个兼容的行为克隆模型。任务输出完整视频、步骤、验收和物理快照；不再从完整装配中自动切出旧的组件视频。
 
-任务同时输出 `atomic_skills.json`（11 个原子技能）及 `candidates.json`：包含所有抓取候选，以及所选抓法在实际抓持状态下生成的多条搬运路线。`status=unknown` 不能解释为不可行。以下命令从同一初态复现两种方块抓取前缀，并将候选输入和仿真结果分开保存：
+任务同时输出 `atomic_skills.json`（10 个原子技能）及 `candidates.json`：包含所有抓取候选，以及所选抓法在实际抓持状态下生成的多条搬运路线。`status=unknown` 不能解释为不可行。以下命令从同一初态复现两种方块抓取前缀，并将候选输入和仿真结果分开保存：
 
 ```bash
 python -m simbench.assembly.candidate_demo --out results/candidate_demo
 python -m simbench.assembly.graph --out results/skill_graph.json
 ```
 
-## 11 个原子技能近景演示
+## 10 个原子技能近景演示
 
 ```bash
 python -m simbench.assembly.atomic_demos --out results/atomic_closeup
@@ -34,7 +34,7 @@ python -m simbench.assembly.atomic_demos --only plan_path move --out results/pat
 python -m simbench.assembly.atomic_demos --no-record --out results/atomic_checks
 ```
 
-默认录制全部 11 项，也可以指定技能子集。每次输出到独立目录；输出包括 `skills/*.mp4`、`previews/*.png`、准备场景和 `verification.json`。视频采用 1600 × 1000、25 fps、固定近景，不切镜头。计算技能用 5 秒展示计算结果，不推进仿真时间。
+默认录制全部 10 项，也可以指定技能子集。每次输出到独立目录；输出包括 `skills/*.mp4`、`previews/*.png`、准备场景和 `verification.json`。原有九段近景采用 1600 × 1000，新增擦拭采用 1920 × 1200，均为 25 fps、固定近景，不切镜头。计算技能用 5 秒展示计算结果，不推进仿真时间。
 
 准备阶段调用原有控制器；视频从指定技能的就绪状态开始。例如抓取从方块两侧闭爪开始，放置从已到达支撑面的释放开始，搬运和接近仍属于移动。插入使用已有行为克隆策略。
 
@@ -76,3 +76,16 @@ python -m simbench.assembly.learning results/tabletop/assembly/pin_left_checkpoi
 - `docs/demos/`：精选成品视频与索引。
 - `docs/evidence/`：当前测试及历史评估证据。
 - `results/`：本机重新生成的实验数据，Git 忽略。
+
+## 含擦拭的完整成功与失败演示
+
+```bash
+python -m simbench.assembly.full_demos --record --out results/product_success
+python -m simbench.assembly.full_demos --record --failure --out results/product_failure
+python -m simbench.assembly.full_demos --record --wipe-only --out results/wipe_final
+python -m simbench.assembly.graph_figure --out docs/skill-graph
+```
+
+完整视频 1920 × 1200、25 fps、明确标注 2× 播放，固定正面略向下镜头，无切镜头。擦拭独立演示为 1×。`--failure` 只将右侧插销的规划目标沿 X 偏移 8 mm，不改变成功阈值、不强制失败标志；若实际意外通过，程序反而报错。检测到失败时停止后续装配。
+
+完整演示在原装配前加工具抓取、底座擦拭与工具归还。插销选用已有接触反馈分支；旧行为克隆插销策略仍保留供独立演示和研究。新增擦拭策略可通过 `python -m simbench.assembly.wiping` 从 24 条程序化专家轨迹重新训练，随仓库提供数据、权重及拟合报告。图形导出另需系统 Graphviz（`dot`）。

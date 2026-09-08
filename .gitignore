@@ -35,3 +35,5 @@ Thumbs.db
 *.swp
 
 !docs/demos/atoms/*.mp4
+
+!docs/demos/feedback/*.mp4

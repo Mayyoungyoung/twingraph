@@ -1,0 +1,309 @@
+[
+  {
+    "index": 0,
+    "skill": "observe_parts",
+    "interface": "detect",
+    "atom": "detect",
+    "params": {},
+    "ok": true,
+    "metrics": {
+      "detected": [
+        "wipe_tool"
+      ],
+      "backend": "simulator pose observations",
+      "noise_std_m": 0.0
+    },
+    "reason": "",
+    "sim_seconds": 0.0,
+    "wall_seconds": 0.000103754922747612
+  },
+  {
+    "index": 1,
+    "skill": "estimate_pose",
+    "interface": "estimate_pose",
+    "atom": "estimate_pose",
+    "params": {
+      "part": "wipe_tool",
+      "as_": "pose"
+    },
+    "ok": true,
+    "metrics": {
+      "position_m": [
+        -0.31,
+        0.2,
+        0.8037322125435618
+      ],
+      "quaternion_wxyz": [
+        1.0,
+        2.913997881891541e-17,
+        -2.771897618160719e-19,
+        -8.10456132564036e-32
+      ]
+    },
+    "reason": "",
+    "sim_seconds": 0.0,
+    "wall_seconds": 0.00040455604903399944
+  },
+  {
+    "index": 2,
+    "skill": "propose_grasps",
+    "interface": "estimate_grasp",
+    "atom": "estimate_grasp",
+    "params": {
+      "part": "wipe_tool",
+      "artifact": "pose",
+      "as_": "grasps"
+    },
+    "ok": true,
+    "metrics": {
+      "feasible_candidates": 2,
+      "unknown_candidates": 0
+    },
+    "reason": "",
+    "sim_seconds": 0.0,
+    "wall_seconds": 0.0067527840146794915
+  },
+  {
+    "index": 3,
+    "skill": "open_gripper",
+    "interface": "gripper",
+    "atom": null,
+    "params": {},
+    "ok": true,
+    "metrics": {
+      "jaw_span_m": 0.08666330017593211
+    },
+    "reason": "",
+    "sim_seconds": 0.999999999999934,
+    "wall_seconds": 0.014529486070387065
+  },
+  {
+    "index": 4,
+    "skill": "execute_joint_path",
+    "interface": "move",
+    "atom": "move",
+    "params": {
+      "artifact": "transfer"
+    },
+    "ok": true,
+    "metrics": {
+      "target_error_m": 5.905870275654915e-06
+    },
+    "reason": "",
+    "sim_seconds": 6.3799999999997326,
+    "wall_seconds": 0.1084287780104205
+  },
+  {
+    "index": 5,
+    "skill": "approach",
+    "interface": "move",
+    "atom": "move",
+    "params": {
+      "part": "wipe_tool",
+      "artifact": "grasp"
+    },
+    "ok": true,
+    "metrics": {
+      "position_error_m": 5.6075420866411845e-05
+    },
+    "reason": "",
+    "sim_seconds": 4.720000000001576,
+    "wall_seconds": 0.22555200895294547
+  },
+  {
+    "index": 6,
+    "skill": "close_gripper",
+    "interface": "grasp",
+    "atom": "grasp",
+    "params": {
+      "part": "wipe_tool",
+      "force": 3.0
+    },
+    "ok": true,
+    "metrics": {
+      "held": true,
+      "left_n": 3.21158976661054,
+      "right_n": 3.211694030915562
+    },
+    "reason": "",
+    "sim_seconds": 3.999999999999824,
+    "wall_seconds": 0.1087198150344193
+  },
+  {
+    "index": 7,
+    "skill": "verify_grasp",
+    "interface": "inspect",
+    "atom": null,
+    "params": {
+      "part": "wipe_tool"
+    },
+    "ok": true,
+    "metrics": {
+      "held": true,
+      "left_n": 3.21158976661054,
+      "right_n": 3.211694030915562
+    },
+    "reason": "",
+    "sim_seconds": 0.0,
+    "wall_seconds": 9.189604315906763e-05
+  },
+  {
+    "index": 8,
+    "skill": "lift",
+    "interface": "move",
+    "atom": "move",
+    "params": {
+      "part": "wipe_tool",
+      "height": 0.1
+    },
+    "ok": true,
+    "metrics": {
+      "object_lift_m": 0.09975414031727647,
+      "held": true
+    },
+    "reason": "",
+    "sim_seconds": 3.6599999999979715,
+    "wall_seconds": 0.16593198000919074
+  },
+  {
+    "index": 9,
+    "skill": "plan_wipe",
+    "interface": "plan_path",
+    "atom": "plan_path",
+    "params": {
+      "part": "wipe_tool",
+      "center": [
+        0.075,
+        0.085
+      ],
+      "halfspan": [
+        0.055,
+        0.006
+      ],
+      "surface": "guide_base",
+      "height": 0.822,
+      "duration": 14.0,
+      "as_": "wipe"
+    },
+    "ok": true,
+    "metrics": {
+      "samples": 700,
+      "duration_s": 14.0,
+      "policy": "/home/jia/RAL/simbench/assembly/checkpoints/wipe_imitation.npz"
+    },
+    "reason": "",
+    "sim_seconds": 0.0,
+    "wall_seconds": 0.003962213988415897
+  },
+  {
+    "index": 10,
+    "skill": "plan_transfer",
+    "interface": "plan_path",
+    "atom": "plan_path",
+    "params": {
+      "target": [
+        0.01968906836662543,
+        0.07901346636154635,
+        0.9441733381405929
+      ],
+      "as_": "transfer",
+      "clearance": 0.98,
+      "yaw": 0.0,
+      "candidate_id": null,
+      "grasp_artifact": "grasp"
+    },
+    "ok": true,
+    "metrics": {
+      "waypoints": 3,
+      "clearance_m": 0.98,
+      "collision_checks": [
+        {
+          "route_id": "wipe_tool:yaw:0.000000:pose:6d9eba90d487:route:0",
+          "valid": true,
+          "samples": 32,
+          "resolution_rad": 0.035
+        },
+        {
+          "route_id": "wipe_tool:yaw:0.000000:pose:6d9eba90d487:route:1",
+          "valid": true,
+          "samples": 45,
+          "resolution_rad": 0.035
+        },
+        {
+          "route_id": "wipe_tool:yaw:0.000000:pose:6d9eba90d487:route:2",
+          "valid": true,
+          "samples": 56,
+          "resolution_rad": 0.035
+        }
+      ],
+      "candidate_count": 3,
+      "selected_id": "wipe_tool:yaw:0.000000:pose:6d9eba90d487:route:0"
+    },
+    "reason": "",
+    "sim_seconds": 0.0,
+    "wall_seconds": 0.07384751702193171
+  },
+  {
+    "index": 11,
+    "skill": "execute_joint_path",
+    "interface": "move",
+    "atom": "move",
+    "params": {
+      "artifact": "transfer"
+    },
+    "ok": true,
+    "metrics": {
+      "target_error_m": 0.0001226403653901564
+    },
+    "reason": "",
+    "sim_seconds": 5.959999999996697,
+    "wall_seconds": 0.18162252800539136
+  },
+  {
+    "index": 12,
+    "skill": "align_axis",
+    "interface": "move",
+    "atom": "move",
+    "params": {
+      "part": "wipe_tool",
+      "target": [
+        0.019981309529122228,
+        0.07900014582714884,
+        0.823
+      ],
+      "tolerance": 0.0007
+    },
+    "ok": true,
+    "metrics": {
+      "object_error_m": 0.0002751322983881923
+    },
+    "reason": "",
+    "sim_seconds": 4.499999999997506,
+    "wall_seconds": 0.26671353192068636
+  },
+  {
+    "index": 13,
+    "skill": "wipe_surface",
+    "interface": "wipe",
+    "atom": "wipe",
+    "params": {
+      "part": "wipe_tool",
+      "artifact": "wipe",
+      "target_force": 1.5,
+      "force_limit": 12.0,
+      "minimum_coverage": 0.9
+    },
+    "ok": true,
+    "metrics": {
+      "coverage": 0.95,
+      "contact_fraction": 0.8585714285714285,
+      "peak_force_n": 3.2832970655186084,
+      "mean_force_n": 1.068734410231081,
+      "xy_rmse_m": 0.00043815350474550846,
+      "policy": "/home/jia/RAL/simbench/assembly/checkpoints/wipe_imitation.npz"
+    },
+    "reason": "",
+    "sim_seconds": 14.00000000001679,
+    "wall_seconds": 22.52273091499228
+  }
+]

@@ -53,7 +53,7 @@ def release(s):
     s.call("move", delta=[0, 0, 0.10])
 
 
-def assemble(s, policy=None):
+def assemble(s, policy=None, pin_offset=0.0):
     pick(
         s,
         "carriage",
@@ -101,7 +101,8 @@ def assemble(s, policy=None):
     release(s)
     s.call("inspect", part="end_stop", target=STOP)
 
-    for part, target in [("pin_left", PIN_L), ("pin_right", PIN_R)]:
+    for part, intended in [("pin_left", PIN_L), ("pin_right", PIN_R)]:
+        target = intended + ([pin_offset, 0, 0] if part == "pin_right" else [0, 0, 0])
         pick(s, part, terminal_targets=[dict(id="seated", part=part, xyz=target)])
         transfer_part(s, part, target + [0, 0, 0.069])
         s.call("move", reference="object", part=part, target=target + [0, 0, 0.069])
@@ -118,7 +119,7 @@ def assemble(s, policy=None):
             )
         s.call("press", part=part, target_z=target[2])
         release(s)
-        s.call("inspect", part=part, target=target)
+        s.call("inspect", part=part, target=intended)
 
     pick(
         s,

@@ -1,4 +1,4 @@
-"""Eleven close-up, fixed-camera demonstrations of the public atom interfaces.
+"""Ten close-up, fixed-camera demonstrations of the public atom interfaces.
 
 All preparation and execution use the existing controllers. Decorations only
 touch MjvScene; computation-only videos reveal real outputs without moving time.
@@ -442,40 +442,50 @@ class Suite:
         s.call("move", delta=[0, 0, 0.10])
         self.run(s, "inspect", dict(part=part, target=target), part=part, target=target)
 
-    def rail(self):
-        s = self.scene("rail")
-        pick(s, "carriage")
-        entry = np.r_[CENTER + [-0.155, 0], 0.854]
-        transfer_part(s, "carriage", entry)
-        s.call("move", part="carriage", delta=[0, 0, -0.030])
-        s.call(
-            "move", reference="object", part="carriage", target=np.r_[entry[:2], 0.8255]
+    def wipe(self):
+        from .full_demos import make_session, prepare_wipe, FullRecorder
+
+        s = make_session(self.out / "wipe_scene", isolated=True)
+        prepare_wipe(s)
+        rec = (
+            FullRecorder(s, self.out / "skills/wipe.mp4", isolated=True)
+            if self.record
+            else None
         )
-        target = np.r_[CENTER + [0.030, 0], 0.8255]
-        s.call(
-            "plan_path",
-            method="contact",
-            part="carriage",
-            target=target,
-            axis=(1, 0, 0),
-            speed=0.025,
-            force_limit=18.0,
-        )
-        s.call("insert", part="carriage")
-        s.call("press", part="carriage", target_z=0.824)
-        s.call("place", part="carriage", target=np.r_[target[:2], 0.824])
-        s.call("move", delta=[0, 0, 0.10])
-        self.run(
-            s, "measure", dict(quantity="clearance", part="carriage"), part="carriage"
-        )
+        if rec:
+            s.rec = rec
+            s.ctx.on_control_step = rec
+        try:
+            result = s.call("wipe", part="wipe_tool")
+            row = dict(
+                atom="wipe", label="擦拭", success=result.ok, metrics=result.metrics
+            )
+            if rec:
+                rec.pause(2.0)
+                (self.out / "previews").mkdir(exist_ok=True)
+                Image.fromarray(rec.frame()).save(self.out / "previews/wipe.png")
+                row.update(video="skills/wipe.mp4", seconds=rec.frames / 25)
+            self.rows.append(row)
+            (self.out / "verification.json").write_text(
+                json.dumps(
+                    self.rows,
+                    ensure_ascii=False,
+                    indent=2,
+                    default=lambda x: np.asarray(x).tolist(),
+                )
+            )
+        finally:
+            if rec:
+                rec.close()
+            s.ctx.on_control_step = None
 
     def all(self):
         for atoms, method in [
             ({"detect", "estimate_pose", "estimate_grasp"}, self.perception),
             ({"plan_path", "move"}, self.obstacle),
             ({"grasp", "place"}, self.cube),
-            ({"insert", "press", "inspect"}, self.pin),
-            ({"measure"}, self.rail),
+            ({"insert", "press"}, self.pin),
+            ({"wipe"}, self.wipe),
         ]:
             if atoms & self.only:
                 method()

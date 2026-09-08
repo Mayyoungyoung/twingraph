@@ -1,0 +1,10 @@
+{
+  "method": "normalized RBF trajectory imitation with ridge regression",
+  "teacher": "procedural three-pass raster, 24 perturbed trajectories",
+  "seed": 173,
+  "training_trajectories": 24,
+  "evaluation": "800 unseen phase samples; not unseen task shapes",
+  "normalized_rmse": 0.0022101945560888555,
+  "max_normalized_error": 0.0035816425344564616,
+  "physical_robustness": "must be evaluated separately in MuJoCo"
+}

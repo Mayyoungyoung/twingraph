@@ -173,7 +173,11 @@ class Session:
             label = (
                 f"{display['label']}  |  {atom}"
                 if display
-                else f"内部准备：{spec.label}"
+                else (
+                    f"反馈 / 验收：{spec.label}"
+                    if spec.family == "auxiliary"
+                    else f"内部准备：{spec.label}"
+                )
             )
             self.rec.set_skill(atom, label + (f"  ·  {part}" if part else ""))
             self.rec.pause(0.4)
@@ -224,7 +228,8 @@ class Session:
 
     def artifact(self, name, kind, part=None, **data):
         if (
-            kind in ("joint_path", "cartesian_path", "insertion", "recovery")
+            kind
+            in ("joint_path", "cartesian_path", "insertion", "recovery", "wipe_path")
             and "binding" not in data
         ):
             grasp = self.artifacts.get("grasp")
@@ -845,6 +850,56 @@ class Session:
                 "speed_m_s": speed,
                 "force_limit_n": force_limit,
             }
+        )
+
+    @skill(
+        "plan_wipe",
+        "生成表面擦拭路径",
+        "planning",
+        ("held", "capability:wipe"),
+        produces="wipe_path",
+        legacy=False,
+        obligations=(
+            "surface geometry, tool clearance and force tracking require simulation",
+        ),
+    )
+    def plan_wipe(
+        self,
+        part,
+        center,
+        halfspan=(0.055, 0.006),
+        surface="guide_base",
+        height=0.822,
+        duration=14.0,
+        as_="wipe",
+    ):
+        from .wiping import plan
+
+        return plan(self, part, center, halfspan, surface, height, duration, as_)
+
+    @skill(
+        "wipe_surface",
+        "学习轨迹接触擦拭",
+        "contact",
+        ("held", "capability:wipe", "artifact:wipe_path"),
+        implementation="trajectory_imitation_with_force_feedback",
+        legacy=False,
+        obligations=(
+            "actual surface contact, force limit and coverage require simulation",
+        ),
+    )
+    def wipe_surface(
+        self,
+        part,
+        artifact="wipe",
+        target_force=1.5,
+        force_limit=12.0,
+        minimum_coverage=0.9,
+    ):
+        from .wiping import execute
+
+        return execute(
+            self, part, artifact, target_force, force_limit, minimum_coverage
         )
 
     @skill("slide_insert", "沿导轨约束插入", "contact", ("held", "artifact:insertion"))

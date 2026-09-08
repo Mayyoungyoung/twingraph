@@ -1,0 +1,201 @@
+{
+  "success": {
+    "success": true,
+    "expected_failure": false,
+    "error": "",
+    "steps": 138,
+    "atoms": [
+      "detect",
+      "estimate_grasp",
+      "estimate_pose",
+      "grasp",
+      "insert",
+      "move",
+      "place",
+      "plan_path",
+      "press",
+      "wipe"
+    ],
+    "actuators": 9,
+    "sim_seconds": 312.6600000007648,
+    "wiping": {
+      "type": "feedback",
+      "part": "wipe_tool",
+      "coverage": 0.95,
+      "contact_fraction": 0.8585714285714285,
+      "peak_force_n": 3.283297072980968,
+      "mean_force_n": 1.0687344272732375,
+      "xy_rmse_m": 0.00043815350442724465,
+      "policy": "/home/jia/RAL/simbench/assembly/checkpoints/wipe_imitation.npz"
+    },
+    "last_step": {
+      "index": 137,
+      "skill": "home",
+      "interface": "move",
+      "atom": "move",
+      "params": {},
+      "ok": true,
+      "metrics": {
+        "joint_error_rad": 3.348425647864417e-08
+      },
+      "reason": "",
+      "sim_seconds": 3.940000000018813,
+      "wall_seconds": 4.575261645950377
+    },
+    "video_frames": 5912,
+    "video_seconds": 236.48,
+    "playback_rate": 2,
+    "sha256": "3f9a59d3b698aa20a96cca75f6891d19ac30cdf2f7fd8d41ad601b73e7eeab59",
+    "decoded_frames": 5912,
+    "resolution": [
+      1920,
+      1200
+    ],
+    "video": "docs/demos/full_success.mp4",
+    "review_frame_indices": [
+      0,
+      665,
+      1826,
+      2675,
+      3556,
+      4427,
+      5645,
+      5911
+    ]
+  },
+  "failure": {
+    "success": false,
+    "expected_failure": true,
+    "error": "press_seat: shoulder contact/height not verified {'height_error_m': 0.04654411473410913, 'contact_force_n': 1.2937537962665444}",
+    "steps": 98,
+    "atoms": [
+      "detect",
+      "estimate_grasp",
+      "estimate_pose",
+      "grasp",
+      "insert",
+      "move",
+      "place",
+      "plan_path",
+      "press",
+      "wipe"
+    ],
+    "actuators": 9,
+    "sim_seconds": 238.32000000040983,
+    "wiping": {
+      "type": "feedback",
+      "part": "wipe_tool",
+      "coverage": 0.95,
+      "contact_fraction": 0.8585714285714285,
+      "peak_force_n": 3.283297072980968,
+      "mean_force_n": 1.0687344272732375,
+      "xy_rmse_m": 0.00043815350442724465,
+      "policy": "/home/jia/RAL/simbench/assembly/checkpoints/wipe_imitation.npz"
+    },
+    "last_step": {
+      "index": 97,
+      "skill": "press_seat",
+      "interface": "press",
+      "atom": "press",
+      "params": {
+        "part": "pin_right",
+        "target_z": 0.855,
+        "force_stop": 2.5
+      },
+      "ok": false,
+      "metrics": {
+        "height_error_m": 0.04654411473410913,
+        "contact_force_n": 1.2937537962665444
+      },
+      "reason": "shoulder contact/height not verified",
+      "sim_seconds": 2.8000000000133696,
+      "wall_seconds": 4.055347763933241
+    },
+    "video_frames": 4407,
+    "video_seconds": 176.28,
+    "playback_rate": 2,
+    "sha256": "87210bc7d8e72caf0a54f86a9aae70d981302e89ee06c842ce3245f607d54f8d",
+    "decoded_frames": 4407,
+    "resolution": [
+      1920,
+      1200
+    ],
+    "video": "docs/demos/full_failure.mp4",
+    "review_frame_indices": [
+      0,
+      665,
+      1826,
+      2675,
+      3556,
+      4334,
+      4406
+    ]
+  },
+  "wipe": {
+    "success": true,
+    "expected_failure": false,
+    "error": "",
+    "steps": 14,
+    "atoms": [
+      "detect",
+      "estimate_grasp",
+      "estimate_pose",
+      "grasp",
+      "move",
+      "plan_path",
+      "wipe"
+    ],
+    "actuators": 9,
+    "sim_seconds": 45.82000000001003,
+    "wiping": {
+      "type": "feedback",
+      "part": "wipe_tool",
+      "coverage": 0.95,
+      "contact_fraction": 0.8585714285714285,
+      "peak_force_n": 3.2832970655186084,
+      "mean_force_n": 1.068734410231081,
+      "xy_rmse_m": 0.00043815350474550846,
+      "policy": "/home/jia/RAL/simbench/assembly/checkpoints/wipe_imitation.npz"
+    },
+    "last_step": {
+      "index": 13,
+      "skill": "wipe_surface",
+      "interface": "wipe",
+      "atom": "wipe",
+      "params": {
+        "part": "wipe_tool",
+        "artifact": "wipe",
+        "target_force": 1.5,
+        "force_limit": 12.0,
+        "minimum_coverage": 0.9
+      },
+      "ok": true,
+      "metrics": {
+        "coverage": 0.95,
+        "contact_fraction": 0.8585714285714285,
+        "peak_force_n": 3.2832970655186084,
+        "mean_force_n": 1.068734410231081,
+        "xy_rmse_m": 0.00043815350474550846,
+        "policy": "/home/jia/RAL/simbench/assembly/checkpoints/wipe_imitation.npz"
+      },
+      "reason": "",
+      "sim_seconds": 14.00000000001679,
+      "wall_seconds": 22.52273091499228
+    },
+    "video_frames": 470,
+    "video_seconds": 18.8,
+    "playback_rate": 1,
+    "sha256": "27b05402496457f3718a89da0ece706eda0faf006f27db591c4f1b423f8d03d7",
+    "decoded_frames": 470,
+    "resolution": [
+      1920,
+      1200
+    ],
+    "video": "docs/demos/atoms/wipe.mp4",
+    "review_frame_indices": [
+      0,
+      210,
+      469
+    ]
+  }
+}
