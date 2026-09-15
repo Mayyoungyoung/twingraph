@@ -25,7 +25,9 @@ def plain(value):
 
 
 def digest(value):
-    return hashlib.sha256(json.dumps(plain(value), sort_keys=True, allow_nan=False).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(plain(value), sort_keys=True, allow_nan=False).encode()
+    ).hexdigest()
 
 
 @dataclass
@@ -43,7 +45,9 @@ class Argument:
             raise ValueError("invalid parameter status")
         if self.kind in {"pose", "position", "path", "joint_path"} and not self.frame:
             raise ValueError("geometric parameters require a coordinate frame")
-        if self.status == "deferred" and (not self.source_call or not self.source_output):
+        if self.status == "deferred" and (
+            not self.source_call or not self.source_output
+        ):
             raise ValueError("deferred parameters require a producer and output")
         json.dumps(plain(self.value), allow_nan=False)
 
@@ -94,8 +98,14 @@ class PlanIR:
         if len(self.prefix.get("steps", [])) != self.boundary:
             raise ValueError("prefix execution boundary disagrees with calls")
         for call, step in zip(self.calls, self.prefix["steps"]):
-            params = {k: a.value for k, a in call.arguments.items() if not k.startswith("bound_")}
-            if call.skill != step["skill"] or plain(params) != plain(step.get("params", {})):
+            params = {
+                k: a.value
+                for k, a in call.arguments.items()
+                if not k.startswith("bound_")
+            }
+            if call.skill != step["skill"] or plain(params) != plain(
+                step.get("params", {})
+            ):
                 raise ValueError("scoring calls disagree with executable prefix")
         bound = self.calls[0].arguments
         for key in ("grasp", "path", "control", "terminal"):
@@ -109,21 +119,48 @@ class PlanIR:
     @classmethod
     def from_dict(cls, row):
         row = copy.deepcopy(row)
-        row["calls"] = [Call(**{**c, "arguments": {k: Argument(**a) for k, a in c["arguments"].items()}}) for c in row["calls"]]
+        row["calls"] = [
+            Call(
+                **{
+                    **c,
+                    "arguments": {k: Argument(**a) for k, a in c["arguments"].items()},
+                }
+            )
+            for c in row["calls"]
+        ]
         return cls(**row).validate()
 
 
 def argument(value, **kw):
-    kind = "category" if isinstance(value, str) else "vector" if isinstance(value, (list, tuple)) else "scalar"
+    kind = (
+        "category"
+        if isinstance(value, str)
+        else "vector"
+        if isinstance(value, (list, tuple))
+        else "scalar"
+    )
     return Argument(value=plain(value), kind=kw.pop("kind", kind), **kw)
 
 
 def from_pick(candidate, suffix):
     payload = plain(candidate.to_dict())
-    calls = [Call(f"prefix_{i}", step["skill"], {k: argument(v) for k, v in step.get("params", {}).items()}, {"manipulated": candidate.part}, "checker" if step["skill"] == "inspect" else "executable") for i, step in enumerate(payload["steps"])]
+    calls = [
+        Call(
+            f"prefix_{i}",
+            step["skill"],
+            {k: argument(v) for k, v in step.get("params", {}).items()},
+            {"manipulated": candidate.part},
+            "checker" if step["skill"] == "inspect" else "executable",
+        )
+        for i, step in enumerate(payload["steps"])
+    ]
     for key in ("grasp", "path", "control", "terminal"):
-        calls[0].arguments["bound_" + key] = Argument(payload[key], kind="record", frame="world")
-    return PlanIR(candidate.id, calls + suffix, len(calls), payload, candidate.status).validate()
+        calls[0].arguments["bound_" + key] = Argument(
+            payload[key], kind="record", frame="world"
+        )
+    return PlanIR(
+        candidate.id, calls + suffix, len(calls), payload, candidate.status
+    ).validate()
 
 
 def resolve_argument(arg, session, plan):
@@ -142,6 +179,7 @@ def resolve_argument(arg, session, plan):
 def execute_prefix(session, plan):
     import numpy as np
     from simbench.assembly.candidates import Candidate, execute_pick_candidate
+
     plan.validate(session.parts)
     row = copy.deepcopy(plan.prefix)
     for key in ("xyz", "q_hover"):
@@ -154,7 +192,9 @@ def execute_prefix(session, plan):
 
 
 def execute_suffix(session, plan):
-    for call in plan.calls[plan.boundary:]:
-        params = {key: resolve_argument(arg, session, plan) for key, arg in call.arguments.items()}
+    for call in plan.calls[plan.boundary :]:
+        params = {
+            key: resolve_argument(arg, session, plan)
+            for key, arg in call.arguments.items()
+        }
         session.call(call.skill, **params)
-

@@ -142,8 +142,11 @@ class MjContext:
             np.random.set_state(state['numpy_rng'])
         self.n_control_steps, self.n_physics_steps, self._hook_substeps = state['clock']
         mujoco.mj_forward(self.model, self.data)
-        # mj_forward may consume/overwrite solver warm starts. Preserve the
-        # exact integration input from the branch point after the forward pass.
+        # mj_forward normalizes free-joint quaternions in qpos in place, even
+        # changing already valid snapshots by a few floating-point bits. Keep
+        # the exact branch input (used by candidate stale-state fingerprints).
+        self.data.qpos[:] = state['data']['qpos']
+        # Preserve solver warm starts consumed by the forward pass as well.
         self.data.qacc_warmstart[:] = state['data']['qacc_warmstart']
         for name, value in state['clients'].items():
             if name not in self._state_clients:
