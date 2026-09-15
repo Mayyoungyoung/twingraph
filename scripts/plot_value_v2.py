@@ -20,9 +20,9 @@ def cluster(rows,key):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--root',default='results/value_v2');p.add_argument('--out',default='docs/evidence/value_v2');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--root',default='results/value_v2');p.add_argument('--out',default='docs/evidence/value_v2');p.add_argument('--offline-only',action='store_true');a=p.parse_args()
     root=Path(a.root);out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
-    offline=json.loads((root/'locked_metrics.json').read_text());online=json.loads((out/'online_summary.json').read_text());rows=[]
+    offline=json.loads((root/'locked_metrics.json').read_text());online=[] if a.offline_only else json.loads((out/'online_summary.json').read_text());rows=[]
     for name,ks in offline.items():
         for k,value in ks.items():
             source=value['rows']
@@ -36,15 +36,20 @@ def main():
     with (out/'OFFLINE_RANKING_TABLE.csv').open('w',newline='') as f:
         w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
     names=[n for n in LABELS if n in offline]
-    fig,axes=plt.subplots(1,2,figsize=(13,4.5),layout='constrained')
+    fig,axes=plt.subplots(1,2,figsize=(13,5.5))
     for axis,family in zip(axes,['sliding_stage_pin','rigid_connector_module']):
         x=np.arange(len(names));width=.38
         for offset,k in [(-.5,1),(.5,4)]:
             values=[100*cluster([r for r in offline[n][str(k)]['rows'] if r['family']==family],'hit') for n in names]
             axis.bar(x+offset*width,values,width,label=f'Near-optimal Hit@{k}')
-        axis.set_xticks(x,[LABELS[n] for n in names],rotation=35,ha='right');axis.set_ylim(0,105);axis.set_ylabel('Configuration-weighted hit (%)');axis.set_title(family.replace('_',' '));axis.legend(fontsize=8)
-    fig.suptitle('Locked simulation reference: 6 independent configurations per family; 2 repeats/candidate')
+        axis.set_xticks(x,[LABELS[n] for n in names],rotation=35,ha='right');axis.set_ylim(0,105);axis.set_ylabel('Configuration-weighted hit (%)');axis.set_title(family.replace('_',' '))
+    handles,labels=axes[0].get_legend_handles_labels()
+    fig.legend(handles,labels,loc='upper center',bbox_to_anchor=(.5,.94),ncol=2,frameon=False)
+    fig.suptitle('Locked simulation reference: 6 independent configurations per family; 2 repeats/candidate',fontsize=12,y=.99)
+    fig.subplots_adjust(left=.06,right=.99,bottom=.27,top=.81,wspace=.16)
     fig.savefig(out/'locked_ranking.png',dpi=180);fig.savefig(out/'locked_ranking.svg');plt.close(fig)
+    if a.offline_only:
+        print(json.dumps(dict(offline_rows=len(rows),plots=str(out))));return
     fig,axes=plt.subplots(1,2,figsize=(11,4.5),layout='constrained')
     for axis,family in zip(axes,['sliding_stage_pin','rigid_connector_module']):
         selected=[r for r in online if r['runset']=='online' and r['family']==family]

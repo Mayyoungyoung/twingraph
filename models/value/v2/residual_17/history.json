@@ -1,0 +1,1682 @@
+[
+  {
+    "epoch": 1,
+    "loss": 0.5407199263572693,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.20181015140066544,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.051822914043441415
+  },
+  {
+    "epoch": 2,
+    "loss": 0.5404189229011536,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.20152502084771792,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.06667420105077326
+  },
+  {
+    "epoch": 3,
+    "loss": 0.5397608876228333,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.20105486990263066,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.07937564805615693
+  },
+  {
+    "epoch": 4,
+    "loss": 0.5386730432510376,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.2003550276781122,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.09358538698870689
+  },
+  {
+    "epoch": 5,
+    "loss": 0.5370624661445618,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.19939365598062675,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.10735051205847412
+  },
+  {
+    "epoch": 6,
+    "loss": 0.5348086953163147,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.19814221790681283,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.12153241201303899
+  },
+  {
+    "epoch": 7,
+    "loss": 0.5317696332931519,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.1965529150639971,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.13474193308502436
+  },
+  {
+    "epoch": 8,
+    "loss": 0.5277913808822632,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.19462595141182343,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.14754440798424184
+  },
+  {
+    "epoch": 9,
+    "loss": 0.5227060317993164,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.19238556052247685,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.16014988103415817
+  },
+  {
+    "epoch": 10,
+    "loss": 0.5163373947143555,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.1897742774958412,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.17383335903286934
+  },
+  {
+    "epoch": 11,
+    "loss": 0.5085137486457825,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.18666962993641695,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.18782744207419455
+  },
+  {
+    "epoch": 12,
+    "loss": 0.49906596541404724,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.18302624660233657,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.20082607003860176
+  },
+  {
+    "epoch": 13,
+    "loss": 0.4878250062465668,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.17884603124111892,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.21355353307444602
+  },
+  {
+    "epoch": 14,
+    "loss": 0.47464311122894287,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.1740882935623328,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.22643745399545878
+  },
+  {
+    "epoch": 15,
+    "loss": 0.4594131410121918,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.1687429537375768,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.2391489400761202
+  },
+  {
+    "epoch": 16,
+    "loss": 0.4420900344848633,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.16279189648727577,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.2520863290410489
+  },
+  {
+    "epoch": 17,
+    "loss": 0.42273738980293274,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.15621110387146472,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.2649729830445722
+  },
+  {
+    "epoch": 18,
+    "loss": 0.40158241987228394,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.14895449796070656,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.2777692300733179
+  },
+  {
+    "epoch": 19,
+    "loss": 0.37906137108802795,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.14107970998932917,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.29076736501883715
+  },
+  {
+    "epoch": 20,
+    "loss": 0.3558272123336792,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.13299046012883387,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.3036915820557624
+  },
+  {
+    "epoch": 21,
+    "loss": 0.332709401845932,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.12501009544357658,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.3175300450529903
+  },
+  {
+    "epoch": 22,
+    "loss": 0.31063753366470337,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.11698980868483583,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.3309595810715109
+  },
+  {
+    "epoch": 23,
+    "loss": 0.2905080318450928,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.10943700469409426,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.34447110805194825
+  },
+  {
+    "epoch": 24,
+    "loss": 0.27296265959739685,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.102033948743095,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.3577986400341615
+  },
+  {
+    "epoch": 25,
+    "loss": 0.25835371017456055,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.09485643195609252,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.37122000206727535
+  },
+  {
+    "epoch": 26,
+    "loss": 0.24673432111740112,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.08780697107625504,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.3845108530949801
+  },
+  {
+    "epoch": 27,
+    "loss": 0.23772934079170227,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.08077765235987802,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.39785411302000284
+  },
+  {
+    "epoch": 28,
+    "loss": 0.23066279292106628,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.07452379137588044,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.4107833179878071
+  },
+  {
+    "epoch": 29,
+    "loss": 0.2246628701686859,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.06725435599995155,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.4239455690840259
+  },
+  {
+    "epoch": 30,
+    "loss": 0.21893398463726044,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.06403237471046547,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.4373240490676835
+  },
+  {
+    "epoch": 31,
+    "loss": 0.2130296230316162,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.05452444138936698,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.4504963740473613
+  },
+  {
+    "epoch": 32,
+    "loss": 0.2067422866821289,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.05485658153581123,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.4636047100648284
+  },
+  {
+    "epoch": 33,
+    "loss": 0.19971737265586853,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04948251305613667,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.4748615180142224
+  },
+  {
+    "epoch": 34,
+    "loss": 0.19225086271762848,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04400347290405383,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.48823303007520735
+  },
+  {
+    "epoch": 35,
+    "loss": 0.18529558181762695,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.044649403728544715,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5013789120130241
+  },
+  {
+    "epoch": 36,
+    "loss": 0.1782044917345047,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04428029928045968,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5126081090420485
+  },
+  {
+    "epoch": 37,
+    "loss": 0.17223607003688812,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04165628875295321,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5242095499997959
+  },
+  {
+    "epoch": 38,
+    "loss": 0.1671217679977417,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.042295098498774074,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5376576880225912
+  },
+  {
+    "epoch": 39,
+    "loss": 0.16283616423606873,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.043924121830301976,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5493362670531496
+  },
+  {
+    "epoch": 40,
+    "loss": 0.15967559814453125,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.042142233221481244,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5611610900377855
+  },
+  {
+    "epoch": 41,
+    "loss": 0.15666384994983673,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04131931649365773,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5735704940743744
+  },
+  {
+    "epoch": 42,
+    "loss": 0.1541399359703064,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.042270473577082156,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.587723760982044
+  },
+  {
+    "epoch": 43,
+    "loss": 0.15151561796665192,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04102642699920883,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.5991730960085988
+  },
+  {
+    "epoch": 44,
+    "loss": 0.14865559339523315,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03927635838432858,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.612827830016613
+  },
+  {
+    "epoch": 45,
+    "loss": 0.1457945853471756,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.039500196604058145,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.6264928100863472
+  },
+  {
+    "epoch": 46,
+    "loss": 0.14253965020179749,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03872712417505682,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.6378308380953968
+  },
+  {
+    "epoch": 47,
+    "loss": 0.1393039971590042,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.036706702380130685,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.6513429040787742
+  },
+  {
+    "epoch": 48,
+    "loss": 0.1360430121421814,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03640090481688579,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.6653187160845846
+  },
+  {
+    "epoch": 49,
+    "loss": 0.13271193206310272,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.036126478435471655,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.6788430300075561
+  },
+  {
+    "epoch": 50,
+    "loss": 0.1296640932559967,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03509929601568729,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.6922158120432869
+  },
+  {
+    "epoch": 51,
+    "loss": 0.12677259743213654,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03546077751088887,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.7056405930779874
+  },
+  {
+    "epoch": 52,
+    "loss": 0.1240529716014862,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.035939141622899726,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.7172081460012123
+  },
+  {
+    "epoch": 53,
+    "loss": 0.12168039381504059,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03576545135583729,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.7289646490244195
+  },
+  {
+    "epoch": 54,
+    "loss": 0.11949827522039413,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03616410273049647,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.7408646510448307
+  },
+  {
+    "epoch": 55,
+    "loss": 0.11740371584892273,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03602742049843073,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.7524854550138116
+  },
+  {
+    "epoch": 56,
+    "loss": 0.1154443696141243,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03558813363003234,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.7644264400005341
+  },
+  {
+    "epoch": 57,
+    "loss": 0.11358077079057693,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03574246469846305,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.776033797999844
+  },
+  {
+    "epoch": 58,
+    "loss": 0.1116999015212059,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.035103260774243,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.787601244985126
+  },
+  {
+    "epoch": 59,
+    "loss": 0.10978364944458008,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03481809267929445,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.7991539670620114
+  },
+  {
+    "epoch": 60,
+    "loss": 0.10791651159524918,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03474255895513731,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.813839762005955
+  },
+  {
+    "epoch": 61,
+    "loss": 0.10614246875047684,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03402367821739366,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.8283240060554817
+  },
+  {
+    "epoch": 62,
+    "loss": 0.10446459800004959,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0344712388003245,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.8427194660762325
+  },
+  {
+    "epoch": 63,
+    "loss": 0.1029011458158493,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03415570243766221,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.8546007830882445
+  },
+  {
+    "epoch": 64,
+    "loss": 0.1014716625213623,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03455265354520331,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.8666078100213781
+  },
+  {
+    "epoch": 65,
+    "loss": 0.10019413381814957,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03483822763276597,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.8803145230049267
+  },
+  {
+    "epoch": 66,
+    "loss": 0.09904283285140991,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.034715561299041534,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.8924535770202056
+  },
+  {
+    "epoch": 67,
+    "loss": 0.09797686338424683,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03541666026770448,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.905914711067453
+  },
+  {
+    "epoch": 68,
+    "loss": 0.09695865958929062,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.035015820281114426,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.9187865880085155
+  },
+  {
+    "epoch": 69,
+    "loss": 0.09595131129026413,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03608608889626339,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.9315126250730827
+  },
+  {
+    "epoch": 70,
+    "loss": 0.09495019912719727,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03536420583550352,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.9446331280050799
+  },
+  {
+    "epoch": 71,
+    "loss": 0.09394432604312897,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.036572512548688485,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.9568926760694012
+  },
+  {
+    "epoch": 72,
+    "loss": 0.09295877814292908,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0356569094893833,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.9700911419931799
+  },
+  {
+    "epoch": 73,
+    "loss": 0.09192588180303574,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03670947236096254,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.9823874980211258
+  },
+  {
+    "epoch": 74,
+    "loss": 0.09087706357240677,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03621607991323496,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.9946788160596043
+  },
+  {
+    "epoch": 75,
+    "loss": 0.08983268588781357,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03657954391771151,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.0078497120412067
+  },
+  {
+    "epoch": 76,
+    "loss": 0.08887569606304169,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0369865080176775,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.019970928085968
+  },
+  {
+    "epoch": 77,
+    "loss": 0.08801012486219406,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03656116802837156,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.0331651330925524
+  },
+  {
+    "epoch": 78,
+    "loss": 0.0871918797492981,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.037737498210238606,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.0452726039802656
+  },
+  {
+    "epoch": 79,
+    "loss": 0.08638104051351547,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03688766988101028,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.0576429300708696
+  },
+  {
+    "epoch": 80,
+    "loss": 0.08551924675703049,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.038062417799907655,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.070237944019027
+  },
+  {
+    "epoch": 81,
+    "loss": 0.08462242782115936,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03737315979330257,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.0829235940473154
+  },
+  {
+    "epoch": 82,
+    "loss": 0.08371821790933609,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03776440049017159,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.0956068700179458
+  },
+  {
+    "epoch": 83,
+    "loss": 0.0828760638833046,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.037837138124450574,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.1082655020290986
+  },
+  {
+    "epoch": 84,
+    "loss": 0.0821169763803482,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.037242484006371035,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.1209781860234216
+  },
+  {
+    "epoch": 85,
+    "loss": 0.08142249286174774,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.037866605091646,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.1337292470270768
+  },
+  {
+    "epoch": 86,
+    "loss": 0.08076637238264084,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03680308430581741,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.146515442058444
+  },
+  {
+    "epoch": 87,
+    "loss": 0.08011292666196823,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.037792016764190826,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.159496354055591
+  },
+  {
+    "epoch": 88,
+    "loss": 0.07943979650735855,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03690325032415179,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.1724270620616153
+  },
+  {
+    "epoch": 89,
+    "loss": 0.0787232518196106,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.037824566504665806,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.1852615639800206
+  },
+  {
+    "epoch": 90,
+    "loss": 0.0779871940612793,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03744239608689289,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.198229729081504
+  },
+  {
+    "epoch": 91,
+    "loss": 0.07726477831602097,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03793221126446345,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.2111638489877805
+  },
+  {
+    "epoch": 92,
+    "loss": 0.07658113539218903,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0381482191781591,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.2241101460531354
+  },
+  {
+    "epoch": 93,
+    "loss": 0.07594066858291626,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03820848167524673,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.2372561880620196
+  },
+  {
+    "epoch": 94,
+    "loss": 0.07533709704875946,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.038938449435227084,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.2503753330092877
+  },
+  {
+    "epoch": 95,
+    "loss": 0.07477061450481415,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03867078483162913,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.2633021430810913
+  },
+  {
+    "epoch": 96,
+    "loss": 0.07426029443740845,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03998434201639611,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.2765140230767429
+  },
+  {
+    "epoch": 97,
+    "loss": 0.07384519279003143,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.03915501585482464,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.28975445299875
+  },
+  {
+    "epoch": 98,
+    "loss": 0.07357779890298843,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04118206146764957,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.3030330539913848
+  },
+  {
+    "epoch": 99,
+    "loss": 0.07330305874347687,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0395665967730262,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.3160948610166088
+  },
+  {
+    "epoch": 100,
+    "loss": 0.07266652584075928,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04085158546610425,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.3294011050602421
+  },
+  {
+    "epoch": 101,
+    "loss": 0.0715709924697876,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.040536584684984216,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.3426995140034705
+  },
+  {
+    "epoch": 102,
+    "loss": 0.07077305763959885,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04021918419117962,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.356202669092454
+  },
+  {
+    "epoch": 103,
+    "loss": 0.07057426124811172,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.041454248960265734,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.3695807420881465
+  },
+  {
+    "epoch": 104,
+    "loss": 0.07039345800876617,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04012832741767246,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.3831554590724409
+  },
+  {
+    "epoch": 105,
+    "loss": 0.06967753916978836,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0408189676917876,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.3964829060714692
+  },
+  {
+    "epoch": 106,
+    "loss": 0.06882254034280777,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04104526620333976,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.4099774970673025
+  },
+  {
+    "epoch": 107,
+    "loss": 0.06842634081840515,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0405257574035204,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.4247206710278988
+  },
+  {
+    "epoch": 108,
+    "loss": 0.06825637072324753,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.0416209712025496,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.4388127999845892
+  },
+  {
+    "epoch": 109,
+    "loss": 0.06776056438684464,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04089558961616907,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.4522346860030666
+  },
+  {
+    "epoch": 110,
+    "loss": 0.06702311336994171,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.041117575511452745,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.465980577049777
+  },
+  {
+    "epoch": 111,
+    "loss": 0.06651155650615692,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.041732742573852497,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.47988382098265
+  },
+  {
+    "epoch": 112,
+    "loss": 0.06627441197633743,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04103411086252891,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.493884580093436
+  },
+  {
+    "epoch": 113,
+    "loss": 0.06596817821264267,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04166265704964947,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.5078614390222356
+  },
+  {
+    "epoch": 114,
+    "loss": 0.06540004163980484,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.041454830705333734,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.5219837829936296
+  },
+  {
+    "epoch": 115,
+    "loss": 0.06479952484369278,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.041518024123555125,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.5361068240599707
+  },
+  {
+    "epoch": 116,
+    "loss": 0.06440097838640213,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04190844838109721,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.5500701430719346
+  },
+  {
+    "epoch": 117,
+    "loss": 0.064134880900383,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04141688711582295,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.5645333430729806
+  },
+  {
+    "epoch": 118,
+    "loss": 0.06381737440824509,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.042059908809703,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.578694874071516
+  },
+  {
+    "epoch": 119,
+    "loss": 0.06334374099969864,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.04175379050769455,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.5927391910227016
+  },
+  {
+    "epoch": 120,
+    "loss": 0.06281856447458267,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.042070333127048797,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 1.60688104305882
+  }
+]

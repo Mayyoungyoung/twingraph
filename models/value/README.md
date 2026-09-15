@@ -10,3 +10,8 @@ Both use a shared 128-dimensional, three-layer Transformer with frozen ResNet-18
 Use `python -m simbench.value.rank --checkpoint <file> --input <inputs.json> --k 2`. The released data archive includes cached vision features; scoring those cases requires no download of visual encoder weights. New observations use torchvision's official ImageNet ResNet-18 weights.
 
 Scores are not calibrated guarantees. Both models are limited to the current simulator pin-assembly family. The geometric baseline matches the recommended model on this small test set. See the [full evidence and limitations](../../docs/evidence/value/README.md).
+
+
+## v2 两家族研究模型
+
+[完整模型与训练记录](v2/README.md)。推荐 [数值特征 MLP](best_value_v2.pt)，使用 `simbench.value.research_rank` / `research_decision`。v1 文件保持原样。

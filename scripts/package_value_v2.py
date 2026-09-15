@@ -50,6 +50,13 @@ def main():
     with tarfile.open(out/'two_family_v2_source.tar.gz','w:gz') as archive:
         for f in sorted(code):archive.add(f,arcname=f)
     (out/'source_hashes.json').write_text(json.dumps({str(f):sha(f) for f in sorted(code)},indent=2))
+    execution_dirs=[f for f in root.iterdir() if f.is_dir() and (f.name.startswith('online') or f.name.startswith('new_configuration'))]
+    with tarfile.open(out/'online_execution_v2.tar.gz','w:gz') as archive:
+        for directory in sorted(execution_dirs):archive.add(directory,arcname=directory.name)
+    development_dirs=[f for f in root.iterdir() if f.is_dir() and (f.name in {'pilot','pilot2','checks','contact_probe','regression','data_wide_v2a','timing_smoke','development_online'} or f.name.startswith('spacing_probe'))]
+    with tarfile.open(out/'development_evidence_v2.tar.gz','w:gz') as archive:
+        for directory in sorted(development_dirs):archive.add(directory,arcname=directory.name)
+    if (root/'wide_v2a_source.tar.gz').exists():shutil.copy2(root/'wide_v2a_source.tar.gz',out/'wide_v2a_source.tar.gz')
     modeldir=out/'models';modeldir.mkdir(exist_ok=True);model_info={}
     for folder in sorted((root/'models').iterdir()):
         if not folder.is_dir() or not (folder/'best.pt').exists():continue
@@ -67,6 +74,7 @@ def main():
              cpu_quota=Path('/sys/fs/cgroup/cpu.max').read_text().strip(),code_commit=a.code_commit,
              device_info=subprocess.check_output(['nvidia-smi','--query-gpu=name,driver_version,memory.total','--format=csv,noheader'],text=True).strip())
     (out/'environment.json').write_text(json.dumps(env,indent=2))
+    (out/'release_checksums.json').write_text(json.dumps({str(f.relative_to(out)):sha(f) for f in sorted(out.rglob('*')) if f.is_file() and f.name!='release_checksums.json'},indent=2))
     print(json.dumps(dict(groups=len(groups),trials=used_trials,archive_mb=(out/'two_family_v2.tar.gz').stat().st_size/1e6,output=str(out))))
 
 

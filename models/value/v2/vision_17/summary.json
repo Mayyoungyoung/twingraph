@@ -1,0 +1,15 @@
+{
+  "wall_seconds": 205.89882801205385,
+  "optimization_and_validation_seconds": 179.053720358992,
+  "setup_including_prior_seconds": 26.84511569608003,
+  "seed": 17,
+  "kind": "vision",
+  "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+  "parameters": 1730947,
+  "training_groups": 44,
+  "validation_groups": 14,
+  "training_configurations": 24,
+  "validation_configurations": 8,
+  "training_label_rollouts": 1408,
+  "validation_label_rollouts": 448
+}

@@ -1,0 +1,273 @@
+{
+  "data": [
+    {
+      "family": "rigid_connector_module",
+      "split": "test",
+      "groups": 10,
+      "configuration_seed_clusters": 6,
+      "geometries": 6,
+      "trials": 320,
+      "successes": 181,
+      "prefix_successes": 320,
+      "collection_worker_seconds": 4976.127391790273,
+      "all_success_groups": 0,
+      "all_failure_groups": 0,
+      "lengths": [
+        22,
+        58,
+        76
+      ]
+    },
+    {
+      "family": "rigid_connector_module",
+      "split": "train",
+      "groups": 32,
+      "configuration_seed_clusters": 12,
+      "geometries": 24,
+      "trials": 1024,
+      "successes": 731,
+      "prefix_successes": 1024,
+      "collection_worker_seconds": 18643.849302489427,
+      "all_success_groups": 2,
+      "all_failure_groups": 0,
+      "lengths": [
+        40,
+        58,
+        76
+      ]
+    },
+    {
+      "family": "rigid_connector_module",
+      "split": "val",
+      "groups": 10,
+      "configuration_seed_clusters": 4,
+      "geometries": 5,
+      "trials": 320,
+      "successes": 222,
+      "prefix_successes": 320,
+      "collection_worker_seconds": 5392.1142441016855,
+      "all_success_groups": 0,
+      "all_failure_groups": 0,
+      "lengths": [
+        40,
+        58,
+        76
+      ]
+    },
+    {
+      "family": "sliding_stage_pin",
+      "split": "test",
+      "groups": 6,
+      "configuration_seed_clusters": 6,
+      "geometries": 6,
+      "trials": 192,
+      "successes": 91,
+      "prefix_successes": 192,
+      "collection_worker_seconds": 529.8469337671995,
+      "all_success_groups": 0,
+      "all_failure_groups": 0,
+      "lengths": [
+        19
+      ]
+    },
+    {
+      "family": "sliding_stage_pin",
+      "split": "train",
+      "groups": 12,
+      "configuration_seed_clusters": 12,
+      "geometries": 12,
+      "trials": 384,
+      "successes": 174,
+      "prefix_successes": 384,
+      "collection_worker_seconds": 1051.2308887790423,
+      "all_success_groups": 0,
+      "all_failure_groups": 0,
+      "lengths": [
+        19
+      ]
+    },
+    {
+      "family": "sliding_stage_pin",
+      "split": "val",
+      "groups": 4,
+      "configuration_seed_clusters": 4,
+      "geometries": 4,
+      "trials": 128,
+      "successes": 85,
+      "prefix_successes": 128,
+      "collection_worker_seconds": 360.4375372971408,
+      "all_success_groups": 0,
+      "all_failure_groups": 0,
+      "lengths": [
+        19
+      ]
+    }
+  ],
+  "models": {
+    "mlp_17": {
+      "wall_seconds": 24.63752420397941,
+      "optimization_and_validation_seconds": 1.54389104899019,
+      "setup_including_prior_seconds": 23.09363364696037,
+      "seed": 17,
+      "kind": "mlp",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "residual_17": {
+      "wall_seconds": 26.130624901037663,
+      "optimization_and_validation_seconds": 1.6098861690843478,
+      "setup_including_prior_seconds": 24.520739165018313,
+      "seed": 17,
+      "kind": "residual",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "pin_mlp_17": {
+      "wall_seconds": 23.248310173978098,
+      "optimization_and_validation_seconds": 0.9590151290176436,
+      "setup_including_prior_seconds": 22.289295754977502,
+      "seed": 17,
+      "kind": "mlp",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 12,
+      "validation_groups": 4,
+      "training_configurations": 12,
+      "validation_configurations": 4,
+      "training_label_rollouts": 384,
+      "validation_label_rollouts": 128
+    },
+    "mlp_43": {
+      "wall_seconds": 24.647459806059487,
+      "optimization_and_validation_seconds": 1.5018270300934091,
+      "setup_including_prior_seconds": 23.145633228006773,
+      "seed": 43,
+      "kind": "mlp",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "no_vision_17": {
+      "wall_seconds": 191.4316309640417,
+      "optimization_and_validation_seconds": 166.5320141260745,
+      "setup_including_prior_seconds": 24.89961952494923,
+      "seed": 17,
+      "kind": "no_vision",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 1665283,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "vision_17": {
+      "wall_seconds": 205.89882801205385,
+      "optimization_and_validation_seconds": 179.053720358992,
+      "setup_including_prior_seconds": 26.84511569608003,
+      "seed": 17,
+      "kind": "vision",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 1730947,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "residual_29": {
+      "wall_seconds": 26.13499408797361,
+      "optimization_and_validation_seconds": 1.5919081349857152,
+      "setup_including_prior_seconds": 24.543086402933113,
+      "seed": 29,
+      "kind": "residual",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "prior_17": {
+      "wall_seconds": 24.148014602949843,
+      "optimization_and_validation_seconds": 0.00942805502563715,
+      "setup_including_prior_seconds": 24.138587027904578,
+      "seed": 17,
+      "kind": "prior",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "mlp_29": {
+      "wall_seconds": 25.473927536047995,
+      "optimization_and_validation_seconds": 1.5570229579461738,
+      "setup_including_prior_seconds": 23.916905010002665,
+      "seed": 29,
+      "kind": "mlp",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "residual_43": {
+      "wall_seconds": 24.548304502037354,
+      "optimization_and_validation_seconds": 1.60586436802987,
+      "setup_including_prior_seconds": 22.942440668004565,
+      "seed": 43,
+      "kind": "residual",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 44,
+      "validation_groups": 14,
+      "training_configurations": 24,
+      "validation_configurations": 8,
+      "training_label_rollouts": 1408,
+      "validation_label_rollouts": 448
+    },
+    "fewshot_mlp_17": {
+      "wall_seconds": 24.296322394977324,
+      "optimization_and_validation_seconds": 1.46652534394525,
+      "setup_including_prior_seconds": 22.82979755999986,
+      "seed": 17,
+      "kind": "mlp",
+      "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+      "parameters": 7752,
+      "training_groups": 24,
+      "validation_groups": 14,
+      "training_configurations": 14,
+      "validation_configurations": 8,
+      "training_label_rollouts": 768,
+      "validation_label_rollouts": 448
+    }
+  }
+}

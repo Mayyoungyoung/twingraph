@@ -1,0 +1,16 @@
+[
+  {
+    "epoch": 1,
+    "loss": 0.5407199263572693,
+    "val": {
+      "groups": 14,
+      "configurations": 8,
+      "hit": 1.0,
+      "feasible": 1.0,
+      "regret": 0.0,
+      "brier": 0.20185920043538014,
+      "aggregation": "equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed"
+    },
+    "seconds": 0.0069462640676647425
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "fewshot_mlp_17\\best.pt": "4850fa67adc31e64cd265d61589a519d520908407f695d7f5c964460fdf31c7b",
+  "mlp_17\\best.pt": "2d1b73af8d31e70aad10de1dc7c6d493aca154509addb13409d433b8216f8459",
+  "mlp_29\\best.pt": "e27094d71ddaa81999547d1aa7ebeea3f5cadaa36363985923e2f8d7d7de76e9",
+  "mlp_43\\best.pt": "b9efb0395218c887f5a6bec9599a9dfa43baba5056f2f29130021f9039a532fd",
+  "no_vision_17\\best.pt": "8170b408cb7562fb96d83bfeb957d3a0e69f93f83d38d85b65f22eca15190b1e",
+  "pin_mlp_17\\best.pt": "96a60d4fb38f86e040f43afc3cec19360e1fb1e28734a09c0e5b93ffa5b0f45f",
+  "prior_17\\best.pt": "eca9874d7bd879d99918d1e3aba0ad38b2743e6966cd2f85141d175732f5d7cc",
+  "residual_17\\best.pt": "13a5cdb2570c123cf90d8f88048eda8e1624b05d9545a530f1144eb77ab03074",
+  "residual_29\\best.pt": "c8deb976b2bd855505cca0488dd28c706d31a25352ac115b2be962309e20275c",
+  "residual_43\\best.pt": "76a786363bb9b9570c74c2adc82e30f96a3bb29984975003a3db04de86df4565",
+  "vision_17\\best.pt": "ca04eeb22ab518ae361eb5b92612be3086321c603b241d93a13aeac5d6624ef2"
+}

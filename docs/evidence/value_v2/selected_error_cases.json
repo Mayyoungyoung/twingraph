@@ -1,0 +1,239 @@
+[
+  {
+    "family": "rigid_connector_module",
+    "seed": 20041,
+    "checkpoint": 0,
+    "geometry": {
+      "candidate": "e9e5157755cccbd72d5e",
+      "choices": {
+        "insert_0": {
+          "yaw": 1.5707963267948966,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 2.5,
+          "speed": 0.006
+        },
+        "insert_1": {
+          "yaw": 0.0,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 2.5,
+          "speed": 0.006
+        },
+        "guard": {
+          "yaw": 0.0,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 2.5,
+          "speed": 0.006
+        },
+        "locator": {
+          "yaw": 0.0,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 2.5,
+          "speed": 0.006
+        }
+      },
+      "order": [
+        "insert_0",
+        "insert_1",
+        "guard",
+        "locator"
+      ],
+      "reference": 0.0,
+      "errors": [
+        "open_gripper:  {'jaw_span_m': 0.05999247218065691}",
+        "place_object: no supporting contact; refusing air release {'support_force_n': 0.0}"
+      ],
+      "geometric_score": -0.0009800000116229057
+    },
+    "mlp": {
+      "candidate": "6fee4b98791edb99caa7",
+      "choices": {
+        "insert_0": {
+          "yaw": 0.0,
+          "height": 0.006,
+          "clearance": 1.035,
+          "force": 3.5,
+          "speed": 0.006
+        },
+        "insert_1": {
+          "yaw": 0.0,
+          "height": 0.006,
+          "clearance": 1.035,
+          "force": 3.5,
+          "speed": 0.006
+        },
+        "guard": {
+          "yaw": 0.0,
+          "height": 0.003,
+          "clearance": 1.035,
+          "force": 3.5,
+          "speed": 0.006
+        },
+        "locator": {
+          "yaw": 0.0,
+          "height": 0.003,
+          "clearance": 1.035,
+          "force": 3.5,
+          "speed": 0.006
+        }
+      },
+      "order": [
+        "insert_0",
+        "insert_1",
+        "guard",
+        "locator"
+      ],
+      "reference": 1.0,
+      "errors": [
+        "",
+        ""
+      ],
+      "geometric_score": -0.0010349999647587538
+    }
+  },
+  {
+    "family": "rigid_connector_module",
+    "seed": 20045,
+    "checkpoint": 0,
+    "geometry": {
+      "candidate": "a5cd0e279d4e20663037",
+      "choices": {
+        "insert_1": {
+          "yaw": 1.5707963267948966,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.006
+        },
+        "insert_0": {
+          "yaw": 0.0,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.006
+        },
+        "guard": {
+          "yaw": 0.0,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.006
+        },
+        "locator": {
+          "yaw": 0.0,
+          "height": 0.0,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.006
+        }
+      },
+      "order": [
+        "insert_1",
+        "insert_0",
+        "guard",
+        "locator"
+      ],
+      "reference": 0.0,
+      "errors": [
+        "open_gripper:  {'jaw_span_m': 0.059496874976280846}",
+        "open_gripper:  {'jaw_span_m': 0.05953458849302944}"
+      ],
+      "geometric_score": -0.0009800000116229057
+    },
+    "mlp": {
+      "candidate": "d32a03206856bdf199ef",
+      "choices": {
+        "insert_0": {
+          "yaw": 0.0,
+          "height": 0.006,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.008
+        },
+        "insert_1": {
+          "yaw": 0.0,
+          "height": 0.006,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.008
+        },
+        "guard": {
+          "yaw": 0.0,
+          "height": 0.003,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.008
+        },
+        "locator": {
+          "yaw": 0.0,
+          "height": 0.003,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.008
+        }
+      },
+      "order": [
+        "insert_0",
+        "insert_1",
+        "guard",
+        "locator"
+      ],
+      "reference": 1.0,
+      "errors": [
+        "",
+        ""
+      ],
+      "geometric_score": -0.0009800000116229057
+    }
+  },
+  {
+    "family": "sliding_stage_pin",
+    "seed": 21045,
+    "checkpoint": 0,
+    "geometry": {
+      "candidate": "8f9272de148f5a2e89e0",
+      "choices": {
+        "pin_left": {
+          "yaw": 1.5707963267948966,
+          "height": -0.002,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.006
+        }
+      },
+      "order": [
+        "pin_left"
+      ],
+      "reference": 0.0,
+      "errors": [
+        "open_gripper:  {'jaw_span_m': 0.0725325597864486}",
+        "open_gripper:  {'jaw_span_m': 0.07189414524541118}"
+      ],
+      "geometric_score": -0.0009800000116229057
+    },
+    "mlp": {
+      "candidate": "7b1c71532f353fadf874",
+      "choices": {
+        "pin_left": {
+          "yaw": 0.0,
+          "height": 0.003,
+          "clearance": 0.98,
+          "force": 3.5,
+          "speed": 0.006
+        }
+      },
+      "order": [
+        "pin_left"
+      ],
+      "reference": 1.0,
+      "errors": [
+        "",
+        ""
+      ],
+      "geometric_score": -0.0009800000116229057
+    }
+  }
+]

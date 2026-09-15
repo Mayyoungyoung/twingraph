@@ -1,0 +1,15 @@
+{
+  "wall_seconds": 24.296322394977324,
+  "optimization_and_validation_seconds": 1.46652534394525,
+  "setup_including_prior_seconds": 22.82979755999986,
+  "seed": 17,
+  "kind": "mlp",
+  "training_source_sha256": "d168282e3594a117bef80e90edfeec905cb872ab4aa89699bf0bbeec03ce13cd",
+  "parameters": 7752,
+  "training_groups": 24,
+  "validation_groups": 14,
+  "training_configurations": 14,
+  "validation_configurations": 8,
+  "training_label_rollouts": 768,
+  "validation_label_rollouts": 448
+}

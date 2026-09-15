@@ -121,3 +121,21 @@ def test_program_contracts_preserve_unknown_and_catch_reordering():
     # Data-production edges do not allow a grasp before approach/ownership.
     q=copy.deepcopy(p);q.calls[7].skill='place'
     with pytest.raises((ValueError,TypeError)):audit_program(q,session.parts)
+
+
+@pytest.mark.parametrize('changed',['implementation_sha256','checkpoint_sha256'])
+def test_online_resume_rejects_changed_code_or_weights(tmp_path,monkeypatch,changed):
+    import json
+    from simbench.value import research_evaluate as evaluator
+    from simbench.value.plan import digest
+    experiment=evaluator.OnlineExperiment({},'cpu')
+    experiment.checkpoint_hashes['learned']='current-weights'
+    task=dict(family='rigid_connector_module',seed=20040,checkpoint=0)
+    request=dict(task=task,method='learned',n=16,k=4,budget=8,repeats=2,mode='best_within_budget',
+                 allow_expand=False,deployment_repeats=2,domain_seed=0,
+                 implementation_sha256=experiment.implementation_sha256,checkpoint_sha256='current-weights')
+    request[changed]='stale-version'
+    (tmp_path/'decision.json').write_text(json.dumps(dict(request_sha256=digest(request))))
+    def should_not_execute(*args,**kwargs):raise AssertionError('stale result reached physics')
+    monkeypatch.setattr(evaluator,'make_family',should_not_execute)
+    with pytest.raises(ValueError,match='resume mismatch'):experiment.run(task,'learned',tmp_path)
