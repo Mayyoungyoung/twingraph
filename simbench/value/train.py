@@ -15,7 +15,7 @@ from .network import ModelConfig, PlanValueNet
 from .losses import probability_loss, keep_loss
 from .evaluate import evaluate
 from .vision import ENCODER
-from .plan import digest
+from .plan import digest, plain
 
 
 def main():
@@ -186,7 +186,10 @@ def main():
             ],
         ),
     )
-    print(json.dumps({k: v for k, v in test.items() if k != "predictions"}), flush=True)
+    print(
+        json.dumps(plain({k: v for k, v in test.items() if k != "predictions"})),
+        flush=True,
+    )
 
 
 if __name__ == "__main__":

@@ -39,6 +39,7 @@ def load_groups(directory, vision=True):
     groups = []
     seen = set()
     protocols = set()
+    source_versions = set()
     for complete in sorted(Path(directory).glob("group_*/complete.json")):
         p = complete.parent
         inputs = json.loads((p / "inputs.json").read_text())
@@ -50,12 +51,16 @@ def load_groups(directory, vision=True):
             raise ValueError("duplicate configuration would bias data splits")
         seen.add(gid)
         protocols.add(inputs["protocol"])
+        if inputs.get("source_sha256"):
+            source_versions.add(inputs["source_sha256"])
         plans = [PlanIR.from_dict(x) for x in inputs["candidates"]]
         ids = [plan.id for plan in plans]
         if len(ids) != len(set(ids)):
             raise ValueError("duplicate candidates")
         counts = {cid: [0, 0, 0] for cid in ids}
         seen_trials = set()
+        repeat_specs = {}
+        candidate_repeats = {cid: set() for cid in ids}
         for trial in outcomes["trials"]:
             if not trial["valid"]:
                 raise ValueError("invalid trials require collection repair")
@@ -64,6 +69,12 @@ def load_groups(directory, vision=True):
             if cid not in counts or pair in seen_trials:
                 raise ValueError("unknown candidate or duplicate trial")
             seen_trials.add(pair)
+            repeat = pair[1]
+            trial_hash = digest(trial["trial"])
+            if repeat in repeat_specs and repeat_specs[repeat] != trial_hash:
+                raise ValueError("candidate perturbations are not paired")
+            repeat_specs[repeat] = trial_hash
+            candidate_repeats[cid].add(repeat)
             a, b = trial["prefix_success"], trial["suffix_success"]
             if (
                 not isinstance(a, bool)
@@ -77,6 +88,8 @@ def load_groups(directory, vision=True):
             counts[cid][1] += int(a)
             counts[cid][2] += int(bool(a and b))
         numbers = np.array([counts[c] for c in ids], np.float32)
+        if any(repeats != set(repeat_specs) for repeats in candidate_repeats.values()):
+            raise ValueError("candidate repeat sets differ")
         if np.any(numbers[:, 0] == 0) or len(set(numbers[:, 0])) != 1:
             raise ValueError("incomplete/unpaired candidate trials")
         visual = None
@@ -106,4 +119,8 @@ def load_groups(directory, vision=True):
         )
     if not groups or len(protocols) != 1:
         raise ValueError("empty dataset or mixed execution protocols")
+    if len(source_versions) > 1:
+        raise ValueError(
+            "mixed collection source versions; use a homogeneous dataset release"
+        )
     return groups

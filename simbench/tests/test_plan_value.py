@@ -10,6 +10,8 @@ from simbench.value.encode import encode_plan, collate, sample_path
 from simbench.value.network import ModelConfig, PlanValueNet
 from simbench.value.losses import probability_loss, keep_loss
 from simbench.value.dataset import split_name
+from simbench.value.dataset import load_groups
+from simbench.value.plan import digest, resolve_argument
 from simbench.value.evaluate import subset_metrics
 from simbench.value.rank import PlanRanker, select_and_validate
 
@@ -74,6 +76,10 @@ def test_plan_roundtrip_bindings_and_same_skill_edges():
         PlanIR.from_dict(bad)
     with pytest.raises(ValueError, match="frame"):
         Argument([0, 0, 0], kind="position").validate()
+    with pytest.raises(ValueError, match="world-frame"):
+        resolve_argument(
+            Argument([0, 0, 0], kind="position", frame="receiver"), None, p
+        )
 
 
 def test_prefix_cannot_see_suffix_even_indirectly():
@@ -118,6 +124,7 @@ def test_costs_ids_outcomes_do_not_enter_features():
     obs, p = example()
     before = encode_plan(obs, p)
     p.id = "different trace id"
+    p.prefix["id"] = p.id
     p.prefix["cost"] = -9999
     p.prefix["grasp"]["cost"] = 9999
     p.calls[0].arguments["bound_grasp"].value["cost"] = 9999
@@ -125,6 +132,17 @@ def test_costs_ids_outcomes_do_not_enter_features():
     after = encode_plan(obs, p)
     for key in before:
         np.testing.assert_array_equal(before[key], after[key])
+
+
+def test_argument_type_and_unknown_status_are_observable():
+    obs, plan = example()
+    before = encode_plan(obs, plan)
+    plan.calls[-1].arguments["target"].kind = "pose"
+    typed = encode_plan(obs, plan)
+    assert not np.array_equal(before["categories"], typed["categories"])
+    plan.calls[-1].arguments["target"].status = "unknown"
+    unknown = encode_plan(obs, plan)
+    assert not np.array_equal(typed["statuses"], unknown["statuses"])
 
 
 def test_object_order_does_not_change_tokens():
@@ -193,6 +211,7 @@ def test_rank_returns_original_plans_and_budget_is_exact(tmp_path):
     ranker = PlanRanker(file)
     p2 = copy.deepcopy(p)
     p2.id = "second"
+    p2.prefix["id"] = p2.id
     p2.status = "unknown"
     ranked = ranker.rank(obs, [p, p2], k=5)
     assert ranked["returned_k"] == 2 and ranked["top_k"][0]["plan"] in (
@@ -235,3 +254,52 @@ def test_restore_preserves_free_joint_quaternion_bits():
     before = ctx.snapshot()
     ctx.restore(before)
     np.testing.assert_array_equal(ctx.data.qpos, before["data"]["qpos"])
+
+
+def test_dataset_rejects_unpaired_perturbations_and_inapplicable_labels(tmp_path):
+    import json
+
+    obs, plan = example()
+    second = copy.deepcopy(plan)
+    second.id = "second"
+    second.prefix["id"] = second.id
+    group = tmp_path / "group_000001"
+    group.mkdir()
+    inputs = dict(
+        split_group="configuration",
+        protocol=plan.protocol,
+        observation=obs,
+        candidates=[plan.to_dict(), second.to_dict()],
+    )
+    rows = [
+        dict(
+            candidate_id=p.id,
+            trial=dict(repeat=0, friction_scale=1.0),
+            valid=True,
+            prefix_success=True,
+            suffix_success=True,
+            full_success=True,
+        )
+        for p in (plan, second)
+    ]
+    (group / "complete.json").write_text("{}")
+    (group / "inputs.json").write_text(json.dumps(inputs))
+
+    def write():
+        (group / "outcomes.json").write_text(
+            json.dumps(dict(input_sha256=digest(inputs), trials=rows))
+        )
+
+    write()
+    assert len(load_groups(tmp_path, vision=False)) == 1
+    rows[1]["trial"]["friction_scale"] = 0.8
+    write()
+    with pytest.raises(ValueError, match="paired"):
+        load_groups(tmp_path, vision=False)
+    rows[1]["trial"]["friction_scale"] = 1.0
+    rows[1]["prefix_success"] = False
+    rows[1]["suffix_success"] = False
+    rows[1]["full_success"] = False
+    write()
+    with pytest.raises(ValueError, match="conditional"):
+        load_groups(tmp_path, vision=False)

@@ -43,7 +43,8 @@ python -m simbench.assembly.atomic_demos --out results/atomic_current
 | [技能图谱](docs/skill-graph/README.md) | 共享契约、条件依赖与绑定 |
 | [擦拭学习](docs/wiping.md) | 专家数据、轨迹拟合与接触执行 |
 | [架构设计](docs/architecture.md) | 多解候选、图谱验证与边界 |
-| [价值模块设计](docs/value-module.md) | 反事实数据、训练与 Top-k 评估 |
+| [价值粗筛实现](docs/value-screening.md) | 统一计划、完整后缀采集、共享 Transformer、训练与 Top-K 输出 |
+| [价值模块设计存档](docs/value-module.md) | 原始研究方案与后续扩展方向 |
 | [当前验证](docs/evidence/surface-assembly/README.md) | 回归、真实成功/失败与视频核验 |
 
 历史验证保留于 `docs/evidence/`，包括旧 11 项接口与旧近景录像记录。它们不代表当前新增擦拭任务的鲁棒性统计。旧底层组件继续兼容；当前定义以上述 10 项为准。

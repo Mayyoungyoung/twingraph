@@ -42,6 +42,8 @@
 
 推荐 Linux、Python 3.10、匹配版本的 PyTorch/CUDA/torchvision，以及 `libegl1`、`libgl1` 和 NVIDIA EGL 驱动。已有兼容 PyTorch 的服务器可保留其配对 torchvision。
 
+已有环境可通过 `bash scripts/train_plan_value.sh` 运行整套流程。用 `VALUE_PYTHON=/path/to/python` 指定解释器，`VALUE_WORKERS` 和 `VALUE_EPOCHS` 调整并行数与训练轮次；默认包含完整采集、视觉缓存、双头/单头训练、Top-K 导出及新问题执行验证。
+
 ```bash
 python -m pip install -r requirements-value.txt
 export MUJOCO_GL=egl OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1

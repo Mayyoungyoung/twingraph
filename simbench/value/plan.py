@@ -83,10 +83,22 @@ class PlanIR:
             raise ValueError("invalid execution boundary")
         if self.status not in {"necessary_pass", "unknown", "conflict"}:
             raise ValueError("invalid plan status")
+        if self.id != self.prefix.get("id"):
+            raise ValueError("plan identity disagrees with executable prefix")
         ids = [c.id for c in self.calls]
         if len(ids) != len(set(ids)):
             raise ValueError("call identifiers must be unique")
         for i, call in enumerate(self.calls):
+            part_argument = call.arguments.get("part")
+            if (
+                part_argument
+                and part_argument.status == "known"
+                and (
+                    call.roles.get("manipulated", part_argument.value)
+                    != part_argument.value
+                )
+            ):
+                raise ValueError("object role disagrees with execution parameter")
             for ref in call.roles.values():
                 if objects is not None and ref not in objects:
                     raise ValueError("unbound object role")
@@ -98,6 +110,8 @@ class PlanIR:
         if len(self.prefix.get("steps", [])) != self.boundary:
             raise ValueError("prefix execution boundary disagrees with calls")
         for call, step in zip(self.calls, self.prefix["steps"]):
+            if call.roles.get("manipulated") != self.prefix["part"]:
+                raise ValueError("prefix object role disagrees with execution")
             params = {
                 k: a.value
                 for k, a in call.arguments.items()
@@ -164,6 +178,8 @@ def from_pick(candidate, suffix):
 
 
 def resolve_argument(arg, session, plan):
+    if arg.kind in {"position", "pose", "path"} and arg.frame != "world":
+        raise ValueError("executor requires world-frame geometric targets")
     if arg.status == "known":
         return copy.deepcopy(arg.value)
     if arg.status == "unknown":

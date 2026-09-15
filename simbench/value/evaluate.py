@@ -96,8 +96,10 @@ def evaluate(model, groups, device="cpu", k=2, epsilon=0.1, objective="dual"):
         }
     return dict(
         groups=len(groups),
-        viable_groups=sum(g.reference.max() > 0 for g in groups),
-        informative_groups=sum(g.reference.max() > g.reference.min() for g in groups),
+        viable_groups=int(sum(g.reference.max() > 0 for g in groups)),
+        informative_groups=int(
+            sum(g.reference.max() > g.reference.min() for g in groups)
+        ),
         candidates=sum(len(g.plans) for g in groups),
         k=k,
         epsilon=epsilon,

@@ -127,6 +127,7 @@ def encode_plan(observation, plan):
             visit("role/" + role, obj, stage, i + 1)
         for name, arg in sorted(call.arguments.items()):
             a_stage = 2 if name == "bound_terminal" else stage
+            add("argument_kind/" + name, arg.kind, a_stage, i + 1)
             visit(
                 "argument/" + name,
                 arg.value,
