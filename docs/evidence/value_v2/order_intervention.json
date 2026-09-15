@@ -1,0 +1,4390 @@
+[
+  {
+    "candidate_id": "7be738789e38a03eb18c",
+    "trial": {
+      "domain": "train",
+      "repeat": 0,
+      "friction_scale": 0.9896358621343747,
+      "actuator_gain_scale": 0.9980789219041816
+    },
+    "trial_sha256": "ddc6726e68df38bd48ab1d58c29194148ab4cc3c8e5ceed4a1c7f537df69ae28",
+    "valid": true,
+    "success": true,
+    "full_success": true,
+    "prefix_success": true,
+    "suffix_success": true,
+    "error": "",
+    "timeout": false,
+    "restore_seconds": 0.0003575450973585248,
+    "wall_seconds": 20.01648195798043,
+    "sim_seconds": 161.3400000000499,
+    "physics_steps": 80670,
+    "executed_steps": 80,
+    "deferred_solving_seconds": 1.41592603106983,
+    "final_positions": {
+      "insert_0": [
+        -0.01094234824751916,
+        0.045511211496687194,
+        0.8549968331307907
+      ],
+      "insert_1": [
+        0.028940110360669295,
+        0.04559756216542419,
+        0.8549966372191254
+      ],
+      "guard": [
+        0.008958688761259654,
+        0.11906842738939712,
+        0.8619829565939832
+      ],
+      "locator": [
+        0.0815663649470936,
+        0.11893646242079914,
+        0.8549965277131479
+      ]
+    },
+    "executed_parameters": [
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_0",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.2557556584377155,
+            -0.2316878000092246,
+            0.8509968571720516
+          ],
+          "quaternion_wxyz": [
+            0.7071068139683651,
+            1.1608002339548512e-05,
+            1.1969555955842474e-05,
+            0.7071067482081416
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_0",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            1.5707963267948966
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 1.5707963267948966,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.2557556584377155,
+            -0.2316878000092246,
+            0.9669968571720516
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:0",
+              "valid": true,
+              "samples": 81,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:1",
+              "valid": true,
+              "samples": 81,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:2",
+              "valid": true,
+              "samples": 81,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 4.268892003158031e-05
+        },
+        "sim_seconds": 8.740000000000121
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 5.365237073932543e-05
+        },
+        "sim_seconds": 4.720000000001576
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_0",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.7389218857529007,
+          "right_n": 4.211028079574762
+        },
+        "sim_seconds": 4.519999999998328
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_0"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.7389218857529007,
+          "right_n": 4.211028079574762
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_0",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09989868807362579,
+          "held": true
+        },
+        "sim_seconds": 3.6599999999979715
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.011048031577653883,
+            0.04549831816286237,
+            0.9360615443228385
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:0",
+              "valid": true,
+              "samples": 35,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:1",
+              "valid": true,
+              "samples": 47,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:2",
+              "valid": true,
+              "samples": 57,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:2d0aa851f3d6:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 3.009060074809189e-05
+        },
+        "sim_seconds": 5.519999999996941
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.011026581516052118,
+            0.04558993464014926,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 5.0723668080883e-05
+        },
+        "sim_seconds": 0.9999999999994458
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8552099207827955,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06474698477343743,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.260000000006116
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 6.993406069422115e-05,
+          "contact_force_n": 2.6106928370600224
+        },
+        "sim_seconds": 0.6400000000007822
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08472118311801055
+        },
+        "sim_seconds": 1.0000000000012221
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.011026581516052118,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00011539065643113168,
+          "tilt_deg": 0.003280806067887856,
+          "support_force_n": 2.6106921932001477,
+          "jaw_span_m": 0.08532739533264473
+        },
+        "sim_seconds": 1.3400000000016377
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9705419316917645
+        },
+        "sim_seconds": 2.3800000000029087
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.011026581516052118,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00011539035339597883,
+          "tilt_deg": 0.0032813845735619497
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_1",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.13575564899226483,
+            -0.24168779843968827,
+            0.8509968501820292
+          ],
+          "quaternion_wxyz": [
+            0.9999999998792432,
+            -8.451418907289522e-07,
+            1.5516696496572045e-05,
+            1.774350600646354e-07
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_1",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.13575564899226483,
+            -0.24168779843968827,
+            0.9669968501820292
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:0",
+              "valid": true,
+              "samples": 77,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:1",
+              "valid": true,
+              "samples": 87,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:2",
+              "valid": true,
+              "samples": 91,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 8.41336948866654e-05
+        },
+        "sim_seconds": 8.360000000010217
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 5.31349048191727e-05
+        },
+        "sim_seconds": 4.700000000005744
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_1",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.779789461759431,
+          "right_n": 3.79777972451767
+        },
+        "sim_seconds": 4.5000000000055
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_1"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.779789461759431,
+          "right_n": 3.79777972451767
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_1",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09989716029431883,
+          "held": true
+        },
+        "sim_seconds": 3.660000000004473
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            0.02893754161503173,
+            0.04559340766777051,
+            0.9360600764343425
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:0",
+              "valid": true,
+              "samples": 43,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:1",
+              "valid": true,
+              "samples": 49,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:2",
+              "valid": true,
+              "samples": 53,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:f9c6465a8df3:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 1.8049240590703792e-05
+        },
+        "sim_seconds": 5.959999999987524
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.028973418483947883,
+            0.04558993464014926,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 1.5353754329996616e-05
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8550837336980304,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06490093365236704,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.279999999980703
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 7.840102435308083e-05,
+          "contact_force_n": 2.5159842675156607
+        },
+        "sim_seconds": 0.719999999998322
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08472250602446513
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.028973418483947883,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.442071864197533e-05,
+          "tilt_deg": 0.006117385887830584,
+          "support_force_n": 2.5159826682662927,
+          "jaw_span_m": 0.08532800640256359
+        },
+        "sim_seconds": 1.339999999996877
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.969646278687315
+        },
+        "sim_seconds": 2.379999999994453
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.028973418483947883,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.4418242935055165e-05,
+          "tilt_deg": 0.006117391190315442
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "guard",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.2407557,
+            -0.07668778,
+            0.8079829565938731
+          ],
+          "quaternion_wxyz": [
+            1.0,
+            1.6317595913837243e-17,
+            3.265083194000607e-19,
+            -3.165485079137859e-31
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "guard",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "guard",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.02
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.2407557,
+            -0.07668778,
+            0.9309829565938731
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:0",
+              "valid": true,
+              "samples": 53,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:1",
+              "valid": true,
+              "samples": 63,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:2",
+              "valid": true,
+              "samples": 70,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 3.4706276316442325e-05
+        },
+        "sim_seconds": 6.939999999983826
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "guard",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 5.363357245315482e-05
+        },
+        "sim_seconds": 4.719999999989
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "guard",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.3880297019078576,
+          "right_n": 3.4931135084772746
+        },
+        "sim_seconds": 4.539999999989419
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "guard"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.3880297019078576,
+          "right_n": 3.4931135084772746
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "guard",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09979885191978344,
+          "held": true
+        },
+        "sim_seconds": 3.65999999999147
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            0.008859252066798967,
+            0.119052841211776,
+            0.9501405371299587
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:0",
+              "valid": true,
+              "samples": 54,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:1",
+              "valid": true,
+              "samples": 61,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:2",
+              "valid": true,
+              "samples": 69,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "guard:yaw:0.000000:pose:de49f2a0a8b4:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 4.256581903961456e-05
+        },
+        "sim_seconds": 6.859999999984012
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "guard",
+          "target": [
+            0.008973418483947882,
+            0.11894587893158881,
+            0.927
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 0.0003117184378188879
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "guard",
+          "target_z": 0.862,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8621141527422945,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06459476440172673,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.239999999980796
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "guard",
+          "target_z": 0.862,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 0.00013974325069898708,
+          "contact_force_n": 2.5262725418494156
+        },
+        "sim_seconds": 0.39999999999906777
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08471978028428147
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "guard",
+          "target": [
+            0.008973418483947882,
+            0.11894587893158881,
+            0.862
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0001246016208844393,
+          "tilt_deg": 0.0,
+          "support_force_n": 2.5262725418494156,
+          "jaw_span_m": 0.08532674938509349
+        },
+        "sim_seconds": 1.339999999996877
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9851988243757064
+        },
+        "sim_seconds": 2.379999999994453
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "guard",
+          "target": [
+            0.008973418483947882,
+            0.11894587893158881,
+            0.862
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00012463139332951592,
+          "tilt_deg": 0.0002622155568733799
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "locator",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.13075560674786454,
+            -0.09168777765233051,
+            0.8509968834026829
+          ],
+          "quaternion_wxyz": [
+            0.9999999998003918,
+            -9.135270806957363e-07,
+            1.995949899464834e-05,
+            -2.0687248054861353e-08
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "locator",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "locator",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.018
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.13075560674786454,
+            -0.09168777765233051,
+            0.9599968834026829
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "locator:yaw:0.000000:pose:00f3c669170c:route:0",
+              "valid": true,
+              "samples": 42,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:00f3c669170c:route:1",
+              "valid": true,
+              "samples": 49,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:00f3c669170c:route:2",
+              "valid": true,
+              "samples": 54,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "locator:yaw:0.000000:pose:00f3c669170c:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 4.1051129688803666e-05
+        },
+        "sim_seconds": 6.119999999989133
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "locator",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.5766835416443464e-05
+        },
+        "sim_seconds": 4.720000000022537
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "locator",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 4.005149855571132,
+          "right_n": 3.6089677510838767
+        },
+        "sim_seconds": 4.800000000022919
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "locator"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 4.005149855571132,
+          "right_n": 3.6089677510838767
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "locator",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09981753752684852,
+          "held": true
+        },
+        "sim_seconds": 3.660000000017476
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            0.08014966570150042,
+            0.11893158001036967,
+            0.9291633787229582
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "locator:yaw:0.000000:pose:00f3c669170c:route:0",
+              "valid": true,
+              "samples": 49,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:00f3c669170c:route:1",
+              "valid": true,
+              "samples": 57,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:00f3c669170c:route:2",
+              "valid": true,
+              "samples": 64,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "locator:yaw:0.000000:pose:00f3c669170c:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 9.544464664649003e-06
+        },
+        "sim_seconds": 6.480000000030941
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.08097341848394787,
+            0.11894587893158881,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 0.0005157915133331322
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "locator",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.855223420639012,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06481541866963736,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.280000000039536
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "locator",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 0.00016187062608330471,
+          "contact_force_n": 1.753393629990705
+        },
+        "sim_seconds": 2.8000000000133696
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08470247837236052
+        },
+        "sim_seconds": 1.0000000000047748
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.08097341848394787,
+            0.11894587893158881,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0005930273270762152,
+          "tilt_deg": 0.01004363243219805,
+          "support_force_n": 1.7533853663119139,
+          "jaw_span_m": 0.08531907417224509
+        },
+        "sim_seconds": 1.3400000000063983
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9609753962662859
+        },
+        "sim_seconds": 2.380000000011364
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.08097341848394787,
+            0.11894587893158881,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0005930313951288431,
+          "tilt_deg": 0.010043646693426224
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.011026581516052118,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00011533692342386726,
+          "tilt_deg": 0.003281574276333371
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.028973418483947883,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.433538281964371e-05,
+          "tilt_deg": 0.00611756599100714
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "guard",
+          "target": [
+            0.008973418483947882,
+            0.11894587893158881,
+            0.862
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00012460163293601115,
+          "tilt_deg": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.08097341848394787,
+            0.11894587893158881,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0005930313951288431,
+          "tilt_deg": 0.010043646693426224
+        },
+        "sim_seconds": 0.0
+      }
+    ],
+    "seed": 20000,
+    "spacing": 0.04,
+    "order": [
+      "insert_0",
+      "insert_1",
+      "guard",
+      "locator"
+    ],
+    "finger_contacts": []
+  },
+  {
+    "candidate_id": "de498aef24413c5a65ce",
+    "trial": {
+      "domain": "train",
+      "repeat": 0,
+      "friction_scale": 0.9896358621343747,
+      "actuator_gain_scale": 0.9980789219041816
+    },
+    "trial_sha256": "ddc6726e68df38bd48ab1d58c29194148ab4cc3c8e5ceed4a1c7f537df69ae28",
+    "valid": true,
+    "success": false,
+    "full_success": false,
+    "prefix_success": true,
+    "suffix_success": false,
+    "error": "open_gripper:  {'jaw_span_m': 0.07386963369490847}",
+    "timeout": false,
+    "restore_seconds": 0.0003581281052902341,
+    "wall_seconds": 9.145300747011788,
+    "sim_seconds": 74.46000000000414,
+    "physics_steps": 37230,
+    "executed_steps": 35,
+    "deferred_solving_seconds": 0.5529699609614909,
+    "final_positions": {
+      "insert_0": [
+        -0.010875663041385021,
+        0.04548290879280237,
+        0.8549968385500434
+      ],
+      "insert_1": [
+        0.03160046515156722,
+        0.04566181682091408,
+        0.8554598896230285
+      ],
+      "guard": [
+        -0.2407557,
+        -0.07668778,
+        0.8079829565938731
+      ],
+      "locator": [
+        -0.1307556270414008,
+        -0.09168777725394295,
+        0.8509968828277727
+      ]
+    },
+    "executed_parameters": [
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_1",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.1357556628952907,
+            -0.24168779808161459,
+            0.8509968498495601
+          ],
+          "quaternion_wxyz": [
+            0.9999999998795127,
+            -1.0969401901130322e-06,
+            1.5483456345598876e-05,
+            1.847255908783986e-07
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_1",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.1357556628952907,
+            -0.24168779808161459,
+            0.9669968498495601
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:0",
+              "valid": true,
+              "samples": 38,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:1",
+              "valid": true,
+              "samples": 38,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:2",
+              "valid": true,
+              "samples": 38,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 1.7667553343177728e-05
+        },
+        "sim_seconds": 5.919999999999392
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.5473865981288425e-05
+        },
+        "sim_seconds": 4.720000000001363
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_1",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.8331942102965075,
+          "right_n": 3.8511824726309474
+        },
+        "sim_seconds": 4.500000000000844
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_1"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.8331942102965075,
+          "right_n": 3.8511824726309474
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_1",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.0998060080988139,
+          "held": true
+        },
+        "sim_seconds": 3.6599999999979715
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            0.028974914240414595,
+            0.04558691454057634,
+            0.9361265155267311
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:0",
+              "valid": true,
+              "samples": 29,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:1",
+              "valid": true,
+              "samples": 38,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:2",
+              "valid": true,
+              "samples": 45,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:c0d6c329c7b7:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 2.24924435005564e-05
+        },
+        "sim_seconds": 5.179999999997129
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.028973418483947883,
+            0.04558993464014926,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 0.000693123093125294
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8552162412617175,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06471705069221323,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.25999999999869
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 8.068878303624238e-05,
+          "contact_force_n": 2.5291592500704967
+        },
+        "sim_seconds": 0.9400000000011488
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08472250624735517
+        },
+        "sim_seconds": 1.0000000000012221
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.028973418483947883,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.000713338911561226,
+          "tilt_deg": 0.007645469452351471,
+          "support_force_n": 2.529156403620567,
+          "jaw_span_m": 0.08532800650551974
+        },
+        "sim_seconds": 1.3400000000016377
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9704135903225999
+        },
+        "sim_seconds": 2.3800000000029087
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.028973418483947883,
+            0.04558993464014926,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0007133419829961993,
+          "tilt_deg": 0.007645446522720456
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_0",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.2557556455862103,
+            -0.2316878027459728,
+            0.8509968548376698
+          ],
+          "quaternion_wxyz": [
+            0.7071068095165259,
+            1.2378919806204763e-05,
+            1.0873812715613294e-05,
+            0.7071067526646045
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_0",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            1.5707963267948966
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 1.5707963267948966,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.2557556455862103,
+            -0.2316878027459728,
+            0.9669968548376698
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:0",
+              "valid": true,
+              "samples": 71,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:1",
+              "valid": true,
+              "samples": 78,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:2",
+              "valid": true,
+              "samples": 83,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 6.545078100755526e-06
+        },
+        "sim_seconds": 8.320000000010168
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.58514440834649e-05
+        },
+        "sim_seconds": 4.7200000000057685
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_0",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.7768094145888194,
+          "right_n": 3.8019182062732515
+        },
+        "sim_seconds": 4.5000000000055
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_0"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.7768094145888194,
+          "right_n": 3.8019182062732515
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_0",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09980194744401494,
+          "held": true
+        },
+        "sim_seconds": 3.660000000004473
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.011028939057890152,
+            0.04562748262107885,
+            0.9361362267642946
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:0",
+              "valid": true,
+              "samples": 33,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:1",
+              "valid": true,
+              "samples": 44,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:2",
+              "valid": true,
+              "samples": 52,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:0430d837d175:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 2.560201451463346e-05
+        },
+        "sim_seconds": 5.400000000002684
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.011026581516052118,
+            0.04558993464014926,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 4.972022867493128e-05
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8552330472457141,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06472141348294291,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.25999999998075
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 7.023911048953391e-05,
+          "contact_force_n": 2.537580935017473
+        },
+        "sim_seconds": 0.6999999999983686
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": false,
+        "metrics": {
+          "jaw_span_m": 0.07386963369490847
+        },
+        "sim_seconds": 0.9999999999976694
+      }
+    ],
+    "seed": 20000,
+    "spacing": 0.04,
+    "order": [
+      "insert_1",
+      "insert_0",
+      "guard",
+      "locator"
+    ],
+    "finger_contacts": [
+      {
+        "pair": [
+          "finger1_pad_collision",
+          "insert_1_head"
+        ],
+        "distance": -0.0008502697176237656
+      },
+      {
+        "pair": [
+          "finger1_pad_collision",
+          "insert_1_head"
+        ],
+        "distance": -0.0008145637610607326
+      }
+    ]
+  },
+  {
+    "candidate_id": "7be738789e38a03eb18c",
+    "trial": {
+      "domain": "train",
+      "repeat": 0,
+      "friction_scale": 0.9254117572989277,
+      "actuator_gain_scale": 1.0148316451878903
+    },
+    "trial_sha256": "0593e3638ef223e85283625644932482e02de0272a712e35fc43bd90e97646c7",
+    "valid": true,
+    "success": true,
+    "full_success": true,
+    "prefix_success": true,
+    "suffix_success": true,
+    "error": "",
+    "timeout": false,
+    "restore_seconds": 0.0003843550803139806,
+    "wall_seconds": 20.159470230923034,
+    "sim_seconds": 158.90000000003826,
+    "physics_steps": 79450,
+    "executed_steps": 80,
+    "deferred_solving_seconds": 1.3680406999774277,
+    "final_positions": {
+      "insert_0": [
+        -0.036157225796366266,
+        0.04064660095836249,
+        0.8549968173677899
+      ],
+      "insert_1": [
+        0.00376722774434263,
+        0.04076935196190573,
+        0.8549966281728855
+      ],
+      "guard": [
+        -0.016230458029942805,
+        0.11554996240906051,
+        0.8619829566381563
+      ],
+      "locator": [
+        0.056347561021923245,
+        0.11544582083597349,
+        0.8549965397859859
+      ]
+    },
+    "executed_parameters": [
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_0",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.24335145825760723,
+            -0.2095996000668448,
+            0.850996847172075
+          ],
+          "quaternion_wxyz": [
+            0.7071067966464774,
+            1.1608095953094533e-05,
+            1.1969744130562917e-05,
+            0.7071067655300258
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_0",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            1.5707963267948966
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 1.5707963267948966,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.24335145825760723,
+            -0.2095996000668448,
+            0.966996847172075
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:0",
+              "valid": true,
+              "samples": 80,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:1",
+              "valid": true,
+              "samples": 80,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:2",
+              "valid": true,
+              "samples": 80,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 3.3977151385410375e-05
+        },
+        "sim_seconds": 8.700000000000108
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 5.374328896710298e-05
+        },
+        "sim_seconds": 4.720000000001576
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_0",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.706851153139667,
+          "right_n": 3.7272776277425606
+        },
+        "sim_seconds": 4.479999999998386
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_0"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.706851153139667,
+          "right_n": 3.7272776277425606
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_0",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09987483198194269,
+          "held": true
+        },
+        "sim_seconds": 3.6599999999979715
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.036189799296139,
+            0.040684175109158116,
+            0.9360848240667778
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:0",
+              "valid": true,
+              "samples": 32,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:1",
+              "valid": true,
+              "samples": 45,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:2",
+              "valid": true,
+              "samples": 54,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:412f8197f6b9:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 0.00010309075020374033
+        },
+        "sim_seconds": 5.259999999997085
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.036194628953828786,
+            0.04076030763576015,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 4.642569567065461e-05
+        },
+        "sim_seconds": 0.9999999999994458
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8550611474384285,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06489713534220287,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.280000000005536
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 6.775189362673295e-05,
+          "contact_force_n": 2.529128279849388
+        },
+        "sim_seconds": 0.4600000000005622
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.0847797304421845
+        },
+        "sim_seconds": 1.0000000000012221
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.036194628953828786,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00011976617203910692,
+          "tilt_deg": 0.003480802801963713,
+          "support_force_n": 2.529127760515591,
+          "jaw_span_m": 0.08537340321793602
+        },
+        "sim_seconds": 1.3400000000016377
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9706295735074563
+        },
+        "sim_seconds": 2.3800000000029087
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.036194628953828786,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00011976592683771751,
+          "tilt_deg": 0.003480822277427301
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_1",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.12335144888433182,
+            -0.21959960039567877,
+            0.8509968418165611
+          ],
+          "quaternion_wxyz": [
+            0.999999999877646,
+            1.695518306154133e-07,
+            1.5641576740176323e-05,
+            1.4267058150953586e-07
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_1",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.12335144888433182,
+            -0.21959960039567877,
+            0.9669968418165611
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:0",
+              "valid": true,
+              "samples": 73,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:1",
+              "valid": true,
+              "samples": 79,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:2",
+              "valid": true,
+              "samples": 81,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 4.475074866666038e-06
+        },
+        "sim_seconds": 8.000000000009777
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.55579830432173e-05
+        },
+        "sim_seconds": 4.7200000000057685
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_1",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.9246245924185255,
+          "right_n": 3.9014610845158413
+        },
+        "sim_seconds": 4.480000000005475
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_1"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.9246245924185255,
+          "right_n": 3.9014610845158413
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_1",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09989517677610171,
+          "held": true
+        },
+        "sim_seconds": 3.660000000004473
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            0.0037745212438291403,
+            0.04076365404261767,
+            0.9360435020761463
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:0",
+              "valid": true,
+              "samples": 34,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:1",
+              "valid": true,
+              "samples": 43,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:2",
+              "valid": true,
+              "samples": 47,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:7d131a17dfc9:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 3.203622252937832e-05
+        },
+        "sim_seconds": 5.099999999992583
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.003805371046171211,
+            0.04076030763576015,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 1.7191070387993098e-05
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8550941107669888,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06488898688837685,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.279999999980703
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 7.967858508428627e-05,
+          "contact_force_n": 2.535094315402025
+        },
+        "sim_seconds": 0.719999999998322
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08477973056503754
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.003805371046171211,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.943103078395967e-05,
+          "tilt_deg": 0.006177291409217704,
+          "support_force_n": 2.5350927532312286,
+          "jaw_span_m": 0.08537340327764126
+        },
+        "sim_seconds": 1.339999999996877
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9697522231020489
+        },
+        "sim_seconds": 2.379999999994453
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.003805371046171211,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.942853159773115e-05,
+          "tilt_deg": 0.006177296896283422
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "guard",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.2283515,
+            -0.05459955,
+            0.8079829565938731
+          ],
+          "quaternion_wxyz": [
+            1.0,
+            1.632058208838554e-17,
+            7.279170016035913e-19,
+            -5.34195180718758e-31
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "guard",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "guard",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.02
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.2283515,
+            -0.05459955,
+            0.9309829565938731
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:0",
+              "valid": true,
+              "samples": 48,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:1",
+              "valid": true,
+              "samples": 59,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:2",
+              "valid": true,
+              "samples": 65,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 4.2408679195334724e-05
+        },
+        "sim_seconds": 6.479999999984898
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "guard",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 5.380470441122712e-05
+        },
+        "sim_seconds": 4.719999999989
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "guard",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.5587482795024985,
+          "right_n": 3.4505453400212187
+        },
+        "sim_seconds": 4.539999999989419
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "guard"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.5587482795024985,
+          "right_n": 3.4505453400212187
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "guard",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09992293361637017,
+          "held": true
+        },
+        "sim_seconds": 3.65999999999147
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.016463330413581806,
+            0.11553250324162125,
+            0.9500157858964599
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:0",
+              "valid": true,
+              "samples": 49,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:1",
+              "valid": true,
+              "samples": 58,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:2",
+              "valid": true,
+              "samples": 65,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "guard:yaw:0.000000:pose:103e337a7a3e:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 4.465761544759997e-05
+        },
+        "sim_seconds": 6.399999999985084
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "guard",
+          "target": [
+            -0.01619462895382879,
+            0.11546241326682519,
+            0.927
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 0.00032798413314865554
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "guard",
+          "target_z": 0.862,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.86210334466174,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06457505874705127,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.239999999980796
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "guard",
+          "target_z": 0.862,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 0.00014147173232736954,
+          "contact_force_n": 2.566149920578762
+        },
+        "sim_seconds": 0.3799999999991144
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08477602577795765
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "guard",
+          "target": [
+            -0.01619462895382879,
+            0.11546241326682519,
+            0.862
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 9.6120056881893e-05,
+          "tilt_deg": 0.0,
+          "support_force_n": 2.566149920578762,
+          "jaw_span_m": 0.08537160279817803
+        },
+        "sim_seconds": 1.339999999996877
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9851188737963078
+        },
+        "sim_seconds": 2.379999999994453
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "guard",
+          "target": [
+            -0.01619462895382879,
+            0.11546241326682519,
+            0.862
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 9.614961692643059e-05,
+          "tilt_deg": 0.0002798476747644383
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "locator",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.11835140781439268,
+            -0.06959954818208382,
+            0.8509968837504167
+          ],
+          "quaternion_wxyz": [
+            0.9999999997996566,
+            -6.405480739786911e-07,
+            2.0006905819656954e-05,
+            -2.0238591880130322e-08
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "locator",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "locator",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.018
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.11835140781439268,
+            -0.06959954818208382,
+            0.9599968837504167
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:0",
+              "valid": true,
+              "samples": 43,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:1",
+              "valid": true,
+              "samples": 47,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:2",
+              "valid": true,
+              "samples": 52,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 1.03884070933806e-05
+        },
+        "sim_seconds": 6.13999999998569
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "locator",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.5712445138384255e-05
+        },
+        "sim_seconds": 4.720000000007175
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "locator",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.7093213536076246,
+          "right_n": 4.10874442677608
+        },
+        "sim_seconds": 4.800000000022919
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "locator"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.7093213536076246,
+          "right_n": 4.10874442677608
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "locator",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.0998011744065882,
+          "held": true
+        },
+        "sim_seconds": 3.660000000017476
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            0.054986282703857345,
+            0.1154347335831832,
+            0.9291782361592268
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:0",
+              "valid": true,
+              "samples": 51,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:1",
+              "valid": true,
+              "samples": 59,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:2",
+              "valid": true,
+              "samples": 65,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "locator:yaw:0.000000:pose:3cde987a02d9:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 9.611379386425684e-06
+        },
+        "sim_seconds": 6.7000000000319915
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.05580537104617121,
+            0.11546241326682519,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 0.0004789562020785096
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "locator",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8552074572771314,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06465947101339731,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.26000000003944
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "locator",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 0.000162793163909547,
+          "contact_force_n": 1.7635264141866864
+        },
+        "sim_seconds": 2.8000000000133696
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08476017068114747
+        },
+        "sim_seconds": 1.0000000000047748
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.05580537104617121,
+            0.11546241326682519,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0005424507691301184,
+          "tilt_deg": 0.010027636693001237,
+          "support_force_n": 1.7635180917898912,
+          "jaw_span_m": 0.08536414939968506
+        },
+        "sim_seconds": 1.3400000000063983
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9611445452535688
+        },
+        "sim_seconds": 2.380000000011364
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.05580537104617121,
+            0.11546241326682519,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0005424548383493156,
+          "tilt_deg": 0.01002765126774617
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.036194628953828786,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.00011974278191509396,
+          "tilt_deg": 0.003480558616473161
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.003805371046171211,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.934565449835743e-05,
+          "tilt_deg": 0.006177476373746049
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "guard",
+          "target": [
+            -0.01619462895382879,
+            0.11546241326682519,
+            0.862
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 9.611998327226894e-05,
+          "tilt_deg": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "locator",
+          "target": [
+            0.05580537104617121,
+            0.11546241326682519,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0005424548383493156,
+          "tilt_deg": 0.01002765126774617
+        },
+        "sim_seconds": 0.0
+      }
+    ],
+    "seed": 20001,
+    "spacing": 0.04,
+    "order": [
+      "insert_0",
+      "insert_1",
+      "guard",
+      "locator"
+    ],
+    "finger_contacts": []
+  },
+  {
+    "candidate_id": "de498aef24413c5a65ce",
+    "trial": {
+      "domain": "train",
+      "repeat": 0,
+      "friction_scale": 0.9254117572989277,
+      "actuator_gain_scale": 1.0148316451878903
+    },
+    "trial_sha256": "0593e3638ef223e85283625644932482e02de0272a712e35fc43bd90e97646c7",
+    "valid": true,
+    "success": false,
+    "full_success": false,
+    "prefix_success": true,
+    "suffix_success": false,
+    "error": "open_gripper:  {'jaw_span_m': 0.07395014398730147}",
+    "timeout": false,
+    "restore_seconds": 0.0003627740079537034,
+    "wall_seconds": 8.94111596501898,
+    "sim_seconds": 73.34000000000675,
+    "physics_steps": 36670,
+    "executed_steps": 35,
+    "deferred_solving_seconds": 0.5441613921429962,
+    "final_positions": {
+      "insert_0": [
+        -0.03613071740667225,
+        0.040627058495070215,
+        0.8549968197418605
+      ],
+      "insert_1": [
+        0.006301842542370555,
+        0.04081574398873889,
+        0.8555020270609568
+      ],
+      "guard": [
+        -0.2283515,
+        -0.05459955,
+        0.8079829565938731
+      ],
+      "locator": [
+        -0.11835142726219021,
+        -0.06959954899259853,
+        0.8509968841324617
+      ]
+    },
+    "executed_parameters": [
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_1",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.12335146286623196,
+            -0.2195995980226803,
+            0.8509968398494229
+          ],
+          "quaternion_wxyz": [
+            0.9999999998795169,
+            -1.0969611974722878e-06,
+            1.5483555897802288e-05,
+            1.4988252635882208e-07
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_1",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            0.0
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 0.0,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.12335146286623196,
+            -0.2195995980226803,
+            0.9669968398494229
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:0",
+              "valid": true,
+              "samples": 37,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:1",
+              "valid": true,
+              "samples": 37,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:2",
+              "valid": true,
+              "samples": 37,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 1.4251990944193668e-05
+        },
+        "sim_seconds": 5.799999999999406
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_1",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.5469369495796856e-05
+        },
+        "sim_seconds": 4.72000000000131
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_1",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.8713653418251157,
+          "right_n": 3.9085842234987855
+        },
+        "sim_seconds": 4.50000000000095
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_1"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 3.8713653418251157,
+          "right_n": 3.9085842234987855
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_1",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.09980127695876562,
+          "held": true
+        },
+        "sim_seconds": 3.6599999999979715
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            0.003804572643400131,
+            0.040762916257039955,
+            0.9361329495431765
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 0.0,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:0",
+              "valid": true,
+              "samples": 28,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:1",
+              "valid": true,
+              "samples": 37,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:2",
+              "valid": true,
+              "samples": 45,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_1:yaw:0.000000:pose:01ed580afa1c:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 2.3550980076804283e-05
+        },
+        "sim_seconds": 5.059999999997196
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.003805371046171211,
+            0.04076030763576015,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 0.0006480478014127065
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.85515120846767,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06473323089658434,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.259999999998264
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_1",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 8.134569352924448e-05,
+          "contact_force_n": 2.541363231480056
+        },
+        "sim_seconds": 0.8400000000010266
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "jaw_span_m": 0.08477851723280937
+        },
+        "sim_seconds": 1.0000000000012221
+      },
+      {
+        "skill": "place_object",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.003805371046171211,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015,
+          "settle": 0.35,
+          "minimum_support": 0.01
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0006569699003016706,
+          "tilt_deg": 0.0076361283969280155,
+          "support_force_n": 2.541360371628187,
+          "jaw_span_m": 0.08537281361358977
+        },
+        "sim_seconds": 1.3400000000016377
+      },
+      {
+        "skill": "retreat",
+        "params": {
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "height_m": 0.9705305578439172
+        },
+        "sim_seconds": 2.3800000000029087
+      },
+      {
+        "skill": "inspect_seat",
+        "params": {
+          "part": "insert_1",
+          "target": [
+            0.003805371046171211,
+            0.04076030763576015,
+            0.855
+          ],
+          "tol": 0.0015
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 0.0006569729476987802,
+          "tilt_deg": 0.007636081670100675
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "observe_parts",
+        "params": {},
+        "ok": true,
+        "metrics": {
+          "detected": [
+            "insert_0",
+            "insert_1",
+            "guard",
+            "locator"
+          ],
+          "backend": "simulator pose observations",
+          "noise_std_m": 0.0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "estimate_pose",
+        "params": {
+          "part": "insert_0",
+          "as_": "pose"
+        },
+        "ok": true,
+        "metrics": {
+          "position_m": [
+            -0.24335144536685227,
+            -0.20959960186575352,
+            0.8509968457222755
+          ],
+          "quaternion_wxyz": [
+            0.707106792230348,
+            1.2097840182894597e-05,
+            1.1270600375670178e-05,
+            0.7071067699494353
+          ]
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "propose_grasps",
+        "params": {
+          "part": "insert_0",
+          "artifact": "pose",
+          "as_": "grasps",
+          "yaws": [
+            1.5707963267948966
+          ],
+          "height_offset": 0.003
+        },
+        "ok": true,
+        "metrics": {
+          "feasible_candidates": 1,
+          "unknown_candidates": 0
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "select_grasp",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasps",
+          "as_": "grasp",
+          "index": null,
+          "candidate_id": null
+        },
+        "ok": true,
+        "metrics": {
+          "chosen_index": 0,
+          "yaw_rad": 1.5707963267948966,
+          "jaw_width_m": 0.022
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.24335144536685227,
+            -0.20959960186575352,
+            0.9669968457222755
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:0",
+              "valid": true,
+              "samples": 69,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:1",
+              "valid": true,
+              "samples": 76,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:2",
+              "valid": true,
+              "samples": 82,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 6.457067513656892e-06
+        },
+        "sim_seconds": 8.140000000009948
+      },
+      {
+        "skill": "approach",
+        "params": {
+          "part": "insert_0",
+          "artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "position_error_m": 3.5833698146620593e-05
+        },
+        "sim_seconds": 4.7200000000057685
+      },
+      {
+        "skill": "close_gripper",
+        "params": {
+          "part": "insert_0",
+          "force": 3.0
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 4.150342117843414,
+          "right_n": 3.5456721597887886
+        },
+        "sim_seconds": 4.5000000000055
+      },
+      {
+        "skill": "verify_grasp",
+        "params": {
+          "part": "insert_0"
+        },
+        "ok": true,
+        "metrics": {
+          "held": true,
+          "left_n": 4.150342117843414,
+          "right_n": 3.5456721597887886
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "lift",
+        "params": {
+          "part": "insert_0",
+          "height": 0.1
+        },
+        "ok": true,
+        "metrics": {
+          "object_lift_m": 0.0997980708746471,
+          "held": true
+        },
+        "sim_seconds": 3.660000000004473
+      },
+      {
+        "skill": "plan_transfer",
+        "params": {
+          "target": [
+            -0.03618737729215096,
+            0.04078849656639594,
+            0.9361419650815178
+          ],
+          "as_": "transfer",
+          "clearance": 1.035,
+          "yaw": 1.5707963267948966,
+          "candidate_id": null,
+          "grasp_artifact": "grasp"
+        },
+        "ok": true,
+        "metrics": {
+          "waypoints": 3,
+          "clearance_m": 1.035,
+          "collision_checks": [
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:0",
+              "valid": true,
+              "samples": 31,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:1",
+              "valid": true,
+              "samples": 42,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:2",
+              "valid": true,
+              "samples": 52,
+              "resolution_rad": 0.035
+            }
+          ],
+          "candidate_count": 3,
+          "selected_id": "insert_0:yaw:1.570796:pose:a4e216ee8b50:route:0"
+        },
+        "sim_seconds": 0.0
+      },
+      {
+        "skill": "execute_joint_path",
+        "params": {
+          "artifact": "transfer"
+        },
+        "ok": true,
+        "metrics": {
+          "target_error_m": 3.032535758811025e-05
+        },
+        "sim_seconds": 5.200000000004998
+      },
+      {
+        "skill": "align_axis",
+        "params": {
+          "part": "insert_0",
+          "target": [
+            -0.036194628953828786,
+            0.04076030763576015,
+            0.9199999999999999
+          ],
+          "tolerance": 0.0007
+        },
+        "ok": true,
+        "metrics": {
+          "object_error_m": 6.758834572623288e-05
+        },
+        "sim_seconds": 0.9999999999976694
+      },
+      {
+        "skill": "guarded_descent",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 3.0,
+          "speed": 0.008
+        },
+        "ok": true,
+        "metrics": {
+          "z_m": 0.8552228364422668,
+          "peak_contact_n": 0.0,
+          "travel_m": 0.06473225863871368,
+          "stopped_by": "height"
+        },
+        "sim_seconds": 8.25999999998075
+      },
+      {
+        "skill": "press_seat",
+        "params": {
+          "part": "insert_0",
+          "target_z": 0.855,
+          "force_stop": 2.5
+        },
+        "ok": true,
+        "metrics": {
+          "height_error_m": 1.6931694342914305e-05,
+          "contact_force_n": 2.5934259539438522
+        },
+        "sim_seconds": 0.2999999999993008
+      },
+      {
+        "skill": "open_gripper",
+        "params": {},
+        "ok": false,
+        "metrics": {
+          "jaw_span_m": 0.07395014398730147
+        },
+        "sim_seconds": 0.9999999999976694
+      }
+    ],
+    "seed": 20001,
+    "spacing": 0.04,
+    "order": [
+      "insert_1",
+      "insert_0",
+      "guard",
+      "locator"
+    ],
+    "finger_contacts": [
+      {
+        "pair": [
+          "finger1_pad_collision",
+          "insert_1_head"
+        ],
+        "distance": -0.0008604166940879239
+      },
+      {
+        "pair": [
+          "finger1_pad_collision",
+          "insert_1_head"
+        ],
+        "distance": -0.0008258444784307027
+      }
+    ]
+  }
+]

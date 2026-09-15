@@ -42,8 +42,8 @@ def main():
     root=Path(a.root);models=choose_models(root);out=root/'online_curves';out.mkdir(exist_ok=True)
     jobs=[]
     for family,base in [('rigid_connector_module',20040),('sliding_stage_pin',21040)]:
-        jobs.append((dict(family=family,seed=base,checkpoint=0),models,[(16,1,2),(16,2,4),(16,4,8)],str(out)))
-        jobs.append((dict(family=family,seed=base+4,checkpoint=0),models,[(16,4,8),(32,4,8),(64,4,8)],str(out)))
+        jobs.append((dict(family=family,seed=base,checkpoint=0),models,[(16,1,2),(16,2,4),(16,4,8)],str(root/'online_budget')))
+        jobs.append((dict(family=family,seed=base+4,checkpoint=0),models,[(16,4,8),(32,4,8),(64,4,8)],str(root/'online_scale')))
     dump(out/'request.json',dict(jobs=jobs,models=models,workers=a.workers,selection='validation only',
          limitation='scale runs measure deployment and actual cost; no complete 64-candidate reference labels'))
     with concurrent.futures.ProcessPoolExecutor(max_workers=a.workers,mp_context=multiprocessing.get_context('spawn')) as pool:

@@ -78,6 +78,8 @@ Geometric ranking uses nominal future assembly jaw-sweep checks, including
 previously assembled bodies, in scratch data. Necessary initial route checks are
 shared; optional full rule scoring is only paid by consumers of those features.
 Numeric MLP and geometric-prior residual consume identical numeric features.
+The fitted geometric prior alone is also evaluated, to isolate the correction
+from the effect of calibrating the geometric features on training labels.
 The direct Transformer is trained independently with and without frozen
 ImageNet ResNet18 features; direct inference skips the untrained prefix head.
 All model selection uses train/validation only. Fixed v1 weights are never

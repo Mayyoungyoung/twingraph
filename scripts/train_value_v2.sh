@@ -6,6 +6,7 @@ DATA=${VALUE_DATA:-results/value_v2/data}
 OUT=${VALUE_OUT:-results/value_v2/models}
 mkdir -p "$OUT"
 "$PYTHON" -m simbench.value.vision --data "$DATA" --device cuda
+"$PYTHON" -m simbench.value.research_learning --data "$DATA" --out "$OUT/prior_17" --kind prior --seed 17 --epochs 1 > "$OUT/prior_17.log" 2>&1
 for seed in 17 29 43; do
   for kind in mlp residual; do
     "$PYTHON" -m simbench.value.research_learning --data "$DATA" --out "$OUT/${kind}_${seed}" --kind "$kind" --seed "$seed" --epochs 120 > "$OUT/${kind}_${seed}.log" 2>&1

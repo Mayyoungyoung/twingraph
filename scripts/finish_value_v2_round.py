@@ -33,7 +33,7 @@ def main():
     run([sys.executable,'-m','simbench.value.vision','--data',str(root/'data'),'--device','cuda'],'test_visual.log')
     # Model set fixed in advance, not selected on test performance.
     mapping={name:str(root/'models'/folder/'best.pt') for name,folder in
-             [('mlp','mlp_17'),('residual','residual_17'),('no_vision','no_vision_17'),('vision','vision_17')]}
+             [('prior','prior_17'),('mlp','mlp_17'),('residual','residual_17'),('no_vision','no_vision_17'),('vision','vision_17')]}
     mapping['v1_fixed']='results/value/direct/best.pt'
     (root/'models/online_models.json').write_text(json.dumps(mapping,indent=2))
     status('locked_offline_evaluation')
