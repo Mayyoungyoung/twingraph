@@ -27,6 +27,16 @@ The initial origin-at-shoulder asset defect was fixed by moving the local body
 origin 1 mm above the supporting shoulder. The support contract was preserved.
 Pilot data is excluded from the research dataset.
 
+Development revision before locked-test collection: wide ports (65--95 mm)
+largely isolated the two inserts. A 40 mm paired probe preserved each object's
+grasp and final goal but reversed insert order: the second release contacted the
+previous insert's head and failed, while the other order completed. Main port
+spacing now spans 38--70 mm (22 mm heads, linked rectangular keyed sockets).
+Completed wide-port training groups are retained as augmentation, including
+rule-friendly cases. The old source/data are archived; an explicit source
+compatibility manifest admits this sampling-only change, never arbitrary mixed
+execution implementations. No test labels were opened to make this revision.
+
 ## Selection semantics
 
 - `K`: initial candidate count. `B`: physical rollout budget. `r`: repetitions

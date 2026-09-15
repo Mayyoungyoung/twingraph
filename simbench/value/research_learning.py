@@ -13,6 +13,7 @@ from .encode import encode_plan,collate
 from .network import ModelConfig,PlanValueNet
 from .evaluate import subset_metrics
 from .collect import dump
+from .program_audit import audit_program
 
 
 def numeric_features(obs,plan,geometry):
@@ -61,6 +62,7 @@ def load_data(root,vision=False,include_test=False):
         ih=digest(inputs);out=json.loads((d/"outcomes.json").read_text());geo=json.loads((d/"geometry.json").read_text())
         if out["input_sha256"]!=ih or geo["input_sha256"]!=ih:raise ValueError("stale labels/geometry")
         plans=[PlanIR.from_dict(p) for p in inputs["candidates"]]
+        for p in plans:audit_program(p,inputs["observation"]["objects"])
         records={p.id:[] for p in plans};paired={}
         for r in out["trials"]:
             if r["valid"] is not True:raise ValueError("invalid trial")
@@ -85,7 +87,10 @@ def load_data(root,vision=False,include_test=False):
                     encoded=[encode_plan(inputs["observation"],p) for p in plans],visual=visual,
                     repeats=len(paired),input_sha256=ih))
     if not groups:raise ValueError("empty dataset")
-    if len(sources)>1:raise ValueError("mixed collection code versions: create a reviewed release before training")
+    if len(sources)>1:
+        review=Path(root)/"source_compatibility.json"
+        approved=set(json.loads(review.read_text())["approved_sources"]) if review.exists() else set()
+        if not sources.issubset(approved):raise ValueError("unreviewed mixed collection code versions")
     return groups
 
 
@@ -133,6 +138,7 @@ def metrics(groups,scores,k=4):
 def load_model(path,device="cpu"):
     saved=torch.load(path,map_location=device,weights_only=False)
     if saved.get("schema")=="twingraph.value.v1":
+        if saved.get("objective")!="direct":raise ValueError("fixed v1 transfer requires the trained direct head")
         model=PlanValueNet(ModelConfig(**saved["model_config"]));kind="transformer"
     else:
         kind=saved["kind"]
@@ -197,6 +203,7 @@ def train(args):
             best=selection
             torch.save(dict(schema="twingraph.value.v2",kind=args.kind,dim=dim,model_config=asdict(cfg),
                             state_dict=model.state_dict(),epoch=epoch+1,training=vars(args),split_sha256=digest(manifest),
+                            collection_sources=sorted({g['inputs']['source_sha256'] for g in groups}),
                             protocol="assembly.program.feedback.v2",validation=val),out/"best.pt")
         dump(out/"history.json",history)
         if epoch%5==0:print(json.dumps(history[-1]),flush=True)

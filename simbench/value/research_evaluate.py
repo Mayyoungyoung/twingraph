@@ -5,6 +5,7 @@ read only AFTER the selected PlanIR has been independently executed.
 """
 import argparse
 import contextlib
+import hashlib
 import json
 from pathlib import Path
 import time
@@ -15,8 +16,9 @@ from .research_learning import load_data,load_model,predict,metrics,numeric_feat
 from .physical import PhysicalRunner,perturbation
 from .validation import select_and_validate
 from .plan import PlanIR,execute_calls,digest
-from .encode import encode_plan
+from .encode import encode_plan,collate,NUMERIC
 from .collect import dump
+from .program_audit import audit_program
 
 
 def synchronize(device):
@@ -32,13 +34,29 @@ def ranking_rows(plans,scores,k):
 class OnlineExperiment:
     def __init__(self,models,device="cuda"):
         self.device=device;self.models={};self.cold={};self.vision=None
+        self.checkpoint_hashes={}
         for name,path in models.items():
             synchronize(device);t=time.perf_counter()
             self.models[name]=load_model(path,device)
             synchronize(device);self.cold[name]=time.perf_counter()-t
+            self.checkpoint_hashes[name]=hashlib.sha256(Path(path).read_bytes()).hexdigest()
+            # Warm kernels on synthetic tensors, never on a test candidate.
+            model,kind,_=self.models[name]
+            t=time.perf_counter()
+            with torch.inference_mode():
+                if kind in {"mlp","residual","prior"}:
+                    model(torch.zeros((1,len(model.mean)),device=device))
+                else:
+                    dummy={k:np.ones(32,dtype=np.int64) for k in ('keys','categories','statuses','stages','positions')}
+                    dummy['numbers']=np.zeros((32,NUMERIC),np.float32)
+                    visuals=[np.zeros((3,512),np.float32)] if model.config.vision else None
+                    model(collate([dummy],visuals,device),direct_only=True)
+            synchronize(device);self.cold[name]+=time.perf_counter()-t
         if any(getattr(m,"config",None) and m.config.vision for m,_,_ in self.models.values()):
             from .vision import FrozenVision
             t=time.perf_counter();self.vision=FrozenVision(device);synchronize(device)
+            with torch.inference_mode():self.vision.model(torch.zeros((1,3,224,224),device=device))
+            synchronize(device)
             self.cold["visual_encoder"]=time.perf_counter()-t
 
     def run(self,task,method,out,*,n=16,k=4,budget=8,repeats=2,mode="best_within_budget",
@@ -61,10 +79,11 @@ class OnlineExperiment:
                 execute_calls(s,warm,warm.calls[:18*cp]);completed=order[:cp]
             start=time.perf_counter();plans,counts=build_pool(s,targets,task["seed"],n,completed)
             obs=observed(s,targets);runner=PhysicalRunner(s)
+            contracts=[audit_program(p,obs["objects"]) for p in plans]
             times=dict(scene_setup_seconds=setup,candidate_generation_seconds=counts["candidate_generation_seconds"],
                        necessary_geometry_seconds=counts["necessary_geometry_seconds"],optional_geometry_seconds=0.,
                        render_seconds=0.,visual_encoding_seconds=0.,network_inference_seconds=0.,numeric_features_seconds=0.)
-            input_record=dict(observation=obs,candidates=[p.to_dict() for p in plans],snapshot_sha256=runner.initial)
+            input_record=dict(observation=obs,candidates=[p.to_dict() for p in plans],snapshot_sha256=runner.initial,contracts=contracts)
             dump(directory/"inputs.json",input_record)
             geometry=None;visual=None
             if method in {"geometry","exhaustive"} or (method in self.models and self.models[method][1] in {"mlp","residual","prior"}):
@@ -108,7 +127,9 @@ class OnlineExperiment:
             success=sum(x["success"] for x in deployment)/deployment_repeats
             times["independent_execution_seconds"]=sum(x["wall_seconds"]+x["restore_seconds"] for x in deployment)
             result=dict(request=request,request_sha256=digest(request),task=task,method=method,selection=selected,
-                        timing=times,model_cold_start_seconds=self.cold.get(method,0.),cold_visual_seconds=self.cold.get("visual_encoder",0.),
+                        timing=times,model_cold_start_seconds=self.cold.get(method,0.),
+                        cold_visual_seconds=self.cold.get("visual_encoder",0.) if method in self.models and getattr(self.models[method][0],"visual",None) is not None else 0.,
+                        checkpoint_sha256=self.checkpoint_hashes.get(method),
                         execution_success_rate=success,deployment=deployment,
                         physics_steps=sum(x["physics_steps"] for x in selected["validated"]),pool_counts=counts,
                         input_sha256=digest(input_record),parallel_workers=1,cache_policy="resident weights; fresh geometry/render/vision each decision",

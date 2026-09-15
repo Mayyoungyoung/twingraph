@@ -41,7 +41,7 @@ class ConnectorSpec:
     def sample(cls, seed):
         r = np.random.default_rng(seed)
         return cls(seed, r.uniform([-.02,.005],[.035,.05]).tolist(),
-                   float(r.uniform(.065,.095)), float(r.uniform(.0008,.0014)),
+                   float(r.uniform(.038,.070)), float(r.uniform(.0008,.0014)),
                    float(r.uniform(.020,.026)),
                    [float(r.choice([0,math.pi/2])) for _ in range(2)],
                    r.uniform([-.012,-.012],[.012,.012]).tolist(),

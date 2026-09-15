@@ -101,3 +101,23 @@ def test_candidate_reordering_preserves_individual_scores():
 def test_unknown_validation_mode_and_fraction():
     with pytest.raises(ValueError):select_and_validate(ranking(),lambda p:True,3,mode="implicit")
     with pytest.raises(ValueError):select_and_validate(ranking(),lambda p:True,3,accept_rate=0)
+
+
+def test_program_contracts_preserve_unknown_and_catch_reordering():
+    from types import SimpleNamespace
+    from simbench.value.research_scenarios import program
+    from simbench.value.program_audit import audit_program
+    data=SimpleNamespace(qpos=np.zeros(7),qvel=np.zeros(7),ctrl=np.zeros(7))
+    model=SimpleNamespace(geom_size=np.zeros((1,3)),geom_pos=np.zeros((1,3)),geom_friction=np.ones((1,3)))
+    session=SimpleNamespace(parts=['component'],ctx=SimpleNamespace(data=data,model=model))
+    targets={'component':[0,0,.85]}
+    choices={'component':dict(yaw=0.,height=.003,clearance=1.,force=3.,speed=.006)}
+    p=program(session,targets,['component'],choices)
+    audit=audit_program(p,session.parts)
+    assert audit['unknown'] and audit['status']=='no_known_contract_conflict'
+    # Changing a future grasp value without the bound payload is rejected.
+    q=copy.deepcopy(p);q.calls[2].arguments['height_offset'].value=.02
+    with pytest.raises(ValueError,match='disagree'):q.validate()
+    # Data-production edges do not allow a grasp before approach/ownership.
+    q=copy.deepcopy(p);q.calls[7].skill='place'
+    with pytest.raises((ValueError,TypeError)):audit_program(q,session.parts)
