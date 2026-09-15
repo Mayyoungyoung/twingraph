@@ -1,0 +1,8 @@
+# Keep released evidence checksums stable on Windows and Linux.
+/docs/evidence/value/*.json text eol=lf
+/docs/evidence/value/*.md text eol=lf
+/docs/evidence/value/*.txt text eol=lf
+/docs/evidence/value/*.svg text eol=lf
+/datasets/value/*.json text eol=lf
+/datasets/value/*.md text eol=lf
+/models/value/*.md text eol=lf

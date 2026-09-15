@@ -1,0 +1,27 @@
+{
+  "dataset": "pin_suffix_v1",
+  "groups": 100,
+  "candidates": 800,
+  "trials": 3200,
+  "prefix_successes": 3200,
+  "full_successes": 1330,
+  "data_sha256": "a6d08322229d822f00cd3444a872c50d92f51803e540c7f6a1962deb98c6f790",
+  "data_bytes": 3079470,
+  "source": {
+    "source_sha256": "e79e7e6507c37d7d83b862c5fc2c467b1b422358a9620650272e6fd8b28718b2",
+    "archive_sha256": "031feff7b0fadb791fc491659d1aa5ed7bbab73c526f4754d6bff9214c4c7307",
+    "bytes": 5367455
+  },
+  "seed_range": [
+    1000,
+    1100
+  ],
+  "repetitions": 4,
+  "labels": "physical MuJoCo feedback-controller prefix and complete release/retreat suffix",
+  "limitations": [
+    "one pin-assembly subtask family",
+    "simulation privileged perception",
+    "four trials per candidate",
+    "current dataset uses a fixed 13-call template"
+  ]
+}
