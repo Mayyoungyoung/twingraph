@@ -1,6 +1,7 @@
 """Scientific plots and offline strata, always sourced from completed experiments."""
 import argparse
 import csv
+import hashlib
 import json
 from pathlib import Path
 import numpy as np
@@ -88,6 +89,10 @@ def main():
         for axis in axes.flat:axis.legend(fontsize=7);axis.grid(alpha=.2)
         fig.suptitle('Budget: 3 configurations/family. Scale: 1/family. Reference quality uses 2 independent repeats.',fontsize=11)
         fig.savefig(out/'budget_scale.png',dpi=180);fig.savefig(out/'budget_scale.svg');plt.close(fig)
+    digest=lambda obj:hashlib.sha256(json.dumps(obj,sort_keys=True).encode()).hexdigest()
+    plot_files=[out/(name+ext) for name in ('locked_ranking','execution_cost','budget_scale') for ext in ('.png','.svg') if (out/(name+ext)).exists()]
+    (out/'plot_manifest.json').write_text(json.dumps(dict(locked_metrics_sha256=digest(offline),online_summary_sha256=digest(online),
+         matplotlib=matplotlib.__version__,files={f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in plot_files}),indent=2))
     print(json.dumps(dict(offline_rows=len(rows),plots=str(out))))
 
 

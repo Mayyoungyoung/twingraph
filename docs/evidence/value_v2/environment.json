@@ -1,0 +1,14 @@
+{
+  "python": "3.10.13",
+  "platform": "Linux-5.15.0-191-generic-x86_64-with-glibc2.35",
+  "torch": "2.1.0",
+  "torchvision": "0.16.0",
+  "mujoco": "2.3.2",
+  "numpy": "1.26.4",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "cuda": "12.1",
+  "cpu_quota": "1000000 100000",
+  "code_commit": "304f6e0a3b9084eac195e1e57ef1acc07d64750b",
+  "code_commit_scope": "runtime implementation freeze; release scripts/docs may be newer; archived source_hashes.json identifies exact bytes",
+  "device_info": "NVIDIA GeForce RTX 3090, 580.119.02, 24576 MiB"
+}

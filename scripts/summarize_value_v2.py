@@ -113,6 +113,8 @@ def main():
                  deployment_physics_steps=sum(d['physics_steps'] for d in r['deployment']),decision_seconds=t['decision_wall_seconds'],
                  deployment_successful_sim_seconds=float(np.mean([d['sim_seconds'] for d in r['deployment'] if d['success']])) if any(d['success'] for d in r['deployment']) else None,
                  scene_setup_seconds=t['scene_setup_seconds'],model_cold_seconds=r['model_cold_start_seconds'],visual_cold_seconds=r['cold_visual_seconds'],
+                 scene_setup_plus_decision_seconds=t['scene_setup_seconds']+t['decision_wall_seconds'],
+                 accounted_scene_decision_deployment_seconds=t['scene_setup_seconds']+t['decision_wall_seconds']+t['independent_execution_seconds'],
                  candidate_generation_seconds=t['candidate_generation_seconds'],necessary_geometry_seconds=t['necessary_geometry_seconds'],
                  optional_geometry_seconds=t['optional_geometry_seconds'],render_seconds=t['render_seconds'],visual_encoding_seconds=t['visual_encoding_seconds'],
                  network_seconds=t['network_inference_seconds'],numeric_features_seconds=t['numeric_features_seconds'],

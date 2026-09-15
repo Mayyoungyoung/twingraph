@@ -10,6 +10,20 @@
 
 几何规则在名义终态检查夹爪释放空间，包括此前装入的零件。它不调用物理执行。轻量 MLP 与残差模型读取相同几何/计划数值特征；Transformer 读取有类型的完整计划，视觉版本另读冻结 ResNet18 特征。完整几何排序代理只由需要它的方法计算，必要路线检查始终保留。
 
+```mermaid
+flowchart LR
+  A[执行前场景与目标] --> B[生成完整候选 PlanIR]
+  B --> C[契约与必要几何检查]
+  C --> D[几何和计划特征]
+  D --> E[MLP 每候选一个完整成功分数]
+  E --> F[Top-K 完整 PlanIR]
+  F --> G[B 次物理验证预算 每候选 r 次]
+  G --> H[按成功率与执行成本选计划]
+  H --> I[独立扰动下执行所选 PlanIR]
+```
+
+例如 N=32、K=4、B=8、r=2：模型先对 32 个真实候选评分，B 模式只验证前四个，每个两次；选中后再单独执行。训练时则让候选真实执行，记录完整任务成功/失败，用这些历史标签拟合模型。运行时评分器不读取这些后续标签。
+
 ## 环境与执行
 
 服务器已有解释器：
@@ -26,7 +40,7 @@ $PY -m pytest simbench/tests -q
 ```bash
 $PY -m simbench.value.research_decision \
   --checkpoint models/value/best_value_v2.pt \
-  --out results/my_connector --family rigid_connector_module --seed 30001 \
+  --out results/my_connector --family rigid_connector_module --seed 30000 \
   --n 32 --k 4 --budget 8 --repeats 2 --mode best_within_budget
 ```
 
@@ -60,6 +74,22 @@ $PY scripts/summarize_value_v2.py
 $PY scripts/audit_value_v2_table.py
 $PY scripts/plot_value_v2.py
 ```
+
+绘图是独立的分析步骤，需要 Matplotlib；本轮服务器训练环境没有该库，因此在本地已有分析环境运行同一 `plot_value_v2.py`，没有改动服务器的 Torch/CUDA 环境。`plot_manifest.json` 同时记录指标内容和图像文件的哈希。把本轮指标同步到 `docs/evidence/value_v2` 后，可用以下命令重画：
+
+```bash
+python scripts/plot_value_v2.py --root docs/evidence/value_v2 --out docs/evidence/value_v2
+```
+
+将生成的图表及 manifest 同步回服务器后，可继续发布检查而不重做物理试验：
+
+```bash
+$PY scripts/finish_value_v2_release.py \
+  --code-commit 304f6e0a3b9084eac195e1e57ef1acc07d64750b \
+  --package-only --prepared-plots
+```
+
+它会核对图表对应的指标和图像哈希，再执行回归、冷启动测量与打包。上述 commit 是本轮运行时实现冻结点；精确源码字节以发布的 source hash 清单为准。
 
 精确复现本轮训练时，先将发布数据归档解压到 `results/value_v2/data`，其中还包含早期完成并保留的宽接口开发数据和显式源码兼容清单。仅从当前采集器重新生成，会得到紧凑/宽间距混合的 v2b 分布，不会自动重建 v2a 宽接口增强部分。两份采集源码均随发布保存。
 

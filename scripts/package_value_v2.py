@@ -50,7 +50,8 @@ def main():
         if 'release' in f.parts:continue
         try:raw_trials+=len(json.loads(f.read_text())['trials'])
         except (json.JSONDecodeError,KeyError):pass
-    manifest=dict(schema='twingraph.dataset.manifest.v2',code_commit=a.code_commit,created_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
+    commit_scope='runtime implementation freeze; release scripts/docs may be newer; archived source_hashes.json identifies exact bytes'
+    manifest=dict(schema='twingraph.dataset.manifest.v2',code_commit=a.code_commit,code_commit_scope=commit_scope,created_utc=time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
                   groups=groups,decision_groups=len(groups),configurations=len({(g['family'],g['seed']) for g in groups}),
                   used_label_rollouts=used_trials,collection_worker_seconds=wall,collection_physics_steps=steps,
                   raw_outcome_record_count_including_archived_copies=raw_trials,
@@ -86,7 +87,7 @@ def main():
     import torch,mujoco,torchvision,numpy
     env=dict(python=platform.python_version(),platform=platform.platform(),torch=torch.__version__,torchvision=torchvision.__version__,
              mujoco=mujoco.__version__,numpy=numpy.__version__,gpu=torch.cuda.get_device_name(0),cuda=torch.version.cuda,
-             cpu_quota=Path('/sys/fs/cgroup/cpu.max').read_text().strip(),code_commit=a.code_commit,
+             cpu_quota=Path('/sys/fs/cgroup/cpu.max').read_text().strip(),code_commit=a.code_commit,code_commit_scope=commit_scope,
              device_info=subprocess.check_output(['nvidia-smi','--query-gpu=name,driver_version,memory.total','--format=csv,noheader'],text=True).strip())
     (out/'environment.json').write_text(json.dumps(env,indent=2))
     (out/'release_checksums.json').write_text(json.dumps({str(f.relative_to(out)):sha(f) for f in sorted(out.rglob('*')) if f.is_file() and f.name!='release_checksums.json'},indent=2))

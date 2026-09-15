@@ -1,0 +1,263 @@
+{
+  "scope": "fresh Python process including imports, lazy CUDA initialization, model loading, synthetic kernel warmup and process shutdown; OS file caches not flushed; no scene or physical rollout",
+  "workers": 1,
+  "repeats": 3,
+  "rows": [
+    {
+      "method": "no_vision",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 3.213143400964327,
+      "model_load_and_warm_seconds": {
+        "no_vision": 0.26262094697449356
+      },
+      "checkpoint_sha256": {
+        "no_vision": "8170b408cb7562fb96d83bfeb957d3a0e69f93f83d38d85b65f22eca15190b1e"
+      }
+    },
+    {
+      "method": "mlp",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 2.9392343079671264,
+      "model_load_and_warm_seconds": {
+        "mlp": 0.06479761505033821
+      },
+      "checkpoint_sha256": {
+        "mlp": "2d1b73af8d31e70aad10de1dc7c6d493aca154509addb13409d433b8216f8459"
+      }
+    },
+    {
+      "method": "vision",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 4.23271986306645,
+      "model_load_and_warm_seconds": {
+        "vision": 0.2654069379204884,
+        "visual_encoder": 0.9878595640184358
+      },
+      "checkpoint_sha256": {
+        "vision": "ca04eeb22ab518ae361eb5b92612be3086321c603b241d93a13aeac5d6624ef2"
+      }
+    },
+    {
+      "method": "prior",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 2.9107673969119787,
+      "model_load_and_warm_seconds": {
+        "prior": 0.061085933120921254
+      },
+      "checkpoint_sha256": {
+        "prior": "eca9874d7bd879d99918d1e3aba0ad38b2743e6966cd2f85141d175732f5d7cc"
+      }
+    },
+    {
+      "method": "residual",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 2.9231370410416275,
+      "model_load_and_warm_seconds": {
+        "residual": 0.0625949971145019
+      },
+      "checkpoint_sha256": {
+        "residual": "13a5cdb2570c123cf90d8f88048eda8e1624b05d9545a530f1144eb77ab03074"
+      }
+    },
+    {
+      "method": "geometry",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 2.3397014709189534,
+      "model_load_and_warm_seconds": {},
+      "checkpoint_sha256": {}
+    },
+    {
+      "method": "v1_fixed",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 4.422272379975766,
+      "model_load_and_warm_seconds": {
+        "v1_fixed": 0.27075229201000184,
+        "visual_encoder": 0.9994654610054567
+      },
+      "checkpoint_sha256": {
+        "v1_fixed": "75dedd09a16fd9cdf163955aa2908b9bd5b6586a12be3ca28fd5fb5d1a9ad489"
+      }
+    },
+    {
+      "method": "random",
+      "repeat": 0,
+      "process_start_and_shutdown_seconds": 2.3659841580083594,
+      "model_load_and_warm_seconds": {},
+      "checkpoint_sha256": {}
+    },
+    {
+      "method": "random",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 2.40894090407528,
+      "model_load_and_warm_seconds": {},
+      "checkpoint_sha256": {}
+    },
+    {
+      "method": "no_vision",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 3.1438706079497933,
+      "model_load_and_warm_seconds": {
+        "no_vision": 0.25660614599473774
+      },
+      "checkpoint_sha256": {
+        "no_vision": "8170b408cb7562fb96d83bfeb957d3a0e69f93f83d38d85b65f22eca15190b1e"
+      }
+    },
+    {
+      "method": "vision",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 4.316665192949586,
+      "model_load_and_warm_seconds": {
+        "vision": 0.2723868889734149,
+        "visual_encoder": 0.9983512919861823
+      },
+      "checkpoint_sha256": {
+        "vision": "ca04eeb22ab518ae361eb5b92612be3086321c603b241d93a13aeac5d6624ef2"
+      }
+    },
+    {
+      "method": "geometry",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 2.322943172068335,
+      "model_load_and_warm_seconds": {},
+      "checkpoint_sha256": {}
+    },
+    {
+      "method": "prior",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 2.91935582307633,
+      "model_load_and_warm_seconds": {
+        "prior": 0.05827334802597761
+      },
+      "checkpoint_sha256": {
+        "prior": "eca9874d7bd879d99918d1e3aba0ad38b2743e6966cd2f85141d175732f5d7cc"
+      }
+    },
+    {
+      "method": "residual",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 2.858568713068962,
+      "model_load_and_warm_seconds": {
+        "residual": 0.06364332104567438
+      },
+      "checkpoint_sha256": {
+        "residual": "13a5cdb2570c123cf90d8f88048eda8e1624b05d9545a530f1144eb77ab03074"
+      }
+    },
+    {
+      "method": "mlp",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 2.8594973519211635,
+      "model_load_and_warm_seconds": {
+        "mlp": 0.06317181594204158
+      },
+      "checkpoint_sha256": {
+        "mlp": "2d1b73af8d31e70aad10de1dc7c6d493aca154509addb13409d433b8216f8459"
+      }
+    },
+    {
+      "method": "v1_fixed",
+      "repeat": 1,
+      "process_start_and_shutdown_seconds": 4.314659788040444,
+      "model_load_and_warm_seconds": {
+        "v1_fixed": 0.2671143979532644,
+        "visual_encoder": 0.986442670924589
+      },
+      "checkpoint_sha256": {
+        "v1_fixed": "75dedd09a16fd9cdf163955aa2908b9bd5b6586a12be3ca28fd5fb5d1a9ad489"
+      }
+    },
+    {
+      "method": "residual",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 2.820573857985437,
+      "model_load_and_warm_seconds": {
+        "residual": 0.06283913797233254
+      },
+      "checkpoint_sha256": {
+        "residual": "13a5cdb2570c123cf90d8f88048eda8e1624b05d9545a530f1144eb77ab03074"
+      }
+    },
+    {
+      "method": "v1_fixed",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 4.355826404993422,
+      "model_load_and_warm_seconds": {
+        "v1_fixed": 0.29361819790210575,
+        "visual_encoder": 1.0576756650116295
+      },
+      "checkpoint_sha256": {
+        "v1_fixed": "75dedd09a16fd9cdf163955aa2908b9bd5b6586a12be3ca28fd5fb5d1a9ad489"
+      }
+    },
+    {
+      "method": "random",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 2.4206287369597703,
+      "model_load_and_warm_seconds": {},
+      "checkpoint_sha256": {}
+    },
+    {
+      "method": "no_vision",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 3.2708965269848704,
+      "model_load_and_warm_seconds": {
+        "no_vision": 0.2591221409384161
+      },
+      "checkpoint_sha256": {
+        "no_vision": "8170b408cb7562fb96d83bfeb957d3a0e69f93f83d38d85b65f22eca15190b1e"
+      }
+    },
+    {
+      "method": "prior",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 3.106822645990178,
+      "model_load_and_warm_seconds": {
+        "prior": 0.05998638202436268
+      },
+      "checkpoint_sha256": {
+        "prior": "eca9874d7bd879d99918d1e3aba0ad38b2743e6966cd2f85141d175732f5d7cc"
+      }
+    },
+    {
+      "method": "vision",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 4.221647450933233,
+      "model_load_and_warm_seconds": {
+        "vision": 0.2700691430363804,
+        "visual_encoder": 1.0028007319197059
+      },
+      "checkpoint_sha256": {
+        "vision": "ca04eeb22ab518ae361eb5b92612be3086321c603b241d93a13aeac5d6624ef2"
+      }
+    },
+    {
+      "method": "mlp",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 2.974039984983392,
+      "model_load_and_warm_seconds": {
+        "mlp": 0.0634592849528417
+      },
+      "checkpoint_sha256": {
+        "mlp": "2d1b73af8d31e70aad10de1dc7c6d493aca154509addb13409d433b8216f8459"
+      }
+    },
+    {
+      "method": "geometry",
+      "repeat": 2,
+      "process_start_and_shutdown_seconds": 2.3922863269690424,
+      "model_load_and_warm_seconds": {},
+      "checkpoint_sha256": {}
+    }
+  ],
+  "median_seconds": {
+    "random": 2.40894090407528,
+    "geometry": 2.3397014709189534,
+    "prior": 2.91935582307633,
+    "mlp": 2.9392343079671264,
+    "residual": 2.858568713068962,
+    "no_vision": 3.213143400964327,
+    "vision": 4.23271986306645,
+    "v1_fixed": 4.355826404993422
+  }
+}

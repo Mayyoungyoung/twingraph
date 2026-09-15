@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "archives": 5,
+  "data_files": 975,
+  "source_files": 143,
+  "models": 11,
+  "formal_decisions": 150,
+  "physical_rollouts": 1256,
+  "top_k": 4,
+  "new_plan_calls": 76,
+  "new_deployment_successes": 2,
+  "checks": "archive and internal hashes, model and plot hashes, CSV counts, executable Top-K provenance, report links"
+}
