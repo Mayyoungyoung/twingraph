@@ -61,10 +61,11 @@ def evaluate(model, groups, device="cpu", k=2, epsilon=0.1, objective="dual"):
         )
         for method, selected in rankings.items():
             methods[method].append(subset_metrics(group.reference, selected, epsilon))
-        combinations = list(itertools.combinations(range(n), kk))
-        if len(combinations) > 10000:
+        if math.comb(n, kk) > 10000:
             rng = np.random.default_rng(0)
             combinations = [rng.choice(n, kk, replace=False) for _ in range(10000)]
+        else:
+            combinations = list(itertools.combinations(range(n), kk))
         random_rows = [
             subset_metrics(group.reference, idx, epsilon) for idx in combinations
         ]

@@ -52,7 +52,7 @@ class PlanValueNet(nn.Module):
         self.suffix_head = nn.Linear(c.width, 1)
         self.direct_head = nn.Linear(c.width, 1)
 
-    def forward(self, batch):
+    def forward(self, batch, direct_only=False):
         pos = batch["positions"].float().unsqueeze(-1)
         frequency = torch.exp(
             torch.arange(0, self.config.width, 2, device=pos.device)
@@ -88,6 +88,8 @@ class PlanValueNet(nn.Module):
         # Two views share weights. The prefix head cannot attend to a suffix
         # directly OR indirectly via updated context tokens from another layer.
         full = self.encoder(x, src_key_padding_mask=all_mask)[:, 0]
+        if direct_only:
+            return dict(direct_logit=self.direct_head(full).squeeze(-1))
         local = self.encoder(x, src_key_padding_mask=prefix_mask)[:, 0]
         a = self.prefix_head(local).squeeze(-1)
         b = self.suffix_head(full).squeeze(-1)

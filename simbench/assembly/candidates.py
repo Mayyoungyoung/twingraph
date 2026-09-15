@@ -173,7 +173,8 @@ TEMPLATES = {"pick": pick_template, "release": release_template}
 
 
 def build_pick_candidates(
-    session, part, lift=True, terminal_targets=None, control_options=None
+    session, part, lift=True, terminal_targets=None, control_options=None,
+    score_release=True
 ):
     """Bind grasp/approach route/control/terminal choices from one unchanged state.
 
@@ -208,7 +209,8 @@ def build_pick_candidates(
                     path = copy.deepcopy(route.get("path"))
                     if path is not None:
                         path["binding"]["prefix_id"] = cid
-                    release = release_space_proxy(session, part, grasp, terminal)
+                    release = (release_space_proxy(session, part, grasp, terminal)
+                               if score_release else dict(status="not_scored", penalty=0.0))
                     candidates.append(
                         Candidate(
                             cid,

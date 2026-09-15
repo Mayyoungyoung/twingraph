@@ -9,6 +9,7 @@ import torch
 from .encode import encode_plan, collate
 from .network import ModelConfig, PlanValueNet
 from .plan import PlanIR, digest
+from .validation import select_and_validate
 
 
 class PlanRanker:
@@ -77,35 +78,6 @@ class PlanRanker:
             rejected_conflicts=[p.id for p in plans if p.status == "conflict"],
             status="requires_twin_validation" if scores else "expand_candidates",
         )
-
-
-def select_and_validate(ranking, validate, budget):
-    """validate(PlanIR) -> bool; caller owns snapshot isolation for each trial.
-
-    Try the screened candidates first and expand in score order only when
-    needed and authorized by the fixed total rollout budget. No feasible plan
-    found in that budget means unresolved, never proven task infeasibility.
-    """
-    if budget < 0:
-        raise ValueError("validation budget must be nonnegative")
-    checked = []
-    chosen = None
-    for row in ranking["ranked"][:budget]:
-        plan = PlanIR.from_dict(row["plan"])
-        ok = validate(plan)
-        if not isinstance(ok, bool):
-            raise TypeError("validator must return a boolean")
-        checked.append(dict(candidate_id=plan.id, success=ok))
-        if ok:
-            chosen = plan.to_dict()
-            break
-    return dict(
-        top_k=ranking["top_k"],
-        validated=checked,
-        chosen=chosen,
-        validation_calls=len(checked),
-        status="validated" if chosen else "budget_exhausted_expand_or_resample",
-    )
 
 
 def main():

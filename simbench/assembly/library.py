@@ -378,7 +378,7 @@ class Session:
         produces="grasps",
         implementation="geometry_and_ik",
     )
-    def propose_grasps(self, part, artifact="pose", as_="grasps"):
+    def propose_grasps(self, part, artifact="pose", as_="grasps", yaws=None, height_offset=0.0):
         pose = self.artifacts[artifact]
         dz, width = self.grasp_specs[part]
         candidates = []
@@ -386,8 +386,10 @@ class Session:
         pose_id = hashlib.sha256(
             np.asarray(pose["xyz"]).tobytes() + np.asarray(pose["quat"]).tobytes()
         ).hexdigest()[:12]
-        for yaw in (0.0, np.pi / 2):
-            xyz = pose["xyz"] + np.array([0, 0, dz])
+        if not np.isfinite(height_offset) or abs(height_offset) > 0.025:
+            raise ValueError("invalid grasp height offset")
+        for yaw in ((0.0, np.pi / 2) if yaws is None else yaws):
+            xyz = pose["xyz"] + np.array([0, 0, dz + height_offset])
             try:
                 q = self.arm.ik(xyz + [0, 0, 0.10], down(yaw))
                 # Width depends on the box face; round parts keep their diameter.

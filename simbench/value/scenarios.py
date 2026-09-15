@@ -272,7 +272,7 @@ def observation(session, spec):
     )
 
 
-def render_observation(session, directory):
+def render_observation(session, directory, names=None):
     from PIL import Image
 
     out = Path(directory)
@@ -292,7 +292,7 @@ def render_observation(session, directory):
             renderer._mjr_context.free()
             renderer._gl_context.free()
     images = ["scene.png"]
-    for name in ("pin_left", "receiver"):
+    for name in (("pin_left", "receiver") if names is None else names):
         ids = np.where(session.ctx.model.geom_bodyid == session.ctx.body_id(name))[0]
         mask = np.isin(seg[:, :, 0], ids) & (
             seg[:, :, 1] == int(mujoco.mjtObj.mjOBJ_GEOM)

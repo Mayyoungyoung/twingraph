@@ -121,6 +121,23 @@ class PlanIR:
                 step.get("params", {})
             ):
                 raise ValueError("scoring calls disagree with executable prefix")
+        if self.prefix.get("execution") == "program":
+            if self.protocol != "assembly.program.feedback.v2":
+                raise ValueError("program payload requires v2 execution protocol")
+            order=[]; choices={}; current=None
+            for call in self.calls:
+                args={k:a.value for k,a in call.arguments.items()}
+                if call.skill=="estimate_grasp":
+                    current=call.roles["manipulated"]
+                    order.append(current)
+                    choices[current]=dict(yaw=args["yaws"][0],height=args["height_offset"])
+                elif current is not None:
+                    if call.skill=="grasp": choices[current]["force"]=args["force"]
+                    if call.skill=="plan_path" and "clearance" in args: choices[current]["clearance"]=args["clearance"]
+                    if call.skill=="move" and args.get("mode")=="guarded": choices[current]["speed"]=args["speed"]
+            if plain(order)!=self.prefix["order"] or plain(choices)!=self.prefix["choices"]:
+                raise ValueError("program scoring/execution choices disagree")
+            return self
         bound = self.calls[0].arguments
         for key in ("grasp", "path", "control", "terminal"):
             if plain(bound["bound_" + key].value) != plain(self.prefix[key]):
@@ -177,18 +194,24 @@ def from_pick(candidate, suffix):
     ).validate()
 
 
-def resolve_argument(arg, session, plan):
+def resolve_argument(arg, session, plan, part=None):
     if arg.kind in {"position", "pose", "path"} and arg.frame != "world":
         raise ValueError("executor requires world-frame geometric targets")
     if arg.status == "known":
         return copy.deepcopy(arg.value)
     if arg.status == "unknown":
         raise ValueError("cannot execute an unresolved parameter")
-    part = plan.prefix["part"]
+    part = part or plan.prefix["part"]
     if arg.source_output == "object_to_eef":
         return session.arm.part_target(part, arg.value)
     if arg.source_output == "grasp_yaw":
         return session.artifacts["grasp"]["yaw"]
+    if arg.source_output == "grasp_hover":
+        import numpy as np
+        grasp = session.artifacts["grasp"]
+        if grasp["part"] != part:
+            raise ValueError("deferred grasp producer object mismatch")
+        return np.asarray(grasp["xyz"]) + np.asarray(arg.value)
     raise ValueError(f"unsupported deferred output {arg.source_output}")
 
 
@@ -197,6 +220,13 @@ def execute_prefix(session, plan):
     from simbench.assembly.candidates import Candidate, execute_pick_candidate
 
     plan.validate(session.parts)
+    if plan.prefix.get("execution") == "program":
+        from simbench.assembly.candidates import fingerprint
+        if fingerprint(session) != plan.prefix["start_state"]:
+            raise ValueError("stale program initial snapshot")
+        session.active_candidate_id = plan.id
+        execute_calls(session, plan, plan.calls[:plan.boundary])
+        return
     row = copy.deepcopy(plan.prefix)
     for key in ("xyz", "q_hover"):
         if key in row["grasp"]:
@@ -208,9 +238,13 @@ def execute_prefix(session, plan):
 
 
 def execute_suffix(session, plan):
-    for call in plan.calls[plan.boundary :]:
+    execute_calls(session, plan, plan.calls[plan.boundary:])
+
+
+def execute_calls(session, plan, calls):
+    for call in calls:
         params = {
-            key: resolve_argument(arg, session, plan)
+            key: resolve_argument(arg, session, plan, call.roles.get("manipulated"))
             for key, arg in call.arguments.items()
         }
         session.call(call.skill, **params)
