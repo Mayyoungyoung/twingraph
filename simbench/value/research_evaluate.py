@@ -38,6 +38,10 @@ def ranking_rows(plans,scores,k):
 class OnlineExperiment:
     def __init__(self,models,device="cuda"):
         self.device=device;self.models={};self.cold={};self.vision=None
+        from .research_collect import collection_source_hash
+        self.implementation_sha256=digest(dict(physics=collection_source_hash(),files={name:
+            hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in
+            ('research_evaluate.py','research_learning.py','encode.py','network.py','validation.py','vision.py','program_audit.py')}))
         self.checkpoint_hashes={}
         for name,path in models.items():
             synchronize(device);t=time.perf_counter()
@@ -67,7 +71,8 @@ class OnlineExperiment:
             allow_expand=False,deployment_repeats=2,domain_seed=0):
         directory=Path(out);directory.mkdir(parents=True,exist_ok=True)
         request=dict(task=task,method=method,n=n,k=k,budget=budget,repeats=repeats,mode=mode,
-                     allow_expand=allow_expand,deployment_repeats=deployment_repeats,domain_seed=domain_seed)
+                     allow_expand=allow_expand,deployment_repeats=deployment_repeats,domain_seed=domain_seed,
+                     checkpoint_sha256=self.checkpoint_hashes.get(method),implementation_sha256=self.implementation_sha256)
         file=directory/"decision.json"
         if file.exists():
             old=json.loads(file.read_text())
@@ -108,7 +113,7 @@ class OnlineExperiment:
                 features=np.stack([numeric_features(obs,p,g) for p,g in zip(plans,geometry)]) if geometry is not None else None
                 times["numeric_features_seconds"]=time.perf_counter()-t
                 synchronize(self.device);t=time.perf_counter()
-                group=dict(plans=plans,x=features,encoded=[encode_plan(obs,p) for p in plans],visual=visual)
+                group=dict(plans=plans,x=features,encoded=[] if kind in {'mlp','residual','prior'} else [encode_plan(obs,p) for p in plans],visual=visual)
                 scores=predict(model,group,self.device,kind)
                 synchronize(self.device);times["network_inference_seconds"]=time.perf_counter()-t
             if method=="exhaustive":k=len(plans);budget=len(plans)*repeats;allow_expand=False;mode="best_within_budget"

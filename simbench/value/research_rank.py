@@ -35,7 +35,7 @@ def rank_input(checkpoint,input_file,k=4,device="cpu"):
             from .vision import FrozenVision
             visual=FrozenVision(device).encode([path.parent/i for i in inputs["images"]])
     synchronize(device);start=time.perf_counter()
-    group=dict(plans=plans,x=features,encoded=[encode_plan(obs,p) for p in plans],visual=visual)
+    group=dict(plans=plans,x=features,encoded=[] if kind in {'mlp','residual','prior'} else [encode_plan(obs,p) for p in plans],visual=visual)
     scores=predict(model,group,device,kind);synchronize(device)
     result=ranking_rows(plans,scores,k)
     result.update(schema="twingraph.topk.v2",input_sha256=ih,checkpoint=str(checkpoint),

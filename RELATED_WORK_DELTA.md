@@ -10,12 +10,13 @@
   expensive refinement, and evaluates planning runtime. Therefore a Transformer
   ranking plans with scene images is prior art, including its runtime rationale.
 - Agia et al., **STAP: Sequencing Task-Agnostic Policies**, ICRA 2023.
-  [Author-hosted paper](https://www.jiajunwu.com/papers/stap_icra.pdf).
+  [Author project](https://sites.google.com/stanford.edu/stap/home),
+  [official implementation](https://github.com/agiachris/STAP).
   STAP coordinates skill dependencies by optimizing estimates of joint skill
   success; its mechanism uses learned skill values and state prediction.
   TwinGraph retains feedback controllers and actual physics verification.
 - Ait Bouhsain et al., **Learning to Predict Action Feasibility for Task and
-  Motion Planning in 3D Environments**, IROS 2023.
+  Motion Planning in 3D Environments**, ICRA 2023.
   [Author project](https://smail8.github.io/action-feasibility-prediction/).
   Predicting geometric feasibility to avoid planner calls is adjacent work;
   replacing a geometry call with a classifier is not alone a novelty claim.
