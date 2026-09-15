@@ -114,20 +114,34 @@ class OnlineExperiment:
             if method=="exhaustive":k=len(plans);budget=len(plans)*repeats;allow_expand=False;mode="best_within_budget"
             ranking=ranking_rows(plans,scores,k);dump(directory/"top_k.json",ranking)
             occurrences={}
+            def run_measured(plan,trial):
+                row=runner.run(plan,trial,keep_trace=True)
+                # feedback.v2 has ten non-composite prefix calls. Composite place
+                # calls occur only in the suffix, so their extra records stay there.
+                prefix_names=['observe_parts','estimate_pose','propose_grasps','select_grasp',
+                              'plan_transfer','execute_joint_path','approach','close_gripper','verify_grasp','lift']
+                cut=10 if row['prefix_success'] else len(s.results)
+                if [step['skill'] for step in s.results[:cut]]!=prefix_names[:cut]:
+                    raise RuntimeError('prefix timing boundary no longer matches the execution protocol')
+                solving={'plan_transfer','propose_grasps','select_grasp','estimate_pose'}
+                row['prefix_parameter_solving_seconds']=sum(step['wall_seconds'] for step in s.results[:cut] if step['skill'] in solving)
+                row['later_parameter_solving_seconds']=sum(step['wall_seconds'] for step in s.results[cut:] if step['skill'] in solving)
+                return row
             def validate(plan):
                 r=occurrences.get(plan.id,0);occurrences[plan.id]=r+1
-                return runner.run(plan,perturbation(task["seed"],domain_seed*1000+r,"online"),keep_trace=True)
+                return run_measured(plan,perturbation(task["seed"],domain_seed*1000+r,"online"))
             selected=select_and_validate(ranking,validate,budget,mode=mode,repeats=repeats,
                                          accept_rate=.5,allow_expand=allow_expand)
             times["decision_wall_seconds"]=time.perf_counter()-start
             times["snapshot_restore_seconds"]=sum(x["restore_seconds"] for x in selected["validated"])
             times["twin_rollout_seconds"]=sum(x["wall_seconds"] for x in selected["validated"])
             times["deferred_solving_seconds_subset_of_rollout"]=sum(x["deferred_solving_seconds"] for x in selected["validated"])
+            times['later_parameter_solving_seconds_subset_of_rollout']=sum(x['later_parameter_solving_seconds'] for x in selected['validated'])
             deployment=[]
             if selected["chosen"]:
                 chosen=PlanIR.from_dict(selected["chosen"])
                 for r in range(deployment_repeats):
-                    deployment.append(runner.run(chosen,perturbation(task["seed"],domain_seed*1000+r,"deployment"),keep_trace=True))
+                    deployment.append(run_measured(chosen,perturbation(task["seed"],domain_seed*1000+r,"deployment")))
             success=sum(x["success"] for x in deployment)/deployment_repeats
             times["independent_execution_seconds"]=sum(x["wall_seconds"]+x["restore_seconds"] for x in deployment)
             result=dict(request=request,request_sha256=digest(request),task=task,method=method,selection=selected,

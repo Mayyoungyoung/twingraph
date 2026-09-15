@@ -22,6 +22,12 @@ def main():
         assert all(r['trial']['domain']=='deployment' for r in record['deployment'])
         if selection['chosen']:assert all(r['candidate_id']==selection['chosen']['id'] for r in record['deployment'])
         assert all(r['valid'] for r in [*selection['validated'],*record['deployment']])
+        for trial in [*selection['validated'],*record['deployment']]:
+            assert abs(trial['prefix_parameter_solving_seconds']+trial['later_parameter_solving_seconds']-trial['deferred_solving_seconds'])<1e-8
+        components=('candidate_generation_seconds','necessary_geometry_seconds','optional_geometry_seconds',
+                    'render_seconds','visual_encoding_seconds','network_inference_seconds','numeric_features_seconds',
+                    'snapshot_restore_seconds','twin_rollout_seconds')
+        assert sum(record['timing'][k] for k in components)<=record['timing']['decision_wall_seconds']+.001
         identity=tuple(row[k] for k in ('runset','family','seed','checkpoint','method','protocol','n','k','budget','repeats'))
         assert identity not in identities;identities.add(identity);total+=int(row['rollouts'])+len(record['deployment'])
         domains.update(r['trial']['domain'] for r in [*selection['validated'],*record['deployment']])

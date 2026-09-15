@@ -95,6 +95,8 @@ measure training variability offline. Additional budget/scale runs select one
 primary model using validation Hit@4, Regret@4, parameter count, then Brier;
 they do not choose a winner using locked-test results. Main and curve run sets
 are separate statistical cells, even when configuration/budget overlap.
+The budget curve repeats B=2/4/8 on the same three predeclared online seeds per
+family; pool scaling uses the fifth test seed per family with N=16/32/64.
 
 ## Reporting
 

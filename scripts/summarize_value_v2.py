@@ -110,6 +110,7 @@ def main():
                  network_seconds=t['network_inference_seconds'],numeric_features_seconds=t['numeric_features_seconds'],
                  restore_seconds=t['snapshot_restore_seconds'],twin_seconds=t['twin_rollout_seconds'],
                  deferred_solving_seconds_subset=t['deferred_solving_seconds_subset_of_rollout'],deployment_seconds=t['independent_execution_seconds'],
+                 later_parameter_solving_seconds_subset=t.get('later_parameter_solving_seconds_subset_of_rollout'),
                  rollouts=q['validation_calls'],unique_candidates=q['unique_candidates'],physics_steps=r['physics_steps'],
                  timeouts=sum(d.get('timeout',False) for d in q['validated']),
                  budget_exhausted=int(q['budget_exhausted']),budget_fully_spent=int(q['budget_fully_spent']),accepted=int(q['chosen'] is not None),
