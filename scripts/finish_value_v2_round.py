@@ -40,7 +40,7 @@ def main():
     run([sys.executable,'-m','simbench.value.research_evaluate','--models',str(root/'models/all_models.json'),
          '--data',str(root/'data'),'--out',str(root/'locked_metrics.json')],'locked_evaluation.log')
     status('independent_online_execution')
-    run([sys.executable,'scripts/run_value_v2_online.py','--workers','3'],'online.log')
+    run([sys.executable,'scripts/run_value_v2_online.py','--workers','6'],'online.log')
     run([sys.executable,'scripts/summarize_value_v2.py'],'summarize.log')
     status('complete')
 

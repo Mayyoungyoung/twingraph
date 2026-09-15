@@ -30,7 +30,7 @@ def run_task(request):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--models',default='results/value_v2/models/online_models.json')
-    p.add_argument('--out',default='results/value_v2/online');p.add_argument('--workers',type=int,default=3)
+    p.add_argument('--out',default='results/value_v2/online');p.add_argument('--workers',type=int,default=6)
     p.add_argument('--groups-per-family',type=int,default=3);a=p.parse_args()
     models=json.loads(Path(a.models).read_text());tasks=[dict(family=f,seed=base+i,checkpoint=0)
         for f,base in [('rigid_connector_module',20040),('sliding_stage_pin',21040)] for i in range(a.groups_per_family)]

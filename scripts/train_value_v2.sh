@@ -12,7 +12,7 @@ for seed in 17 29 43; do
   done
 done
 "$PYTHON" -m simbench.value.research_learning --data "$DATA" --out "$OUT/pin_mlp_17" --kind mlp --family sliding_stage_pin --epochs 120 > "$OUT/pin_mlp_17.log" 2>&1
-"$PYTHON" -m simbench.value.research_learning --data "$DATA" --out "$OUT/fewshot_mlp_17" --kind mlp --few-shot 2 --epochs 120 > "$OUT/fewshot_mlp_17.log" 2>&1
+"$PYTHON" -m simbench.value.research_learning --data "$DATA" --out "$OUT/fewshot_mlp_17" --kind mlp --few-shot 2 --initialize "$OUT/pin_mlp_17/best.pt" --epochs 120 > "$OUT/fewshot_mlp_17.log" 2>&1
 for kind in no_vision vision; do
   "$PYTHON" -m simbench.value.research_learning --data "$DATA" --out "$OUT/${kind}_17" --kind "$kind" --epochs 40 --batch-size 4 > "$OUT/${kind}_17.log" 2>&1
 done

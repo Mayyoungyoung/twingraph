@@ -1,5 +1,6 @@
 """Small numeric models and single-head Transformer with locked group splits."""
 import argparse
+import hashlib
 from dataclasses import asdict
 import json
 from pathlib import Path
@@ -29,18 +30,23 @@ def numeric_features(obs,plan,geometry):
             if call.skill=="plan_path" and "clearance" in a:current["clearance"]=a["clearance"]
             if call.skill=="move" and a.get("mode")=="guarded":current["speed"]=a["speed"]
     goals={g["manipulated"]:np.array(g["position"]) for g in obs["goals"]}
-    rows=[];assembled=[]
+    rows=[]
+    stage_parts={stage['part'] for stage in stages}
+    # Occupancy at the decision checkpoint is observed input, not a rollout label.
+    initially_near={name:np.asarray(obs['objects'][name]['position']) for name,target in goals.items()
+                    if name not in stage_parts and np.linalg.norm(np.asarray(obs['objects'][name]['position'])-target)<.002}
+    assembled=[]
     for stage in stages:
         part=stage["part"];obj=obs["objects"][part];target=goals[part]
         source=np.asarray(obj["position"]);others=[v for k,v in goals.items() if k!=part]
-        previous=[goals[k] for k in assembled]
+        previous=[*initially_near.values(),*[goals[k] for k in assembled]]
         nearest=min((float(np.linalg.norm(x[:2]-target[:2])) for x in others),default=.3)
         prev=min((float(np.linalg.norm(x[:2]-target[:2])) for x in previous),default=.3)
         size=np.max(np.asarray([g["size"] for g in obj["geoms"]]),axis=0)
         yaw=stage["yaw"]
         rows.append([np.sin(2*yaw),np.cos(2*yaw),stage["height"]*100,stage["force"],
                      stage["clearance"],stage["speed"]*100,*((target-source)*10),* (size*100),
-                     nearest*10,prev*10,float(len(assembled)),target[2]*10])
+                     nearest*10,prev*10,float(len(previous)),target[2]*10])
         assembled.append(part)
     rows=np.asarray(rows,np.float32)
     if not len(rows):raise ValueError("numeric v2 model requires parameterized grasp stages")
@@ -53,7 +59,7 @@ def load_data(root,vision=False,include_test=False):
     for f in sorted(Path(root).glob("group_*/complete.json")):
         d=f.parent;inputs=json.loads((d/"inputs.json").read_text())
         split=inputs["declared_split"]
-        gid=inputs["split_group"]
+        gid=(inputs['task']['family'],inputs['task']['seed'])
         if gid in split_by_config and split_by_config[gid]!=split:raise ValueError("trajectory siblings cross split")
         split_by_config[gid]=split
         if split=="test" and not include_test:continue
@@ -62,6 +68,8 @@ def load_data(root,vision=False,include_test=False):
         ih=digest(inputs);out=json.loads((d/"outcomes.json").read_text());geo=json.loads((d/"geometry.json").read_text())
         if out["input_sha256"]!=ih or geo["input_sha256"]!=ih:raise ValueError("stale labels/geometry")
         plans=[PlanIR.from_dict(p) for p in inputs["candidates"]]
+        if not plans or len({p.id for p in plans})!=len(plans):raise ValueError("empty/duplicate plan pool")
+        if len(geo['features'])!=len(plans):raise ValueError("geometry/plan count mismatch")
         for p in plans:audit_program(p,inputs["observation"]["objects"])
         records={p.id:[] for p in plans};paired={}
         for r in out["trials"]:
@@ -75,12 +83,16 @@ def load_data(root,vision=False,include_test=False):
             paired[key]=trial_hash;records[r["candidate_id"]].append(r)
         for rs in records.values():
             if sorted(r["trial"]["repeat"] for r in rs)!=sorted(paired):raise ValueError("missing or duplicate repetitions")
+        if not paired:raise ValueError("empty physical trial set")
         visual=None
         if vision:
+            from .vision import ENCODER
             cache=np.load(d/"visual.npz",allow_pickle=False)
             if str(cache["input_sha256"])!=ih:raise ValueError("stale visual cache")
+            if str(cache["encoder"])!=ENCODER:raise ValueError("incompatible pretrained encoder")
             visual=cache["features"]
-        groups.append(dict(id=inputs["group_id"],split_group=gid,split=split,path=str(d),inputs=inputs,plans=plans,
+            if visual.ndim!=2 or visual.shape[1]!=512 or not np.isfinite(visual).all():raise ValueError("invalid visual features")
+        groups.append(dict(id=inputs["group_id"],split_group=inputs['split_group'],split=split,path=str(d),inputs=inputs,plans=plans,
                     x=np.stack([numeric_features(inputs["observation"],p,g) for p,g in zip(plans,geo["features"])]),
                     geometry=np.asarray(geo["features"],np.float32),
                     y=np.array([np.mean([r["success"] for r in records[p.id]]) for p in plans],np.float32),
@@ -126,13 +138,19 @@ def metrics(groups,scores,k=4):
     for g,s in zip(groups,scores):
         selected=np.argsort(-np.asarray(s),kind="stable")[:k]
         rows.append(dict(group_id=g["id"],split_group=g["split_group"],family=g["inputs"]["task"]["family"],
+                         seed=g["inputs"]["task"]["seed"],informative=bool(g["y"].max()>g["y"].min()),
                          checkpoint=g["inputs"]["checkpoint"],length=len(g["plans"][0].calls),
                          pool_type="all_failure" if g["y"].max()==0 else "all_success" if g["y"].min()==1 else "mixed",
                          **subset_metrics(g["y"],selected,.1),brier=float(np.mean((s-g["y"])**2)),
                          scores=np.asarray(s).tolist(),reference=g["y"].tolist()))
-    return dict(groups=len(rows),hit=float(np.mean([r["hit"] for r in rows if r["hit"] is not None])) if any(r["hit"] is not None for r in rows) else None,
-                feasible=float(np.mean([r["feasible"] for r in rows])),regret=float(np.mean([r["regret"] for r in rows])),
-                brier=float(np.mean([r["brier"] for r in rows])),rows=rows)
+    def clustered_mean(key):
+        clusters={}
+        for row in rows:
+            if row[key] is not None:clusters.setdefault((row['family'],row['seed']),[]).append(row[key])
+        return float(np.mean([np.mean(values) for values in clusters.values()])) if clusters else None
+    return dict(groups=len(rows),configurations=len({(r['family'],r['seed']) for r in rows}),
+                hit=clustered_mean('hit'),feasible=clustered_mean('feasible'),regret=clustered_mean('regret'),
+                brier=clustered_mean('brier'),aggregation="equal configuration weight; checkpoint/geometry-variant siblings clustered by family+seed",rows=rows)
 
 
 def load_model(path,device="cpu"):
@@ -148,13 +166,14 @@ def load_model(path,device="cpu"):
 
 
 def train(args):
+    total_start=time.perf_counter()
     torch.set_num_threads(2);torch.manual_seed(args.seed);np.random.seed(args.seed);random.seed(args.seed)
     vision=args.kind=="vision";groups=load_data(args.data,vision=vision)
     if args.family:groups=[g for g in groups if g["inputs"]["task"]["family"]==args.family]
     if args.few_shot:
         # Fixed first configuration IDs, no outcome-based selection.
-        connector=sorted({g["split_group"] for g in groups if g["split"]=="train" and g["inputs"]["task"]["family"]=="rigid_connector_module"})[:args.few_shot]
-        groups=[g for g in groups if g["split"]!="train" or g["inputs"]["task"]["family"]!="rigid_connector_module" or g["split_group"] in connector]
+        connector=sorted({g['inputs']['task']['seed'] for g in groups if g["split"]=="train" and g["inputs"]["task"]["family"]=="rigid_connector_module"})[:args.few_shot]
+        groups=[g for g in groups if g["split"]!="train" or g["inputs"]["task"]["family"]!="rigid_connector_module" or g['inputs']['task']['seed'] in connector]
     tr=[g for g in groups if g["split"]=="train"];va=[g for g in groups if g["split"]=="val"]
     if not tr or not va:raise ValueError("nonempty train/val required")
     out=Path(args.out);out.mkdir(parents=True,exist_ok=True)
@@ -162,10 +181,15 @@ def train(args):
     dim=tr[0]["x"].shape[1];cfg=ModelConfig(vision=vision)
     model=NumericNet(dim,args.kind) if numeric else PlanValueNet(cfg)
     model=model.to(args.device)
+    if args.initialize:
+        initial,initial_kind,_=load_model(args.initialize,args.device)
+        if args.kind!='mlp' or initial_kind!='mlp':raise ValueError('initial adaptation currently supports numeric MLP only')
+        model.load_state_dict(initial.state_dict())
     if numeric:
         x=torch.as_tensor(np.concatenate([g["x"] for g in tr]),device=args.device)
         y=torch.as_tensor(np.concatenate([g["y"] for g in tr]),device=args.device)
-        model.mean.copy_(x.mean(0));model.std.copy_(x.std(0).clamp_min(.01))
+        if not args.initialize:
+            model.mean.copy_(x.mean(0));model.std.copy_(x.std(0).clamp_min(.01))
         if args.kind in {"residual","prior"}:
             opt=torch.optim.Adam(model.prior.parameters(),lr=.025)
             for _ in range(250):
@@ -177,6 +201,9 @@ def train(args):
                 nn.init.zeros_(model.delta[-1].weight);nn.init.zeros_(model.delta[-1].bias)
     optimizer=torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],lr=.003 if numeric else .0002,weight_decay=.01)
     history=[];best=None;start=time.perf_counter()
+    setup_seconds=start-total_start
+    code_files=('research_learning.py','network.py','encode.py','evaluate.py','vision.py','program_audit.py')
+    code_hash=digest({name:hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in code_files})
     manifest=dict(train=[g["id"] for g in tr],val=[g["id"] for g in va],input_hashes={g["id"]:g["input_sha256"] for g in groups})
     dump(out/"splits.json",manifest)
     for epoch in range(args.epochs):
@@ -204,11 +231,17 @@ def train(args):
             torch.save(dict(schema="twingraph.value.v2",kind=args.kind,dim=dim,model_config=asdict(cfg),
                             state_dict=model.state_dict(),epoch=epoch+1,training=vars(args),split_sha256=digest(manifest),
                             collection_sources=sorted({g['inputs']['source_sha256'] for g in groups}),
+                            training_source_sha256=code_hash,
                             protocol="assembly.program.feedback.v2",validation=val),out/"best.pt")
         dump(out/"history.json",history)
         if epoch%5==0:print(json.dumps(history[-1]),flush=True)
-    dump(out/"summary.json",dict(wall_seconds=time.perf_counter()-start,seed=args.seed,kind=args.kind,
-                                parameters=sum(p.numel() for p in model.parameters()),training_groups=len(tr),validation_groups=len(va)))
+    dump(out/"summary.json",dict(wall_seconds=time.perf_counter()-total_start,optimization_and_validation_seconds=time.perf_counter()-start,
+                                setup_including_prior_seconds=setup_seconds,seed=args.seed,kind=args.kind,training_source_sha256=code_hash,
+                                parameters=sum(p.numel() for p in model.parameters()),training_groups=len(tr),validation_groups=len(va),
+                                training_configurations=len({(g['inputs']['task']['family'],g['inputs']['task']['seed']) for g in tr}),
+                                validation_configurations=len({(g['inputs']['task']['family'],g['inputs']['task']['seed']) for g in va}),
+                                training_label_rollouts=sum(len(g['plans'])*g['repeats'] for g in tr),
+                                validation_label_rollouts=sum(len(g['plans'])*g['repeats'] for g in va)))
 
 
 def main():
@@ -217,6 +250,7 @@ def main():
     p.add_argument("--device",default="cuda");p.add_argument("--seed",type=int,default=17)
     p.add_argument("--epochs",type=int,default=60);p.add_argument("--batch-size",type=int,default=2)
     p.add_argument("--k",type=int,default=4);p.add_argument("--family");p.add_argument("--few-shot",type=int,default=0)
+    p.add_argument('--initialize',help='MLP checkpoint to adapt; retain its input normalization')
     train(p.parse_args())
 
 

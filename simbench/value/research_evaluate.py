@@ -26,6 +26,10 @@ def synchronize(device):
 
 
 def ranking_rows(plans,scores,k):
+    scores=np.asarray(scores)
+    if k<1 or scores.ndim!=1 or len(scores)!=len(plans) or not np.isfinite(scores).all():
+        raise ValueError("invalid top-k scores or cardinality")
+    if len({p.id for p in plans})!=len(plans):raise ValueError("duplicate candidate ids")
     order=np.argsort(-np.asarray(scores),kind="stable")
     rows=[dict(candidate_id=plans[i].id,score=float(scores[i]),plan=plans[i].to_dict()) for i in order]
     return dict(ranked=rows,top_k=rows[:k],requested_k=k,returned_k=min(k,len(rows)))

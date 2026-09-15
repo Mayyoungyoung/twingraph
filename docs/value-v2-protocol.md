@@ -82,6 +82,17 @@ The direct Transformer is trained independently with and without frozen
 ImageNet ResNet18 features; direct inference skips the untrained prefix head.
 All model selection uses train/validation only. Fixed v1 weights are never
 updated in zero-shot evaluation. Few-shot uses a fixed count of train configs.
+Its two target seeds are chosen by numerical seed order, with all their
+checkpoints/geometry variants kept together. Adaptation starts from the pin-only
+MLP, retains its input normalization, and trains with source data plus those two
+target configurations. Target validation labels are additional cost, reported
+separately; "two-shot" never means only two target configurations were labeled.
+
+Primary online comparisons use seed 17 models. MLP/residual seeds 29 and 43
+measure training variability offline. Additional budget/scale runs select one
+primary model using validation Hit@4, Regret@4, parameter count, then Brier;
+they do not choose a winner using locked-test results. Main and curve run sets
+are separate statistical cells, even when configuration/budget overlap.
 
 ## Reporting
 
