@@ -50,27 +50,43 @@ def main():
     fig.savefig(out/'locked_ranking.png',dpi=180);fig.savefig(out/'locked_ranking.svg');plt.close(fig)
     if a.offline_only:
         print(json.dumps(dict(offline_rows=len(rows),plots=str(out))));return
-    fig,axes=plt.subplots(1,2,figsize=(11,4.5),layout='constrained')
-    for axis,family in zip(axes,['sliding_stage_pin','rigid_connector_module']):
+    methods=['random','geometry','prior','mlp','residual','no_vision','vision','v1_fixed','exhaustive']
+    display=['Random','Geometry','Fitted geo prior','MLP','Geo + residual','Plan Transformer','Vision + plan','Frozen v1','Full pool (B=32)']
+    fig,axes=plt.subplots(2,2,figsize=(13,10))
+    for row,family in enumerate(['sliding_stage_pin','rigid_connector_module']):
         selected=[r for r in online if r['runset']=='online' and r['family']==family]
-        for r in selected:
-            axis.scatter(r['median_seconds'],100*r['success'],marker='o' if r['protocol']=='first_verified' else 's',s=40)
-            axis.annotate(r['method']+(' A' if r['protocol']=='first_verified' else ' B'),(r['median_seconds'],100*r['success']),fontsize=7,xytext=(3,4),textcoords='offset points')
-        axis.set_xlabel('Measured median decision time (s)');axis.set_ylabel('Independent deployment success (%)');axis.set_ylim(-3,110);axis.set_title(family.replace('_',' '));axis.grid(alpha=.2)
-    fig.suptitle('Actual execution: A = first verified, B = best within budget (3 configurations/family)')
+        y=np.arange(len(methods));width=.36
+        for offset,protocol,label in [(-.5,'first_verified','A: first verified'),(.5,'best_within_budget','B: compare within budget')]:
+            records={r['method']:r for r in selected if r['protocol']==protocol}
+            axes[row,0].barh(y+offset*width,[records[m]['median_seconds'] if m in records else np.nan for m in methods],width,label=label)
+            axes[row,1].barh(y+offset*width,[100*records[m]['success'] if m in records else np.nan for m in methods],width,label=label)
+        for col,axis in enumerate(axes[row]):
+            axis.set_yticks(y,display if col==0 else ['']*len(display));axis.invert_yaxis();axis.grid(axis='x',alpha=.15);axis.set_axisbelow(True)
+            axis.set_title(family.replace('_',' '));axis.set_xlabel('Measured median decision time (s)' if col==0 else 'Independent deployment success (%)')
+        axes[row,1].set_xlim(0,105)
+    handles,labels=axes[0,0].get_legend_handles_labels()
+    fig.legend(handles,labels,loc='upper center',bbox_to_anchor=(.5,.965),ncol=2,frameon=False)
+    fig.suptitle('Actual simulation execution: N=16, r=2, B=8 (full pool B=32); 3 configurations/family',fontsize=12,y=.995)
+    fig.subplots_adjust(left=.15,right=.98,bottom=.06,top=.90,hspace=.25,wspace=.10)
     fig.savefig(out/'execution_cost.png',dpi=180);fig.savefig(out/'execution_cost.svg');plt.close(fig)
     curve=[r for r in online if r['runset'] in {'online_budget','online_scale'} and r['family']!='all']
     if curve:
-        fig,axes=plt.subplots(1,2,figsize=(10,4),layout='constrained')
+        fig,axes=plt.subplots(2,2,figsize=(11,8),layout='constrained')
         for family in sorted({r['family'] for r in curve}):
             for method in sorted({r['method'] for r in curve}):
+                label=family.split('_')[0]+' / '+method
                 selected=sorted([r for r in curve if r['family']==family and r['method']==method and r['runset']=='online_budget'],key=lambda r:r['budget'])
-                axes[0].plot([r['budget'] for r in selected],[100*r['success'] for r in selected],'o-',label=family.split('_')[0]+' / '+method)
+                axes[0,0].plot([r['budget'] for r in selected],[100*r['success'] for r in selected],'o-',label=label)
+                axes[0,1].plot([r['budget'] for r in selected],[r['selected_regret'] for r in selected],'o-',label=label)
+                axes[1,0].plot([r['mean_seconds'] for r in selected],[100*r['success'] for r in selected],'o-',label=label)
                 selected=sorted([r for r in curve if r['family']==family and r['method']==method and r['runset']=='online_scale'],key=lambda r:r['n'])
-                axes[1].plot([r['n'] for r in selected],[r['median_seconds'] for r in selected],'o-',label=family.split('_')[0]+' / '+method)
-        axes[0].set(xlabel='Physical rollout budget B',ylabel='Independent deployment success (%)',ylim=(-3,105));axes[1].set(xlabel='Nested candidate pool N',ylabel='Measured median decision time (s)')
-        for axis in axes:axis.legend(fontsize=7);axis.grid(alpha=.2)
-        fig.suptitle('Exploratory curves: tiny configuration counts; no 32/64-pool reference regret claim')
+                axes[1,1].plot([r['n'] for r in selected],[r['median_seconds'] for r in selected],'o-',label=label)
+        axes[0,0].set(xlabel='Physical rollout budget B',ylabel='Independent deployment success (%)',ylim=(-3,105))
+        axes[0,1].set(xlabel='Physical rollout budget B',ylabel='Selected-plan reference regret',ylim=(-.03,1.05))
+        axes[1,0].set(xlabel='Mean measured decision time (s)',ylabel='Independent deployment success (%)',ylim=(-3,105))
+        axes[1,1].set(xlabel='Nested candidate pool N (K=4, B=8)',ylabel='Measured decision time (s)')
+        for axis in axes.flat:axis.legend(fontsize=7);axis.grid(alpha=.2)
+        fig.suptitle('Budget: 3 configurations/family. Scale: 1/family. Reference quality uses 2 independent repeats.',fontsize=11)
         fig.savefig(out/'budget_scale.png',dpi=180);fig.savefig(out/'budget_scale.svg');plt.close(fig)
     print(json.dumps(dict(offline_rows=len(rows),plots=str(out))))
 

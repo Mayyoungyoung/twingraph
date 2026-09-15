@@ -43,9 +43,8 @@ def main():
                   split_unit='family + seed, with all checkpoints and wide/compact variants together',
                   reference='two paired independent reference-domain perturbations per candidate; coarse empirical rates')
     (out/'manifest.json').write_text(json.dumps(manifest,indent=2))
-    code=[]
-    for directory in ('simbench','scripts'):
-        code.extend(f for f in Path(directory).rglob('*') if f.suffix in {'.py','.sh'} and '__pycache__' not in f.parts)
+    code=[f for f in Path('simbench').rglob('*') if f.is_file() and '__pycache__' not in f.parts and f.suffix not in {'.pyc','.log'}]
+    code.extend(f for f in Path('scripts').rglob('*') if f.suffix in {'.py','.sh'} and '__pycache__' not in f.parts)
     code.extend(Path(f) for f in ('docs/value-v2-protocol.md','RELATED_WORK_DELTA.md'))
     with tarfile.open(out/'two_family_v2_source.tar.gz','w:gz') as archive:
         for f in sorted(code):archive.add(f,arcname=f)
