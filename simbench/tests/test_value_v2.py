@@ -72,3 +72,32 @@ def test_object_renaming_preserves_input():
     renamed=rename(obs);renamed["objects"][new]=renamed["objects"].pop(old)
     after=encode_plan(renamed,PlanIR.from_dict(rename(p.to_dict())))
     for key in before:np.testing.assert_array_equal(before[key],after[key])
+
+
+def test_direct_fast_path_matches_full_network():
+    import torch
+    from simbench.tests.test_plan_value import model
+    from simbench.value.encode import collate
+    obs,plan=example();net=model();net.eval();batch=collate([encode_plan(obs,plan)])
+    with torch.no_grad():
+        torch.testing.assert_close(net(batch)["direct_logit"],net(batch,direct_only=True)["direct_logit"])
+
+
+def test_candidate_reordering_preserves_individual_scores():
+    import torch
+    from simbench.tests.test_plan_value import model
+    from simbench.value.encode import collate
+    obs,p=example();q=copy.deepcopy(p)
+    q.calls[-1].arguments["target"].value=[.2,.1,.3]
+    a,b=encode_plan(obs,p),encode_plan(obs,q)
+    net=model().eval()
+    with torch.no_grad():
+        before=net(collate([a,b]),direct_only=True)["direct_logit"]
+        after=net(collate([b,a]),direct_only=True)["direct_logit"]
+    torch.testing.assert_close(before,after.flip(0))
+    assert not np.array_equal(a["numbers"],b["numbers"])
+
+
+def test_unknown_validation_mode_and_fraction():
+    with pytest.raises(ValueError):select_and_validate(ranking(),lambda p:True,3,mode="implicit")
+    with pytest.raises(ValueError):select_and_validate(ranking(),lambda p:True,3,accept_rate=0)

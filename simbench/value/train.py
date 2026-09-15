@@ -33,7 +33,7 @@ def main():
     p.add_argument("--lr", type=float, default=2e-4)
     p.add_argument("--keep-weight", type=float, default=0.2)
     p.add_argument("--warmup-epochs", type=int, default=10)
-    p.add_argument("--objective", choices=["dual", "direct"], default="dual")
+    p.add_argument("--objective", choices=["dual", "direct"], default="direct")
     p.add_argument("--no-vision", action="store_true")
     a = p.parse_args()
     if min(a.epochs, a.batch_groups, a.k) < 1:

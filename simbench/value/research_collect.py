@@ -1,5 +1,6 @@
 """Resumable v2 physical collection; all-success/all-failure groups survive."""
 import argparse
+import hashlib
 import contextlib
 import concurrent.futures
 from dataclasses import asdict
@@ -13,6 +14,15 @@ from .research_scenarios import *
 from .physical import PhysicalRunner,perturbation
 from .plan import execute_calls
 from .collect import dump,source_hash
+
+
+def collection_source_hash():
+    root=Path(__file__).resolve().parents[1]
+    files=[root/"value"/n for n in ("research_scenarios.py","research_collect.py","physical.py","plan.py","scenarios.py","collect.py")]
+    files+=list((root/"assembly").glob("*.py"))+list((root/"core").glob("*.py"))
+    h=hashlib.sha256()
+    for f in sorted(files):h.update(f.relative_to(root).as_posix().encode());h.update(f.read_bytes())
+    return h.hexdigest()
 
 
 def collect_one(family,seed,out,n=16,repeats=2,domain="train",split="train",checkpoint=0,render=True):
@@ -44,7 +54,7 @@ def collect_one(family,seed,out,n=16,repeats=2,domain="train",split="train",chec
         inputs=dict(schema="twingraph.group.v2",group_id=spec.config_id+f"_cp{checkpoint}",split_group=spec.config_id,
                     declared_split=split,protocol=PROGRAM_PROTOCOL,task=asdict(spec),checkpoint=checkpoint,
                     checkpoint_trace=checkpoint_trace,observation=obs,images=images,candidates=[p.to_dict() for p in plans],
-                    pool_counts=counts,render_seconds=rendering,source_sha256=source_hash(),snapshot_sha256=runner.initial)
+                    pool_counts=counts,render_seconds=rendering,source_sha256=collection_source_hash(),snapshot_sha256=runner.initial)
         ih=digest(inputs);dump(directory/"inputs.json",inputs)
         np.savez_compressed(directory/"initial_physics.npz",**runner.snapshot["physics"]["data"])
         # Rule labels are optional pre-rollout features, stored separately from model inputs.
