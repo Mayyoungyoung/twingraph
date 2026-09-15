@@ -17,7 +17,9 @@ def reference_groups(root):
         if any(t['trial']['domain']!='reference' or not t['valid'] for t in trials):
             raise ValueError('reference domain/validity mismatch')
         rates={p['id']:np.mean([t['success'] for t in trials if t['candidate_id']==p['id']]) for p in inputs['candidates']}
-        result[key]=(inputs,rates)
+        times={p['id']:[t['sim_seconds'] for t in trials if t['candidate_id']==p['id'] and t['success']] for p in inputs['candidates']}
+        costs={pid:float(np.mean(values)) if values else None for pid,values in times.items()}
+        result[key]=(inputs,rates,costs)
     return result
 
 
@@ -25,7 +27,7 @@ def reference_quality(record,inputs,reference):
     """Called only after physical deployment; no reference used to choose plans."""
     key=(record['task']['family'],record['task']['seed'],record['task'].get('checkpoint',0))
     if key not in reference:return {}
-    ref,rates=reference[key]
+    ref,rates,costs=reference[key]
     plans=inputs['candidates']
     if {p['id'] for p in plans}!=set(rates):return {}  # larger pools lack exhaustive labels
     ref_plans={p['id']:p for p in ref['candidates']}
@@ -36,10 +38,15 @@ def reference_quality(record,inputs,reference):
     best=float(max(rates.values()));selected=record['selection']
     top=max((rates[p['candidate_id']] for p in selected['top_k']),default=0.)
     chosen=float(rates[selected['chosen']['id']]) if selected['chosen'] else 0.
+    best_cost=min((costs[pid] for pid,rate in rates.items() if best>0 and rate>=best-.1 and costs[pid] is not None),default=None)
+    chosen_cost=costs[selected['chosen']['id']] if selected['chosen'] else None
+    time_regret=chosen_cost-best_cost if best_cost is not None and chosen_cost is not None and chosen>=best-.1 else None
     return dict(reference_repeats=2,pool_type='all_failure' if best==0 else 'all_success' if min(rates.values())==1 else 'mixed',
                 pool_best_reference=best,near_optimal_hit_at_k=float(top>=best-.1) if best>0 else None,
                 feasible_hit_at_k=float(top>0),regret_at_k=best-top,
-                selected_reference=chosen,selected_regret=best-chosen)
+                selected_reference=chosen,selected_regret=best-chosen,
+                pool_near_best_reference_sim_seconds=best_cost,selected_reference_sim_seconds=chosen_cost,
+                selected_secondary_time_regret_seconds=time_regret)
 
 
 def mean_cluster(rows,key):
@@ -62,7 +69,7 @@ def summarize(rows):
                          success=mean_cluster(chosen,'independent_execution_success'),
                          mean_seconds=float(times.mean()),median_seconds=float(np.median(times)),p95_seconds=float(np.quantile(times,.95)),
                          mean_rollouts=mean_cluster(chosen,'rollouts'),exhausted=mean_cluster(chosen,'budget_exhausted'))
-            for key in ('near_optimal_hit_at_k','feasible_hit_at_k','regret_at_k','selected_regret'):
+            for key in ('near_optimal_hit_at_k','feasible_hit_at_k','regret_at_k','selected_regret','selected_secondary_time_regret_seconds','deployment_successful_sim_seconds'):
                 summary[key]=mean_cluster(chosen,key)
             summaries.append(summary)
     return summaries
@@ -100,10 +107,11 @@ def main():
         r=json.loads(f.read_text());q=r['selection'];t=r['timing'];runset=f.relative_to(root).parts[0]
         inputs=json.loads((f.parent/'inputs.json').read_text())
         row=dict(artifact=str(f),runset=runset,family=r['task']['family'],seed=r['task']['seed'],checkpoint=r['task'].get('checkpoint',0),
-                 method=r['method'],checkpoint_sha256=r['checkpoint_sha256'],input_sha256=r['input_sha256'],protocol=q['mode'],
+                 method=r['method'],checkpoint_sha256=r['checkpoint_sha256'],implementation_sha256=r['request']['implementation_sha256'],input_sha256=r['input_sha256'],protocol=q['mode'],
                  n=r['pool_counts']['materializable'],k=q['k'],budget=q['budget'],repeats=q['repeats'],accept_rate=q['accept_rate'],allow_expand=q['allow_expand'],
                  independent_execution_success=r['execution_success_rate'],deployment_rollouts=len(r['deployment']),
                  deployment_physics_steps=sum(d['physics_steps'] for d in r['deployment']),decision_seconds=t['decision_wall_seconds'],
+                 deployment_successful_sim_seconds=float(np.mean([d['sim_seconds'] for d in r['deployment'] if d['success']])) if any(d['success'] for d in r['deployment']) else None,
                  scene_setup_seconds=t['scene_setup_seconds'],model_cold_seconds=r['model_cold_start_seconds'],visual_cold_seconds=r['cold_visual_seconds'],
                  candidate_generation_seconds=t['candidate_generation_seconds'],necessary_geometry_seconds=t['necessary_geometry_seconds'],
                  optional_geometry_seconds=t['optional_geometry_seconds'],render_seconds=t['render_seconds'],visual_encoding_seconds=t['visual_encoding_seconds'],
@@ -113,6 +121,7 @@ def main():
                  later_parameter_solving_seconds_subset=t.get('later_parameter_solving_seconds_subset_of_rollout'),
                  rollouts=q['validation_calls'],unique_candidates=q['unique_candidates'],physics_steps=r['physics_steps'],
                  timeouts=sum(d.get('timeout',False) for d in q['validated']),
+                 deployment_timeouts=sum(d.get('timeout',False) for d in r['deployment']),
                  budget_exhausted=int(q['budget_exhausted']),budget_fully_spent=int(q['budget_fully_spent']),accepted=int(q['chosen'] is not None),
                  **reference_quality(r,inputs,refs))
         identity=tuple(row[k] for k in ('runset','family','seed','checkpoint','method','protocol','n','k','budget','repeats'))

@@ -6,6 +6,7 @@ from pathlib import Path
 import platform
 import shutil
 import subprocess
+import sys
 import tarfile
 import time
 
@@ -16,6 +17,21 @@ def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',default='results/value_v2');p.add_argument('--out',default='results/value_v2/release');p.add_argument('--code-commit',required=True);a=p.parse_args()
     root=Path(a.root);out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
+    # Run release checks after the timed physical studies have finished. A failed
+    # check blocks packaging; unchanged code can resume without repeating tests.
+    test_files=sorted(f for f in Path('simbench').rglob('*') if f.is_file() and '__pycache__' not in f.parts and f.suffix not in {'.pyc','.log'})
+    test_signature=hashlib.sha256(json.dumps({str(f):sha(f) for f in test_files},sort_keys=True).encode()).hexdigest()
+    test_marker=root/'regression/final_tests_manifest.json';test_log=test_marker.with_name('final_tests.txt')
+    if not test_marker.exists() or json.loads(test_marker.read_text()).get('source_sha256')!=test_signature:
+        test_marker.parent.mkdir(parents=True,exist_ok=True)
+        with test_log.open('w') as log:
+            subprocess.run([sys.executable,'-m','pytest','simbench/tests','-q'],stdout=log,stderr=subprocess.STDOUT,check=True)
+        test_marker.write_text(json.dumps(dict(source_sha256=test_signature,status='passed'),indent=2))
+    if not (root/'cold_start.json').exists():
+        subprocess.run([sys.executable,'scripts/benchmark_value_v2_cold.py','--models',str(root/'models/online_models.json'),
+                        '--out',str(root/'cold_start.json')],check=True)
+    shutil.copy2(root/'cold_start.json',out/'cold_start.json')
+    shutil.copy2(test_log,out/'tests.txt')
     data=root/'data';files=[];groups=[];raw_trials=0;used_trials=0;wall=0.;steps=0
     for f in sorted(data.glob('group_*/complete.json')):
         d=f.parent;complete=json.loads(f.read_text());inputs=json.loads((d/'inputs.json').read_text());trials=json.loads((d/'outcomes.json').read_text())['trials']
