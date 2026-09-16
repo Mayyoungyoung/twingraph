@@ -6,3 +6,6 @@
 /datasets/value/*.json text eol=lf
 /datasets/value/*.md text eol=lf
 /models/value/*.md text eol=lf
+# Immutable v4 evidence and checkpoint sidecars retain their published bytes.
+/docs/evidence/value_v4/** -text
+/models/value/v4/** -text

@@ -199,6 +199,26 @@ def styling():
 
 
 def save(figure, out, stem, plt):
+    # Final panel widths are known only after subplots_adjust. Reserve measured
+    # text width inside each x-axis without changing any plotted data value.
+    figure.canvas.draw()
+    renderer = figure.canvas.get_renderer()
+    for axis in figure.axes:
+        bounds = axis.get_window_extent(renderer)
+        left, right = axis.get_xlim()
+        required = right
+        for label in axis.texts:
+            if label.get_gid() != "value_numeric_label":
+                continue
+            anchor = label.xy[0]
+            anchor_pixel = axis.transData.transform((anchor, label.xy[1]))[0]
+            patch = label.get_bbox_patch()
+            extent = patch.get_window_extent(renderer) if patch is not None else label.get_window_extent(renderer)
+            reserve = (extent.x1 - anchor_pixel + 6) / bounds.width
+            if reserve >= 1:
+                raise ValueError("numeric annotation is wider than its plotting panel")
+            required = max(required, left + (anchor - left) / (1 - reserve))
+        axis.set_xlim(left, required)
     paths = []
     for extension in ("png", "svg"):
         path = out / f"{stem}.{extension}"
@@ -215,6 +235,7 @@ def empty_axis(axis, text):
 
 def horizontal(axis, rows, key, *, fraction=False, seed_key=None, annotations=None):
     from matplotlib.ticker import PercentFormatter
+    anchors = []
     for i, row in enumerate(rows):
         value = row.get(key)
         if value is None:
@@ -222,13 +243,18 @@ def horizontal(axis, rows, key, *, fraction=False, seed_key=None, annotations=No
             continue
         axis.barh(i, value, height=.60, color=row.get("color", COLORS["selected"]), alpha=.86,
                   edgecolor="white", linewidth=.7, zorder=2)
+        seeds = [x for x in row.get(seed_key, []) if x is not None] if seed_key else []
         if seed_key:
-            seeds = [x for x in row.get(seed_key, []) if x is not None]
             offsets = [0.] if len(seeds) == 1 else [(.16 * j / (len(seeds) - 1) - .08) for j in range(len(seeds))]
             axis.scatter(seeds, [i + y for y in offsets], marker="o", s=22, facecolor="white",
                          edgecolor="#25374C", linewidth=.8, zorder=4)
         label = annotations[i] if annotations is not None else f"{100 * value:.1f}%" if fraction else f"{value:.2f}"
-        axis.annotate(label, xy=(value, i), xytext=(5, 0), textcoords="offset points", va="center", fontsize=9)
+        anchor = max([value, *seeds])
+        anchors.append(anchor)
+        annotation = axis.annotate(label, xy=(anchor, i), xytext=(8, 0), textcoords="offset points",
+                                   va="center", fontsize=9, zorder=5,
+                                   bbox=dict(facecolor="white", edgecolor="none", alpha=.96, pad=.6))
+        annotation.set_gid("value_numeric_label")
     axis.set_yticks(range(len(rows)), [r["label"] for r in rows])
     # A fixed limit is idempotent when two panels share their y-axis.
     axis.set_ylim(len(rows) - .6, -.6)
@@ -240,8 +266,7 @@ def horizontal(axis, rows, key, *, fraction=False, seed_key=None, annotations=No
         axis.set_xticks([0, .25, .5, .75, 1.])
         axis.xaxis.set_major_formatter(PercentFormatter(1.))
     else:
-        maxima = [r[key] for r in rows if r.get(key) is not None]
-        axis.set_xlim(0, max(maxima, default=1.) * 1.30 or 1.)
+        axis.set_xlim(0, max(anchors, default=1.) * 1.30 or 1.)
 
 
 def plot_ranking(data, out, plt):
@@ -294,6 +319,7 @@ def plot_timing(data, out, plt):
     figure.text(.02, .045,
         "Complete module = graph construction + integrity checks + encoding + inference + export.\n"
         f"Timing repetitions/group: {repeat_text}. Saved medians aggregate repeated timing within checkpoints, then configurations.\n"
+        "Model comparators use fixed representative seed 29 plus the frozen selected policy; all 12 models remain in module_timing.json.\n"
         "Timing repetitions and model seeds do not increase the configuration count. No confidence intervals or rollout-time estimates are shown.",
         fontsize=8.5, color="#475569", linespacing=1.45)
     figure.subplots_adjust(left=.25, right=.97, top=.90, bottom=.20, wspace=.30)
