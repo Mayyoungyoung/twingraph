@@ -1,0 +1,341 @@
+{
+  "schema": "twingraph.planner_record.v5",
+  "task_text": "从供料位置抓取并装配滑台的滑块、端挡、左右定位销和手柄。全部零件应装到目标位姿，释放后稳定，机器人退出。",
+  "source": "llm_proxy",
+  "provider": "OpenAI",
+  "model": "Codex assistant in this task",
+  "prompt": {
+    "task": "从供料位置抓取并装配滑台的滑块、端挡、左右定位销和手柄。全部零件应装到目标位姿，释放后稳定，机器人退出。",
+    "constraints": [
+      "滑块从导轨左端沿导轨插入后，才可安装封闭入口的端挡。",
+      "两枚定位销依赖端挡就位，两者安装顺序可以互换。",
+      "两枚定位销均就位后安装手柄；本次终验包含五部件位姿与释放，不包含滑动行程试验。",
+      "仅从已注册技能及反馈检查接口组成程序，具体抓取、关节轨迹和接触参数由任务编译器和现有求解器实例化。"
+    ],
+    "skill_catalog": {
+      "public_skills": {
+        "detect": {
+          "label": "检测",
+          "kind": "information",
+          "inputs": "观测范围",
+          "outputs": "对象及观测",
+          "description": "发现场景中的对象"
+        },
+        "estimate_pose": {
+          "label": "物体位姿估计",
+          "kind": "information",
+          "inputs": "对象观测",
+          "outputs": "物体位姿及不确定性",
+          "description": "估计物体在哪里、朝向如何"
+        },
+        "estimate_grasp": {
+          "label": "抓取位姿估计",
+          "kind": "information",
+          "inputs": "物体位姿、几何",
+          "outputs": "多个抓取候选",
+          "description": "给出夹爪应放在哪里、开多大"
+        },
+        "plan_path": {
+          "label": "路径规划",
+          "kind": "information",
+          "inputs": "起点、目标、约束",
+          "outputs": "路径候选或接触运动参数",
+          "description": "生成运动参数，不移动机器人"
+        },
+        "move": {
+          "label": "移动",
+          "kind": "execution",
+          "inputs": "目标/位移/路径、持物对象及约束",
+          "outputs": "到达误差、抓持状态",
+          "description": "移动末端或持物；所有方向和搬运共用一个节点"
+        },
+        "grasp": {
+          "label": "抓取",
+          "kind": "execution",
+          "inputs": "对象、夹持力",
+          "outputs": "双侧稳定抓持",
+          "description": "在已有抓取姿态处闭爪并建立抓持，不包含搬运"
+        },
+        "place": {
+          "label": "放置",
+          "kind": "execution",
+          "inputs": "持物对象、支撑目标及容差",
+          "outputs": "释放且位置稳定",
+          "description": "在已有支撑位置释放并检查落稳，不包含远距离移动"
+        },
+        "insert": {
+          "label": "插入",
+          "kind": "execution",
+          "inputs": "配合对象、插入参数、策略",
+          "outputs": "插入深度/误差/接触状态",
+          "description": "沿配合约束插入，可选反馈或学习策略"
+        },
+        "press": {
+          "label": "压靠",
+          "kind": "execution",
+          "inputs": "对象、压靠高度、力阈值",
+          "outputs": "接触力与压靠误差",
+          "description": "建立指定压靠接触；需要接触和高度同时满足"
+        },
+        "wipe": {
+          "label": "擦拭",
+          "kind": "execution",
+          "inputs": "擦拭工具、表面路径、接触力与策略",
+          "outputs": "实际接触覆盖率、力与跟踪误差",
+          "description": "沿学习的覆盖轨迹保持表面接触；当前模拟擦拭，不模拟磨料去除"
+        }
+      },
+      "parameter_dispatch": {
+        "detect": {
+          "scene": "observe_parts"
+        },
+        "estimate_grasp": {
+          "generate": "propose_grasps"
+        },
+        "plan_path": {
+          "joint": "plan_transfer",
+          "cartesian": "plan_linear",
+          "contact": "plan_insertion",
+          "recovery": "plan_recovery",
+          "surface": "plan_wipe"
+        },
+        "move": {
+          "joint_path": "execute_joint_path",
+          "cartesian_path": "execute_cartesian_path",
+          "lift": "lift",
+          "lower": "lower",
+          "home": "home",
+          "retreat": "retreat",
+          "approach": "approach",
+          "orient": "orient_wrist",
+          "align": "align_axis",
+          "guarded": "guarded_descent",
+          "retract": "retract_contact",
+          "constrained": "move_constrained",
+          "target": "move_to"
+        },
+        "grasp": {
+          "close": "close_gripper"
+        },
+        "place": {
+          "release": "place_object"
+        },
+        "insert": {
+          "axis": "slide_insert",
+          "spiral": "spiral_search",
+          "learned": "learned_insert"
+        },
+        "press": {
+          "seat": "press_seat"
+        },
+        "wipe": {
+          "learned": "wipe_surface"
+        }
+      },
+      "feedback_and_acceptance_utilities": {
+        "measure": {
+          "value": "measure_value"
+        },
+        "inspect": {
+          "pose": "inspect_seat",
+          "grasp": "verify_grasp",
+          "stroke": "verify_stroke",
+          "measurement": "inspect_measurement"
+        }
+      }
+    },
+    "requested_output": "给出完整合法零件顺序和技能骨架，供编译器实例化12个候选，不生成虚构执行结果。"
+  },
+  "proposed_orders": [
+    [
+      "carriage",
+      "end_stop",
+      "pin_left",
+      "pin_right",
+      "handle"
+    ],
+    [
+      "carriage",
+      "end_stop",
+      "pin_right",
+      "pin_left",
+      "handle"
+    ]
+  ],
+  "proposed_skill_programs": {
+    "common_pick": [
+      "detect",
+      "estimate_pose",
+      "estimate_grasp",
+      "plan_path(joint)",
+      "move(joint_path)",
+      "move(approach)",
+      "grasp",
+      "inspect(grasp)",
+      "move(lift)"
+    ],
+    "carriage": [
+      "plan_path(joint)",
+      "move(joint_path)",
+      "move(lower)",
+      "move(align)",
+      "plan_path(contact)",
+      "insert(axis)",
+      "press",
+      "place",
+      "move(retreat)",
+      "inspect(pose)"
+    ],
+    "remaining_parts": [
+      "plan_path(joint)",
+      "move(joint_path)",
+      "move(align)",
+      "move(guarded)",
+      "press",
+      "place",
+      "move(retreat)",
+      "inspect(pose)"
+    ],
+    "terminal": [
+      "inspect(pose) for each of the five parts",
+      "move(home)"
+    ]
+  },
+  "raw_response": "{\n  \"proposed_orders\": [\n    [\n      \"carriage\",\n      \"end_stop\",\n      \"pin_left\",\n      \"pin_right\",\n      \"handle\"\n    ],\n    [\n      \"carriage\",\n      \"end_stop\",\n      \"pin_right\",\n      \"pin_left\",\n      \"handle\"\n    ]\n  ],\n  \"symbolic_recipe\": {\n    \"common_pick\": [\n      \"detect\",\n      \"estimate_pose\",\n      \"estimate_grasp\",\n      \"plan_path(joint)\",\n      \"move(joint_path)\",\n      \"move(approach)\",\n      \"grasp\",\n      \"inspect(grasp)\",\n      \"move(lift)\"\n    ],\n    \"carriage\": [\n      \"plan_path(joint)\",\n      \"move(joint_path)\",\n      \"move(lower)\",\n      \"move(align)\",\n      \"plan_path(contact)\",\n      \"insert(axis)\",\n      \"press\",\n      \"place\",\n      \"move(retreat)\",\n      \"inspect(pose)\"\n    ],\n    \"remaining_parts\": [\n      \"plan_path(joint)\",\n      \"move(joint_path)\",\n      \"move(align)\",\n      \"move(guarded)\",\n      \"press\",\n      \"place\",\n      \"move(retreat)\",\n      \"inspect(pose)\"\n    ],\n    \"terminal\": [\n      \"inspect(pose) for each of the five parts\",\n      \"move(home)\"\n    ]\n  },\n  \"instantiation\": \"在两个合法零件顺序上，由任务编译器和几何求解器生成共12个不同的可执行候选。先验碰撞与可达性检查不读取执行标签；保存每个候选的全部参数和已规划轨迹。\"\n}",
+  "skill_catalog": {
+    "public_skills": {
+      "detect": {
+        "label": "检测",
+        "kind": "information",
+        "inputs": "观测范围",
+        "outputs": "对象及观测",
+        "description": "发现场景中的对象"
+      },
+      "estimate_pose": {
+        "label": "物体位姿估计",
+        "kind": "information",
+        "inputs": "对象观测",
+        "outputs": "物体位姿及不确定性",
+        "description": "估计物体在哪里、朝向如何"
+      },
+      "estimate_grasp": {
+        "label": "抓取位姿估计",
+        "kind": "information",
+        "inputs": "物体位姿、几何",
+        "outputs": "多个抓取候选",
+        "description": "给出夹爪应放在哪里、开多大"
+      },
+      "plan_path": {
+        "label": "路径规划",
+        "kind": "information",
+        "inputs": "起点、目标、约束",
+        "outputs": "路径候选或接触运动参数",
+        "description": "生成运动参数，不移动机器人"
+      },
+      "move": {
+        "label": "移动",
+        "kind": "execution",
+        "inputs": "目标/位移/路径、持物对象及约束",
+        "outputs": "到达误差、抓持状态",
+        "description": "移动末端或持物；所有方向和搬运共用一个节点"
+      },
+      "grasp": {
+        "label": "抓取",
+        "kind": "execution",
+        "inputs": "对象、夹持力",
+        "outputs": "双侧稳定抓持",
+        "description": "在已有抓取姿态处闭爪并建立抓持，不包含搬运"
+      },
+      "place": {
+        "label": "放置",
+        "kind": "execution",
+        "inputs": "持物对象、支撑目标及容差",
+        "outputs": "释放且位置稳定",
+        "description": "在已有支撑位置释放并检查落稳，不包含远距离移动"
+      },
+      "insert": {
+        "label": "插入",
+        "kind": "execution",
+        "inputs": "配合对象、插入参数、策略",
+        "outputs": "插入深度/误差/接触状态",
+        "description": "沿配合约束插入，可选反馈或学习策略"
+      },
+      "press": {
+        "label": "压靠",
+        "kind": "execution",
+        "inputs": "对象、压靠高度、力阈值",
+        "outputs": "接触力与压靠误差",
+        "description": "建立指定压靠接触；需要接触和高度同时满足"
+      },
+      "wipe": {
+        "label": "擦拭",
+        "kind": "execution",
+        "inputs": "擦拭工具、表面路径、接触力与策略",
+        "outputs": "实际接触覆盖率、力与跟踪误差",
+        "description": "沿学习的覆盖轨迹保持表面接触；当前模拟擦拭，不模拟磨料去除"
+      }
+    },
+    "parameter_dispatch": {
+      "detect": {
+        "scene": "observe_parts"
+      },
+      "estimate_grasp": {
+        "generate": "propose_grasps"
+      },
+      "plan_path": {
+        "joint": "plan_transfer",
+        "cartesian": "plan_linear",
+        "contact": "plan_insertion",
+        "recovery": "plan_recovery",
+        "surface": "plan_wipe"
+      },
+      "move": {
+        "joint_path": "execute_joint_path",
+        "cartesian_path": "execute_cartesian_path",
+        "lift": "lift",
+        "lower": "lower",
+        "home": "home",
+        "retreat": "retreat",
+        "approach": "approach",
+        "orient": "orient_wrist",
+        "align": "align_axis",
+        "guarded": "guarded_descent",
+        "retract": "retract_contact",
+        "constrained": "move_constrained",
+        "target": "move_to"
+      },
+      "grasp": {
+        "close": "close_gripper"
+      },
+      "place": {
+        "release": "place_object"
+      },
+      "insert": {
+        "axis": "slide_insert",
+        "spiral": "spiral_search",
+        "learned": "learned_insert"
+      },
+      "press": {
+        "seat": "press_seat"
+      },
+      "wipe": {
+        "learned": "wipe_surface"
+      }
+    },
+    "feedback_and_acceptance_utilities": {
+      "measure": {
+        "value": "measure_value"
+      },
+      "inspect": {
+        "pose": "inspect_seat",
+        "grasp": "verify_grasp",
+        "stroke": "verify_stroke",
+        "measurement": "inspect_measurement"
+      }
+    }
+  },
+  "skill_catalog_sha256": "ada43faac801e21afba03189dad3171985f13d6ff51ab7f03396a5e0618e1327",
+  "interface_sha256": "9dd30d4b1062250ad340bbf8284d615f7d1e70c1962e88f8583eefce394de35d",
+  "dispatch_scope": "The system consumes proposed_orders. Symbolic recipes are recorded context; stage_v5 is the explicit task compiler expanding those orders into registered skill calls.",
+  "provenance_scope": "Authored by the current assistant with user-authorized LLM proxy; no external API invocation or planner benchmark is claimed."
+}
