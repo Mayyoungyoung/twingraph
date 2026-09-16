@@ -1,0 +1,31 @@
+{
+  "python": "3.10.21 (main, Aug 27 2026, 14:42:07) [GCC 14.3.0]",
+  "prefix": "/home/jia/twingraph-v3-venv",
+  "platform": "Linux-5.15.92-rt57-x86_64-with-glibc2.31",
+  "packages": {
+    "torch": "2.1.0",
+    "mujoco": "2.3.2",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "matplotlib": "3.10.9",
+    "Pillow": "12.3.0",
+    "imageio": "2.37.4",
+    "imageio-ffmpeg": "0.6.0",
+    "pytest": "9.1.1"
+  },
+  "gpu": "NVIDIA GeForce RTX 2080 Ti, 525.85.05, 11264 MiB\nNVIDIA GeForce RTX 2080 Ti, 525.85.05, 11264 MiB",
+  "cpu": "\u67b6\u6784\uff1a                           x86_64\nCPU \u8fd0\u884c\u6a21\u5f0f\uff1a                   32-bit, 64-bit\n\u5b57\u8282\u5e8f\uff1a                         Little Endian\nAddress sizes:                   46 bits physical, 48 bits virtual\nCPU:                             20\n\u5728\u7ebf CPU \u5217\u8868\uff1a                  0-19\n\u6bcf\u4e2a\u6838\u7684\u7ebf\u7a0b\u6570\uff1a                 2\n\u6bcf\u4e2a\u5ea7\u7684\u6838\u6570\uff1a                   10\n\u5ea7\uff1a                             1\nNUMA \u8282\u70b9\uff1a                      1\n\u5382\u5546 ID\uff1a                        GenuineIntel\nCPU \u7cfb\u5217\uff1a                       6\n\u578b\u53f7\uff1a                           85\n\u578b\u53f7\u540d\u79f0\uff1a                       Intel(R) Core(TM) i9-10900X CPU @ 3.70GHz\n\u6b65\u8fdb\uff1a                           7\nCPU MHz\uff1a                        3885.079\nCPU \u6700\u5927 MHz\uff1a                   4700.0000\nCPU \u6700\u5c0f MHz\uff1a                   1200.0000\nBogoMIPS\uff1a                       7399.70\n\u865a\u62df\u5316\uff1a                         VT-x\nL1d \u7f13\u5b58\uff1a                       320 KiB\nL1i \u7f13\u5b58\uff1a                       320 KiB\nL2 \u7f13\u5b58\uff1a                        10 MiB\nL3 \u7f13\u5b58\uff1a                        19.3 MiB\nNUMA \u8282\u70b90 CPU\uff1a                 0-19\nVulnerability Itlb multihit:     KVM: Mitigation: VMX disabled\nVulnerability L1tf:              Not affected\nVulnerability Mds:               Not affected\nVulnerability Meltdown:          Not affected\nVulnerability Mmio stale data:   Mitigation; Clear CPU buffers; SMT vulnerable\nVulnerability Retbleed:          Mitigation; Enhanced IBRS\nVulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:        Mitigation; Enhanced IBRS, IBPB conditional, RSB filling, PBRSB-eIBRS SW sequence\nVulnerability Srbds:             Not affected\nVulnerability Tsx async abort:   Mitigation; TSX disabled\n\u6807\u8bb0\uff1a                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3 invpcid_single ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req avx512_vnni md_clear flush_l1d arch_capabilities\n",
+  "execution_policy": {
+    "OMP_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "MUJOCO_GL": "egl",
+    "collection_workers": 16,
+    "system_workers": 4
+  },
+  "torch_runtime": {
+    "version": "2.1.0+cu121",
+    "cuda": "12.1",
+    "cudnn": 8902
+  },
+  "render_dependency_note": "imageio-ffmpeg installed for offline replay after physical collection started; not used by physics or labels"
+}

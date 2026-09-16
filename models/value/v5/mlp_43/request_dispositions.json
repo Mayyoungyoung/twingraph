@@ -1,0 +1,962 @@
+[
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61100",
+    "request": {
+      "seed": 61100,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61101",
+    "request": {
+      "seed": 61101,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61102",
+    "request": {
+      "seed": 61102,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61103",
+    "request": {
+      "seed": 61103,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61104",
+    "request": {
+      "seed": 61104,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61105",
+    "request": {
+      "seed": 61105,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61106",
+    "request": {
+      "seed": 61106,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61107",
+    "request": {
+      "seed": 61107,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61108",
+    "request": {
+      "seed": 61108,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61109",
+    "request": {
+      "seed": 61109,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61110",
+    "request": {
+      "seed": 61110,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61111",
+    "request": {
+      "seed": 61111,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61112",
+    "request": {
+      "seed": 61112,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61113",
+    "request": {
+      "seed": 61113,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61114",
+    "request": {
+      "seed": 61114,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61115",
+    "request": {
+      "seed": 61115,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61116",
+    "request": {
+      "seed": 61116,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61117",
+    "request": {
+      "seed": 61117,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61118",
+    "request": {
+      "seed": 61118,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61119",
+    "request": {
+      "seed": 61119,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61120",
+    "request": {
+      "seed": 61120,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61121",
+    "request": {
+      "seed": 61121,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61122",
+    "request": {
+      "seed": 61122,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61123",
+    "request": {
+      "seed": 61123,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61124",
+    "request": {
+      "seed": 61124,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61125",
+    "request": {
+      "seed": 61125,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61126",
+    "request": {
+      "seed": 61126,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61127",
+    "request": {
+      "seed": 61127,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61128",
+    "request": {
+      "seed": 61128,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61129",
+    "request": {
+      "seed": 61129,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61130",
+    "request": {
+      "seed": 61130,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61131",
+    "request": {
+      "seed": 61131,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61132",
+    "request": {
+      "seed": 61132,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61133",
+    "request": {
+      "seed": 61133,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61134",
+    "request": {
+      "seed": 61134,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61135",
+    "request": {
+      "seed": 61135,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61136",
+    "request": {
+      "seed": 61136,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61137",
+    "request": {
+      "seed": 61137,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61138",
+    "request": {
+      "seed": 61138,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61139",
+    "request": {
+      "seed": 61139,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61140",
+    "request": {
+      "seed": 61140,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61141",
+    "request": {
+      "seed": 61141,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61142",
+    "request": {
+      "seed": 61142,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61143",
+    "request": {
+      "seed": 61143,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61144",
+    "request": {
+      "seed": 61144,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61145",
+    "request": {
+      "seed": 61145,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61146",
+    "request": {
+      "seed": 61146,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61147",
+    "request": {
+      "seed": 61147,
+      "split": "train",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61200",
+    "request": {
+      "seed": 61200,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61201",
+    "request": {
+      "seed": 61201,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61202",
+    "request": {
+      "seed": 61202,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61203",
+    "request": {
+      "seed": 61203,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61204",
+    "request": {
+      "seed": 61204,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61205",
+    "request": {
+      "seed": 61205,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61206",
+    "request": {
+      "seed": 61206,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61207",
+    "request": {
+      "seed": 61207,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61208",
+    "request": {
+      "seed": 61208,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61209",
+    "request": {
+      "seed": 61209,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61210",
+    "request": {
+      "seed": 61210,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  },
+  {
+    "directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/data/group_61211",
+    "request": {
+      "seed": 61211,
+      "split": "val",
+      "domain": "train",
+      "n": 12,
+      "repeats": 1,
+      "timeout_seconds": 240.0,
+      "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+      "friction_span": 0.03,
+      "gain_span": 0.005
+    },
+    "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+    "status": "completed"
+  }
+]

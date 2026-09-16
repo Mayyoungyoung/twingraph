@@ -1,0 +1,213 @@
+{
+  "schema": "twingraph.value.evaluation_freeze.v5",
+  "validation_sha256": "2afba70b6110254469295b287f81831fc88c866f3d670bb5c321f27c1090a9ac",
+  "selected": "mlp_29",
+  "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+  "selection_metadata": {
+    "rule": "minimum nominal validation Brier, equally weighted physical configurations; exact ties by model name",
+    "model_selection_sha256": "9e114baead0f24143a1477dc7943c8689342842367e29281582ca85bcfca113c"
+  },
+  "validation_config_ids": [
+    "0507de76dcb141f7c11a",
+    "3527ea3eed0c2d460b1a",
+    "3b058ca18558f117f29d",
+    "749949b4c7cd1085730a",
+    "841a50c7d454817b5e97",
+    "8c86f9c6a60b7d0dce23",
+    "92feb9cebcec730595d6",
+    "a10bfb6e52bb28d252e9",
+    "a63f6847a02e7f32654f",
+    "cf273746b51ba6037a7b",
+    "dc9e5045f0682b70fbc7",
+    "dd3d1233eb051bbae990"
+  ],
+  "methods": {
+    "linear_17": {
+      "model_sha256": "2028c6862ec8a7c7e6d508d5bc36f72ceb4af1c2d80ec48f5f15caf0fcf3d7cb",
+      "threshold": 0.45809339805721616,
+      "reason": "nominal validation balanced accuracy, recall, proximity to 0.5, then lower threshold",
+      "nominal_validation": {
+        "trials": 144,
+        "positive_trials": 75,
+        "negative_trials": 69,
+        "tp": 59,
+        "fp": 33,
+        "tn": 36,
+        "fn": 16,
+        "accuracy": 0.6597222222222222,
+        "balanced_accuracy": 0.6542028985507247,
+        "precision": 0.6413043478260869,
+        "recall": 0.7866666666666666,
+        "specificity": 0.5217391304347826,
+        "f1": 0.7065868263473054,
+        "roc_auc": 0.7057004830917875,
+        "average_precision": 0.7192173224902483,
+        "brier": 0.21503549188449592,
+        "log_loss": 0.6168923083407645
+      },
+      "validation_primary_screening": {
+        "feasible_hit": {
+          "mean": 0.9166666666666666,
+          "bootstrap95": [
+            0.9166666666666666,
+            0.9166666666666666
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        },
+        "quality": {
+          "mean": 0.7083333333333334,
+          "bootstrap95": [
+            0.7291666666666666,
+            0.7291666666666666
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        }
+      }
+    },
+    "mlp_17": {
+      "model_sha256": "a7c8606bc7247506debfd24606d6b06d58793935a1a9fc3670b8461c2b8781d4",
+      "threshold": 0.3116366454249809,
+      "reason": "nominal validation balanced accuracy, recall, proximity to 0.5, then lower threshold",
+      "nominal_validation": {
+        "trials": 144,
+        "positive_trials": 75,
+        "negative_trials": 69,
+        "tp": 74,
+        "fp": 42,
+        "tn": 27,
+        "fn": 1,
+        "accuracy": 0.7013888888888888,
+        "balanced_accuracy": 0.6889855072463769,
+        "precision": 0.6379310344827587,
+        "recall": 0.9866666666666667,
+        "specificity": 0.391304347826087,
+        "f1": 0.774869109947644,
+        "roc_auc": 0.7103381642512078,
+        "average_precision": 0.723725839958766,
+        "brier": 0.20990047879267604,
+        "log_loss": 0.6000209588548417
+      },
+      "validation_primary_screening": {
+        "feasible_hit": {
+          "mean": 0.9166666666666666,
+          "bootstrap95": [
+            0.9166666666666666,
+            0.9166666666666666
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        },
+        "quality": {
+          "mean": 0.6666666666666666,
+          "bootstrap95": [
+            0.7291666666666666,
+            0.7291666666666666
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        }
+      }
+    },
+    "mlp_29": {
+      "model_sha256": "7149a504030ce60de1a06a86f132664cc19adbf4d8dc438fdf6d1ddae91dd479",
+      "threshold": 0.5695365870155553,
+      "reason": "nominal validation balanced accuracy, recall, proximity to 0.5, then lower threshold",
+      "nominal_validation": {
+        "trials": 144,
+        "positive_trials": 75,
+        "negative_trials": 69,
+        "tp": 46,
+        "fp": 17,
+        "tn": 52,
+        "fn": 29,
+        "accuracy": 0.6805555555555556,
+        "balanced_accuracy": 0.6834782608695652,
+        "precision": 0.7301587301587301,
+        "recall": 0.6133333333333333,
+        "specificity": 0.7536231884057971,
+        "f1": 0.6666666666666666,
+        "roc_auc": 0.7408695652173913,
+        "average_precision": 0.730435323926927,
+        "brier": 0.20458018491776583,
+        "log_loss": 0.593992759597677
+      },
+      "validation_primary_screening": {
+        "feasible_hit": {
+          "mean": 0.9166666666666666,
+          "bootstrap95": [
+            0.9166666666666666,
+            0.9166666666666666
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        },
+        "quality": {
+          "mean": 0.7291666666666666,
+          "bootstrap95": [
+            0.7708333333333334,
+            0.7708333333333334
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        }
+      }
+    },
+    "mlp_43": {
+      "model_sha256": "bdabbf90f84315d0a7043235ebdd9f574b4d9ebec6562f43b1d5f950822d1a74",
+      "threshold": 0.6670366694069766,
+      "reason": "nominal validation balanced accuracy, recall, proximity to 0.5, then lower threshold",
+      "nominal_validation": {
+        "trials": 144,
+        "positive_trials": 75,
+        "negative_trials": 69,
+        "tp": 37,
+        "fp": 10,
+        "tn": 59,
+        "fn": 38,
+        "accuracy": 0.6666666666666666,
+        "balanced_accuracy": 0.6742028985507247,
+        "precision": 0.7872340425531915,
+        "recall": 0.49333333333333335,
+        "specificity": 0.855072463768116,
+        "f1": 0.6065573770491803,
+        "roc_auc": 0.7327536231884058,
+        "average_precision": 0.7418685448368861,
+        "brier": 0.2062989078473919,
+        "log_loss": 0.5950378823788998
+      },
+      "validation_primary_screening": {
+        "feasible_hit": {
+          "mean": 0.9166666666666666,
+          "bootstrap95": [
+            0.9166666666666666,
+            0.9166666666666666
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        },
+        "quality": {
+          "mean": 0.7083333333333334,
+          "bootstrap95": [
+            0.75,
+            0.75
+          ],
+          "eligible_configurations": 12,
+          "eligible_groups": 12
+        }
+      }
+    }
+  },
+  "ks": [
+    1,
+    2,
+    4
+  ],
+  "primary_k": 4,
+  "epsilon": 0.1,
+  "tie_tolerance": 1e-06,
+  "selection": "Thresholds only; deployment model must be selected and hashed from validation before test.",
+  "ranking": "descending ranking_scores if supplied, else scores; stable candidate input order breaks exact ties",
+  "validation_file_sha256": "27dfa9f3ed07f46dfdc3eac8fe298f93991a59827edb0e543d28a90065216417"
+}
