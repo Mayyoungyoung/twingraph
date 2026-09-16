@@ -160,19 +160,26 @@ def package(run, output, commit, freeze=None, snapshots=(), repo=None):
     retained = [p for p in files_under(run) if not p.is_relative_to(output)]
     if not retained:
         raise ValueError("run contains no retained evidence")
+    # A directly selected development/pilot root carries its scope into every
+    # child, including names such as system_preflight that lack a dev prefix.
+    # Inspect only the selected root's name, not unrelated ancestor directories.
+    development_root = development(Path(run.name))
     inventory = {p.relative_to(run).as_posix(): dict(sha256=sha(p), bytes=p.stat().st_size) for p in retained}
     groups = []
     directories = {p.parent for p in retained if p.name in {"request.json", "failure.json"} and p.parent.name.startswith("group_")}
     directories |= {p.parent for p in retained if p.name == "inputs.json" and read(p).get("schema") == "twingraph.group.v5"}
     for directory in sorted(directories):
         group = collection_record(directory, run)
+        group["development"] = development_root or group["development"]
         if group["status"] == "incomplete" and not group["development"]:
             raise ValueError(f"formal group is incomplete; preserve a failure record before packaging: {directory}")
         groups.append(group)
     systems = [system_record(p, run) for p in retained if p.name == "result.json"
                and read(p).get("schema") == "twingraph.system_run.v5"]
+    for system in systems:
+        system["development"] = development_root or system["development"]
     development_roots = {run/g["path"] for g in groups if g["development"]}
-    is_dev = lambda p: development(p.relative_to(run)) or any(p.is_relative_to(root) for root in development_roots)
+    is_dev = lambda p: development_root or development(p.relative_to(run)) or any(p.is_relative_to(root) for root in development_roots)
     resolver = ExactSources(repo, run, commit, snapshots)
     source_refs = [p for p in retained if p.name == "source.json"]
     overlays, source_rows, mapping_by_dir = {}, [], {}
@@ -284,6 +291,7 @@ def package(run, output, commit, freeze=None, snapshots=(), repo=None):
         artifacts = [dict(path=p.relative_to(stage).as_posix(), bytes=p.stat().st_size, sha256=sha(p)) for p in files_under(stage)]
         manifest = dict(schema="twingraph.value.package.v5", created_utc=datetime.now(timezone.utc).isoformat(),
             recorded_code_commit=commit, code_commit_scope="recorded identifier; exact source-byte manifests are authoritative",
+            input_root_scope="development" if development_root else "mixed_or_formal",
             input_run=str(run), retained_files=inventory, groups=groups, systems=systems, models=models,
             designated_freeze=frozen and {key:value for key,value in frozen.items() if key!="value"},
             source_manifests=source_rows, archives=archives, artifacts=artifacts,

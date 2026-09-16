@@ -1,5 +1,6 @@
 """Packaging checks use tiny synthetic files; no model loading or simulation."""
 import io
+import shutil
 import tarfile
 
 import pytest
@@ -107,3 +108,17 @@ def test_changed_frozen_checkpoint_blocks_package(tmp_path):
     packaging.write(freeze,dict(checkpoint_sha256="f"*64))
     with pytest.raises(ValueError,match="missing or changed checkpoint"):
         packaging.package(run,tmp_path/"artifact","test",freeze,repo=repo)
+
+
+def test_development_root_scope_is_inherited_by_system_records_and_sources(tmp_path, monkeypatch):
+    repo,run,_=fixture_run(tmp_path)
+    dev=tmp_path/"development"
+    shutil.copytree(run/"systems/case1/top_k",dev/"system_preflight_10")
+    monkeypatch.setattr(packaging,"environment",lambda: {"kind":"test_fixture"})
+    packaging.package(dev,tmp_path/"dev_artifact","test",repo=repo)
+    manifest=packaging.read(tmp_path/"dev_artifact/manifest.json")
+    assert manifest["input_root_scope"]=="development"
+    assert manifest["systems"][0]["development"] is True
+    assert all(row["development"] for row in manifest["source_manifests"])
+    assert manifest["categories"]["development"]==len(manifest["retained_files"])
+    assert manifest["categories"]["system"]==0
