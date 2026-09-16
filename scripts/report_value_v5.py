@@ -282,7 +282,99 @@ def system_audit(roots, protocol=None):
                 timing_scope="Actual separately executed paired clocks; no inferred N/K acceleration or claim about parallel batch wall time.")
 
 
-def build_summary(*,protocol=None,validation=None,test=None,metrics=None,selection=None,thresholds=None,data_roots=(),system_roots=(),model_roots=()):
+def offline_costs(protocol=None, selection=None, data_roots=(), model_roots=(),
+                  collection_batches=(), model_batches=(), raw_groups=()):
+    """Read exact batch wall clocks separately from resident online timings."""
+    collection_paths=sorted({Path(p).resolve() for p in collection_batches} |
+        {Path(root).resolve()/"batch_train_val.json" for root in data_roots if (Path(root)/"batch_train_val.json").exists()})
+    model_paths=sorted({Path(p).resolve() for p in model_batches} |
+        {Path(root).resolve()/"model_batch.json" for root in model_roots if (Path(root)/"model_batch.json").exists()})
+    if (collection_paths or model_paths) and not protocol:
+        raise ValueError("offline batch costs require their bound prospective protocol")
+    raw={(row["split"],row["seed"]):row for row in raw_groups}
+    files=[];collections=[];training=[]
+    def load(path):
+        value=read(path);files.append(dict(path=str(path),sha256=file_sha(path)))
+        if value.get("protocol_sha256")!=digest(protocol):
+            raise ValueError(f"offline batch protocol binding mismatch: {path}")
+        return value
+    def wall(value):
+        seconds=value.get("wall_seconds")
+        if not isinstance(seconds,(int,float)) or not np.isfinite(seconds) or seconds<0:
+            raise ValueError("offline cost requires a finite nonnegative measured wall time")
+        return float(seconds)
+    for path in collection_paths:
+        batch=load(path)
+        if not path.name.startswith("batch_"):
+            raise ValueError("collection batch file must retain its batch_SPLITS.json name")
+        dispatch_path=path.with_name("dispatch_"+path.name[len("batch_"):])
+        dispatch=load(dispatch_path)
+        if dispatch.get("schema")!="twingraph.collection_dispatch.v5":
+            raise ValueError("unsupported collection dispatch schema")
+        requests=dispatch["requests"];rows=batch["results"]
+        expected={(r["split"],r["seed"]):r for r in requests}
+        actual={(r.get("split",r.get("request",{}).get("split")),r.get("seed",r.get("request",{}).get("seed"))):r for r in rows}
+        if len(expected)!=len(requests) or len(actual)!=len(rows) or set(actual)!=set(expected):
+            raise ValueError("offline collection batch request/result identities mismatch")
+        splits=sorted({split for split,_ in expected})
+        for split in splits:
+            key=("validation" if split=="val" else split)+"_seeds"
+            if {seed for s,seed in expected if s==split}!=set(protocol["collection"][key]):
+                raise ValueError("offline collection requests differ from prospective split budget")
+        if any(r["n"]!=protocol["candidates"]["n"] or r["repeats"]!=protocol["collection"]["nominal_repeats"] for r in requests):
+            raise ValueError("offline collection candidate/repeat budget mismatch")
+        completed=[r for r in rows if "error" not in r]
+        raw_checked=0
+        for key,row in actual.items():
+            if key in raw and "error" not in row:
+                if any(row[field]!=raw[key][field] for field in ("candidates","trials")):
+                    raise ValueError("offline collection batch/raw outcome counts mismatch")
+                raw_checked+=1
+        collections.append(dict(path=str(path),status="completed" if len(completed)==len(requests) else "contains_failed_requests",
+            splits=splits,wall_seconds=wall(batch),workers=protocol["collection"]["workers"],
+            worker_count_source="hash-bound protocol, consumed by collection dispatch script",
+            requested_configurations=len(requests),completed_configurations=len(completed),
+            failed_requests=len(rows)-len(completed),requested_trials=sum(r["n"]*r["repeats"] for r in requests),
+            recorded_completed_trials=sum(r["trials"] for r in completed),
+            observed_candidate_counts=sorted({r["candidates"] for r in completed}),
+            completed_groups_checked_against_raw=raw_checked,
+            failed_request_partial_trials="not included in completed-trial count; retained raw failures govern total accounting",
+            hardware=dispatch.get("hardware",batch.get("hardware")),
+            hardware_scope="CPU model/host is not inferred when absent from the saved metadata",
+            timing_scope="actual enclosing ProcessPoolExecutor batch, not summed per-worker time"))
+    for path in model_paths:
+        batch=load(path);dispatch=load(path.with_name("dispatch.json"))
+        if batch.get("schema")!="twingraph.model_batch.v5" or dispatch.get("schema")!="twingraph.model_dispatch.v5" or batch.get("dispatch_sha256")!=digest(dispatch):
+            raise ValueError("offline training batch/dispatch binding mismatch")
+        for key in ("source_sha256","geometry_sha256"):
+            if any(value.get(key)!=protocol.get(key) for value in (batch,dispatch)):
+                raise ValueError("offline training source/geometry binding mismatch")
+        rows=batch["models"];expected={r["name"] for r in dispatch["models"]}
+        if len({r["name"] for r in rows})!=len(rows) or {r["name"] for r in rows}!=expected or len(rows)!=batch["requested_models"]:
+            raise ValueError("offline model batch requested identities mismatch")
+        if sum(r["status"]=="completed" for r in rows)!=batch["completed_models"]:
+            raise ValueError("offline model completion count mismatch")
+        devices=dispatch.get("devices",[])
+        for row in rows:
+            known=(selection or {}).get("models",{}).get(row["name"],{}).get("sha256")
+            if known and row.get("checkpoint_sha256")!=known:
+                raise ValueError("offline model batch checkpoint binding mismatch")
+            if row.get("device") not in devices:
+                raise ValueError("offline model device differs from dispatch")
+        training.append(dict(path=str(path),status=batch["status"],wall_seconds=wall(batch),
+            requested_models=batch["requested_models"],completed_models=batch["completed_models"],
+            devices=devices,concurrent_model_lanes=len(devices),execution=dispatch.get("execution"),
+            hardware=dispatch.get("hardware",batch.get("hardware")),
+            hardware_scope="CUDA device indices and lane count are recorded; GPU product names are not inferred",
+            models=[{key:row.get(key) for key in ("name","kind","device","status","checkpoint_sha256",
+                "input_dim","parameters","training_wall_seconds","subprocess_and_verification_wall_seconds")} for row in rows],
+            timing_scope="actual enclosing batch and verification wall time; individual training times overlap across GPU lanes"))
+    return dict(status="observed" if collections or training else "not_supplied_optional",
+        collection_batches=collections,model_batches=training,source_files=files,
+        scope="Offline task-specific data collection and model fitting only; no amortization or break-even estimate across different concurrency.")
+
+
+def build_summary(*,protocol=None,validation=None,test=None,metrics=None,selection=None,thresholds=None,data_roots=(),system_roots=(),model_roots=(),collection_batches=(),model_batches=()):
     pending=[]
     for name,value in (("protocol",protocol),("validation_predictions",validation),("test_predictions",test),
                        ("audited_test_metrics",metrics),("model_selection",selection),("threshold_freeze",thresholds)):
@@ -357,9 +449,11 @@ def build_summary(*,protocol=None,validation=None,test=None,metrics=None,selecti
         models=models,controls=baseline,disposition=(metrics or {}).get("disposition"),
         prediction_raw_binding_coverage=binding_coverage,
         collection={k:v for k,v in raw.items() if k!="bindings"},system=system,
-        limitations=["LLM代理提出符号顺序/技能框架；任务编译器及抓取、运动求解器实例化物理程序与轨迹。",
-            "输入为仿真器结构化位姿和几何，未评估视觉感知或图像输入。",
-            "名义单次成功标签与扰动下真实成功概率不同；分类结论不等同于鲁棒性保证。",
+        offline_costs=offline_costs(protocol,selection,data_roots,model_roots,collection_batches,model_batches,raw["groups"]),
+        limitations=["LLM代理保存的 proposed_orders 被实际消费；固定的 stage_calls 任务宏展开为本场景101条技能/检查调用，proposed_skill_programs仅保留为来源说明。抓取和运动求解器实例化物理参数与轨迹。",
+            "机器人型号及大部分初始观测字段固定或近似静态；仅训练输入上的常量/重复列删除不能证明对广泛机器人状态变化的泛化。",
+            "输入为仿真器结构化位姿和几何，没有图像输入，也没有图像或视觉感知消融实验。",
+            "每候选R1名义执行的0/1标签训练的是该分布下的成功估计，不是实测重复扰动成功概率；分类结论不等同于鲁棒性保证。",
             "首段自由运动已物化完整关节路径；后续依赖实测抓取的路径保留为延迟求解参数，不能宣称预先提供了全部未来真实轨迹。",
             "目标执行使用独立MuJoCo模型/数据和未装配初态；仍为仿真，未完成真机验证。",
             "终验覆盖五部件位姿、释放和末端退出，不包含滑动行程或长期装配质量验证。",
@@ -410,7 +504,19 @@ def markdown(summary):
     for split,row in summary["collection"]["splits"].items():
         if row["candidates"]:
             lines += ["",f"{split} 每池初始轨迹分支范围 {row['initial_trajectory_branch_range']}，完整抓取选择分支范围 {row['grasp_choice_branch_range']}，程序长度 {row['plan_lengths']}；首次失败技能计数 {json.dumps(row['first_failure_skills'],ensure_ascii=False)}。"]
-    lines += ["","多样性按同一初态下的实际调用、物理参数和完整初始轨迹检查，剔除候选ID与来源标签；轨迹、顺序、抓取分支及首次失败技能逐池记录于 summary.json。中途失败和开发试验不删除，也不混作测试数据。", "","## 独立目标执行与实际时间",""]
+    lines += ["","多样性按同一初态下的实际调用、物理参数和完整初始轨迹检查，剔除候选ID与来源标签；轨迹、顺序、抓取分支及首次失败技能逐池记录于 summary.json。中途失败和开发试验不删除，也不混作测试数据。", "", "## 离线采集与训练成本", ""]
+    offline=summary.get("offline_costs",{})
+    if not offline.get("collection_batches") and not offline.get("model_batches"):
+        lines.append("尚未提供可绑定的离线批次时间元数据；不从单个任务时间推算批次耗时。")
+    for batch in offline.get("collection_batches",[]):
+        lines += [f"离线采集 {', '.join(batch['splits'])}：批次实际墙钟 {number(batch['wall_seconds'])} 秒，协议绑定的 {batch['workers']} 个进程；请求 {batch['requested_configurations']} 个配置、{batch['requested_trials']} 次物理试验，已完成配置记录 {batch['recorded_completed_trials']} 次，失败请求 {batch['failed_requests']}。实际候选池大小 {batch['observed_candidate_counts']}。", ""]
+    for batch in offline.get("model_batches",[]):
+        lines += [f"模型训练批次：实际墙钟 {number(batch['wall_seconds'])} 秒，完成 {batch['completed_models']}/{batch['requested_models']} 个模型；设备 {batch['devices']}，{batch['concurrent_model_lanes']} 条并发模型通道（每通道内部顺序训练）。", "",
+            "| 模型 | 设备 | 保留输入维度 | 参数量 | 单模型训练墙钟 (s) |", "|---|---|---:|---:|---:|"]
+        for row in batch["models"]:
+            lines.append(f"| {row['name']} | {row['device']} | {row['input_dim']} | {row['parameters']} | {number(row['training_wall_seconds'])} |")
+        lines.append("")
+    lines += ["以上离线成本与在线常驻模型决策时间分开报告；采集进程数、GPU通道数不同，不能直接相除计算部署次数的盈亏平衡点。批次/派发/协议及模型SHA256绑定见 summary.json；未记录的CPU/GPU产品型号不作推断。", "", "## 独立目标执行与实际时间", ""]
     if not summary["system"]["methods"]:
         lines.append("尚无独立目标执行结果；不填入预计成功率或按 N/K 推算速度。")
     for name,row in summary["system"]["methods"].items():
@@ -511,6 +617,8 @@ def main():
     parser.add_argument("--data",nargs="+")
     parser.add_argument("--systems",nargs="+")
     parser.add_argument("--models",nargs="+",help="Optional relocated model roots containing NAME/summary.json")
+    parser.add_argument("--collection-batches",nargs="+",help="Optional retained batch_SPLITS.json files with sibling dispatch_SPLITS.json")
+    parser.add_argument("--model-batches",nargs="+",help="Optional retained model_batch.json files with sibling dispatch.json")
     parser.add_argument("--out")
     args=parser.parse_args();run=Path(args.run)
     defaults=dict(protocol=Path("experiments/value_v5/protocol.json"),validation=run/"evidence/validation_predictions.json",
@@ -521,7 +629,8 @@ def main():
         path=Path(getattr(args,name) or default)
         values[name]=read(path) if path.exists() else None
         files[name]=dict(path=str(path.resolve()),present=path.exists(),sha256=file_sha(path) if path.exists() else None)
-    summary=build_summary(**values,data_roots=args.data or [run/"data"],system_roots=args.systems or [run/"systems"],model_roots=args.models or [run/"models"])
+    summary=build_summary(**values,data_roots=args.data or [run/"data"],system_roots=args.systems or [run/"systems"],model_roots=args.models or [run/"models"],
+        collection_batches=args.collection_batches or (),model_batches=args.model_batches or ())
     summary["input_files"]=files;summary["report_script_sha256"]=file_sha(__file__)
     output=Path(args.out or run/"report");output.mkdir(parents=True,exist_ok=True)
     (output/"summary.json").write_text(json.dumps(summary,indent=2,ensure_ascii=False,allow_nan=False),encoding="utf-8")

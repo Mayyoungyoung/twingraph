@@ -136,3 +136,46 @@ def test_value_call_latency_uses_whole_pool_measurements_and_observed_phase_coun
     rows[0]["measured_rank_wall_seconds"]=-1
     with pytest.raises(ValueError,match="finite nonnegative measured times"):
         report.value_call_latency(rows)
+
+
+def test_offline_costs_use_bound_batch_wall_not_summed_worker_or_model_times(tmp_path):
+    spec=dict(source_sha256="s",geometry_sha256="g",candidates=dict(n=2),
+        collection=dict(train_seeds=[1],validation_seeds=[2],workers=7,nominal_repeats=1))
+    ph=report.digest(spec)
+    data=tmp_path/"data";models=tmp_path/"models";data.mkdir();models.mkdir()
+    requests=[dict(seed=1,split="train",n=2,repeats=1),dict(seed=2,split="val",n=2,repeats=1)]
+    dispatch=dict(schema="twingraph.collection_dispatch.v5",protocol_sha256=ph,requests=requests)
+    results=[dict(seed=r["seed"],split=r["split"],candidates=2,trials=2,wall_seconds=50.) for r in requests]
+    batch=dict(protocol_sha256=ph,results=results,wall_seconds=61.)
+    model_dispatch=dict(schema="twingraph.model_dispatch.v5",protocol_sha256=ph,source_sha256="s",geometry_sha256="g",
+        devices=["cuda:0","cuda:1"],models=[dict(name="a"),dict(name="b")],execution="fixture two lanes")
+    model_rows=[dict(name=name,device=f"cuda:{i}",status="completed",checkpoint_sha256=name*64,
+        training_wall_seconds=25.,input_dim=3,parameters=17) for i,name in enumerate(("a","b"))]
+    model_batch=dict(schema="twingraph.model_batch.v5",protocol_sha256=ph,source_sha256="s",geometry_sha256="g",
+        dispatch_sha256=report.digest(model_dispatch),models=model_rows,requested_models=2,completed_models=2,
+        wall_seconds=31.,status="completed")
+    for path,value in ((data/"dispatch_train_val.json",dispatch),(data/"batch_train_val.json",batch),
+                       (models/"dispatch.json",model_dispatch),(models/"model_batch.json",model_batch)):
+        path.write_text(json.dumps(value),encoding="utf-8")
+    selection=dict(models={name:dict(sha256=name*64) for name in ("a","b")})
+    value=report.offline_costs(spec,selection,[data],[models],raw_groups=results)
+    assert value["collection_batches"][0]["wall_seconds"]==61.  # Not two workers * 50.
+    assert value["collection_batches"][0]["workers"]==7
+    assert value["collection_batches"][0]["recorded_completed_trials"]==4
+    assert value["collection_batches"][0]["completed_groups_checked_against_raw"]==2
+    assert value["model_batches"][0]["wall_seconds"]==31.  # Not two models * 25.
+    assert value["model_batches"][0]["concurrent_model_lanes"]==2
+    assert value["model_batches"][0]["hardware"] is None
+    assert len(value["source_files"])==4
+    model_batch["models"][0]["checkpoint_sha256"]="changed"
+    (models/"model_batch.json").write_text(json.dumps(model_batch),encoding="utf-8")
+    with pytest.raises(ValueError,match="checkpoint binding mismatch"):
+        report.offline_costs(spec,selection,[data],[models])
+
+
+def test_offline_unbound_protocol_is_rejected_and_missing_metadata_stays_optional(tmp_path):
+    assert report.offline_costs()["status"]=="not_supplied_optional"
+    data=tmp_path/"data";data.mkdir()
+    (data/"batch_train_val.json").write_text(json.dumps(dict(protocol_sha256="wrong",wall_seconds=1.)),encoding="utf-8")
+    with pytest.raises(ValueError,match="protocol binding mismatch"):
+        report.offline_costs(dict(collection={}),data_roots=[data])
