@@ -1,9 +1,11 @@
 # Value module v5: prospective evaluation draft
 
-Status: DEVELOPMENT DRAFT, 2026-09-16. The configuration counts, seed ranges,
-disturbance budget and physical task scope below are proposed, not a freeze.
-Run development pilots first; publish the final source/model/data specification
-before generating or opening final test labels. Preserve all v4 artifacts.
+Status: PROSPECTIVE FREEZE, 2026-09-16. The machine-readable
+`experiments/value_v5/protocol.json` binds exact source bytes and settings before
+formal collection. Development seeds61000/61001 establish the executable
+five-part recipe and remain excluded from all formal splits. Model weights and
+thresholds are frozen separately after validation and before test generation.
+Preserve all v4 artifacts and the development evidence.
 
 ## Question and interface
 
@@ -21,7 +23,7 @@ weighted geometric reward or retrospective positive/negative construction.
 Structured scene geometry and observed poses provide state in this experiment;
 omitting images is a scope choice, not an image-ablation finding.
 
-## Proposed physical scope and data
+## Physical scope and data
 
 Start each candidate from the original unassembled slide scene, not a successful
 robot-created suffix checkpoint or teleportation of installed parts. A development
@@ -36,18 +38,25 @@ failure skills, and marginal outcome distributions. IDs, repeated disturbances
 and duplicated programs do not constitute candidate diversity. Marginal yaw,
 force and route correlations cannot establish causes or model reliance.
 
-Proposed configuration split, pending pilot runtimes:
+Frozen configuration split:
 
-- Train: 24 configurations, seeds61100--61123.
-- Validation: 8 configurations, seeds61200--61207.
+- Train: 48 configurations, seeds61100--61147.
+- Validation: 12 configurations, seeds61200--61211.
 - Locked test: 12 configurations, seeds61300--61311.
 - Each reached group: N=12 unique executable candidates. Primary K=4; also K1/2.
 - Primary labels: one nominal physical execution per candidate (R=1).
-- Any repeated perturbed reference executions use a separately predeclared
-  subset and budget. Declare which execution is nominal. Never choose the repeat
-  subset from final outcomes or silently add repeats to ambiguous test labels.
+- No extra perturbed repeats in the classification dataset. Every candidate is
+  a distinct executable program, not a noise repetition counted as a new plan.
 - Separate system cases: seeds61400--61403, N12/K4, independently created twin
-  and target scenes; final disturbances and budgets fixed before their results.
+  and target scenes; two twin repeats and one target execution. Both roles use
+  independent draws of friction scale1±3% and actuator gain1±0.5%, with fixed
+  namespaces. These are simulated uncertainty, not measured hardware noise.
+
+Fit MLPs with seeds17/29/43 and a linear model with seed17, using automatic
+training-input schema and nominal binary cross entropy. All four models are
+eligible for validation-Brier selection; this rule is fixed before training.
+Use120epochs, batch48, AdamW learning rate0.001 and weight decay0.01. The MLP
+has64/32hidden units and0.1dropout. No test-selected fallback model is allowed.
 
 Keep every candidate, trajectory sibling, checkpoint and repetition from a
 physical configuration in the same split. Preserve missing/failed setup and
