@@ -258,9 +258,13 @@ def freeze(validation, ks=(1, 2, 4), primary_k=4, epsilon=.1, tolerance=1e-6):
     for name, method in methods.items():
         threshold = select_threshold(method["rows"]) if method["probability_metrics"] else dict(threshold=None, reason="nonprobability baseline")
         pool = [screening_row(row, primary_k, epsilon) for row in method["rows"]]
-        validation_pool = cluster_means(pool, ("feasible_hit", "quality"), bootstrap_samples=1)
+        # Freeze stores point summaries only. A single bootstrap draw is not a
+        # confidence interval; uncertainty belongs to the full analysis budget.
+        validation_pool = {key:{field:value for field,value in summary.items() if field != "bootstrap95"}
+            for key,summary in cluster_means(pool, ("feasible_hit", "quality"), bootstrap_samples=0).items()}
         frozen_methods[name] = dict(model_sha256=method["model_sha256"], **threshold,
-                                    validation_primary_screening=validation_pool)
+                                    validation_primary_screening=validation_pool,
+                                    validation_primary_screening_note="Point summaries only; no uncertainty estimated during freeze.")
     selected = validation.get("selected")
     if selected is not None and selected not in methods:
         raise ValueError("selected deployment model is absent from validation predictions")

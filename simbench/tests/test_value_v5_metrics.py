@@ -222,3 +222,30 @@ def test_json_csv_outputs_preserve_nulls_and_confusion(tmp_path):
     restored = json.loads(path.read_text())
     assert restored["methods"]["model"]["strata"]["overall"]["classification_nominal"]["point"]["tp"] == 2
     assert "classification_nominal" in (tmp_path/"summary.csv").read_text()
+
+
+def test_freeze_validation_screening_has_point_summaries_without_fake_intervals():
+    val=payload()
+    first=val["methods"]["model"]["rows"][0]
+    val["methods"]["model"]["rows"]=[
+        dict(first,group_id="a",config_id="a",outcomes=[[1]]*4),
+        dict(first,group_id="b",config_id="b",outcomes=[[0]]*4),
+        dict(first,group_id="c",config_id="c"),
+    ]
+    locked=freeze(val)
+    summary=locked["methods"]["model"]["validation_primary_screening"]
+    assert summary["quality"]==dict(mean=.5,eligible_configurations=3,eligible_groups=3)
+    assert summary["feasible_hit"]["mean"]==pytest.approx(2/3)
+    assert all("bootstrap95" not in row for row in summary.values())
+
+
+def test_legacy_freeze_diagnostic_intervals_cannot_change_locked_test_metrics():
+    original=freeze(payload())
+    legacy=copy.deepcopy(original)
+    legacy["methods"]["model"]["validation_primary_screening"]["quality"]["bootstrap95"]=[.7708333,.7708333]
+    legacy["methods"]["model"]["validation_primary_screening"]["feasible_hit"]["bootstrap95"]=[.9166667,.9166667]
+    test=payload("test")
+    first=analyze(test,original,bootstrap_samples=20)
+    second=analyze(test,legacy,bootstrap_samples=20)
+    assert first["methods"]==second["methods"]
+    assert first["freeze_sha256"]!=second["freeze_sha256"]  # provenance changes, decisions do not
