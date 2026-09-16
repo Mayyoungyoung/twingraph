@@ -18,17 +18,18 @@ from .collect import dump,source_hash
 
 def collection_source_hash():
     root=Path(__file__).resolve().parents[1]
-    files=[root/"value"/n for n in ("research_scenarios.py","research_collect.py","physical.py","plan.py","scenarios.py","collect.py")]
+    files=[root/"value"/n for n in ("research_scenarios.py","research_collect.py","physical.py","plan.py","scenarios.py","collect.py","skill_graph.py")]
     files+=list((root/"assembly").glob("*.py"))+list((root/"core").glob("*.py"))
     h=hashlib.sha256()
     for f in sorted(files):h.update(f.relative_to(root).as_posix().encode());h.update(f.read_bytes())
     return h.hexdigest()
 
 
-def collect_one(family,seed,out,n=16,repeats=2,domain="train",split="train",checkpoint=0,render=True):
+def collect_one(family,seed,out,n=16,repeats=2,domain="train",split="train",checkpoint=0,render=True,emit_graph=False):
     directory=Path(out)/f"group_{family}_{seed}_{checkpoint}"
     directory.mkdir(parents=True,exist_ok=True)
     request=dict(family=family,seed=seed,n=n,repeats=repeats,domain=domain,split=split,checkpoint=checkpoint,render=render)
+    if emit_graph: request["emit_graph"] = True
     if (directory/"complete.json").exists():
         result=json.loads((directory/"complete.json").read_text())
         if result["request_sha256"]!=digest(request):raise ValueError("resume request mismatch")
@@ -56,6 +57,11 @@ def collect_one(family,seed,out,n=16,repeats=2,domain="train",split="train",chec
                     checkpoint_trace=checkpoint_trace,observation=obs,images=images,candidates=[p.to_dict() for p in plans],
                     pool_counts=counts,render_seconds=rendering,source_sha256=collection_source_hash(),snapshot_sha256=runner.initial)
         ih=digest(inputs);dump(directory/"inputs.json",inputs)
+        executable = plans
+        if emit_graph:
+            from .skill_graph import compile_graph
+            executable = [compile_graph(obs, p) for p in plans]
+            dump(directory/"skill_graphs.json", dict(input_sha256=ih, graphs=executable))
         np.savez_compressed(directory/"initial_physics.npz",**runner.snapshot["physics"]["data"])
         # Rule labels are optional pre-rollout features, stored separately from model inputs.
         t=time.perf_counter(); features=[geometric_features(s,p,targets) for p in plans]
@@ -63,7 +69,7 @@ def collect_one(family,seed,out,n=16,repeats=2,domain="train",split="train",chec
         trials=[]
         for repeat in range(repeats):
             trial=perturbation(seed,repeat,domain)
-            for plan in plans:
+            for plan in executable:
                 row=runner.run(plan,trial,keep_trace=True);trials.append(row)
                 dump(directory/"outcomes.json",dict(input_sha256=ih,trials=trials))
         summary=dict(request_sha256=digest(request),input_sha256=ih,source_sha256=inputs["source_sha256"],
@@ -86,9 +92,10 @@ def main():
     p.add_argument("--n",type=int,default=16);p.add_argument("--repeats",type=int,default=2)
     p.add_argument("--workers",type=int,default=4);p.add_argument("--domain",default="train")
     p.add_argument("--split",default="train");p.add_argument("--checkpoint",type=int,default=0)
-    p.add_argument("--no-render",action="store_true");a=p.parse_args()
+    p.add_argument("--no-render",action="store_true")
+    p.add_argument("--emit-graph",action="store_true");a=p.parse_args()
     requests=[dict(family=a.family,seed=a.seed+i,out=a.out,n=a.n,repeats=a.repeats,domain=a.domain,split=a.split,
-                   checkpoint=a.checkpoint,render=not a.no_render) for i in range(a.groups)]
+                   checkpoint=a.checkpoint,render=not a.no_render,emit_graph=a.emit_graph) for i in range(a.groups)]
     Path(a.out).mkdir(parents=True,exist_ok=True)
     with concurrent.futures.ProcessPoolExecutor(max_workers=a.workers,mp_context=multiprocessing.get_context("spawn")) as pool:
         results=[]

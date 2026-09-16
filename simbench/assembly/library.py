@@ -17,6 +17,7 @@ from scipy.spatial.transform import Rotation
 from .control import PoseController, down, HOME
 from .contracts import check, apply_effects, session_state
 from .interfaces import resolve, family, PUBLIC_SKILLS
+from .ports import declare_ports, state_interface, validate_ports
 
 PARTS = ("carriage", "end_stop", "handle", "pin_left", "pin_right")
 DEFAULT_CAPABILITIES = {"pin_left": ("pin",), "pin_right": ("pin",)}
@@ -43,6 +44,9 @@ class Spec:
     effects: tuple = ()
     obligations: tuple = ()
     output_bindings: tuple = (("part", "part"),)
+    ports: tuple = ()
+    state_reads: tuple = ()
+    state_writes: tuple = ()
 
 
 CATALOG = {}
@@ -88,6 +92,8 @@ def skill(
                 )
             ),
             output_bindings,
+            declare_ports(fn),
+            *state_interface(name, category),
         )
         if legacy:
             CATALOG[name] = HANDLERS[name]
@@ -161,6 +167,7 @@ class Session:
             raise SkillFailure(str(exc)) from exc
         params = dict(bound.arguments)
         spec = HANDLERS[name]
+        validate_ports(spec, params)
         part = params.get("part")
         previous_atom = getattr(self, "_active_atom", None)
         atom = spec.family if spec.family in PUBLIC_SKILLS else previous_atom

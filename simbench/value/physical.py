@@ -23,6 +23,11 @@ class PhysicalRunner:
         self.timeout=timeout
 
     def run(self,plan,trial,keep_trace=False):
+        graph_hash = None
+        if isinstance(plan, dict) and plan.get("schema") == "twingraph.executable_skill_graph.v1":
+            from .skill_graph import validate_graph
+            graph_hash = digest(plan)
+            plan = validate_graph(plan)
         s=self.session; t=time.perf_counter(); s.restore(self.snapshot)
         s.ctx.model.actuator_gainprm[:]=self.gain;s.ctx.model.actuator_biasprm[:]=self.bias
         restore=time.perf_counter()-t
@@ -65,6 +70,7 @@ class PhysicalRunner:
         steps=copy.deepcopy(s.results)
         sim=float(s.ctx.data.time-start_sim)
         result=dict(candidate_id=plan.id,trial=trial,trial_sha256=digest(trial),valid=True,
+                    input_graph_sha256=graph_hash,
                     success=bool(prefix and suffix),full_success=bool(prefix and suffix),
                     prefix_success=prefix,suffix_success=suffix,error=error,timeout=timeout,
                     restore_seconds=restore,wall_seconds=elapsed,sim_seconds=sim,
