@@ -2,7 +2,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from simbench.value.schema_learning import compact_columns, calibrate, sigmoid
+from simbench.value.schema_learning import compact_columns, calibrate, sigmoid, score_metrics
 from simbench.value.goal_check import evaluate_goals, validate_goals
 
 
@@ -42,3 +42,26 @@ def test_final_goal_rejects_held_part_even_at_correct_target():
 def test_unknown_task_predicate_is_not_implicitly_success():
     with pytest.raises(ValueError, match="unsupported"):
         validate_goals([dict(predicate="assembled", manipulated="pin", position=[0, 0, 0])])
+
+
+def test_saturated_probabilities_do_not_change_deployed_ranking():
+    groups = [dict(id="a", seed=1, y=np.array([0., 1.]))]
+    result = score_metrics(groups, [np.array([41., 42.])])
+    assert result["hit1"] == 1.
+    assert result["brier"] == .5
+
+
+def test_single_class_validation_does_not_fit_fake_calibration():
+    c = calibrate([np.array([-1., 1.])], [dict(y=np.zeros(2), config=("a", 1))])
+    assert c["scale"] == 1. and c["bias"] == 0.
+    assert "skip_reason" in c
+
+
+@pytest.mark.parametrize("key,value", [("position_tolerance", float("inf")),
+                                      ("tilt_tolerance_deg", float("nan")),
+                                      ("minimum_eef_clearance_m", -.1)])
+def test_task_tolerances_must_be_finite_and_physically_valid(key, value):
+    goal = dict(predicate="seated", manipulated="pin", position=[0, 0, 0])
+    goal[key] = value
+    with pytest.raises(ValueError):
+        validate_goals([goal])

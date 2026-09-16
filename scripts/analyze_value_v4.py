@@ -142,17 +142,28 @@ def analyze(payload, *, ks=(1, 2, 4), epsilon=.1, tolerance=1e-6,
             s = np.asarray(source["scores"], dtype=float)
             if s.ndim != 1 or len(s) != len(y) or not np.isfinite(s).all():
                 raise ValueError(f"{name}/{group_id}: score/reference cardinality or finiteness mismatch")
+            ranking_scores = np.asarray(source.get("ranking_scores", s), dtype=float)
+            if ranking_scores.shape != s.shape or not np.isfinite(ranking_scores).all():
+                raise ValueError(f"{name}/{group_id}: invalid ranking scores")
             binding = (configuration_key(source), y.tolist())
             if group_id in reference_pools and reference_pools[group_id] != binding:
                 raise ValueError(f"{group_id}: methods use different reference pools")
             reference_pools[group_id] = binding
-            order = np.argsort(-s, kind="stable")
+            order = np.argsort(-ranking_scores, kind="stable")
             best = float(y.max())
             row = dict(group_id=group_id, config_id=binding[0], seed=source.get("seed"),
                        n=len(y), pool_type="all_failure" if best == 0 else
                        "all_success" if y.min() == 1 else "mixed",
                        empirical_best=best, empirical_pool_quality=float(y.mean()),
                        intermediate_label_fraction=float(np.mean((y > 0) & (y < 1))))
+            probabilities = source.get("probability_metrics", bool(np.all((s >= 0) & (s <= 1))))
+            if probabilities and np.any((s < 0) | (s > 1)):
+                raise ValueError("probability metrics require scores in [0,1]")
+            clipped = np.clip(s, 1.e-12, 1-1.e-12)
+            row.update(brier=float(np.mean((s-y)**2)) if probabilities else None,
+                       bernoulli_brier=float(np.mean(y*(1-s)**2+(1-y)*s**2)) if probabilities else None,
+                       log_loss=float(np.mean(-y*np.log(clipped)-(1-y)*np.log1p(-clipped))) if probabilities else None,
+                       ranking_score_spread=float(np.ptp(ranking_scores)))
             for k in dict.fromkeys(ks):
                 selected = y[order[:k]]
                 random = exact_uniform_random(y, k, epsilon)
@@ -180,7 +191,7 @@ def analyze(payload, *, ks=(1, 2, 4), epsilon=.1, tolerance=1e-6,
                  "random_quality", "excess_hit", "excess_feasible", "excess_quality",
                  "boundary_near_tie")]
         keys += ["score_spread", "numerically_flat", "adjacent_near_tie_fraction",
-                 "intermediate_label_fraction", "empirical_pool_quality"]
+                 "intermediate_label_fraction", "empirical_pool_quality", "brier", "bernoulli_brier", "log_loss"]
         summary = {key:cluster_summary(rows, key, bootstrap_samples=bootstrap_samples, seed=seed)
                    for key in keys}
         results[name] = dict(
@@ -194,7 +205,8 @@ def analyze(payload, *, ks=(1, 2, 4), epsilon=.1, tolerance=1e-6,
                 settings=dict(ks=list(ks), epsilon=epsilon, tie_tolerance=tolerance,
                               bootstrap_samples=bootstrap_samples, bootstrap_seed=seed),
                 aggregation="equal configuration weight; eligible sibling groups averaged within configuration",
-                ranking="descending saved scores, stable input-order tie break; tolerance is diagnostic only",
+                ranking="descending ranking_scores if supplied, otherwise scores; stable input-order tie break; tolerance is diagnostic only",
+                probability_metrics="brier is squared error to empirical fractions; bernoulli_brier and log_loss average individual binary outcomes implied by those fractions; unavailable for declared nonprobability baselines",
                 random_baseline="exact expectation of uniform subsets without replacement, no sampled random seed",
                 reference_interpretation=INTERPRETATION,
                 configuration_key_policy="config_id, else family+seed, else split_group, else group_id; v4 should provide config_id",

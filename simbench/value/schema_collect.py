@@ -30,13 +30,19 @@ def create_scene(seed, directory, checkpoint=2):
     if checkpoint not in (2, 3):
         raise ValueError("checkpoint must be after carriage/stop or after an additional real pin")
     if checkpoint == 3:
-        # A fixed production choice is executed, never chosen using future labels.
-        order = list(stage.CONTINUATION_PARTS)
-        choices = {p: dict(yaw=0., height=.002, clearance=1.035, force=3.5, speed=.006) for p in order}
-        warm = stage.program(session, targets, order, choices)
-        session.active_candidate_id = warm.id
+        # The existing production recipe selects its current grasp/route using
+        # necessary geometry, never labels of the candidate continuations.
+        from simbench.assembly.task import pick, transfer_part, release
+        part = "pin_left"
+        target = np.asarray(targets[part])
         begin = len(session.results)
-        execute_calls(session, warm, warm.calls[:18])
+        pick(session, part, terminal_targets=[dict(id="seated", part=part, xyz=target)])
+        transfer_part(session, part, target + [0, 0, .069])
+        session.call("move", reference="object", part=part, target=target + [0, 0, .069])
+        session.call("move", mode="guarded", part=part, target_z=float(target[2]), force_stop=3.)
+        session.call("press", part=part, target_z=float(target[2]))
+        release(session)
+        session.call("inspect", part=part, target=target)
         session.stage_checkpoint_trace.extend(plain(session.results[begin:]))
         session.stage_completed = (*stage.CHECKPOINT_PARTS, "pin_left")
         stage.check_preconditions(session, targets, session.stage_completed)
@@ -46,7 +52,7 @@ def create_scene(seed, directory, checkpoint=2):
 def collect_one(seed, out, split="train", domain="train", n=16, repeats=2, checkpoint=2):
     directory = Path(out)/f"group_{stage.FAMILY}_{seed}_{checkpoint}"
     directory.mkdir(parents=True, exist_ok=True)
-    request = dict(seed=seed, split=split, domain=domain, n=n, repeats=repeats, checkpoint=checkpoint)
+    request = dict(seed=seed, split=split, domain=domain, n=n, repeats=repeats, checkpoint=checkpoint, timeout_seconds=180.)
     if (directory/"complete.json").exists():
         done = json.loads((directory/"complete.json").read_text())
         if done["request_sha256"] != digest(request):
@@ -82,6 +88,9 @@ def collect_one(seed, out, split="train", domain="train", n=16, repeats=2, check
             prefix_successes=sum(t["prefix_success"] for t in trials),
             timeouts=sum(t["timeout"] for t in trials), plan_lengths=sorted({len(p.calls) for p in plans}),
             wall_seconds=time.perf_counter()-started)
+        if result["timeouts"]:
+            dump(directory/"censored.json", result)
+            raise RuntimeError("censored paired group retained; do not train as physical failure")
         dump(directory/"complete.json", result)
     return result
 
@@ -104,9 +113,11 @@ def main():
     p.add_argument("--repeats", type=int, default=2); p.add_argument("--workers", type=int, default=4)
     p.add_argument("--split", default="train"); p.add_argument("--domain", default="train")
     p.add_argument("--checkpoints", nargs="+", type=int, default=[2])
+    p.add_argument("--alternate-checkpoints", action="store_true")
     a = p.parse_args()
     requests = [dict(seed=a.seed+i, out=a.out, split=a.split, domain=a.domain, n=a.n,
-                     repeats=a.repeats, checkpoint=cp) for i in range(a.groups) for cp in a.checkpoints]
+                     repeats=a.repeats, checkpoint=cp) for i in range(a.groups)
+                for cp in ([a.checkpoints[(a.seed+i) % len(a.checkpoints)]] if a.alternate_checkpoints else a.checkpoints)]
     results = []
     with concurrent.futures.ProcessPoolExecutor(max_workers=a.workers, mp_context=multiprocessing.get_context("spawn")) as pool:
         for result in pool.map(worker, requests):

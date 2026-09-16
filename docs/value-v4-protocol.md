@@ -61,3 +61,38 @@ whether a task skeleton can be refined. Our proposed distinction is a shared
 executable representation, including available trajectory/control data and
 explicit deferred values. Neither Transformers nor industrial context alone
 establish novelty. Source: https://roboticsproceedings.org/rss19/p061.pdf
+
+## Frozen data specification after development pilots
+
+Original sliding-stage scene, after actual robot installation of carriage/end
+stop (checkpoint 2, 58 calls) or also the left pin (checkpoint 3, 40 calls).
+Checkpoint 3 uses the repository's existing production pick/transfer/release
+recipe, after an arbitrary fixed grasp choice failed on development seed 51002.
+That failed attempt is preserved, not relabeled or included as a continuation.
+Development seeds 51000/51001: 16 trials, 3 successes, no timeouts; seed 51003
+checkpoint 3: 4 trials, 1 success, no timeouts. These are feasibility pilots.
+
+- Training configurations: seeds 51100--51111 (12).
+- Validation configurations: seeds 51200--51203 (4).
+- Locked test configurations: seeds 51300--51307 (8).
+- Every even seed uses checkpoint 2; every odd seed uses checkpoint 3. Exactly
+  one checkpoint per configuration in this round; no unseen-length claim.
+- Each group: N=8 unique candidates, R=2 paired physical repetitions.
+- Training/validation namespace `train`; test namespace `reference`.
+- Final grid includes the existing nominal 3 N grip command alongside 2.5/3.5 N,
+  with uniform label-blind shuffle. No preferred successful anchor is inserted.
+- Expected maximum: 24 groups, 192 plans, 384 continuation executions, plus
+  separately recorded physical checkpoint preparation. Failed preparations or
+  censored groups stay visible and are not silently resampled.
+- Models: compact port MLP and unpruned port MLP, seeds17/29/43, 60 epochs;
+  same-input sequence and graph, seeds17/29/43, 60 epochs. All final models use
+  the new dataset only. Earlier v3 fitting remains development evidence.
+- Deployment test configurations: seeds51300--51303 with their assigned
+  checkpoints. K4, two `online` trials per candidate, select by online success
+  fraction then original rank; two independent `deployment` trials. Include
+  source-order and shortest-initial-joint-path controls under the same budget.
+
+This prospective small dataset can test implementation and an initial ranking
+effect. It cannot establish broad RAL-level generalization, real-robot validity,
+or optimality of a representation. A negative graph-vs-sequence result will be
+reported rather than repaired by inspecting the locked test.

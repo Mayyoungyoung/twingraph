@@ -270,7 +270,7 @@ def build_pool(session, targets, seed, n=16, completed=(), precheck=True):
     # Each part receives its own grasp choice; joint route/force/speed branches
     # avoid the meaningless large grids produced by sub-tolerance jitter.
     grid = list(itertools.product(range(len(orders)), *([range(8)] * len(remaining)),
-                                  range(2), range(2), range(2), range(3) if precheck else range(1)))
+                                  range(2), range(3), range(2), range(3) if precheck else range(1)))
     rng.shuffle(grid)
     result, seen, cache, witnesses = [], set(), {}, []
     raw, conflicts, materialization_unknown, check_seconds = 0, 0, 0, 0.
@@ -284,7 +284,7 @@ def build_pool(session, targets, seed, n=16, completed=(), precheck=True):
             choices[part] = dict(yaw=float((grasp // 4) * math.pi / 2),
                                  height=[-.002, 0., .002, .004][grasp % 4],
                                  clearance=.98 + .055 * route,
-                                 force=2.5 + force, speed=.006 + .002 * speed)
+                                 force=2.5 + .5 * force, speed=.006 + .002 * speed)
         plan = program(session, targets, order, choices, completed)
         first = order[0]
         choice = choices[first]

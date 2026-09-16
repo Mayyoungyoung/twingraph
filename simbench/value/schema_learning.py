@@ -25,6 +25,12 @@ from .port_pool import PortPoolNet, fit_vocabulary, vectorize
 from .skill_graph import compile_graph, interface_hash
 
 
+def representation_hash():
+    directory = Path(__file__).parent
+    return digest({name: (directory/name).read_text(encoding="utf-8").replace("\r\n", "\n")
+                   for name in ("graph_encode.py", "port_pool.py", "skill_graph.py", "plan.py", "program_audit.py")})
+
+
 def load_groups(roots, splits=("train", "val")):
     groups, seen, configurations = [], set(), {}
     for root in roots:
@@ -143,10 +149,33 @@ def sigmoid(x):
     return 1. / (1. + np.exp(-np.clip(x, -50, 50)))
 
 
+def score_metrics(groups, zs, calibration=None):
+    """Rank logits; use probabilities only for proper scoring rules."""
+    c = calibration or dict(scale=1., bias=0.)
+    result = metrics(groups, zs)
+    for g, z, row in zip(groups, zs, result["rows"]):
+        p = sigmoid(c["scale"]*np.asarray(z)+c["bias"])
+        row["ranking_scores"] = np.asarray(z).tolist()
+        row["scores"] = p.tolist()
+        row["brier"] = float(np.mean((p-g["y"])**2))
+        q = np.clip(p, 1e-7, 1-1e-7)
+        row["log_loss"] = float(-np.mean(g["y"]*np.log(q)+(1-g["y"])*np.log1p(-q)))
+    # Select models at the same independent-configuration level as calibration.
+    by_config = {}
+    for g, row in zip(groups, result["rows"]):
+        by_config.setdefault(g.get("config", g["id"]), []).append(row)
+    for key in ("brier", "log_loss"):
+        result[key] = float(np.mean([np.mean([r[key] for r in rows]) for rows in by_config.values()]))
+    return result
+
+
 def calibrate(zs, groups):
     """Positive temperature and bias, fit on validation binomial labels only."""
     z = torch.tensor(np.concatenate(zs), dtype=torch.float64)
     y = torch.tensor(np.concatenate([g["y"] for g in groups]), dtype=torch.float64)
+    if not bool(y.sum() > 0 and (1-y).sum() > 0):
+        return dict(scale=1., bias=0., fit="identity", groups=len(groups),
+                    skip_reason="validation has only one observed outcome class")
     # Equal configuration contribution despite differing candidate/checkpoint counts.
     counts = {}
     for g in groups:
@@ -179,7 +208,7 @@ def train(args):
         raise ValueError("nonempty training and validation configurations required")
     cfg = GraphConfig(relations=args.kind == "graph", pooling="attention", normalize=True)
     saved = dict(schema="twingraph.value.schema.v1", kind=args.kind, seed=args.seed,
-                 config=asdict(cfg), interface_sha256=interface_hash(), training=vars(args))
+                 config=asdict(cfg), interface_sha256=interface_hash(), representation_sha256=representation_hash(), training=vars(args))
     if args.kind in {"compact", "port_mlp"}:
         vocab = fit_vocabulary([e for g in tr for e in g["encoded"]])
         x = np.stack([vectorize(e, vocab) for g in tr for e in g["encoded"]])
@@ -210,20 +239,26 @@ def train(args):
     saved.update(source_sha256=digest(source), split_sha256=digest(split_manifest), parameters=sum(p.numel() for p in model.parameters()))
     dump(out/"source.json", source)
     best, history = float("inf"), []
-    config_counts = {}
+    config_groups = {}
     for g in tr:
-        config_counts[g["config"]] = config_counts.get(g["config"], 0) + 1
+        config_groups.setdefault(g["config"], []).append(g)
+    configurations = list(config_groups.values())
     for epoch in range(args.epochs):
         model.train(); losses = []
-        for gi in np.random.permutation(len(tr)):
-            g = tr[gi]; order = np.random.permutation(len(g["plans"]))
-            for start in range(0, len(order), 8):
-                ix = order[start:start+8]; optimizer.zero_grad()
-                z = forward(model, args.kind, g, ix, args.device)
-                loss = nn.functional.binary_cross_entropy_with_logits(z, torch.as_tensor(g["y"][ix], device=args.device)) / config_counts[g["config"]]
-                loss.backward(); nn.utils.clip_grad_norm_(model.parameters(), 1.); optimizer.step()
-                losses.append(float(loss.detach()))
-        validation = metrics(va, [sigmoid(logits(model, args.kind, g, args.device)) for g in va])
+        for ci in np.random.permutation(len(configurations)):
+            checkpoint_groups = configurations[ci]
+            optimizer.zero_grad()
+            for g in checkpoint_groups:
+                order = np.random.permutation(len(g["plans"]))
+                for start in range(0, len(order), 8):
+                    ix = order[start:start+8]
+                    z = forward(model, args.kind, g, ix, args.device)
+                    loss = nn.functional.binary_cross_entropy_with_logits(z, torch.as_tensor(g["y"][ix], device=args.device))
+                    loss = loss * len(ix) / (len(order) * len(checkpoint_groups))
+                    loss.backward()
+                    losses.append(float(loss.detach()))
+            nn.utils.clip_grad_norm_(model.parameters(), 1.); optimizer.step()
+        validation = score_metrics(va, [logits(model, args.kind, g, args.device) for g in va])
         row = dict(epoch=epoch+1, loss=float(np.mean(losses)), validation={k:v for k,v in validation.items() if k != "rows"}, seconds=time.perf_counter()-started)
         history.append(row)
         if validation["brier"] < best:
@@ -238,7 +273,7 @@ def train(args):
     zs = [logits(model, args.kind, g, args.device) for g in va]
     selected["calibration"] = calibrate(zs, va)
     c = selected["calibration"]
-    selected["validation_calibrated"] = metrics(va, [sigmoid(c["scale"]*z+c["bias"]) for z in zs])
+    selected["validation_calibrated"] = score_metrics(va, zs, c)
     torch.save(selected, out/"best.pt")
     dump(out/"summary.json", {k:v for k,v in selected.items() if k not in {"state_dict", "vocabulary", "columns"}} | dict(wall_seconds=time.perf_counter()-started, train_groups=len(tr), val_groups=len(va), training_rollouts=sum(len(g["plans"])*g["repeats"] for g in tr)))
 
@@ -247,6 +282,8 @@ def load_model(path, device="cpu"):
     saved = torch.load(path, map_location=device, weights_only=False)
     if saved.get("schema") != "twingraph.value.schema.v1" or saved["interface_sha256"] != interface_hash():
         raise ValueError("checkpoint/schema/execution interface mismatch")
+    if saved.get("representation_sha256") != representation_hash():
+        raise ValueError("checkpoint typed graph representation changed")
     model = make_model(saved).to(device)
     model.load_state_dict(saved["state_dict"]); model.eval()
     return model, saved

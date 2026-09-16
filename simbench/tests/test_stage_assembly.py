@@ -47,6 +47,7 @@ def test_pool_is_nested_unique_and_compiles_same_executable_graph():
     assert len({semantic_key(p) for p in large}) == 32
     assert counts["structure_branches"] == 2
     assert counts["label_blind"]
+    assert {p.prefix["choices"]["pin_left"]["force"] for p in large} == {2.5, 3., 3.5}
     obs = dict(robot={}, objects={p: {} for p in PARTS}, goals=[])
     for plan in small:
         assert len(plan.calls) == 59  # Three real 18-call stages + all five final checks.

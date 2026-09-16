@@ -10,7 +10,10 @@ def validate_goals(goals):
             raise ValueError("unsupported independent task goal")
         if not goal.get("manipulated") or np.asarray(goal.get("position")).shape != (3,):
             raise ValueError("goal requires object and world position")
-        if not np.isfinite(goal["position"]).all() or goal.get("position_tolerance", .0015) <= 0:
+        scalars = [goal.get("position_tolerance", .0015), goal.get("tilt_tolerance_deg", 3.),
+                   goal.get("minimum_eef_clearance_m", 0.)]
+        if (not np.isfinite(goal["position"]).all() or not np.isfinite(scalars).all()
+                or scalars[0] <= 0 or scalars[1] <= 0 or scalars[2] < 0):
             raise ValueError("invalid task acceptance tolerance")
 
 
