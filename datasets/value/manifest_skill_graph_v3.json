@@ -1,0 +1,1254 @@
+{
+  "schema": "twingraph.value.graph.dataset.v1",
+  "runtime_code_commit": "41fceb1",
+  "environment": {
+    "python": "3.10.21 (main, Aug 27 2026, 14:42:07) [GCC 14.3.0]",
+    "platform": "Linux-5.15.92-rt57-x86_64-with-glibc2.31",
+    "torch": "2.1.0+cu121",
+    "mujoco": "2.3.2",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "cuda": "12.1",
+    "gpus": [
+      "NVIDIA GeForce RTX 2080 Ti",
+      "NVIDIA GeForce RTX 2080 Ti"
+    ]
+  },
+  "new_groups": 32,
+  "new_label_rollouts": 1024,
+  "new_full_successes": 506,
+  "new_prefix_successes": 1024,
+  "timeouts": 0,
+  "physics_steps": 21118830,
+  "rollout_wall_sum_seconds": 1804.8781972294673,
+  "collection_worker_wall_sum_seconds": 1879.644614041783,
+  "formal_training_wall_sum_seconds": 459.4583826623857,
+  "reused_old_train_groups": 12,
+  "reused_old_val_groups": 4,
+  "note": "Fresh: train16/val4/test12, 16 candidates x 2 physical repeats. Old pin train12/val4 reused; old test excluded. Worker/process sums are not parallel elapsed time.",
+  "groups": [
+    {
+      "seed": 41000,
+      "split": "train",
+      "group_id": "0c783c73bdf36e0c295e_cp0",
+      "input_sha256": "1430406d0c6dd93e9f59aa9602023fd895223df66f627e7223b5701929703a78",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "074d2048406da88c78bbe14a67737d83c172fef70f0cd5aa81aac2143d5275b8",
+        "geometry.json": "417b14425b752c0014f27ffe64564a43fa7285b342c10a8b67bd4c8488cac43e",
+        "scene.png": "6bc2caf01a500ae038a32aa7dd37f93492e6c3f84afc4db5ab4afb21161b65f4",
+        "pin_left.png": "e1cc88e0704ebf6b5314d83accfeeb1cd3268df87de3c83c975b52675e1811a7",
+        "inputs.json": "81c025d6fc7682c6083247067c0405b19603a93359398cec5811ffd413b01682",
+        "complete.json": "f88e41c61ebdbc2ec2b51dfb9e65a9486835398c78cdff9f5db1dfacb461c592",
+        "pin.xml": "670899be3601151dc460cd7ccd8febea3e5d68f992ce7d550eb9b3c016ff5e3a",
+        "outcomes.json": "5cfab016fc349b709c2c00567619091c8692b4d7f4486b89d48856409a416066",
+        "skill_graphs.json": "32ceff424831a8019632ec1dbd5313b08bf91bbc156e70ab9871a16970c9dcdf",
+        "steps.log": "12b18de084aea173b00db1f79ff6136d458bfc4157ebf6108df91b8ae87eb711",
+        "receiver.png": "67ff77bca4460b098ce3a60a48bb5a9bc398756c44e1c50c5ef601f238af10d4"
+      },
+      "summary": {
+        "request_sha256": "c66b3ac1952f1a8caad43673cc7f7d0573d9dff763aa49b3217151f77b22d394",
+        "input_sha256": "1430406d0c6dd93e9f59aa9602023fd895223df66f627e7223b5701929703a78",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41000,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 13,
+        "prefix_successes": 32,
+        "wall_seconds": 59.26175973191857,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41001,
+      "split": "train",
+      "group_id": "b2e711b257c84183c349_cp0",
+      "input_sha256": "23a4dda73590d17748fd3f7f08a7112a31d34d99b8f826b6c486db654269b5eb",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "c6f7cec7035051c7c3f0b372cb959c32ab0f9c6996c557db3e75f8bd29b53c6c",
+        "geometry.json": "8264d1d24bc177cd46532b9485ec83e1a8bf9737810722d0ef9707b835fe5962",
+        "scene.png": "1bb375834aba69e02b9699b691f6a9b3cb93f9bbe03f0d7615d75b0a7a6619f1",
+        "pin_left.png": "fb60ab5586f7a74c9fe00b078df82a9230c4825cf900c4856f2512c0145b7d7d",
+        "inputs.json": "1bbbd6ee03a75df408b00403bc33f9a475f67bbaaeb33ced18cbd0f4fe46e1bc",
+        "complete.json": "4abd568724b92d85dc89ebced92bab65ae72c5b6bddba00bc2f6430cfb808e54",
+        "pin.xml": "96f737863123ef4b7094e9b0e76a28cf31c3e6fb5365bf191f1426c58f067ed2",
+        "outcomes.json": "ead8d97a6a838f1a28ec1f626670fb94c74709c3fceec0a5b96bc7441fe07a2c",
+        "skill_graphs.json": "432b617a784f10ac393ba6812ef236d6fefe6568546d13abbc94b40aa8da0689",
+        "steps.log": "a4ab75648145cf9f70db8d5e0110ed92b89db7304f1f3d0a26e412e22032d31f",
+        "receiver.png": "4e29e716c7c78c2f56d76d7a634953173f1368257deb4282913696e59a1d427e"
+      },
+      "summary": {
+        "request_sha256": "edf868005ca4af36e99c8ed0f2395bc05d33657b528eb5aba78c7dab9681bf9e",
+        "input_sha256": "23a4dda73590d17748fd3f7f08a7112a31d34d99b8f826b6c486db654269b5eb",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41001,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 10,
+        "prefix_successes": 32,
+        "wall_seconds": 58.20345895807259,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41002,
+      "split": "train",
+      "group_id": "f3e3c4a8cef9b3baf4f2_cp0",
+      "input_sha256": "b66d72e13c266714007df25cf712ccd83f366f9316dc60ac016097c30df38725",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "ca328ba1563e2f57204c19ecab998aed4824dd0e9d07ab265d60da385fcf4b2a",
+        "geometry.json": "75feffe7d6879948fe01682cbed8bbc205da2369d66714046457e37d029caec2",
+        "scene.png": "3e51aede82d64b92a2d51ce76756fd9b30cc3eb49eaf555f815fcc2bcd3eddf7",
+        "pin_left.png": "3e072e6ab42415ee411e5e977a88480309573e61f9a4a752fff1750335f59a57",
+        "inputs.json": "e3b351183a748578e2ebe529e7565f9be2da08dc38f815a9d347e33b5b608430",
+        "complete.json": "80d1a823f7ad8cdaafbea7aa33ac6e8c5534b42c43a155a447d4d44b218c1734",
+        "pin.xml": "622c0fd034e1e085e2b55344bc2b65828da556407f0d74a402ecdfcede778e39",
+        "outcomes.json": "2544bfeba516d1743c06de77659b059e1683a99927dce39e13909c475824064b",
+        "skill_graphs.json": "c956c66bc7a4ac6644c7052850187c33c906053b584bba36cd49314bb3e9073c",
+        "steps.log": "bedba46919c8f7bec56533397e54d0b379c3a4c3edcb57ee5e5a98a81eb45476",
+        "receiver.png": "a25eb9f44681f0ba9f213baf2c46380d3ca3f43248c6a5e8f7045d4975274f16"
+      },
+      "summary": {
+        "request_sha256": "b6a0f538a4d688ab0ead032f4fc4f6b80b988665ad18bf91d07c61cc6cb97209",
+        "input_sha256": "b66d72e13c266714007df25cf712ccd83f366f9316dc60ac016097c30df38725",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41002,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 24,
+        "prefix_successes": 32,
+        "wall_seconds": 60.84230258688331,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41003,
+      "split": "train",
+      "group_id": "1b791f4e1ff9515adfcb_cp0",
+      "input_sha256": "07ab66115140c766dca4f3dafc210c8521b9ef0efb93e378d9b8ff56a0b32230",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "f90223a3e40528fbef9cdb81b202dd64da7e86a3e7421be9f30adb6ca8287abb",
+        "geometry.json": "ebcf1f3572bff0d7f72bebf462cb784fde82478cb47f94aadd17359e39e1713a",
+        "scene.png": "2f8c8cd2ff5f86b3f4dc57e5c6ee6ae00dd97b539ad7a3d883da8a65c2d91ed8",
+        "pin_left.png": "55d02d4aff3e5ba054efae235356aab2857d59bf4c59db9504ec629467b4b975",
+        "inputs.json": "62e9090fe2e74924827246cff037b21b71043a6dcde798f4509a38acccdcc180",
+        "complete.json": "16ddb3d3725346161d2e732be1ed07414f32e1b8b96c41ad6e77346238f2634c",
+        "pin.xml": "90add6dc694d77fd4fbf642fb7365ca49bdb88ee6d4aac17fb34abd30735eceb",
+        "outcomes.json": "11e7eb047debffcd3139a49ae981c55fea2d6e7a58c5602e59b07767ffc57469",
+        "skill_graphs.json": "210e058697d73e57419f011d1cfc960a436586e20f9f60e0619fe9d815e64364",
+        "steps.log": "856b242f4562c9b9604f3cb864b2d1180cb98f23d2884d381199ea23527bebea",
+        "receiver.png": "20ae2fc1d73155a8d0a8d61728b2ffd96f5ab0c2afebf77c19237ee5af75ae44"
+      },
+      "summary": {
+        "request_sha256": "287e0cec0666f5e02471df18a995628cbb1868ce50ed2dd589d9df80e83b2f8a",
+        "input_sha256": "07ab66115140c766dca4f3dafc210c8521b9ef0efb93e378d9b8ff56a0b32230",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41003,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 14,
+        "prefix_successes": 32,
+        "wall_seconds": 56.30193621083163,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41004,
+      "split": "train",
+      "group_id": "4412b41f03bce980da28_cp0",
+      "input_sha256": "a040155f012f23f8ee7497eaa7dd7a3d53d9125225a065d6762f62595a134293",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "bd79b71dbdbce0560b2acfd7db8c68d38896055554e0568afb51e44183347e5b",
+        "geometry.json": "9a1cf754071191dcfcfa1b43e1920d7dc5b1f2628696f47887a0dd40af37790d",
+        "scene.png": "8e89c1e11f71bdf16364f4b966929f74dcf029ad79f02a246a17b88b5f2a8711",
+        "pin_left.png": "d9db0d9d392388217cdce1526f30a32aa8c1067a572a676e02869233924dc806",
+        "inputs.json": "993c1e22720dfde2d488b3bbb35a7411fe23d13ca08b60d1772f82404a0d9a5d",
+        "complete.json": "741f228c4be2f3d5dc7890e956690cc455afa19b819a85a56aad1ebabe516878",
+        "pin.xml": "ea69ac5037184e11221fd62d5060a0e94342d52d289143ec88cb4cb64ef813d0",
+        "outcomes.json": "1eaa80b4cd04ceeb63ccc784bd2528895a9c0193f14bb87e6463e70655b73f6c",
+        "skill_graphs.json": "14fbd90d90c22720ca4aa3683c4bdfe52d4890679d40a0c1654aa2eb7146fa7c",
+        "steps.log": "ab86dc119ef084c6b920545f0f212276b8a0ff355428aed26325049b027c0cb4",
+        "receiver.png": "def09d2ff60b85863653da592f58e861bbe9eb49f7ca17bf648a98c501f061bb"
+      },
+      "summary": {
+        "request_sha256": "d40dfb093d26c1a67d995229cbd46abcf53974bbbd77c9714f9ff47a891208c2",
+        "input_sha256": "a040155f012f23f8ee7497eaa7dd7a3d53d9125225a065d6762f62595a134293",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41004,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 4,
+        "prefix_successes": 32,
+        "wall_seconds": 59.64718684507534,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41005,
+      "split": "train",
+      "group_id": "fc6885bf3ce67d1bf850_cp0",
+      "input_sha256": "8ff9a1e7d0f57f8de6ed245dcd7025ccb3711c3e21901a8a764ff1f5b26f65db",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "364ee2a09b135a67402a774f09370d4fbc8b1fed687c44ab8e98d16050e95ab7",
+        "geometry.json": "22f9437db19bda1a0668e08ce74b6020d2dbdda2e9c50e976cd47774ead3aed6",
+        "scene.png": "ea8e0febbeeb173a95ad20f7c75e003d7f789c4a4ffa117df9fe7c71a9370537",
+        "pin_left.png": "49abbda892e5aded5a360a65c87587f5900c06fff46e425ff897c067f69ef18a",
+        "inputs.json": "a1b8979f6f851692071b61962bf6d8c27658d252f32e168cef896498d88249f8",
+        "complete.json": "49036852501ea6f41ded27a9b1cec42ab803b562d3f75160532f62304675f8ef",
+        "pin.xml": "ac6e692627c58429071774d18eabdf34b972bb731a70c5c04f50a10537507e9e",
+        "outcomes.json": "24e7a1e1dd8fe651db6993d68550cdbdd45eb0157d808236c35951d459e60fd2",
+        "skill_graphs.json": "693a66e87579b528c0355b836d607161f7679cf5602a913d4cb6152aa222dac2",
+        "steps.log": "426539a9adaa1c9095447d086a3ef55aea01b889cb327aadef1f97cf72054e33",
+        "receiver.png": "19681d5101e29dc1b8c3c15b31e7d1fe70f47572c5ea1e89beda207cca899ad5"
+      },
+      "summary": {
+        "request_sha256": "292eb49b975c52690d15c98b519f37434f4ab85645e679ad6ef5d615bbbbbe98",
+        "input_sha256": "8ff9a1e7d0f57f8de6ed245dcd7025ccb3711c3e21901a8a764ff1f5b26f65db",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41005,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 16,
+        "prefix_successes": 32,
+        "wall_seconds": 59.25442065298557,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41006,
+      "split": "train",
+      "group_id": "59fed12a449befc141dd_cp0",
+      "input_sha256": "3b9f970a79748015ca33ce729f7decf7eca9a25c56cd201d19f136140cf1afc2",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "9f026f1f3611d07b27e9dbc9a64f97da29632b639c907949aea401a4a858d96c",
+        "geometry.json": "223f858b92f372948a649cabd69d519ea0dc0260dd10957e8dffce681b2b63be",
+        "scene.png": "1f59d2bc75058aee0dc42805862af5df8a355465708756b3cc32438e5f00185c",
+        "pin_left.png": "cd10ba208a64178e13624d993ecb453b98b33077dc4635fe60ea4b4916ee0aeb",
+        "inputs.json": "955e81284870bb1a48cf2f9e2a60323c25c185e511f92b2063b104a17cac8132",
+        "complete.json": "7382da25ee0625774137986e1983582d70d61b23fc285293405584d4ec538e56",
+        "pin.xml": "c406930becd97a15afedd9a6458d571b528b1522e979971ea9e090d9a8a878af",
+        "outcomes.json": "31a8b47b05b0a7030b635671c74b853c112d217b416b6bff551ba2281b70186c",
+        "skill_graphs.json": "b1f667fc95e4fc4cbf647bade7a0d9129070c18ae7a905cac4f6917e4f8e20da",
+        "steps.log": "c7312c90bf6cc0d77defad95fa0ce410e5ae666e75518b51276a706f886a5fa3",
+        "receiver.png": "d3c4d1253baf2f0ee21f84192bfb845dc6dda0b0b0fbee364b754b87d98ca897"
+      },
+      "summary": {
+        "request_sha256": "d46c42f1ee418a1395134d7b0937a0789de93dea1c9eb6bcff7e83c4ff7a3e3c",
+        "input_sha256": "3b9f970a79748015ca33ce729f7decf7eca9a25c56cd201d19f136140cf1afc2",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41006,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 14,
+        "prefix_successes": 32,
+        "wall_seconds": 56.66869431594387,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41007,
+      "split": "train",
+      "group_id": "b3458bccffe9d3eb8cd0_cp0",
+      "input_sha256": "65b4b49526535b6c04733300e44d8c10fecab6514d729b9b3acddfbf48dac47a",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "2d992921c7be7160d33c9dfecf933d66589b737b52e755143096b57bf1b3f6da",
+        "geometry.json": "0856e433922317936fe69a929f9c2c1f4ddc76387c38589fee77c4bf46a5f6db",
+        "scene.png": "09df4b2ca364713e78695711d9df320b2de945bb7d48368cc2a4021d0de726a4",
+        "pin_left.png": "9907c34f014a9a09f753b068dba4b743e56a21ca9d5ad82e69a21c5e9dac1ea6",
+        "inputs.json": "eadac70cccf71141ff790196df437668ebde8273b926d21d559976daa895fd6f",
+        "complete.json": "e248f1666189c583d18ac5a3a2168d195dab4bd2c539eed3bfd3977f81b2413e",
+        "pin.xml": "fd22fe81b22598b3ee6d227a647559a22ef45a9bfc6f4cc28e855ea80bef510c",
+        "outcomes.json": "06a8aaac00d3959ed45353c0f0a2f422124940d17e220ebbae538deae81cc2f2",
+        "skill_graphs.json": "9a85014e49ff0d8092bf4313a3b333e388cc3491c47b3f8792cda89263a739af",
+        "steps.log": "68ea80d3f20e51baad4e5289439c288db647ff5aaddb039bbbde81db2ef9cba2",
+        "receiver.png": "6f22e50d683027a3dc88c202c2439ff6f4563ba9f6102091ac2084a98d5cf9c4"
+      },
+      "summary": {
+        "request_sha256": "5e5bda86faf8095e9b6c2ab57d7f1eaeabdee58a609096a5f91f8582b7c3bdc0",
+        "input_sha256": "65b4b49526535b6c04733300e44d8c10fecab6514d729b9b3acddfbf48dac47a",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41007,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 10,
+        "prefix_successes": 32,
+        "wall_seconds": 59.376107456861064,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41008,
+      "split": "train",
+      "group_id": "c22e76d78aa87416db7a_cp0",
+      "input_sha256": "5891ca19db352f7c8c3448618f57b4bbf09fd6856a67495b03c33f7d8abbde99",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "538fb756c53e01a8e157ef4a4cfdf2c6bc468483fe19a3ba53325cb54998a91e",
+        "geometry.json": "8e3887031676508766d1cdff036706a695c4e02d6164e188bd903f4cda8735e9",
+        "scene.png": "15b544c226424c032aa4d6e362e2b3afb6d1ee81fc84dd2c2853558a6b2154ad",
+        "pin_left.png": "87bd771631383b04b7a9cf2701f72311ac731e8949da8932df4d73a089674b95",
+        "inputs.json": "47db19732fd37b40061ab9719004fe0a7fc998d25bd220c0113fca28a7d71fc8",
+        "complete.json": "b62ef83ff37d797c3953dfda3fafb062d798d37f0042b0f1e11c6fbe3894dd3c",
+        "pin.xml": "c5e30f892965cf6da8399acd22515e872ffdef5081e61a416288ca39e235b50e",
+        "outcomes.json": "7a6f5a7dc8fc83cacc4ddfa73d432c933462b25525f886a0316e9cd8a482add5",
+        "skill_graphs.json": "7faefc55e91adf4667b520542662e14e2e7329f344d43a290a933b2251202a29",
+        "steps.log": "7e2cd182449fea7eb0950acbc54363e39e177bf3c5c945197cb949da2f5961ae",
+        "receiver.png": "a04e9f00f955a823d0a9c93ac1fe7f84927bda36250d2cf8232f1cc8b7c75b6b"
+      },
+      "summary": {
+        "request_sha256": "05ab5bb036fc06c242fa22f87c8f5832c9a00968c74441c4ab949324ad747778",
+        "input_sha256": "5891ca19db352f7c8c3448618f57b4bbf09fd6856a67495b03c33f7d8abbde99",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41008,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 12,
+        "prefix_successes": 32,
+        "wall_seconds": 54.13877698103897,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41009,
+      "split": "train",
+      "group_id": "2231580746bf74fd9e50_cp0",
+      "input_sha256": "7eeeac61f9876c6bcb4c112aac5c5a6c9fe93b6f404f61569ce9f6b07a497b56",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "5065c3c30f6c36dfa2032bd590e7497b89a5a60982819bfba0e513fecda096d8",
+        "geometry.json": "339c2706d7d45338f803f0609cd3479f35df07f89ac29c52058e52a7500ff05b",
+        "scene.png": "8fb2da735415ce52dcbd4b0aed18164b3629dfa0430e3e96b51944d640a7e69c",
+        "pin_left.png": "75fd1d00f6c35871b9e19133a8bef0e3d764ac9461cfcfef32a543a8a4202da8",
+        "inputs.json": "4b95a7b1390c888a84485bf50707a2ef2486dbf62b9b665adf0767f1cd531318",
+        "complete.json": "1c0515014dc45b404c12070684f535a8e3262a91cf97d0e3532f00c526b9dc4d",
+        "pin.xml": "6b4da0d4ef7bae9130599ddff745647d7c42d611e26600a2a0a1b65a11eb3f52",
+        "outcomes.json": "c570daa2989bed25151acc6f236054e634ef1ca7622c6efb31e94585e7367872",
+        "skill_graphs.json": "40de56a79e7fc5c4f58c03571d7a55647d50056652914ef1020fdb1f3ee9a5dd",
+        "steps.log": "6739578626bad40efc0df7e02213de30185ac99faf103efddbe42e9c53f02fdb",
+        "receiver.png": "b045837dc837e8543928d7d13cfda526471185860af8527d62246679b53f2d13"
+      },
+      "summary": {
+        "request_sha256": "a6cfdd46299437738ed0b0be69ceef10b36690ac37873a8874343e908a2298f7",
+        "input_sha256": "7eeeac61f9876c6bcb4c112aac5c5a6c9fe93b6f404f61569ce9f6b07a497b56",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41009,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 12,
+        "prefix_successes": 32,
+        "wall_seconds": 55.327950450824574,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41010,
+      "split": "train",
+      "group_id": "c7e30471c12722f55d18_cp0",
+      "input_sha256": "acebeb60cf63153c4ed0237ce9222e40ead7f4f16739d5542cb357900556d51c",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "3af990c265416b5747543ead5d10f7f8d9bd12b8bdf1ddc48ee97f27a08ea649",
+        "geometry.json": "9f2f71c10f9dbb6c1d50efb4cfc470ecd6a2a21951e384dbcfa1fd860909cdea",
+        "scene.png": "46bc3cb30b7220470c241310be99e6b24cd2dfc5fba1834ad8881c8cd7a2caf7",
+        "pin_left.png": "2bcd21ce6de1aa27c6d7390726dfb47c3eb622c2478be9267ea586eb386ff59b",
+        "inputs.json": "02fd8d4cd6e21815cafe41223beb6769fca330837e6f2d2714ec06ac2d384dc7",
+        "complete.json": "faf01c3c2fcd8e81395235c3e10e93a9176a6c35121b3197d524b8dd8bf4f4f4",
+        "pin.xml": "bf515f2437160f47707d2f187bbc64e073b583db5cfe3062a7d6f659aa5c8463",
+        "outcomes.json": "9bc4052b27270c0cf466ef13448a617352f79fd4be1a3a22592f3b957fed3e17",
+        "skill_graphs.json": "050971dd0f42ecd4b0a585ed2cbf1b545996b5b9f7456bc899e196388f34e52b",
+        "steps.log": "82d7e38e20a6fcea48b0856788be6e97c8f8e9b40984f3a70f053582abf50cf5",
+        "receiver.png": "a9efe73495ef1d9dad31a4acf8817ebd1d0356f8c8d30cb1603ff5306b64a918"
+      },
+      "summary": {
+        "request_sha256": "681911ba9592d129453be1ec79628f966b38415192814ed59382264e55d8e93e",
+        "input_sha256": "acebeb60cf63153c4ed0237ce9222e40ead7f4f16739d5542cb357900556d51c",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41010,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 12,
+        "prefix_successes": 32,
+        "wall_seconds": 54.14601895213127,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41011,
+      "split": "train",
+      "group_id": "be857b0212021cdfcf1a_cp0",
+      "input_sha256": "69bc3ec3d45544536da6161a4b3a67a632230388af18e153387483c5adb3cf2f",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "c85538cb3f6eb39e35b6440b4c705199dbc205688c8189edd80fb593f783c55a",
+        "geometry.json": "26d6c390125bac773911eb6ff7d3134e488d18f346f8e18c8b9d88df2b5f522c",
+        "scene.png": "89a3208c589b544d6b9be1cede8d44a8a4c0ad755d3365645f21fb7f43d6f1d3",
+        "pin_left.png": "5a227aafcff660377c329b923caa5772f24f28a72e4251db5fe78e3f2f023468",
+        "inputs.json": "9c65dc64eef4c4fa3fc1bb0812053b2247a87123e08fd20d09fb293ff1adaed6",
+        "complete.json": "6907076d48ceac27c5a9f4487ca8e42a658a0f2197f65feea65ca022b727a554",
+        "pin.xml": "dc15e7a03ed1a0198a0e93f6bbf677f14210a09d0c3479aa172ce0e9010b0436",
+        "outcomes.json": "4dcc8ea745e91d1f85d40e6760df82f698fa33bca5958d8c3d7da0c58a458e26",
+        "skill_graphs.json": "5bd1cc19d594e05101e27b9f54595e162e3ac32b841c0e045167187509838c0e",
+        "steps.log": "127081ce600a7c418cf9f6ad281d6e407f16ad42cb654757417942a932c7bec3",
+        "receiver.png": "4ea969f3b8f9d7f81a8121dbab6e901e8053f64bea729faeaeec1bedfadc08dd"
+      },
+      "summary": {
+        "request_sha256": "92e54ad43431a7cdb892cb14932192b59b6a5b16d154f0a248eafc47fa27631c",
+        "input_sha256": "69bc3ec3d45544536da6161a4b3a67a632230388af18e153387483c5adb3cf2f",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41011,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 27,
+        "prefix_successes": 32,
+        "wall_seconds": 55.89542689314112,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41012,
+      "split": "train",
+      "group_id": "72095a39845e9a557158_cp0",
+      "input_sha256": "e73a1a0cca9a696597b4df5d70fad58cdcf70fea579ed21fb116476c0f4cf902",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "0156f3d0e3c8993120bdb0ad1a849bde5095569b5cccb8e884a7161553a9d643",
+        "geometry.json": "7e4ae2253e6f2de20e1ef32fd750f1bd893a9262ae72834c57d2389e8866d8ec",
+        "scene.png": "253ef461fe64ebca4365b88496d3a84641896a4331fb7e7c7e9039647ab4d8d2",
+        "pin_left.png": "d941951f4223dc9267905d09e5782c149d389c8f3714bab9bb522eb7059a1855",
+        "inputs.json": "be98277c5d2dc7c731e7c0a4894ccee422c9528fd00cef688c05764fcae5d203",
+        "complete.json": "77596d50f7019976273f6ed743706ecdb56e394c0db9328470af8d6f3475f3d8",
+        "pin.xml": "3de968bee178170a4809686c6c61f21afea369f3aad54f540331b9fdc2b46798",
+        "outcomes.json": "a79f7365a1d1e85d81324fae370617ccdef5be88827800818a0a3cbef8eeca4f",
+        "skill_graphs.json": "f30d33f2572316ffabc24c6996381202db7c2ecb4f5eacfbdbec3d343026f019",
+        "steps.log": "4231ec004711cd46b2b408e2559f10a403f29b0e8998e4b61da313f26bb806ac",
+        "receiver.png": "527f8b89fdbdafb9989322a78f10898df7f6fb1045e7f32e5bd069dd4e4c013f"
+      },
+      "summary": {
+        "request_sha256": "7f2e34db9cd9288666e3c9afab4297bb20b3cd653afd6bf8e16e0b9ad49826b7",
+        "input_sha256": "e73a1a0cca9a696597b4df5d70fad58cdcf70fea579ed21fb116476c0f4cf902",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41012,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 22,
+        "prefix_successes": 32,
+        "wall_seconds": 61.594026506878436,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41013,
+      "split": "train",
+      "group_id": "09e0451bfaa123547a98_cp0",
+      "input_sha256": "fac46b48db940f646e4d32372682bfe73d86978698d632f32608eb9eb2a52860",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "467e8e7addefd71b51d4ebe756181dedb5bb0b9697d4e3b4f4fd3ae51ebe5482",
+        "geometry.json": "8aae8a7047ba9e79191a2cf9a16d30e084bcabe3736dd51e2b58fc07e1bb2c3e",
+        "scene.png": "b8befeb0a3ac09050498ffdaf56cd0f7567b8981ddde0d7a55bf5baaf0c2f36e",
+        "pin_left.png": "37db2034a9f8849dfc8550bda8cf0790050a53ec02b2402817b76b10de3faf71",
+        "inputs.json": "068ef8988902aa04f3320cb6a959a7fae25a0c266ba8ba11fd9d31e56a770b40",
+        "complete.json": "a2c6b8b26041f53ffb373bd046e9418ba7245d8e716eed2b14c8b52f9d5a00c2",
+        "pin.xml": "a1bd2a199bcf96dfb844912cf7476a14c60348a78544e33188cb43384276ee76",
+        "outcomes.json": "08a63d7fe1a8ac34b166ab51a3fc4e60f02fb275eed225f0ff31bff3b6c4f58e",
+        "skill_graphs.json": "cd9460dbe43a61e2af82eac45e99090085ca75ba2970d8050d658e2f303c43d3",
+        "steps.log": "b612d82a3495cc1bb3b4c470194ce094f5e616f98dd8cd992def1c169beed3c3",
+        "receiver.png": "ba6bc626e25043a3634e2f4f8f54efc555aa5ae2fa26ff962d859761e35fe2c8"
+      },
+      "summary": {
+        "request_sha256": "75547587840224583f529acc9c91247361b7c1491eed7c15b602f43a0818cb0f",
+        "input_sha256": "fac46b48db940f646e4d32372682bfe73d86978698d632f32608eb9eb2a52860",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41013,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 26,
+        "prefix_successes": 32,
+        "wall_seconds": 69.61226481478661,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41014,
+      "split": "train",
+      "group_id": "bfe5041043f27dde4092_cp0",
+      "input_sha256": "a9a60443a881ed26c2bb7da2f424a78b542564257e9d16c183f40ed779cecf97",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "20340d87ef5a82c2468432764d48c1d2f3654c60173713f3bf9fe064cd818c39",
+        "geometry.json": "d91cd243c64a4d318d1832c510f41e14d0e6461e5b87f01bbc636209d2b9f71c",
+        "scene.png": "f28133706c1475e91cb3ab5c5a2f534936a196fbefc5daf295de544e2d6df94b",
+        "pin_left.png": "4b73015ed7a510c95ae072b574534301f756e4690a2efcb92e6375d8e5011e21",
+        "inputs.json": "2cbcb68e2337ce01adf43a324f20b865930982cabf754befdf49fd610da44bc1",
+        "complete.json": "94f0b0acc1e381f58e39b3d26e0e8f3b844287fa4df0a56805444baee7187816",
+        "pin.xml": "37f14c5b5b5834c77500fa8e4d047f7362c08cd2306e6ce474cca00e211906ce",
+        "outcomes.json": "b14913105f132c386733d234e1b5bfc28b5fd00a17276425c08c2896b6beecb0",
+        "skill_graphs.json": "42a5e8e79749d2f2625d90b20d8d92da7a89485cfb4c6ead9b9669437dbc9099",
+        "steps.log": "bf338568cf23cf75bc741ffcee3c744e01af5bae3dbe509396bc77e26e7a61d3",
+        "receiver.png": "93e1aac49bb61bc2b69eb18f734b683e28198437e8e9f6ff8b3490ef6ade1087"
+      },
+      "summary": {
+        "request_sha256": "96fc7167e1093aaf3ec6a53ba1d81c9e43053f7bff056b4838a3f5305773de49",
+        "input_sha256": "a9a60443a881ed26c2bb7da2f424a78b542564257e9d16c183f40ed779cecf97",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41014,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 24,
+        "prefix_successes": 32,
+        "wall_seconds": 66.49418372800574,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41015,
+      "split": "train",
+      "group_id": "234d83ac6c95edbf91c2_cp0",
+      "input_sha256": "617aad715206e2d8f783e8693352bc0d83279dcb51ac3951fe9425635bf6c448",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "fb8562e90da2c9086f7270a2bc5145eeeb4e884cc3e08e9a81f4400181b66fbb",
+        "geometry.json": "8070e5133fa1ee4937dd30a7573c58164e8df0a0af9748eaa143bcf4e4a84965",
+        "scene.png": "79dc4e21db49405e963a60b0ddc1d50170fdd45806d196dc04b75ecc89702978",
+        "pin_left.png": "9eab3b79a244ed6bca2fc2c7409aa30e2083c2e2485ed48d17f2625031b92c69",
+        "inputs.json": "328642af7cf13cf630a31277bd550f5cc5c898ec5a05714ace68160f855c1655",
+        "complete.json": "4a725f0eab0946fd8ca3b15447daf5bf2e9b320792d1da9b605c7dcd735dfaf9",
+        "pin.xml": "ea3d529eb79a89eb94f8d837f45826586c747224000c5a423156c0040dba83cc",
+        "outcomes.json": "7aaeb96db5c6a4be38c85442c3e747a32435eeb20ba242371da6997ed15561d3",
+        "skill_graphs.json": "3df1e2fe3d35ea8d49be290abc48665700a9600db267f39445489395890d1a07",
+        "steps.log": "01068b6bbe0a420e14dd68b7126854cd98871234eda49f83ada4706e802c024d",
+        "receiver.png": "d6eb209ae65bd9b37dbd67e2f6adc147d8804787f21264c6e87493bf87d8dd4d"
+      },
+      "summary": {
+        "request_sha256": "5b62d65f949a853dbdbd5ad05f795561adc37b67008bf4b738fd135ed15fc534",
+        "input_sha256": "617aad715206e2d8f783e8693352bc0d83279dcb51ac3951fe9425635bf6c448",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41015,
+        "checkpoint": 0,
+        "split": "train",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 10,
+        "prefix_successes": 32,
+        "wall_seconds": 67.88865347509272,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41100,
+      "split": "val",
+      "group_id": "c2ee8c70eaafff8e60e8_cp0",
+      "input_sha256": "5b2f312ff2adfdd559ec7b8704b55d8586e89661f338f8a8b83c422f4677fb6e",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "577a0b66cbdfd53671c9013ac65c135776d1497bca1cecc0d0b622501134e0dc",
+        "geometry.json": "1a9950c6090726b38929ddf4aec8c64545b35b22c54b29c998e266761b4f8297",
+        "scene.png": "b6a7c1282795c2d685d328d9572315dd1a5111c34ec2efbe7e60c5cc629af193",
+        "pin_left.png": "c863685e38164ea1e242e1a2d995800e4b9e949495c89cbc007fab561415e9cf",
+        "inputs.json": "578f2b2851b7d6409591a47804539a4218dc4de8ef14ac0fc819aeeaa0dff35f",
+        "complete.json": "61c74eafc031ac0556f1eb11d14d47b313b5a5868d88f19ca31d50be90bd7dac",
+        "pin.xml": "191ec98671419f55b31ad98d45129709d08b2b697a08bc16c6fed39268b7ce84",
+        "outcomes.json": "68194e6a9be26d1bc80cff1f3f486be28e87ab06b9e9e7f303b39d6ca12a8cba",
+        "skill_graphs.json": "88f145aacd708836a16397709db2de338aea60e1b8549866dc86c54c43074cb3",
+        "steps.log": "9eca51d8782e769bebbdc2343a9a214758064730460ef5de59ceed2434ea418b",
+        "receiver.png": "b0f92ef90316aaebd890e89c7ee5f65f7b89b6dd8cac230f4a63740ebfd7b4ce"
+      },
+      "summary": {
+        "request_sha256": "796e3480749c19e5d1853286d35858c07909876f6c4fa215cd9681ddad16b03e",
+        "input_sha256": "5b2f312ff2adfdd559ec7b8704b55d8586e89661f338f8a8b83c422f4677fb6e",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41100,
+        "checkpoint": 0,
+        "split": "val",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 10,
+        "prefix_successes": 32,
+        "wall_seconds": 56.88071636785753,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41101,
+      "split": "val",
+      "group_id": "383e2240658601cb9352_cp0",
+      "input_sha256": "ba1cb7a1b653df02d63ba5556d7cc34b1dad8f5059d419bd354c9d5a96a78418",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "a3b4f11457508b44c15bcfb6978acf6258d9a585cfbb815fa0a2a78893fd02bc",
+        "geometry.json": "bd025628d105cfeaf0b3287d5ceb2cadd952c109ff89165978c975819b9f28f1",
+        "scene.png": "f629f0ecbbe15548f3238c803043e23dcdbfeea2e76844c48dc8ff7bd3b66d9e",
+        "pin_left.png": "0729adee47339b8539ddfb6e3c9e4670b53d0470d753912c7ec5a4064518ce70",
+        "inputs.json": "95dafcb5f1496f0b2a6910efb85b90f59b5a08d0bebb1eb4dcf1eeb0b949e9d6",
+        "complete.json": "48b162e48d8db7a4bb39df8a7473f1bb4aea72e168bb48a95df5c6b366c9473b",
+        "pin.xml": "d95c217748a5d570d72337829c945faefcc67bd1c35f40b8070270cf4e631340",
+        "outcomes.json": "703458be416adc486051c7e104874d673bc53becd5dbd434abfc73704c4d90ae",
+        "skill_graphs.json": "3813421941992aef7509ecfea4f61e86b7e451b76b394dd0431b19d617202ed5",
+        "steps.log": "2eaa0f90ceb0380288404a0f2388c4da2510e65921220cf0225edbed2d5c192d",
+        "receiver.png": "8afd026ebfbf3ddfebb91b29b01e62b23e369e81e03d557b4474ff4cc7128d6d"
+      },
+      "summary": {
+        "request_sha256": "7fef04a3cf2986c553d4d0145c7ca647f9394a2821ba06d1eb05382aa37f4ec9",
+        "input_sha256": "ba1cb7a1b653df02d63ba5556d7cc34b1dad8f5059d419bd354c9d5a96a78418",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41101,
+        "checkpoint": 0,
+        "split": "val",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 10,
+        "prefix_successes": 32,
+        "wall_seconds": 57.91117326798849,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41102,
+      "split": "val",
+      "group_id": "eb8a1a2c4b339166ed92_cp0",
+      "input_sha256": "db21f4c97d909f13aa6c8a9dadb8435e030a4c7f8a93146b751eded72a7c7f5e",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "ea1ff9b0caf605761d7119ee97bd364bc598a5502c835dbcf165249236b1cd53",
+        "geometry.json": "a614b852a20f7b803f97d22ba9372e7b066b1cbb67e1053049728dd27d2e8fae",
+        "scene.png": "5f3a922034622656458697824d1cf5c5b5b36c749780e0e2efa8c2b340d1cb54",
+        "pin_left.png": "928c24f3772212965d968f0b32ec94b85cc967c55a682cb380c22f174fb38de5",
+        "inputs.json": "0a96e14c3471dae70a8884b84e79073ae2ddc85c50cf3763d31e8891025dd853",
+        "complete.json": "f5366ce836982042e9d1b7d7027adc873a898f62857d487e3771d77d7dddace7",
+        "pin.xml": "57751d2dbb90975e2c1216d76965d40aa91ac1dc8f52383e04f8f0d76654abed",
+        "outcomes.json": "545888c02c35299f98b8bbfe28e316b73bd2dd8bf2dd8e7c4399234d26731b57",
+        "skill_graphs.json": "0a8489768e4eb338c2aabaabcd2b7efb0cd655ea48350e017c0dbfd9e4146d9a",
+        "steps.log": "900da9c636c66ee3caa0c7b7a97e936442ebd182b99b26283902a7b1dec9951a",
+        "receiver.png": "a714da8380151fd3fcb8d13f17df1fb0198c48587cf70e9231b5d8c46788929a"
+      },
+      "summary": {
+        "request_sha256": "27c21f0437c653d78ac2637fd9070d73d2d8ed74082c840f47e1588b3f2dff1f",
+        "input_sha256": "db21f4c97d909f13aa6c8a9dadb8435e030a4c7f8a93146b751eded72a7c7f5e",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41102,
+        "checkpoint": 0,
+        "split": "val",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 10,
+        "prefix_successes": 32,
+        "wall_seconds": 56.110834868159145,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41103,
+      "split": "val",
+      "group_id": "6a421964f5873ded02f8_cp0",
+      "input_sha256": "f29001807e17afb6ae2a1098f9e2073adbe04dcc2cb95734ff33dfc41080a406",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "862d72e82ed1a70c743069d9dfae84a79f9cf18de2b642a3a5890f8cc126c0ca",
+        "geometry.json": "05ef93d46762e814688bb237f1917c7811d32b85e4bb05a2adca4f7203af65e6",
+        "scene.png": "b3d99a657ddeea294babc224dd0f44a325a8108e813fe9f47eef0cb031e0f945",
+        "pin_left.png": "4b896a566b4236e75590a243f2dff05fba267224b4539ff2c98a09102e4282a9",
+        "inputs.json": "adff846d6f8b87f3ef127f40f776fd9d6bfae56114483faf613d6509227c29e6",
+        "complete.json": "30599568db687c29002f5db87bc5d8483234a6e445f83d66bf3cd07faad96d9c",
+        "pin.xml": "3e8afa151c2342358c11a12b8886e411a86806778ac0df10e789bcc7b9a37839",
+        "outcomes.json": "eff69e2ae307842a423dd5d6b1538e061202cc23e6afb5ac5a3792c9ed7c98f9",
+        "skill_graphs.json": "b227b2cf2fa3c1cf426cf1b16d9090713858126608e483e8dcb943564e15a726",
+        "steps.log": "27c92eeb9e66c32f4097265c394f5b2ccef0474bfd4817785b3235fdb79748f9",
+        "receiver.png": "1641b0ec811b05b8aac176fb961c408464d107e66535c9ca1a87062f0180916b"
+      },
+      "summary": {
+        "request_sha256": "849533f1710984a2433cb9b5c3768249477c6df59c112d8e5576be3b368a1a87",
+        "input_sha256": "f29001807e17afb6ae2a1098f9e2073adbe04dcc2cb95734ff33dfc41080a406",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41103,
+        "checkpoint": 0,
+        "split": "val",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 6,
+        "prefix_successes": 32,
+        "wall_seconds": 59.510756799951196,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41200,
+      "split": "test",
+      "group_id": "2e9bf06aafbc24431c3b_cp0",
+      "input_sha256": "34a11515e95c06c8d307937d49208ff5ea3f47507966ff39710bdd73fb2d232c",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "a0a1a6bd0471e8db5f263339915e6f43b95f6ab5f7c6093a43b9879b2ee7e42f",
+        "geometry.json": "7a11ad424a501991acf8dc52d80c1262aec2da018a20b69d3ca14fe25ef9446e",
+        "scene.png": "212dd1a65b27c17c4e9c108d0411b48c5535f406bdfd7bb275e238ead16e01dd",
+        "pin_left.png": "e98382b30893e34b59ad4d2eb65b8b66704ad90618fb699e61ec34c31cffbc77",
+        "inputs.json": "b70a20446ec80827297af7267cdec7487d5d2f5fbaf44b8e4f8672dfdee5a03c",
+        "complete.json": "ff617b02637063235393185dabff8cca4fa49b5b946c3199e4e29f919cfa6ab7",
+        "pin.xml": "d53e09543fcb584ee0678434a2402582aa0e8bc5e3c3b61b7098130594c79a83",
+        "outcomes.json": "db5475a669d89fc6ca0ddadf0328632b79005ded8df0dfe8f647bdd23ffbf798",
+        "skill_graphs.json": "76bdd27274fcfc112377fc8eff1dbf6527f8f45e4b5098c59e449777e51fd42f",
+        "steps.log": "2b8870e29f00db16a3b1bfdbb996d3163274678f7076fab499791f4575d1bd6e",
+        "receiver.png": "301a2129255291c4c6ae3c4f99f460922056909070b6883c3ed50d9f8c86b963"
+      },
+      "summary": {
+        "request_sha256": "9f9c161c08ca09f35d301bdec0166c716459b9cc192bdd1fe0025e5836881ece",
+        "input_sha256": "34a11515e95c06c8d307937d49208ff5ea3f47507966ff39710bdd73fb2d232c",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41200,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 24,
+        "prefix_successes": 32,
+        "wall_seconds": 59.77529526501894,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41201,
+      "split": "test",
+      "group_id": "f55853dbf036eb681c1a_cp0",
+      "input_sha256": "efbb7822d25e7d251e0ee8f40b7018dfbb3c7aa2543d1b80867709e92b4b3c72",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "e4b47c4d878f8ca4225c644d62063eea7365ce931c95228fd92191f297a9c064",
+        "geometry.json": "3f21b704e920008dd601f5a753108e4790a21c8018f0535b7db56d400fb8fd21",
+        "scene.png": "da3b9790f9f3f73f16091ea59de0cd0975d1bf4d6e1009cdae085ab36a8ce741",
+        "pin_left.png": "39cf1739ad619efb000f86c610cf6eb155dffd9915ec4cc5f7f1c344ddcd803b",
+        "inputs.json": "8a7b3eb170177184ed608fc4bfe39cc96d3913104436b4c71e92398b81d81f6a",
+        "complete.json": "ee5d5e0e101a7a4a0623271c225d00ed24f84bcbaf8a206c67f8f6e3651923eb",
+        "pin.xml": "5af26e424ad98482224f5f1c5a63083b08af55c773eb68d9f864d70ae65a4126",
+        "outcomes.json": "3d9b767fe364b78e89dc2f349a72d5ec910ed2b31bcbbc3f99d27352e9855565",
+        "skill_graphs.json": "f5024ce8ee4b9255316b7791d46b0bea5b5c81f3169f124e499419d025e3372c",
+        "steps.log": "ef085709401f448f8cb472cc421d04e07f6a31ce271a447b3799d4b391842eae",
+        "receiver.png": "bca72cb8a96b0a7bc3763bc486beb2eb12db5c71331afba0303ac80226c8de81"
+      },
+      "summary": {
+        "request_sha256": "ac9d58d4b4ba70412e7235f364cc865471749fb524b7314cb9b7ede507fcd086",
+        "input_sha256": "efbb7822d25e7d251e0ee8f40b7018dfbb3c7aa2543d1b80867709e92b4b3c72",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41201,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 20,
+        "prefix_successes": 32,
+        "wall_seconds": 58.733085884014145,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41202,
+      "split": "test",
+      "group_id": "3e2011c9b6508690ba59_cp0",
+      "input_sha256": "0ee2d7e943c2cde90f7d329a9259dc92921f2d156d2380b0d059c46c042cfd2a",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "ca12fed1e12874f2491b9a6f6bdaec20c21a4112fe03129f6ad029830f7d7818",
+        "geometry.json": "d45f040eb47059f2835adcaf49160911a098cccd1cc9f821ecdeb294a2f7c368",
+        "scene.png": "0be2b651a8beafeae6807a1397070238a3cde8137e7dd4bf3ef21df55b94d131",
+        "pin_left.png": "25f1e4cdc8b9b0ad688065c901d6c4e9bc8d76b6866be22b7a56b88666228625",
+        "inputs.json": "53b93f2a6942cd9d49b7e5dede4bd372e4dd73a633ca41209b26190cbcd1ece4",
+        "complete.json": "007193eeebe292ea6fa402a41802740257a52c9e70fd8408482cf474794c2e2a",
+        "pin.xml": "f231e585b3052946cb207f7317247c64895cb5ca64432fd6ff0b5d9407f57216",
+        "outcomes.json": "46d7af0c9db0b8a6c935489f1e91759fbd95f3b6ad7bd72e1830bd9dbdb35687",
+        "skill_graphs.json": "d1f9b1ffad2b61a76ddc21aa0738b46bc9161f22b9f348c8e4d6e16306f4d793",
+        "steps.log": "233ced4a89d8ee31ace6a3a65bca7ef8998ae013e530c6c92d4fc3acdba9ab91",
+        "receiver.png": "638873f15bc9f680870e5ea38141de6aea98725d9ec5cdf02bb5b2ec5eb7dd5a"
+      },
+      "summary": {
+        "request_sha256": "446414a61feaef94df3aa7faeedf61de4fdc2ba0580eda1e809d61cfda22a9a3",
+        "input_sha256": "0ee2d7e943c2cde90f7d329a9259dc92921f2d156d2380b0d059c46c042cfd2a",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41202,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 26,
+        "prefix_successes": 32,
+        "wall_seconds": 61.99960984312929,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41203,
+      "split": "test",
+      "group_id": "2ca5a2f36a6f375d06cd_cp0",
+      "input_sha256": "7aff82d969828e4f32af810755a051a475b37f4970b5f7258d160a8aacdbbae3",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "e1ab65337e1c3ed16c23d428ab41db07d9ac6fe87277da4ed78bdac4edc12957",
+        "geometry.json": "1f284124f7f97f1032f19768be03a97778de5a55a3ae9966da6f60d6b549c087",
+        "scene.png": "988f85cb6746ba50d788cde000380f00a5253f673f32de62d5b9fd44384b03f0",
+        "pin_left.png": "28f9a8d4784855accf91eb0f721fd095e2f2db4022454b0e4ad023c2f09794b7",
+        "inputs.json": "ac0a6d9293f0a19e6c04416ee65e2a045cedee05a6c013eb8ae0acd17f0c844a",
+        "complete.json": "c8e6f684cfe108ffaeb4acf17daa1b9d88102f8363e8ecfb8182e8d582c6c984",
+        "pin.xml": "a9bdb89a3a58bdf4ea5b8228b71f3fb70239d692adc768e43ce7b33bb2bb1563",
+        "outcomes.json": "b15c2a1a7d1145e8cd27aedf8f06159981291509ad66bb2455d45325e909fad2",
+        "skill_graphs.json": "4079ec464206ee00414a4b2940f66a326fa36d941ad6b9bc5a12dfe8e37fe89a",
+        "steps.log": "fd17df5a724b6a865659cc11d1542db7431b450ff04dd5fe3211d697c351c321",
+        "receiver.png": "03c479502249b32bd350afaaecc97c2c600130f1778b30682fab99615a4e69e1"
+      },
+      "summary": {
+        "request_sha256": "5a9759e4c5d101ef187360095a1457560b2f6c3057add15ba579c17b912149bd",
+        "input_sha256": "7aff82d969828e4f32af810755a051a475b37f4970b5f7258d160a8aacdbbae3",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41203,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 12,
+        "prefix_successes": 32,
+        "wall_seconds": 69.34495466784574,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41204,
+      "split": "test",
+      "group_id": "9e0b1caf05f37eb1b126_cp0",
+      "input_sha256": "335191899245344e4a60171d7546e1c3fc0172a7a88ea6797e7f26e1d3730a92",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "6cbc3701b833772fedf7ff587a7fdca26a15c98a98595b204a9714b890c2eec7",
+        "geometry.json": "6fb06ce57b67018f9457a95029595c99a9bbf316e2dfc8d25ca29d320a487054",
+        "scene.png": "0ec095f408d99b53161ea64e2d460c3465f51832bb62bd3e239252ceeae4f268",
+        "pin_left.png": "0079e753ba8231579b25df3255185a7ca5340ef0798e59f7991bad6aba48f951",
+        "inputs.json": "132e1eea1ac67a2526d9b1872bb620d1d321df6357ad368c2d27182452673e1a",
+        "complete.json": "cf60aa7964d2d5878b961a1d15a9badeb8560ded68db13332e1a6cffff89b5af",
+        "pin.xml": "498cfe7ebddb0c42fe9ebbc5e25a7e7b75ff3802a70ac944e6a2d248012c07cc",
+        "outcomes.json": "21ddd67402c3fc027849887fabd942a8deb4915c51ef21057c39e7cec9c670bf",
+        "skill_graphs.json": "d4f693c89227d128439af0b5a19908671a91d6427fc4eb843683a65dbae18727",
+        "steps.log": "c03c6085eb7bef028e229090d400053084b69c21fac36a3b2ce7a88d7c53f295",
+        "receiver.png": "066d3881427d82917cc976736ae6895c7ec399a472c8564fa751d265553be2ae"
+      },
+      "summary": {
+        "request_sha256": "22e24958ec55951af66d094779eb5d83234ec10c2f2da425587e7bfaee594df0",
+        "input_sha256": "335191899245344e4a60171d7546e1c3fc0172a7a88ea6797e7f26e1d3730a92",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41204,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 22,
+        "prefix_successes": 32,
+        "wall_seconds": 54.616903668036684,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41205,
+      "split": "test",
+      "group_id": "6343978e089a59c881cc_cp0",
+      "input_sha256": "a0cdc644920cc8227fe5ef0a51f11848693ad37285735c2fbafa764b084d0a8f",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "41a682704dbc14dfc397e259d6df2f8396d59bcc443c6e31b39d94662b81f452",
+        "geometry.json": "b684863e6403ba23c8f77b3c78064cdd460e64329adee5db7f8498f64bf5cf7f",
+        "scene.png": "d11881b5c0f0fde1592da157f8af1e41de2d9c6b2e82e148d04ee47be91ca046",
+        "pin_left.png": "1600b0727fca0b62a0d22b7aeb20599d46652f55ed66c673718af0256cba6d58",
+        "inputs.json": "1289448411f31432f97d47b146df83d8275423d54e064c692a18e65a6ed2cce7",
+        "complete.json": "41ae78520b5db28adcf7c805729c043e902f4c365bd67c0093a78c85376e8be8",
+        "pin.xml": "1dbd17de489261374befd52282a563978371dfcffc742a507445df458d057b44",
+        "outcomes.json": "9bce3cdfa4c653b764b679578bf159e3f72be3c4e520fc9e63ce447dae4aa641",
+        "skill_graphs.json": "5b269fde40be224011692f809b6d012c45d4bcf7f55cfdae77970ccb35c4e5b8",
+        "steps.log": "64f5b9a3a4c142bcb7ba674aae4492ff421c835afab195e7a06f10176233971e",
+        "receiver.png": "281950aec29e0956a2f2315cc84dbb0f557d44e9c315dd85f54fcb8c9e9e51af"
+      },
+      "summary": {
+        "request_sha256": "b14d9d9ce793185142af47684c5073fae25e1981bd02a531b848b8d5037b254b",
+        "input_sha256": "a0cdc644920cc8227fe5ef0a51f11848693ad37285735c2fbafa764b084d0a8f",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41205,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 12,
+        "prefix_successes": 32,
+        "wall_seconds": 53.75655521801673,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41206,
+      "split": "test",
+      "group_id": "e3e27582a927b196131d_cp0",
+      "input_sha256": "bc3705cf5b677334b16c004ca0c2ded384453735cd6977ecda25ffe4ede993c5",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "5370684434cd3e64e6c8929e898be9b433e8e4f9acaa2fc0db61ba94d2f3194c",
+        "geometry.json": "66efc0a89478bd19517b74c80198553e537c5e777f7db0f697873f2c47b44ae7",
+        "scene.png": "9687ec3d93b5929f466081f0bfe05ddd3fe4c6096e44f31b333c5af9690f67f3",
+        "pin_left.png": "f9ff50d6202a7520cb24c97ecd33655abdc2a570099cf25d74af868441ec7b01",
+        "inputs.json": "b193d9cedad86e921ae70993acefd7172dbe34457b49e68f558b5d74cf01ecb1",
+        "complete.json": "7b314f0c0bee30a89cf71367897a329aad937975e87320c53292eb155f357df3",
+        "pin.xml": "523c1e7e5b4f2ef407441641b47f28de359ebe80db1835a83d2836ba18d774b7",
+        "outcomes.json": "a3a4c0af32302a1d13bfe8bf4eaa39ea78f874f3f58297059a8d745e48174ce1",
+        "skill_graphs.json": "e58d545e9a63d3646b27f94ca6c914b88d8004f6642f7ed89eff34296cf533d1",
+        "steps.log": "2b08720f63f9cba69dcc3d1a58eee2993e2f86c418de41b243d9f8f75e803048",
+        "receiver.png": "45f211b415470eea47bfa22c481de8939d4f6d481d98a5b050ea0ad18a41f0ed"
+      },
+      "summary": {
+        "request_sha256": "fe4343b7ba3cb778cbd35f69196a47d292ef66fb285f758065faf54c6caddc0b",
+        "input_sha256": "bc3705cf5b677334b16c004ca0c2ded384453735cd6977ecda25ffe4ede993c5",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41206,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 22,
+        "prefix_successes": 32,
+        "wall_seconds": 55.31440776819363,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41207,
+      "split": "test",
+      "group_id": "796f18cb2c3d669e02a3_cp0",
+      "input_sha256": "4a47a60a9e4ea45dc6741a7f2daea110bbfa655c1cc11df9f29ab092cf02b5e1",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "5535ac2b160f718504e897584ee77ee7f921adba8901bb17145ecfdec74080e8",
+        "geometry.json": "65b156c8898cede8d5d67d972dd4c326468a4c048b4ad2f5071508b1d5883bdf",
+        "scene.png": "59dab77c5d8c74ac1b1608baf60d6de53d12f0ef0694543af5c9047fef7f1c1b",
+        "pin_left.png": "62acc05f8a26f971cf08859217cd665d480ed6357a3e86f5ca28397b8d93c174",
+        "inputs.json": "26bbfdf36c4d0b3b21bbda53b07e4956def4de664b07dc49ffb1ab577551d9ca",
+        "complete.json": "f7608af939fbf34637cce3737edf64c44719c5701cd657f20b78775386d8acea",
+        "pin.xml": "41435c0d54e6137e6c276f74e360f24bfa84d54f137bbbd6f94cef7930bda070",
+        "outcomes.json": "f20d782bfd27e1d45a23b6e75bacc0d9f7d63a26480bc7e6988ab3b3ab65074e",
+        "skill_graphs.json": "efeebf7d7b03a87c2870fdf5e0f5617a7f865e54a3022d5f15933be72a02331e",
+        "steps.log": "449f099fbcebd59070e570ea74f9010c1f4a065206b2bfb65888f8f03cadf00f",
+        "receiver.png": "afa1aebac3745480d9a12cda3b1cdbdfb6ff29d035c77a69ef667908bdbbbdf3"
+      },
+      "summary": {
+        "request_sha256": "104909721123be006091f91a893f41945b3e029683dcdcea28f2b9e0692dcc35",
+        "input_sha256": "4a47a60a9e4ea45dc6741a7f2daea110bbfa655c1cc11df9f29ab092cf02b5e1",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41207,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 12,
+        "prefix_successes": 32,
+        "wall_seconds": 50.92097521899268,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41208,
+      "split": "test",
+      "group_id": "22c4c0ace84adb13389d_cp0",
+      "input_sha256": "c98eee23ccdf7d840f332655254055a506bb832eb9d82400968779c4048c6b15",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "4374aa21fdc5b006570ac9a1dafcc6b0ee643d625013b9107924953b531fb806",
+        "geometry.json": "79df87f1d3c4eb7a4b2768a51346dfe6d5400a70f084d075c86db94da2d1152f",
+        "scene.png": "3c98b6ca4f388fffb6f4db0850b319fe344963f1eaf6fa5c59e7aa2797a22952",
+        "pin_left.png": "33cdd5a02a11409e238d0cacb672567443af9c4d18334bdc089c9b1770fb9f19",
+        "inputs.json": "873c4a20c7c0e84fbb15b9b6cbe3431e3259958974ef9476ba6803a2db906a73",
+        "complete.json": "4c2de612a372eeaa926393640557b19bed5722286ed7b7c96b959f0ceb314282",
+        "pin.xml": "06b6b1bd732de4e89b0d47cb3a9af8a6179ce9bdbab6d8c62ffc876d3dfcf5b5",
+        "outcomes.json": "247dc59dbd3d58713580b6ecf1d1d33c282168efc8746186129bb34bca958bb8",
+        "skill_graphs.json": "9d07ba35723d2127a98d92266a9ce609257129011db367d1e4349f608fdfa74f",
+        "steps.log": "a57f717c654815f078689739e9ecb7aa354f763c951f4644e6338f509abb6201",
+        "receiver.png": "6e5fa106aee21656be123407a400e4c446bffe84e43d770315961d4732abf672"
+      },
+      "summary": {
+        "request_sha256": "070e21649b876f42451d07baad782d53bf5bddf8dbfb1bcd27d6412daeb8e15e",
+        "input_sha256": "c98eee23ccdf7d840f332655254055a506bb832eb9d82400968779c4048c6b15",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41208,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 26,
+        "prefix_successes": 32,
+        "wall_seconds": 58.80109786405228,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41209,
+      "split": "test",
+      "group_id": "bbbd4b6ace8fdff94473_cp0",
+      "input_sha256": "ce2ff90d1fff88251ef21bdd1bf1141e90f492ca7e6673e234646174aa8343ce",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "30763b5c9dee6f927cb8646f62f597378e9a58c2b8e689abbd8fcce40ce562c1",
+        "geometry.json": "e622f2c8ec0e8bf729e19b788c59b60786dd269de4a01357e8fd28c27e7ee9e2",
+        "scene.png": "8d09110f501068eb5cedf0f40469e2cbae658dc4d657c0f13dffac1e9c28dd18",
+        "pin_left.png": "d1b5af92deb0eaf4b6d62a84b41de4decc68466a1b2016fe9147e8eb33bf42e3",
+        "inputs.json": "9882f266c43b533fc04bad695853da40dcd9e932a65a9d2867df1181b94f7a5e",
+        "complete.json": "20411140e63ac92448fce985046c68ff7ba5d1455bdefe6eb0a99abb201c8633",
+        "pin.xml": "c9be2d6878d7dbbe717074a0b0dab3f7151b4f0699262fbf40ea1bd8f714eb48",
+        "outcomes.json": "23b85fe03f2f0d23b73c981de833fbffd2ffcef7ee2373243884a821c1ec669d",
+        "skill_graphs.json": "d4f3dc1ee239c12f3cf9ad8ecb7cf1820637f8f07c69a5782270ff4af7c8dd1b",
+        "steps.log": "2fe7a5e2e6d8fb9b0e4df05aa9be1679dd1f3518f1f29d51e2938731a719ea8c",
+        "receiver.png": "94520bb5e9e49a5932c79632131ac068b4717ec2be921ca7425c985ba7a6883f"
+      },
+      "summary": {
+        "request_sha256": "20259b1d08bdace97cc5c6fd2521a26746e57ae066c4d7534bf9791bf33792d0",
+        "input_sha256": "ce2ff90d1fff88251ef21bdd1bf1141e90f492ca7e6673e234646174aa8343ce",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41209,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 20,
+        "prefix_successes": 32,
+        "wall_seconds": 60.69211883097887,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41210,
+      "split": "test",
+      "group_id": "2e2440a8a27157fb4067_cp0",
+      "input_sha256": "aed06c2909247857fd4f3de653942f3dddf59b6868e71361374559d5e7a40ad3",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "e41f9debe95ccca8ce31082538cce823b253599a69a4ab4e25830edb215abbbe",
+        "geometry.json": "29dd99ad6d438f038f6d03f2d6324c998fd191e8d9464b652abe77933daa401e",
+        "scene.png": "a4ce20d56f60c710d73a295e414ec5e5083ec848e7336aa1e5ea11d263600893",
+        "pin_left.png": "8eca0ea11c3fb40705e5543228b0297b2422f743ff69d2372599ad16f8f8c898",
+        "inputs.json": "3adb92e025e13614145f3184673ed4974cc57869df980e39438803899cd7ea32",
+        "complete.json": "f0479be928db3f0b4bc5fc3ea0d6489a9fdfbaf2f5e1c4f2bdcd2f3cf6ac8326",
+        "pin.xml": "581d661616968c455eae23d50c89a0c5858b413f6c9200b4ba0bc6d9699cd6e7",
+        "outcomes.json": "2846e2995303694f364ed8c0bf49386f3108424b3455e9575ee1f63f40e2f4e0",
+        "skill_graphs.json": "0d224df9eb7e1d0b02a1c968ed336897b02cb791c62744c343eb7aa9c1c452be",
+        "steps.log": "932249e75f2b91a586cecffe563e7a13a4311e5073255cf03c839d3f79dda6a4",
+        "receiver.png": "a9968cb1cee63cb4bc28eb2f04ae2c8adcf4b6b87a2685e3ea51ec6723f3cd99"
+      },
+      "summary": {
+        "request_sha256": "54b22746d73bc339570aff2d09eac5f1bb4f196046bd2dcc5a1a70f1247dde61",
+        "input_sha256": "aed06c2909247857fd4f3de653942f3dddf59b6868e71361374559d5e7a40ad3",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41210,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 10,
+        "prefix_successes": 32,
+        "wall_seconds": 56.2416688320227,
+        "plan_lengths": [
+          19
+        ]
+      }
+    },
+    {
+      "seed": 41211,
+      "split": "test",
+      "group_id": "8c3a3f4db76f96261bed_cp0",
+      "input_sha256": "e5188695e6a8762c1e6f96e3ce0f55af89348016ea5288d75904804936b783e5",
+      "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+      "files": {
+        "initial_physics.npz": "89fb3bcde0b2641f47cb39cf743d17ef27ae1ee0c7e7607e6eaf8b2df195fcb1",
+        "geometry.json": "7f2088077e9451f8fff71454f826ea61328948472fcc1c25bbaa01675fd0491f",
+        "scene.png": "ef3b1c2dd7ebea99737daf9d38b7ace7851865f525f0b4832c8587083d34bce5",
+        "pin_left.png": "7f1e5b284c9b09d6fc79491fbc2df2656da14fb18801330a926fc40a96aac564",
+        "inputs.json": "4389f5e441317420edb7d5ce571fd470214f89eafc3376641789a65556fbb978",
+        "complete.json": "83483faa910ab5fd0c3122cf42eef229fb37cb2f5986166884f4869b24bfb715",
+        "pin.xml": "883e039ad9f9f7be09f21a0a94a475e484a8e23821cc9bcebb603e61a0190b56",
+        "outcomes.json": "0b11bab94a3dcb8e92ddd287ef0387099c482770efed73fb9bc2f81911499b8c",
+        "skill_graphs.json": "07f6bbe30cfa6f4d0da1007e19e720d55fd29b90cc4b7a15bc21c65e1e28b87a",
+        "steps.log": "c3d57dc604e68b2af6e1f527e8c51f952f50ace916f99cc11aa41870622f6a9d",
+        "receiver.png": "adce429369fa7b728d75ae8d9b7e6d644cf78510c68d76908636635037a5760a"
+      },
+      "summary": {
+        "request_sha256": "d96144cee53c84fe3dff1a065e2fec8734e213827f13b20ae2b775a4be51a5e5",
+        "input_sha256": "e5188695e6a8762c1e6f96e3ce0f55af89348016ea5288d75904804936b783e5",
+        "source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+        "family": "sliding_stage_pin",
+        "seed": 41211,
+        "checkpoint": 0,
+        "split": "test",
+        "candidates": 16,
+        "trials": 32,
+        "full_successes": 14,
+        "prefix_successes": 32,
+        "wall_seconds": 54.38129111705348,
+        "plan_lengths": [
+          19
+        ]
+      }
+    }
+  ],
+  "archives": {
+    "skill_graph_v3_execution.tar.gz": {
+      "sha256": "89da5e0c177d0bf49c447915757bce3f5c7f87dc2ed79c9cc59b5052167c488e",
+      "bytes": 503322
+    },
+    "skill_graph_v3_source.tar.gz": {
+      "sha256": "e5b16532360b1a6417ddc6b374d74542d370d21ee82a66ab2e30031b2c18c0cd",
+      "bytes": 5626355
+    },
+    "skill_graph_v3.tar.gz": {
+      "sha256": "06275fc1edd7a46dfe2a27164b6858f56f5adc16da851c569f7c5e60bd44ca83",
+      "bytes": 3940693
+    },
+    "skill_graph_v3_development.tar.gz": {
+      "sha256": "4c3bf42bcd5ed828d738bc6dc3d314925d1ab202e1f4abc7ed3c0312e37f3781",
+      "bytes": 40002844
+    },
+    "skill_graph_v3_training_source.tar.gz": {
+      "sha256": "3c99148d62295e63b7ccd9952aed5f432a9953610f6c6a1b51f27204f7b7236b",
+      "bytes": 111813
+    },
+    "skill_graph_v3_collection_source.tar.gz": {
+      "sha256": "05552c8ec146a4e73c0c1bb0fbcd4476baa1842524662ace5d1b48e744538721",
+      "bytes": 111802
+    }
+  },
+  "historical_source_verification": {
+    "training_source_sha256": "69164da5f2470721512e24ba5a867b845ff03eebfeb704883e3ffd93265cc90d",
+    "expected_training": [
+      "69164da5f2470721512e24ba5a867b845ff03eebfeb704883e3ffd93265cc90d"
+    ],
+    "training_match": true,
+    "collection_source_sha256": "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc",
+    "expected_collection": [
+      "ffce4a81edcd0db882f790cd65b3baa23ba5a5e42bac7637b478003ad9acd3fc"
+    ],
+    "collection_match": true
+  },
+  "source_reconstruction_note": "Historical snapshots reverse only the documented graph_rank timing-field rename and explicit-binding rejection. Exact SHA256 matches all 11 trained checkpoint source records and all 32 collection records. Assets reside in the full source archive."
+}

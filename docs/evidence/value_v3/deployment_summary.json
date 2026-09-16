@@ -1,0 +1,113 @@
+{
+  "decisions": [
+    {
+      "seed": 41200,
+      "method": "geometry",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41200,
+      "method": "mlp_17",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41200,
+      "method": "port_mlp_29",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41201,
+      "method": "geometry",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41201,
+      "method": "mlp_17",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41201,
+      "method": "port_mlp_29",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41202,
+      "method": "geometry",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41202,
+      "method": "mlp_17",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41202,
+      "method": "port_mlp_29",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41203,
+      "method": "geometry",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41203,
+      "method": "mlp_17",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    },
+    {
+      "seed": 41203,
+      "method": "port_mlp_29",
+      "chosen": true,
+      "rollouts": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "budget_status": "validated"
+    }
+  ],
+  "note": "Simulator deployment disturbances independent of online validation and offline reference; no real-robot claim."
+}

@@ -21,6 +21,7 @@ class GraphScorer:
         if self.kind not in {"graph","sequence","port_mlp"}:raise ValueError("GraphScorer requires graph-derived input checkpoint")
         self.checkpoint_sha256=hashlib.sha256(Path(checkpoint).read_bytes()).hexdigest()
         self.sync();self.load_seconds=time.perf_counter()-t
+        self.inference_calls=0
 
     def sync(self):
         if str(self.device).startswith("cuda"):torch.cuda.synchronize(self.device)
@@ -41,6 +42,7 @@ class GraphScorer:
             batch=torch.as_tensor(vectors[i:i+32],device=self.device) if vectors is not None else collate_graph(encoded[i:i+32],self.device)
             scores.extend(self.model(batch).sigmoid().cpu().tolist())
         self.sync();inference=time.perf_counter()-t
+        self.inference_calls+=1
         t=time.perf_counter();order=np.argsort(-np.asarray(scores),kind="stable")
         ranked=[dict(candidate_id=plans[i].id,score=scores[i],plan=plans[i].to_dict(),
                      input_graph_sha256=digest(graphs[i])) for i in order]
@@ -50,7 +52,8 @@ class GraphScorer:
                     checkpoint_sha256=self.checkpoint_sha256,
                     timings=dict(graph_integrity_seconds=checks,typed_encoding_seconds=encoding,
                                  network_and_batch_seconds=inference,sort_export_seconds=export,
-                                 resident_total_seconds=time.perf_counter()-started),
+                                 call_total_seconds=time.perf_counter()-started,
+                                 first_inference_after_load=self.inference_calls==1),
                     meaning="full suffix completion estimate, not a feasibility certificate")
 
 
