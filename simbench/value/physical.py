@@ -24,8 +24,12 @@ class PhysicalRunner:
 
     def run(self,plan,trial,keep_trace=False):
         graph_hash = None
+        goals = None
         if isinstance(plan, dict) and plan.get("schema") == "twingraph.executable_skill_graph.v1":
             from .skill_graph import validate_graph
+            from .goal_check import validate_goals
+            goals = copy.deepcopy(plan["observation"]["goals"])
+            validate_goals(goals)
             graph_hash = digest(plan)
             plan = validate_graph(plan)
         s=self.session; t=time.perf_counter(); s.restore(self.snapshot)
@@ -39,7 +43,7 @@ class PhysicalRunner:
         p=copy.deepcopy(plan); p.prefix["start_state"]=fingerprint(s)
         s.results.clear(); s.arm.trace.clear()
         start_sim=float(s.ctx.data.time);wall=time.perf_counter()
-        prefix=False;suffix=None;error="";timeout=False
+        prefix=False;suffix=None;error="";timeout=False;goal_result=None
         # Deadline is checked at control-step boundaries; no background rollouts.
         original_step=s.ctx.step
         def bounded_step(*args,**kw):
@@ -50,6 +54,12 @@ class PhysicalRunner:
         try:
             execute_prefix(s,p);prefix=True
             execute_suffix(s,p);suffix=True
+            if goals is not None:
+                from .goal_check import evaluate_goals
+                goal_result = evaluate_goals(s, goals)
+                if not goal_result["success"]:
+                    suffix = False
+                    error = "independent task goal not satisfied"
         except TimeoutError as exc:
             error=str(exc);timeout=True
             if prefix:suffix=False
@@ -71,6 +81,7 @@ class PhysicalRunner:
         sim=float(s.ctx.data.time-start_sim)
         result=dict(candidate_id=plan.id,trial=trial,trial_sha256=digest(trial),valid=True,
                     input_graph_sha256=graph_hash,
+                    goal_check=goal_result,
                     success=bool(prefix and suffix),full_success=bool(prefix and suffix),
                     prefix_success=prefix,suffix_success=suffix,error=error,timeout=timeout,
                     restore_seconds=restore,wall_seconds=elapsed,sim_seconds=sim,

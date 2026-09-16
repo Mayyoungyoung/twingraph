@@ -5,7 +5,8 @@ inputs, not a second task representation. No hand-selected product features.
 """
 import json
 import numpy as np
-from .encode import bucket, NUMERIC, sample_path
+from .encode import bucket, NUMERIC
+from .plan import JOINT_PATH_FIELDS
 from .skill_graph import RELATIONS, validate_graph
 
 
@@ -45,8 +46,9 @@ def encode_graph(graph, check=True, cache=None):
         if isinstance(value, dict):
             for k,v in sorted(value.items()): visit(key+"/"+k,v,node,**meta)
         elif isinstance(value, (tuple,list)) and any(isinstance(x,(dict,list,tuple)) for x in value):
-            seq = sample_path(value,24) if len(value)>24 and all(isinstance(x,(list,tuple)) for x in value) else value
-            for i,v in enumerate(seq): visit(key+f"/{i}",v,node,**meta)
+            # A supplied trajectory is the executable payload, not a sampled
+            # summary: every waypoint remains available to the value module.
+            for i,v in enumerate(value): visit(key+f"/{i}",v,node,**meta)
         elif isinstance(value,str) and value in objects:
             # Binding carries the corresponding observed geometry; no raw ID.
             visit(key+"/bound_object",objects[value],node,**meta)
@@ -73,6 +75,10 @@ def encode_graph(graph, check=True, cache=None):
             # Binding addresses have their information in typed producer edges.
             value = None if port["kind"] in {"artifact_ref","binding"} else port["value"]
             visit("port/"+key,value,node,status=port["status"],kind=port["kind"],unit=port["unit"],frame=port["frame"])
+            if "materialized" in port:
+                for field, (kind, unit, frame) in JOINT_PATH_FIELDS.items():
+                    visit("materialized/"+key+"/"+field,port["materialized"][field],node,
+                          status="known",kind=kind,unit=unit,frame=frame)
             if port["source"]:
                 leaf("producer_output/"+key,port["source"]["output"],node,status="deferred")
         for direction in ("reads","writes"):

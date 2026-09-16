@@ -3,13 +3,15 @@ import inspect
 from simbench.assembly.library import Session,HANDLERS
 from simbench.assembly.interfaces import resolve
 from simbench.assembly.contracts import State,check,apply_effects
+from .plan import initial_artifacts
 
 
 def audit_program(plan,objects):
     plan.validate(objects)
     if plan.prefix.get("execution")!="program":
         return dict(status="legacy_bound_prefix",unknown=["physical suffix feasibility"])
-    state=State(parts=tuple(objects),grasp_epoch=0);unknown=[]
+    state=State(parts=tuple(objects),grasp_epoch=plan.prefix.get("initial_grasp_epoch",0),
+                artifacts=initial_artifacts(plan));unknown=[]
     producers={c.id:(i,c) for i,c in enumerate(plan.calls)}
     last_grasp=-1
     for i,call in enumerate(plan.calls):

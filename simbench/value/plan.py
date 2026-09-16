@@ -13,6 +13,126 @@ from typing import Any
 SCHEMA = "twingraph.plan.v1"
 PROTOCOL = "pin_suffix.feedback.v1"
 
+# These are the actual execute_joint_path payload fields, with controller units.
+# Identifiers and provenance remain integrity metadata, never learned features.
+JOINT_PATH_FIELDS = {
+    "type": ("category", "", ""),
+    "part": ("object_ref", "", ""),
+    "start_q": ("vector", "rad", "robot_joint"),
+    "joints": ("joint_path", "rad", "robot_joint"),
+    "target": ("position", "m", "world"),
+    "rotation": ("rotation", "1", "world"),
+}
+
+
+def initial_artifacts(plan):
+    """Validate materialized initial free-motion paths without accepting logs.
+
+    Carrying paths depend on the subsequently measured grasp and stay deferred.
+    Supporting an initial held-object checkpoint requires an explicit initial
+    holding state; it must not be inferred from a nominal future grasp.
+    """
+    import numpy as np
+
+    artifacts = plain(copy.deepcopy(plan.prefix.get("initial_artifacts", {})))
+    if not isinstance(artifacts, dict):
+        raise ValueError("initial_artifacts must be a named artifact mapping")
+    if artifacts and plan.prefix.get("execution") != "program":
+        raise ValueError("initial artifacts require an explicit program")
+    epoch = plan.prefix.get("initial_grasp_epoch", 0)
+    if not isinstance(epoch, int) or isinstance(epoch, bool) or epoch < 0:
+        raise ValueError("initial grasp acquisition epoch must be a nonnegative integer")
+    for name, item in artifacts.items():
+        if not isinstance(name, str) or not name or not isinstance(item, dict):
+            raise ValueError("invalid initial artifact")
+        allowed = set(JOINT_PATH_FIELDS) | {"id", "binding"}
+        if set(item) - allowed or not set(JOINT_PATH_FIELDS).issubset(item):
+            raise ValueError("initial joint path has missing or unsupported fields")
+        if item["type"] != "joint_path" or item["part"] is not None:
+            raise ValueError("only materialized initial free joint paths are supported")
+        binding = item.get("binding")
+        if not isinstance(binding, dict) or set(binding) != {
+            "held", "grasp_artifact", "grasp_id", "grasp_epoch", "prefix_id"
+        }:
+            raise ValueError("materialized path requires an exact execution binding")
+        if (binding["held"] is not None or binding["grasp_artifact"] is not None
+                or binding["grasp_id"] is not None or binding["grasp_epoch"] != epoch
+                or binding["prefix_id"] != plan.id):
+            raise ValueError("materialized path is not bound to this initial free-motion program")
+        arrays = {key: np.asarray(item[key])
+                  for key in ("start_q", "joints", "target", "rotation")}
+        if any(x.dtype.kind not in "fi" for x in arrays.values()):
+            raise ValueError("materialized path geometry must contain numeric values")
+        q, joints = arrays["start_q"], arrays["joints"]
+        if (q.ndim != 1 or len(q) == 0 or joints.ndim != 2
+                or joints.shape[0] == 0 or joints.shape[1] != len(q)
+                or arrays["target"].shape != (3,) or arrays["rotation"].shape != (3, 3)
+                or any(not np.isfinite(x).all() for x in arrays.values())):
+            raise ValueError("materialized path requires finite, dimensionally consistent geometry")
+        rotation = arrays["rotation"]
+        if (not np.allclose(rotation.T @ rotation, np.eye(3), atol=1e-6)
+                or not np.isclose(np.linalg.det(rotation), 1., atol=1e-6)):
+            raise ValueError("materialized path rotation must be a proper rotation matrix")
+    return artifacts
+
+
+def materialize_initial_path(session, plan, path):
+    """Replace the first deferred free transfer with the exact preplanned path.
+
+    The caller supplies a solver-produced path from this initial snapshot.
+    Necessary collision checks remain the candidate generator's responsibility.
+    This helper does not turn a path into a physical feasibility certificate.
+    """
+    import numpy as np
+    from simbench.assembly.candidates import fingerprint
+    from simbench.assembly.interfaces import resolve
+
+    plan = copy.deepcopy(plan if isinstance(plan, PlanIR) else PlanIR.from_dict(plan))
+    plan.validate(session.parts)
+    if (plan.prefix.get("execution") != "program" or session.held is not None
+            or fingerprint(session) != plan.prefix["start_state"]):
+        raise ValueError("materialization requires the bound initial empty-gripper snapshot")
+    planner = None
+    for i, call in enumerate(plan.calls):
+        name, params = resolve(call.skill, {k: a.value for k, a in call.arguments.items()})
+        if name == "plan_transfer":
+            planner = (i, call, params)
+            break
+        if name not in {"observe_parts", "estimate_pose", "propose_grasps", "select_grasp"}:
+            raise ValueError("initial path must be consumed before any robot motion")
+    if planner is None:
+        raise ValueError("program has no initial joint-path planner")
+    i, call, params = planner
+    name = params.get("as_", "transfer")
+    if any(a.source_call == call.id for c in plan.calls for a in c.arguments.values()):
+        raise ValueError("cannot remove a planner with explicit deferred consumers")
+    if i + 1 >= len(plan.calls):
+        raise ValueError("initial planner must be followed by its path execution")
+    following = plan.calls[i + 1]
+    implementation, consumer = resolve(following.skill, {k: a.value for k, a in following.arguments.items()})
+    if implementation != "execute_joint_path" or consumer.get("artifact", "transfer") != name:
+        raise ValueError("initial planner must be followed by its path execution")
+    item = plain(copy.deepcopy(path))
+    binding = item.get("binding", {})
+    if (binding.get("held") is not None or binding.get("grasp_artifact") is not None
+            or binding.get("grasp_id") is not None or binding.get("grasp_epoch") != session.grasp_epoch):
+        raise ValueError("cannot reuse a path bound to another grasp acquisition")
+    if not np.array_equal(np.asarray(item.get("start_q")), session.ctx.arm_qpos):
+        raise ValueError("materialized path has a stale joint-space start")
+    if not set(JOINT_PATH_FIELDS).issubset(item):
+        raise ValueError("initial joint path has missing or unsupported fields")
+    plan.id = digest(dict(program=plan.id, path={k: item[k] for k in JOINT_PATH_FIELDS}))[:20]
+    plan.prefix["id"] = plan.id
+    plan.prefix["initial_grasp_epoch"] = int(session.grasp_epoch)
+    item["binding"] = {**binding, "prefix_id": plan.id}
+    plan.prefix.setdefault("initial_artifacts", {})[name] = item
+    del plan.calls[i]
+    if i < plan.boundary:
+        plan.boundary -= 1
+    plan.prefix["steps"] = [dict(skill=c.skill, params={k: a.value for k, a in c.arguments.items()})
+                            for c in plan.calls[:plan.boundary]]
+    return plan.validate(session.parts)
+
 
 def plain(value):
     if hasattr(value, "tolist"):
@@ -85,6 +205,7 @@ class PlanIR:
             raise ValueError("invalid plan status")
         if self.id != self.prefix.get("id"):
             raise ValueError("plan identity disagrees with executable prefix")
+        initial_artifacts(self)
         ids = [c.id for c in self.calls]
         if len(ids) != len(set(ids)):
             raise ValueError("call identifiers must be unique")
@@ -145,7 +266,10 @@ class PlanIR:
         return self
 
     def to_dict(self):
-        return plain(asdict(self))
+        row = plain(asdict(self))
+        if not row["prefix"].get("initial_artifacts"):
+            row["prefix"].pop("initial_artifacts", None)
+        return row
 
     @classmethod
     def from_dict(cls, row):
@@ -224,6 +348,14 @@ def execute_prefix(session, plan):
         from simbench.assembly.candidates import fingerprint
         if fingerprint(session) != plan.prefix["start_state"]:
             raise ValueError("stale program initial snapshot")
+        materialized = initial_artifacts(plan)
+        if materialized and (session.held is not None
+                or session.grasp_epoch != plan.prefix.get("initial_grasp_epoch", 0)):
+            raise ValueError("materialized path initial grasp acquisition changed")
+        for name, item in materialized.items():
+            for key in ("start_q", "joints", "target", "rotation"):
+                item[key] = np.asarray(item[key], dtype=float)
+            session.artifacts[name] = item
         session.active_candidate_id = plan.id
         execute_calls(session, plan, plan.calls[:plan.boundary])
         return

@@ -10,7 +10,7 @@ import inspect
 from simbench.assembly.library import HANDLERS, Session
 from simbench.assembly.interfaces import resolve
 from simbench.assembly.ports import validate_ports
-from .plan import PlanIR, digest, plain
+from .plan import PlanIR, digest, plain, initial_artifacts
 from .program_audit import audit_program
 
 SCHEMA = "twingraph.executable_skill_graph.v1"
@@ -27,6 +27,7 @@ def compile_graph(observation, plan):
     # Whitelist initial observation fields. Rollout logs never enter this record.
     obs = {k: obs[k] for k in ("robot", "objects", "goals", "perception") if k in obs}
     versions = {}; artifacts = {}; nodes = []; edges = []; held = None
+    materialized = initial_artifacts(plan)
     index = {c.id: i for i, c in enumerate(plan.calls)}
 
     def state_ref(key):
@@ -64,6 +65,8 @@ def compile_graph(observation, plan):
                 if producer is not None:
                     row.update(status="deferred", source=dict(call=producer, output=nodes[producer]["outputs"][0]))
                     edge(producer, i, "data", key)
+                elif value in materialized:
+                    row["materialized"] = copy.deepcopy(materialized[value])
             ports.append(row)
         reads = []; writes = []
         for template in spec.state_reads:
