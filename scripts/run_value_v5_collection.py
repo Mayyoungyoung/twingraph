@@ -36,8 +36,16 @@ def main():
         if selection["source_sha256"]!=spec["source_sha256"] or selection["test"]!={
                 "seeds":spec["collection"]["test_seeds"],"n":spec["candidates"]["n"],"repeats":spec["collection"]["nominal_repeats"]}:
             raise ValueError("frozen model/test budget differs from prospective protocol")
-        if not thresholds.get("methods"):
-            raise ValueError("classification thresholds have not been frozen")
+        if (thresholds.get("source_sha256")!=spec["source_sha256"] or
+                thresholds.get("selected")!=selection["selected"] or
+                thresholds.get("selection_metadata",{}).get("model_selection_sha256")!=digest(selection) or
+                {k:v["model_sha256"] for k,v in thresholds.get("methods",{}).items()}!={
+                    k:v["sha256"] for k,v in selection["models"].items()} or
+                thresholds.get("primary_k")!=spec["candidates"]["primary_k"]):
+            raise ValueError("classification threshold/source/model bindings differ from the prior freeze")
+        for model in selection["models"].values():
+            if hashlib.sha256(Path(model["path"]).read_bytes()).hexdigest()!=model["sha256"]:
+                raise ValueError("frozen model weights changed before test collection")
         binding.update(model_selection_sha256=digest(selection),thresholds_sha256=digest(thresholds))
     out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
     marker=out/("dispatch_"+"_".join(a.splits)+".json")
