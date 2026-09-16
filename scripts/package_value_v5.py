@@ -270,7 +270,13 @@ def package(run, output, commit, freeze=None, snapshots=(), repo=None):
         base = {p.relative_to(repo).as_posix(): p for folder in ("simbench", "scripts", "tests")
                 for p in files_under(repo/folder, exclude_results=True)}
         base.update({p.name:p for pattern in ("requirements*.txt", "pyproject.toml", "README.md") for p in repo.glob(pattern)})
+        # Keep the CLI's directly referenced configuration and instructions at
+        # their repository paths, without duplicating the public evidence tree.
+        reproduction_files = ("experiments/value_v5/protocol.json", "experiments/value_v5/planner_record.json",
+            "docs/value-v5-design.md", "docs/value-v5-protocol.md", "docs/value-v5-running.md")
+        base.update({name:repo/name for name in reproduction_files if (repo/name).is_file()})
         overlays["source_index.json"] = json.dumps(dict(recorded_code_commit=commit, manifests=source_rows,
+            base_reproduction_files=[name for name in reproduction_files if name in base],
             reproduction="Extract base tree, then overlay snapshots/<source_sha256>/ files and verify each exact source.json before reproducing.",
             development_limits="Missing historical development source bytes are listed; no exact reproduction claim for those records."), indent=2).encode()
         archives.update(chunked_archives(stage, "source", base, overlays))

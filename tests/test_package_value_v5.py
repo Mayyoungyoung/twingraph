@@ -122,3 +122,35 @@ def test_development_root_scope_is_inherited_by_system_records_and_sources(tmp_p
     assert all(row["development"] for row in manifest["source_manifests"])
     assert manifest["categories"]["development"]==len(manifest["retained_files"])
     assert manifest["categories"]["system"]==0
+
+
+def test_source_archives_retain_exact_v5_configuration_and_narrow_reproduction_docs(tmp_path, monkeypatch):
+    repo,run,freeze=fixture_run(tmp_path)
+    expected={
+        "experiments/value_v5/protocol.json": b'{"fixture": "exact frozen protocol"}\n',
+        "experiments/value_v5/planner_record.json": b'{"fixture": "exact recorded planner"}\n',
+        "docs/value-v5-design.md": b"# Fixture design\n",
+        "docs/value-v5-protocol.md": b"# Fixture prospective protocol\n",
+        "docs/value-v5-running.md": b"# Fixture reproduction commands\n",
+    }
+    for name,payload in expected.items():
+        path=repo/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(payload)
+    excluded=repo/"docs/evidence/value_v5/report.md"
+    excluded.parent.mkdir(parents=True);excluded.write_text("Not a base source artifact\n",encoding="utf-8")
+    (repo/"experiments/value_v5/unrelated.json").write_text("{}\n",encoding="utf-8")
+    original_sources={str(p):packaging.sha(p) for p in run.rglob("source.json")}
+    monkeypatch.setattr(packaging,"environment",lambda: {"kind":"test_fixture"})
+    output=tmp_path/"artifact"
+    packaging.package(run,output,"test",freeze,repo=repo)
+    manifest=packaging.read(output/"manifest.json")
+    members={}
+    for name in manifest["archives"]:
+        if name.startswith("archives/source_"):
+            with tarfile.open(output/name,"r:gz") as archive:
+                members.update({m.name:archive.extractfile(m).read() for m in archive.getmembers() if m.isfile()})
+    for name,payload in expected.items():
+        assert members[name]==payload  # Read actual compressed archive bytes.
+        assert (repo/name).read_bytes()==payload
+    assert "docs/evidence/value_v5/report.md" not in members
+    assert "experiments/value_v5/unrelated.json" not in members
+    assert {str(p):packaging.sha(p) for p in run.rglob("source.json")}==original_sources
