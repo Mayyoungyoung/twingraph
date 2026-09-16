@@ -1,0 +1,17 @@
+{
+  "schema": "twingraph.report_layout_refresh.v5",
+  "metrics_unchanged_except_report_script_sha256": true,
+  "old_script_sha256": "53cd3cd5291e35e37c56705c0a186454d7d33d90baab3780b1db3d8ace382b12",
+  "new_script_sha256": "9fd77dff51f2474806e41595e87a92fba3ad6d5fd5bf2d10835ddc107b1d23c8",
+  "old_report_directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/report_before_posthoc_layout",
+  "new_report_directory": "/home/jia/twingraph-v5-formal-20260916/results/v5/report",
+  "changes": [
+    "Top4 success density column and source-order control density sentence",
+    "Middle plot legend lower-right to avoid upper bars and confidence intervals"
+  ],
+  "files": {
+    "summary.json": "ca0e063fc24a26684b6a5b931be4b1bcc2d9248103054166a3d2066c6d2ca97a",
+    "report.md": "b4ebdac6e0cc0c3bba7e9d48e5b3aaa694651c31ceb321799a14ec574e39fe80",
+    "overview.png": "d70c9076712c29ecc46612d093d58a9994b0851eeb2738fa71887f1f202a2a74"
+  }
+}

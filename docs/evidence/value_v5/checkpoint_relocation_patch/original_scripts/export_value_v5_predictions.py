@@ -128,22 +128,6 @@ def _metadata(name, path, scorer, source_hash):
         split_file_sha256=sha(split_path), model_load_seconds=float(scorer.load_seconds))
 
 
-def frozen_checkpoint_paths(selection, checkpoint_root=None, selected_checkpoint=None):
-    """Relocate frozen files without rewriting their immutable selection record."""
-    if checkpoint_root is not None and selected_checkpoint is not None:
-        raise ValueError("--checkpoint-root and --selected-checkpoint are mutually exclusive")
-    paths = {name: row["path"] for name, row in selection["models"].items()}
-    if checkpoint_root is not None:
-        root = Path(checkpoint_root).resolve()
-        for name in paths:
-            if not name or name in {".", ".."} or any(c in name for c in "/\\:"):
-                raise ValueError("frozen model names must be plain directory names")
-            paths[name] = str(root / name / "best.pt")
-    elif selected_checkpoint is not None:
-        paths[selection["selected"]] = str(Path(selected_checkpoint).resolve())
-    return paths
-
-
 def verify_selection(selection, paths, source_hash):
     if selection.get("schema") != SELECTION_SCHEMA or selection["source_sha256"] != source_hash:
         raise ValueError("selection/source schema mismatch")

@@ -1,0 +1,97 @@
+{
+  "schema": "twingraph.formal_replay_audit.v5",
+  "case": 61401,
+  "method": "top_k",
+  "target_repeat": 0,
+  "illustration_selection_rule": "First successful TopK target execution in ascending fixed system seed order 61400,61401,61402,61403; selected for illustration only, without changing any model, threshold, or system results.",
+  "video_scope": "Recorded target execution only; LLM proposals, value inference, and twin verification are not shown in this clip.",
+  "source_run": "/home/jia/twingraph-v5-formal-20260916/results/v5/systems/case_61401/top_k",
+  "source_result_sha256": "9277e874873510f0a6bd11cfeb0a8f13cf6243a32571b46dce72a895341bc337",
+  "target_execution_sha256": "e90ea21b83bf6ed748158552a852ede4d9d9a959c1eea9991148f563e34478dd",
+  "selected_candidate_id": "0bfa0ac76255dd74db2e",
+  "rebound_candidate_id": "0bfa0ac76255dd74db2e",
+  "checks": {
+    "full_decode_frame_count": true,
+    "decoded_duration_matches": true,
+    "decoded_dimensions_match": true,
+    "decoded_fps_matches": true,
+    "recorded_indices_match_previous_sample_rule": true,
+    "metadata_time_bounds_match": true,
+    "execution_end_time_matches": true,
+    "raw_trace_sha_matches": true,
+    "raw_scene_sha_matches": true,
+    "frozen_sources_unchanged": true,
+    "no_physics_reexecution": true
+  },
+  "source_files_checked": 65,
+  "frozen_source_mismatches": [],
+  "npz_samples": 10409,
+  "npz_bytes": 6161871,
+  "npz_shapes": {
+    "time_s": [
+      10409
+    ],
+    "qpos": [
+      10409,
+      44
+    ],
+    "qvel": [
+      10409,
+      39
+    ],
+    "ctrl": [
+      10409,
+      9
+    ]
+  },
+  "first_recorded_offset_from_initial_s": 0.020000000000000018,
+  "execution_sim_seconds": 208.18000000027357,
+  "recorded_duration_s": 208.16000000027356,
+  "maximum_previous_sample_lag_s": 0.020000000000038654,
+  "decoded_video_header": {
+    "ffmpeg_version": "7.0.2-static https://johnvansickle.com/ffmpeg/ built with gcc 8 (Debian 8.3.0-6)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(progressive)",
+    "fps": 25.0,
+    "source_size": [
+      1280,
+      868
+    ],
+    "size": [
+      1280,
+      868
+    ],
+    "rotate": 0,
+    "duration": 52.12
+  },
+  "decoded_frames": 1303,
+  "decoded_duration_s": 52.12,
+  "video_bytes": 7679281,
+  "video_sha256": "aa86cb3c93186dc4d9b8fe9daf0ff55047e5329cb0f231221ddeefc281622bd0",
+  "sampled_qa_images": [
+    {
+      "path": "/home/jia/twingraph-v5-formal-20260916/results/v5/replays/case_61401_first.png",
+      "video_seek_s": 0.0,
+      "sha256": "976e631f0dc2ea462f02648ce39fea47f37deb398c999fefd037a712a8339aa1"
+    },
+    {
+      "path": "/home/jia/twingraph-v5-formal-20260916/results/v5/replays/case_61401_quarter.png",
+      "video_seek_s": 13.03,
+      "sha256": "f0234fdd5d60e608fee1f5b929af7732e9313bb4111f4470a25d9d8560016a12"
+    },
+    {
+      "path": "/home/jia/twingraph-v5-formal-20260916/results/v5/replays/case_61401_middle.png",
+      "video_seek_s": 26.06,
+      "sha256": "bea9dab76ae5b44b918bd6dc2ce47839a1215861c42eb66905515dc88e8af30e"
+    },
+    {
+      "path": "/home/jia/twingraph-v5-formal-20260916/results/v5/replays/case_61401_three_quarters.png",
+      "video_seek_s": 39.089999999999996,
+      "sha256": "3cc139cc5d2131ce358de3c9c8f88e323ef8ebda8943870cd5ee4dcdf132cad7"
+    }
+  ],
+  "terminal_png": "/home/jia/twingraph-v5-formal-20260916/results/v5/replays/case_61401.png",
+  "passive_pin_holders_note": "The two gray cylinders remaining at supply positions are passive pin holders, not unassembled pins.",
+  "timed_system_batch_already_finished": true,
+  "raw_systems_modified": false
+}

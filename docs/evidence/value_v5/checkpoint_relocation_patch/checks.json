@@ -1,0 +1,100 @@
+{
+  "schema": "twingraph.checkpoint_relocation_check.v5",
+  "tests": {
+    "local": "9 passed in1.30s",
+    "remote": "9 passed in0.27s"
+  },
+  "runs": [
+    {
+      "mode": "original_paths",
+      "command": [
+        "/home/jia/twingraph-v3-venv/bin/python",
+        "scripts/run_value_v5_system_batch.py",
+        "--protocol",
+        "experiments/value_v5/protocol.json",
+        "--selection",
+        "results/v5/evidence/model_selection.json",
+        "--planner",
+        "experiments/value_v5/planner_record.json",
+        "--out",
+        "/home/jia/twingraph-v5-formal-20260916/results/v5/evidence/checkpoint_relocation_patch/no_experiment_original_paths",
+        "--check-only"
+      ],
+      "returncode": 0,
+      "result": {
+        "status": "validated_only",
+        "protocol_sha256": "47d4c4e21282a1374adfbf4e2fca0999995748ddcd924cba983ccd4336ff2353",
+        "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+        "geometry_sha256": "c839707b53c32032444547f42818784b448e31863c7ce1f411e5cfcad88cfd3a",
+        "selected": "mlp_29",
+        "checkpoint": "/home/jia/twingraph-v5-formal-20260916/results/v5/models/mlp_29/best.pt",
+        "checkpoint_sha256": "7149a504030ce60de1a06a86f132664cc19adbf4d8dc438fdf6d1ddae91dd479",
+        "model_selection_sha256": "9e114baead0f24143a1477dc7943c8689342842367e29281582ca85bcfca113c",
+        "planner_sha256": "9adb75d40993a6f20f031d44b0a293daef6529ce385e7d741b8da0346ca06626",
+        "seeds": [
+          61400,
+          61401,
+          61402,
+          61403
+        ],
+        "workers": 4
+      },
+      "stderr": "",
+      "no_experiment_directory_created": true
+    },
+    {
+      "mode": "all_models_relocated",
+      "command": [
+        "/home/jia/twingraph-v3-venv/bin/python",
+        "scripts/run_value_v5_system_batch.py",
+        "--protocol",
+        "experiments/value_v5/protocol.json",
+        "--selection",
+        "results/v5/evidence/model_selection.json",
+        "--planner",
+        "experiments/value_v5/planner_record.json",
+        "--out",
+        "/home/jia/twingraph-v5-formal-20260916/results/v5/evidence/checkpoint_relocation_patch/no_experiment_all_models_relocated",
+        "--check-only",
+        "--checkpoint-root",
+        "/home/jia/twingraph-v5-formal-20260916/results/v5/models"
+      ],
+      "returncode": 0,
+      "result": {
+        "status": "validated_only",
+        "protocol_sha256": "47d4c4e21282a1374adfbf4e2fca0999995748ddcd924cba983ccd4336ff2353",
+        "source_sha256": "666ccc5b6c66cbff830a488559cc7ddcdef315d3abee39a1dcf869360b5d1170",
+        "geometry_sha256": "c839707b53c32032444547f42818784b448e31863c7ce1f411e5cfcad88cfd3a",
+        "selected": "mlp_29",
+        "checkpoint": "/home/jia/twingraph-v5-formal-20260916/results/v5/models/mlp_29/best.pt",
+        "checkpoint_sha256": "7149a504030ce60de1a06a86f132664cc19adbf4d8dc438fdf6d1ddae91dd479",
+        "model_selection_sha256": "9e114baead0f24143a1477dc7943c8689342842367e29281582ca85bcfca113c",
+        "planner_sha256": "9adb75d40993a6f20f031d44b0a293daef6529ce385e7d741b8da0346ca06626",
+        "seeds": [
+          61400,
+          61401,
+          61402,
+          61403
+        ],
+        "workers": 4
+      },
+      "stderr": "",
+      "no_experiment_directory_created": true
+    }
+  ],
+  "protected_artifact_sha256": {
+    "results/v5/systems/dispatch.json": "c325189d64ccc7fa18563834694b887df02e59f6ab89bdc74c20c0de35cc3221",
+    "results/v5/evidence/model_selection.json": "291ef301deb64d68d552e355f409a4b89d4e561b52ba706e44eee66fcd31ee86",
+    "results/v5/evidence/thresholds.json": "90ff39b9483f48999f731badea8f5302ffa9869bcbf162b462c19578d8ee5d15",
+    "results/v5/systems/timing_rows.json": "59ed4e24fbf60fad28a5f33c4001c63e3af9aca30758d2ccd22ab6cb02ee5d30",
+    "results/v5/systems/timing_rows_cold_start.json": "f096060cb328e2ba6456df3d9a6e947243219982586695987863fd37a1f5cf93"
+  },
+  "protected_artifacts_unchanged": true,
+  "original_producer_scripts": "original_scripts/manifest.json",
+  "updated_script_sha256": {
+    "scripts/run_value_v5_system_batch.py": "24c38af025450a0353dcd38ebf64b91b8969e5238162856ae23c882e4e29ce6a",
+    "scripts/run_value_v5_collection.py": "8e41d9eb2dddf383846c387e994342c45193841c35f85a47f7197cc68700bc93",
+    "scripts/export_value_v5_predictions.py": "c5228c40a37e3085ae7dbb524a3a5718e0e18c3afd63b05020856e0c7ab25d16",
+    "simbench/tests/test_value_v5_checkpoint_relocation.py": "0dcb4e2516d0a2abc2ed62440361888824b3c8cbd6fea0e8cb5e81afbfcd4f8e"
+  }
+}

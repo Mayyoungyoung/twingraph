@@ -468,13 +468,15 @@ def markdown(summary):
     lines=["# 滑台装配价值模块 v5 实验报告","",f"证据状态：{summary['status']}；验证集选定模型：{summary['selected'] or '尚未冻结'}。",""]
     if summary["pending"]:lines += ["尚缺："+"、".join(summary["pending"])+"。当前文件不构成已完成实验的结论。",""]
     lines += ["## 候选预测与筛选","","分类指标以成功生成候选的名义物理执行为分母；Hit4 表示至少保留一条成功候选。分类阈值固定自验证集，随机对照为无放回子集的精确期望。", "",
-        "| 模型 | 验证Brier | 阈值 | 测试准确率 | 平衡准确率 | Hit4（达到候选池） | 随机Hit4 | Hit4（全部请求） |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|"]
+        "| 模型 | 验证Brier | 阈值 | 测试准确率 | 平衡准确率 | Top4成功占比 | 随机成功占比 | Hit4（达到候选池） | 随机Hit4 | Hit4（全部请求） |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for name,row in summary["models"].items():
         c=(row["classification_nominal"] or {}).get("point",{})
         s=row["top4"].get("summary",{})
         lines.append("| "+" | ".join([name+("（选定）" if row["selected"] else ""),number(row["validation_brier"]),number(row["threshold"]),
-            number(c.get("accuracy"),True),number(c.get("balanced_accuracy"),True),number(s.get("feasible_hit",{}).get("mean"),True),
+            number(c.get("accuracy"),True),number(c.get("balanced_accuracy"),True),
+            number(s.get("feasible_precision",{}).get("mean"),True),number(s.get("random_feasible_precision",{}).get("mean"),True),
+            number(s.get("feasible_hit",{}).get("mean"),True),
             number(s.get("random_feasible_hit",{}).get("mean"),True),number(row["top4"].get("requested_feasible_hit",{}).get("mean"),True)])+" |")
     lines += ["","外部接口为结构化观测与完整类型化技能程序；字段按接口自动展开，仅用训练输入删除常量及重复列。下表为实际数据产生的维度，不是手工选择的87个特征；表示是否最优尚未验证。", "",
         "| 模型 | 参数量 | 自动展开原始维度 | 保留输入维度 | 元数据状态 |","|---|---:|---:|---:|---|"]
@@ -496,7 +498,7 @@ def markdown(summary):
     if control:
         m=control["majority"];s=control["source_order"]
         lines += ["",f"验证集多数类固定预测为 {m['chosen_label']}（验证正例 {m['validation_positive_trials']}/{m['validation_trials']}）；测试准确率 {number(m['test']['accuracy'],True)}，平衡准确率 {number(m['test']['balanced_accuracy'],True)}。",
-            f"原始候选顺序 Top4 的 Hit4 为 {number(s['summary']['feasible_hit']['mean'],True)}；计入候选生成失败后的请求分母结果为 {number(s['requested_summary']['feasible_hit']['mean'],True)}。候选池达到 {s['reached_configurations']}/{s['requested_configurations']}，失败 {s['setup_failed_configurations']}。"]
+            f"原始候选顺序 Top4 的成功候选占比为 {number(s['summary']['feasible_precision']['mean'],True)}，Hit4 为 {number(s['summary']['feasible_hit']['mean'],True)}；计入候选生成失败后的请求分母结果为 {number(s['requested_summary']['feasible_hit']['mean'],True)}。候选池达到 {s['reached_configurations']}/{s['requested_configurations']}，失败 {s['setup_failed_configurations']}。"]
     lines += ["","## 原始数据与候选多样性","","| 划分 | 已记录请求/预定 | 完成 | 输入前失败 | 未完成 | 候选 | 名义成功/执行 | 超时 | 完全重复程序 | 全失败池 | 全成功池 |",
         "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for split,row in summary["collection"]["splits"].items():
@@ -580,7 +582,7 @@ def plot(summary,path):
         axes[1].bar(x+.18,[np.nan if v is None else v for v in random],.36,label="Exact random Hit4")
         intervals(axes[1],x-.18,hit,hit_ci);intervals(axes[1],x+.18,random,random_ci)
         if summary["controls"]:axes[1].axhline(summary["controls"]["source_order"]["summary"]["feasible_hit"]["mean"],color="black",ls="--",label="Source-order Hit4")
-        axes[1].set_xticks(x,names,rotation=20);axes[1].legend(fontsize=8)
+        axes[1].set_xticks(x,names,rotation=20);axes[1].legend(fontsize=8,loc="lower right")
     else:
         for ax in axes[:2]:ax.text(.5,.5,"Audited test results pending",ha="center",va="center",transform=ax.transAxes)
     axes[0].set(title="Nominal candidate classification",ylim=(0,1.08),ylabel="Rate")

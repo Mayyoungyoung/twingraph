@@ -1,0 +1,602 @@
+{
+  "schema": "twingraph.system_partial_audit.v5",
+  "created_utc": "2026-09-16T09:30:51.504428+00:00",
+  "scope": "Only completed Top-K cases 61400 and 61403; no aggregate performance estimate; read-only stdlib artifact audit, no simulation or model inference",
+  "checks": {
+    "selection_file_unchanged": true,
+    "threshold_file_unchanged": true,
+    "selected_checkpoint_bytes_match_freeze": true,
+    "dispatch_selection_matches_freeze": true,
+    "dispatch_checkpoint_matches_freeze": true,
+    "selected_model_same": true
+  },
+  "frozen": {
+    "selected": "mlp_29",
+    "checkpoint_file_sha256": "7149a504030ce60de1a06a86f132664cc19adbf4d8dc438fdf6d1ddae91dd479",
+    "selection_file_sha256": "291ef301deb64d68d552e355f409a4b89d4e561b52ba706e44eee66fcd31ee86",
+    "threshold_file_sha256": "90ff39b9483f48999f731badea8f5302ffa9869bcbf162b462c19578d8ee5d15",
+    "classification_threshold": 0.5695365870155553,
+    "note": "Classification threshold is an offline classification diagnostic; system TopK budget and empirical twin acceptance are separate rules."
+  },
+  "cases": [
+    {
+      "seed": 61400,
+      "checks": {
+        "completed": true,
+        "source_manifest_hash_matches": true,
+        "source_files_match_record": true,
+        "frozen_core_source_matches": true,
+        "checkpoint_matches": true,
+        "planner_record_hash_matches": true,
+        "original_planner_fields_preserved": true,
+        "ranking_recomputed": true,
+        "exact_top4_selected_for_validation": true,
+        "validation_in_original_pool_order": true,
+        "selected_by_empirical_rate_then_source": true,
+        "exact_budget": true,
+        "all_twin_namespace5107": true,
+        "target_namespace7901": true,
+        "target_graph_binding": true,
+        "target_semantic_binding": true,
+        "raw_target_matches_embedded_result": true,
+        "label_consistent": true,
+        "distinct_target_objects": true,
+        "no_snapshot_transfer": true,
+        "separate_scene_paths": true,
+        "nominal_initial_state_same": true
+      },
+      "source_files": {
+        "results/v5/systems/case_61400/top_k/result.json": "87cbf7606da70d795141896c4e07a58c084457b63495de15c12d7efbdc4e6c19",
+        "results/v5/systems/case_61400/top_k/target_execution_0.json": "33e16a1daf6f381722e1798ba9994ef0a7ba6878630d2b9a65afb58758534e16",
+        "results/v5/systems/case_61400/top_k/target_input_0.json": "1a1e21b47f70e11728a60cf41af172baceb542817cfb050ffda60a878939a664",
+        "results/v5/systems/case_61400/top_k/inputs.json": "3035a1790427175ca0562507ff12db8c20e54f8145ae6c8e00daeb0460fb83b4",
+        "results/v5/systems/case_61400/top_k/source.json": "e61737e7d26c9abab9237ae018c8cae939f88bef7ba0f85c595ea2ac6ac3fbb1",
+        "results/v5/systems/case_61400/top_k/planner.json": "0996529a21bd984149034ffb371cb1a8cfbb1b1b31d1db70daad3db698f25831"
+      },
+      "success": false,
+      "selected_candidate_id": "3b03503d41790c66a955",
+      "selected_original_pool_index": 9,
+      "selected_model_rank_one_based": 4,
+      "validation_recomputed": [
+        {
+          "candidate_id": "7c4df0eb5e09535084da",
+          "original_pool_index": 7,
+          "model_rank_one_based": 1,
+          "successes": 1,
+          "trials": 2,
+          "success_rate": 0.5,
+          "accepted": true
+        },
+        {
+          "candidate_id": "3b03503d41790c66a955",
+          "original_pool_index": 9,
+          "model_rank_one_based": 4,
+          "successes": 2,
+          "trials": 2,
+          "success_rate": 1.0,
+          "accepted": true
+        },
+        {
+          "candidate_id": "07f7109b825ca4410f91",
+          "original_pool_index": 10,
+          "model_rank_one_based": 2,
+          "successes": 1,
+          "trials": 2,
+          "success_rate": 0.5,
+          "accepted": true
+        },
+        {
+          "candidate_id": "f69324f717b54c949b68",
+          "original_pool_index": 11,
+          "model_rank_one_based": 3,
+          "successes": 0,
+          "trials": 2,
+          "success_rate": 0.0,
+          "accepted": false
+        }
+      ],
+      "selected_twin_trials": [
+        {
+          "candidate_id": "3b03503d41790c66a955",
+          "trial": {
+            "domain": "v5_twin",
+            "namespace": 5107,
+            "repeat": 0,
+            "friction_scale": 0.9800384243773872,
+            "actuator_gain_scale": 0.9984119204027568
+          },
+          "trial_sha256": "986c83d403b67cdb54c7fc195df4dd21d2828702fec600fbfb65472f0afa6108",
+          "valid": true,
+          "success": true,
+          "timeout": false,
+          "input_graph_sha256": "1d851fd87ae42a4c912e1701fb80028c20783ba0d46135fc87f25403075a1bcb"
+        },
+        {
+          "candidate_id": "3b03503d41790c66a955",
+          "trial": {
+            "domain": "v5_twin",
+            "namespace": 5107,
+            "repeat": 1,
+            "friction_scale": 0.980148860686743,
+            "actuator_gain_scale": 1.001589959646916
+          },
+          "trial_sha256": "d39c21c7495ae1ca4136cd6fcfe53d718403c7e1d49728b613864a96a301a2f0",
+          "valid": true,
+          "success": true,
+          "timeout": false,
+          "input_graph_sha256": "1d851fd87ae42a4c912e1701fb80028c20783ba0d46135fc87f25403075a1bcb"
+        }
+      ],
+      "target": {
+        "isolation": {
+          "distinct_session": true,
+          "distinct_context": true,
+          "distinct_model": true,
+          "distinct_data": true,
+          "disjoint_buffers": [
+            "data.qpos",
+            "data.qvel",
+            "data.ctrl",
+            "model.geom_friction",
+            "model.actuator_gainprm",
+            "model.actuator_biasprm"
+          ],
+          "snapshot_transfer": false,
+          "target_initialization": "separate_scene_factory_call"
+        },
+        "scene": {
+          "role": "target",
+          "spec": {
+            "seed": 61400,
+            "supply_shifts": {
+              "carriage": [
+                0.005752822930147401,
+                0.001510331895190612
+              ],
+              "end_stop": [
+                0.0011923063787108463,
+                -0.0022056485344979244
+              ],
+              "pin_left": [
+                0.0020039465691004035,
+                0.00411897862139152
+              ],
+              "pin_right": [
+                0.0014121301903684972,
+                -0.004383707522530836
+              ],
+              "handle": [
+                -0.0023965259485684504,
+                -0.0016277958665795933
+              ]
+            },
+            "family": "sliding_stage_full_v5",
+            "scope": "assemble_five_parts_from_supplies_and_release_no_stroke_test",
+            "checkpoint": 0
+          },
+          "scene_path": "/home/jia/twingraph-v5-formal-20260916/results/v5/systems/case_61400/top_k/target_scene_0/stage_scene.xml",
+          "scene_sha256": "e9615be7425ca94e044b860070127a837d939a78aa52547b9843e31492b2061f",
+          "initial_state_sha256": "1d4f8baabb6f19744e76b18564797320cde00528b4a2f098066a8a5fffcaed9f",
+          "initial_simulation_time_s": 1.6000000000000012,
+          "initial_positions": {
+            "carriage": [
+              -0.24424719998517108,
+              -0.19848969998754332,
+              0.8059829565938731
+            ],
+            "end_stop": [
+              -0.1188077,
+              -0.2522056,
+              0.8179991233677093
+            ],
+            "handle": [
+              0.012603469999989604,
+              -0.25162780000000073,
+              0.8079991493021015
+            ],
+            "pin_left": [
+              -0.35801186815105795,
+              -0.21589666114543354,
+              0.8479658523310342
+            ],
+            "pin_right": [
+              -0.35856071714966053,
+              -0.34440181675611786,
+              0.8479652104236483
+            ]
+          }
+        },
+        "rebind_details": {
+          "old_candidate_id": "3b03503d41790c66a955",
+          "new_candidate_id": "3b03503d41790c66a955",
+          "semantic_program_id": "23a5782abc14c54e0ed7d1bc4c67327619f9ce57f7b9d53f625a0b6e21238968",
+          "initial_route_index": 2,
+          "old_start_state": "1d4f8baabb6f19744e76b18564797320cde00528b4a2f098066a8a5fffcaed9f",
+          "new_start_state": "1d4f8baabb6f19744e76b18564797320cde00528b4a2f098066a8a5fffcaed9f",
+          "method": "selected_strategy_initial_approach_replanned_from_target_snapshot",
+          "geometry_checks": [
+            {
+              "route_id": "free:route:0",
+              "valid": true,
+              "samples": 44,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "free:route:1",
+              "valid": true,
+              "samples": 44,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "free:route:2",
+              "valid": true,
+              "samples": 44,
+              "resolution_rad": 0.035
+            }
+          ]
+        },
+        "execution_summary": {
+          "trial": {
+            "domain": "v5_target",
+            "namespace": 7901,
+            "repeat": 0,
+            "friction_scale": 1.029592627728162,
+            "actuator_gain_scale": 0.9953691964403627
+          },
+          "trial_sha256": "114a1e0b8dc618d653b41a058b46b9ad0c5e936b07cb4a798095a67cbc1c60f0",
+          "valid": true,
+          "success": false,
+          "full_success": false,
+          "prefix_success": true,
+          "suffix_success": false,
+          "timeout": false,
+          "input_graph_sha256": "1d851fd87ae42a4c912e1701fb80028c20783ba0d46135fc87f25403075a1bcb",
+          "executed_steps": 77,
+          "physics_steps": 79100,
+          "error": "press_seat: shoulder contact/height not verified {'height_error_m': 0.04654061141463495, 'contact_force_n': 1.4133236715184583}",
+          "goal_check": null
+        },
+        "first_failed_skill": {
+          "log_index_zero_based": 76,
+          "skill": "press_seat",
+          "params": {
+            "part": "pin_right",
+            "target_z": 0.855,
+            "force_stop": 2.5
+          },
+          "ok": false,
+          "metrics": {
+            "height_error_m": 0.04654061141463495,
+            "contact_force_n": 1.4133236715184583
+          },
+          "sim_seconds": 2.8000000000133696
+        },
+        "previous_skill": {
+          "skill": "guarded_descent",
+          "params": {
+            "part": "pin_right",
+            "target_z": 0.855,
+            "force_stop": 3.0,
+            "speed": 0.006
+          },
+          "ok": true,
+          "metrics": {
+            "z_m": 0.901532102042234,
+            "peak_contact_n": 3.2481442711360904,
+            "travel_m": 0.02238412726439909,
+            "stopped_by": "contact"
+          },
+          "sim_seconds": 4.22000000002015
+        }
+      }
+    },
+    {
+      "seed": 61403,
+      "checks": {
+        "completed": true,
+        "source_manifest_hash_matches": true,
+        "source_files_match_record": true,
+        "frozen_core_source_matches": true,
+        "checkpoint_matches": true,
+        "planner_record_hash_matches": true,
+        "original_planner_fields_preserved": true,
+        "ranking_recomputed": true,
+        "exact_top4_selected_for_validation": true,
+        "validation_in_original_pool_order": true,
+        "selected_by_empirical_rate_then_source": true,
+        "exact_budget": true,
+        "all_twin_namespace5107": true,
+        "target_namespace7901": true,
+        "target_graph_binding": true,
+        "target_semantic_binding": true,
+        "raw_target_matches_embedded_result": true,
+        "label_consistent": true,
+        "distinct_target_objects": true,
+        "no_snapshot_transfer": true,
+        "separate_scene_paths": true,
+        "nominal_initial_state_same": true
+      },
+      "source_files": {
+        "results/v5/systems/case_61403/top_k/result.json": "e437f248e76c2c2d3231259a6a93baa60eabafe18958aaea8efaa773f642df95",
+        "results/v5/systems/case_61403/top_k/target_execution_0.json": "5ebabca809d19cfc21522bbc07cacc50c7c43821f881d8dfd430b35f2602c1ca",
+        "results/v5/systems/case_61403/top_k/target_input_0.json": "43a8ed5dbf888243950fa6b4c9642438bf8fd3d265e6b4546e0ca9bbb0c82265",
+        "results/v5/systems/case_61403/top_k/inputs.json": "3fc7d9e69bc4d79bf6fcafc9bc29f6855f010bd05c974ec1dadd066ef78d47b5",
+        "results/v5/systems/case_61403/top_k/source.json": "e61737e7d26c9abab9237ae018c8cae939f88bef7ba0f85c595ea2ac6ac3fbb1",
+        "results/v5/systems/case_61403/top_k/planner.json": "0996529a21bd984149034ffb371cb1a8cfbb1b1b31d1db70daad3db698f25831"
+      },
+      "success": true,
+      "selected_candidate_id": "5b37a469006c0a85a1d9",
+      "selected_original_pool_index": 0,
+      "selected_model_rank_one_based": 4,
+      "validation_recomputed": [
+        {
+          "candidate_id": "5b37a469006c0a85a1d9",
+          "original_pool_index": 0,
+          "model_rank_one_based": 4,
+          "successes": 2,
+          "trials": 2,
+          "success_rate": 1.0,
+          "accepted": true
+        },
+        {
+          "candidate_id": "4c0ce00c52fe9134d48a",
+          "original_pool_index": 4,
+          "model_rank_one_based": 3,
+          "successes": 2,
+          "trials": 2,
+          "success_rate": 1.0,
+          "accepted": true
+        },
+        {
+          "candidate_id": "440ab8bbacaf7f45d55d",
+          "original_pool_index": 8,
+          "model_rank_one_based": 1,
+          "successes": 0,
+          "trials": 2,
+          "success_rate": 0.0,
+          "accepted": false
+        },
+        {
+          "candidate_id": "df555ec5fcbd0d5107ad",
+          "original_pool_index": 10,
+          "model_rank_one_based": 2,
+          "successes": 0,
+          "trials": 2,
+          "success_rate": 0.0,
+          "accepted": false
+        }
+      ],
+      "selected_twin_trials": [
+        {
+          "candidate_id": "5b37a469006c0a85a1d9",
+          "trial": {
+            "domain": "v5_twin",
+            "namespace": 5107,
+            "repeat": 0,
+            "friction_scale": 1.0286219883101275,
+            "actuator_gain_scale": 1.00341103299591
+          },
+          "trial_sha256": "a8b612c2eee303d007f119ecd80b96a83595bc3b04de3bc014bb0b137404b06b",
+          "valid": true,
+          "success": true,
+          "timeout": false,
+          "input_graph_sha256": "3ec1e1760b5ad3dfec066352c9b13e9f3c3422ece2e905981428227ad6f0e80a"
+        },
+        {
+          "candidate_id": "5b37a469006c0a85a1d9",
+          "trial": {
+            "domain": "v5_twin",
+            "namespace": 5107,
+            "repeat": 1,
+            "friction_scale": 1.0113711053521974,
+            "actuator_gain_scale": 0.9964868070684832
+          },
+          "trial_sha256": "766cedba3a0ed8bdd686bdee8f6bae49ffe8435f5c5f2c66cf8745b01025bdf4",
+          "valid": true,
+          "success": true,
+          "timeout": false,
+          "input_graph_sha256": "3ec1e1760b5ad3dfec066352c9b13e9f3c3422ece2e905981428227ad6f0e80a"
+        }
+      ],
+      "target": {
+        "isolation": {
+          "distinct_session": true,
+          "distinct_context": true,
+          "distinct_model": true,
+          "distinct_data": true,
+          "disjoint_buffers": [
+            "data.qpos",
+            "data.qvel",
+            "data.ctrl",
+            "model.geom_friction",
+            "model.actuator_gainprm",
+            "model.actuator_biasprm"
+          ],
+          "snapshot_transfer": false,
+          "target_initialization": "separate_scene_factory_call"
+        },
+        "scene": {
+          "role": "target",
+          "spec": {
+            "seed": 61403,
+            "supply_shifts": {
+              "carriage": [
+                0.0011430066690350411,
+                0.003754073605015838
+              ],
+              "end_stop": [
+                0.002328599533219825,
+                0.003719438116034873
+              ],
+              "pin_left": [
+                -0.0028059551944409787,
+                0.004278963283580678
+              ],
+              "pin_right": [
+                0.0018795413555119135,
+                -0.00010735851386929878
+              ],
+              "handle": [
+                0.003418199210659511,
+                0.0013803627956534151
+              ]
+            },
+            "family": "sliding_stage_full_v5",
+            "scope": "assemble_five_parts_from_supplies_and_release_no_stroke_test",
+            "checkpoint": 0
+          },
+          "scene_path": "/home/jia/twingraph-v5-formal-20260916/results/v5/systems/case_61403/top_k/target_scene_0/stage_scene.xml",
+          "scene_sha256": "d00c083227c6c77f0220d17bc14d3475865e968d3470b7b9883ffd1e0a27908f",
+          "initial_state_sha256": "02d1f7cc9d9ef8fafacc3c5c1a2f19da50aa9004bc7a7149070cafc101fc6c23",
+          "initial_simulation_time_s": 1.6000000000000012,
+          "initial_positions": {
+            "carriage": [
+              -0.24885699998520183,
+              -0.19624589998741485,
+              0.8059829565938731
+            ],
+            "end_stop": [
+              -0.1176714,
+              -0.2462806,
+              0.8179992587611403
+            ],
+            "handle": [
+              0.01841819999998897,
+              -0.2486196000000046,
+              0.8079992181120161
+            ],
+            "pin_left": [
+              -0.362792280729638,
+              -0.21572528061630314,
+              0.8479653409495127
+            ],
+            "pin_right": [
+              -0.3581534939844697,
+              -0.3401030130016422,
+              0.8479664931781737
+            ]
+          }
+        },
+        "rebind_details": {
+          "old_candidate_id": "5b37a469006c0a85a1d9",
+          "new_candidate_id": "5b37a469006c0a85a1d9",
+          "semantic_program_id": "b6db0d59eb536a10aee25fc8a62cad2c095b1df104cdc4ef72d9fbf910c35654",
+          "initial_route_index": 0,
+          "old_start_state": "02d1f7cc9d9ef8fafacc3c5c1a2f19da50aa9004bc7a7149070cafc101fc6c23",
+          "new_start_state": "02d1f7cc9d9ef8fafacc3c5c1a2f19da50aa9004bc7a7149070cafc101fc6c23",
+          "method": "selected_strategy_initial_approach_replanned_from_target_snapshot",
+          "geometry_checks": [
+            {
+              "route_id": "free:route:0",
+              "valid": true,
+              "samples": 84,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "free:route:1",
+              "valid": true,
+              "samples": 84,
+              "resolution_rad": 0.035
+            },
+            {
+              "route_id": "free:route:2",
+              "valid": true,
+              "samples": 84,
+              "resolution_rad": 0.035
+            }
+          ]
+        },
+        "execution_summary": {
+          "trial": {
+            "domain": "v5_target",
+            "namespace": 7901,
+            "repeat": 0,
+            "friction_scale": 0.9808303138082101,
+            "actuator_gain_scale": 1.0046676801261478
+          },
+          "trial_sha256": "e978bd8cac89a025bdea48f94e985310e3731b91fd5cb436c083891f184731ca",
+          "valid": true,
+          "success": true,
+          "full_success": true,
+          "prefix_success": true,
+          "suffix_success": true,
+          "timeout": false,
+          "input_graph_sha256": "3ec1e1760b5ad3dfec066352c9b13e9f3c3422ece2e905981428227ad6f0e80a",
+          "executed_steps": 106,
+          "physics_steps": 103300,
+          "error": "",
+          "goal_check": {
+            "success": true,
+            "goals": [
+              {
+                "part": "carriage",
+                "success": true,
+                "position_error_m": 9.007284551149434e-05,
+                "tilt_deg": 3.4416715973925604e-05,
+                "released": true,
+                "touching_finger": false,
+                "eef_clearance_m": 0.45037824668153015
+              },
+              {
+                "part": "end_stop",
+                "success": true,
+                "position_error_m": 0.00013158252040913328,
+                "tilt_deg": 9.58776780885763e-05,
+                "released": true,
+                "touching_finger": false,
+                "eef_clearance_m": 0.438355981328603
+              },
+              {
+                "part": "pin_left",
+                "success": true,
+                "position_error_m": 0.00011103424456367959,
+                "tilt_deg": 0.004034292787866747,
+                "released": true,
+                "touching_finger": false,
+                "eef_clearance_m": 0.41936085173985416
+              },
+              {
+                "part": "pin_right",
+                "success": true,
+                "position_error_m": 0.0004044254876890523,
+                "tilt_deg": 0.003882128861197299,
+                "released": true,
+                "touching_finger": false,
+                "eef_clearance_m": 0.41936082665680474
+              },
+              {
+                "part": "handle",
+                "success": true,
+                "position_error_m": 3.864536780126832e-05,
+                "tilt_deg": 2.912857475118365e-05,
+                "released": true,
+                "touching_finger": false,
+                "eef_clearance_m": 0.4023790441732382
+              }
+            ]
+          }
+        },
+        "first_failed_skill": null,
+        "previous_skill": null
+      }
+    }
+  ],
+  "all_checks_passed": true,
+  "interpretation": [
+    "Case 61400 is a valid uncensored physical target failure after 2/2 selected twin successes; finite twin evidence is not a guarantee on an independent disturbance draw. Guarded descent contact-stop success is not a seating-success label; the following press_seat verifies seating and fails.",
+    "Case 61403 has two 2/2 twin candidates; original pool index0 wins over index4 despite being model rank4. All five independent target final placement/release goals pass.",
+    "Distinct Session/context/MjModel/MjData and disjoint important buffers are enforced at runtime; target factory recreates a nominal same-seed scene before role-specific disturbance sampling. Identical initial or selected graph hashes are expected with deterministic nominal recreation and do not establish state sharing.",
+    "Both roles still use the same MuJoCo mechanics and known nuisance bounds. These cases are not hardware transfer evidence; friction/gain differences are correlates, not isolated causal explanations.",
+    "No aggregate success/timing claim is made while other paired cases remain running."
+  ],
+  "source_lineage": [
+    "simbench/value/system_v5.py:59 role-specific namespace draws",
+    "simbench/value/system_v5.py:96 distinct identities and disjoint buffers",
+    "simbench/value/system_v5.py:157 empirical fraction and source-order tie selection",
+    "simbench/value/system_v5.py:382 subset preserved in original pool order",
+    "simbench/value/system_v5.py:414 fresh target scene factory call",
+    "simbench/value/system_v5.py:443 selected semantic payload verification",
+    "simbench/value/system_v5.py:455 target-specific PhysicalRunner and disturbance draw",
+    "simbench/value/stage_v5.py:105 separate MjContext and Session factory"
+  ]
+}

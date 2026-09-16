@@ -9,7 +9,7 @@
 ```python
 from simbench.value.value_v5 import ValueScorer
 
-value = ValueScorer(checkpoint="path/to/frozen/best.pt", device="cpu")
+value = ValueScorer(checkpoint="models/value/v5/mlp_29/best.pt", device="cpu")
 result = value.rank(state=current_state, plans=candidate_plans, k=4)
 selected = result["top_k"]
 ```
@@ -67,6 +67,22 @@ python scripts/report_value_v5.py --run results/v5 --out results/v5/report
 确定模型及分类阈值后固定；测试结果不能触发换模型。模型路径移动时，
 导出器的 `--checkpoints name=path` 只允许保持原冻结文件哈希的重定位。
 
+复用仓库中已冻结权重时，系统批次及测试采集可添加
+`--checkpoint-root models/value/v5`，一次定位全部四个 `NAME/best.pt`，逐个核对
+原SHA256而不改写选择记录。正式物理复现仍需满足前述精确源码/场景校验。
+例如在恢复冻结源码后，运行系统复现：
+
+```bash
+python scripts/run_value_v5_system_batch.py \
+  --protocol experiments/value_v5/protocol.json \
+  --selection docs/evidence/value_v5/model_selection.json \
+  --planner experiments/value_v5/planner_record.json \
+  --checkpoint-root models/value/v5 --out results/v5_system_reproduction
+```
+
+已归档的原始结果目录应保留；重跑使用新的空输出目录。路径迁移不会重新
+选模型、训练或调整阈值。
+
 系统中的候选顺序来自当前助手作为 LLM 代理的明确记录。符号顺序由技能
 编译器展开，模型选择 Top4，twin 真正执行这些候选，再在独立 target 中
 执行选中程序。全量对照也真正执行全部12条候选，使用相同的选择规则。
@@ -77,11 +93,13 @@ python scripts/report_value_v5.py --run results/v5 --out results/v5/report
 
 ```bash
 python scripts/render_value_v5_execution.py \
-  --run results/v5/systems/CASE/top_k --repeat 0 \
-  --out results/v5/replays/CASE.mp4 --speed 4
+  --run results/v5/systems/case_61401/top_k --repeat 0 \
+  --out results/v5/replays/case_61401.mp4 --speed 4
+python scripts/walkthrough_value_v5.py \
+  --case results/v5/systems/case_61401 --out results/v5/walkthrough
 ```
 
-`CASE` 使用实际系统输出目录名。回放读取真实记录的 `time_s/qpos/qvel/ctrl`
+61401 是按编号排序的首个成功 Top4 演示案例，性能统计仍包含全部四组。回放读取真实记录的 `time_s/qpos/qvel/ctrl`
 并核对哈希，只做渲染，不重新积分物理状态，也不产生新的成功标签。
 完整执行参数、终验、初始状态和失败尝试均保留，可独立复核。
 

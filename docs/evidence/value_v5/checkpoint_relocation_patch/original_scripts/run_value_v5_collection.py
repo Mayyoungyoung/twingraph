@@ -14,7 +14,6 @@ from simbench.value.plan import digest
 from simbench.value.program_input_v5 import source_manifest
 from simbench.value.collect import dump
 from simbench.value.collect_v5 import worker
-from scripts.export_value_v5_predictions import frozen_checkpoint_paths, verify_selection
 
 
 def main():
@@ -22,7 +21,6 @@ def main():
     p.add_argument("--protocol",required=True);p.add_argument("--out",required=True)
     p.add_argument("--splits",nargs="+",choices=("train","val","test"),required=True)
     p.add_argument("--selection");p.add_argument("--thresholds")
-    p.add_argument("--checkpoint-root",help="test only: verify all frozen weights at ROOT/NAME/best.pt")
     a=p.parse_args();spec=json.loads(Path(a.protocol).read_text())
     if digest(source_manifest())!=spec["source_sha256"]:
         raise ValueError("source differs from prospective freeze")
@@ -30,8 +28,6 @@ def main():
         if hashlib.sha256((ROOT/name).read_bytes()).hexdigest()!=expected:
             raise ValueError(f"scene/geometry differs from prospective freeze: {name}")
     if len(set(a.splits))!=len(a.splits):raise ValueError("duplicate requested split")
-    if a.checkpoint_root is not None and a.splits != ["test"]:
-        raise ValueError("--checkpoint-root is only valid for frozen test collection")
     binding=dict(protocol_sha256=digest(spec))
     if "test" in a.splits:
         if a.splits!=["test"] or not a.selection or not a.thresholds:
@@ -47,7 +43,9 @@ def main():
                     k:v["sha256"] for k,v in selection["models"].items()} or
                 thresholds.get("primary_k")!=spec["candidates"]["primary_k"]):
             raise ValueError("classification threshold/source/model bindings differ from the prior freeze")
-        verify_selection(selection, frozen_checkpoint_paths(selection, a.checkpoint_root), spec["source_sha256"])
+        for model in selection["models"].values():
+            if hashlib.sha256(Path(model["path"]).read_bytes()).hexdigest()!=model["sha256"]:
+                raise ValueError("frozen model weights changed before test collection")
         binding.update(model_selection_sha256=digest(selection),thresholds_sha256=digest(thresholds))
     out=Path(a.out);out.mkdir(parents=True,exist_ok=True)
     marker=out/("dispatch_"+"_".join(a.splits)+".json")

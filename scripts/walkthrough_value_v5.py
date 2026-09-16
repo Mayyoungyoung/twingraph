@@ -71,7 +71,7 @@ def trial_summary(rows):
                 enumerate(row.get("executed_parameters") or []) if not step.get("ok")), None)) for row in rows])
 
 
-def build_walkthrough(case, replay=None):
+def build_walkthrough(case, replay=None, selection_note=None):
     case = Path(case).resolve()
     require(case.is_dir(), "explicit --case directory does not exist")
     files, checks, warnings = [], [], []
@@ -254,7 +254,8 @@ def build_walkthrough(case, replay=None):
         replay_record = dict(metadata_path=str(replay_path), video_path=str(video), metadata=metadata)
         checks.append("video: selected TopK target execution/trial/trace and video hash; no new rollout")
     return dict(schema="twingraph.case_walkthrough.v5", explicitly_selected_case=str(case),
-        interpretation="posthoc explanation of one user-selected recorded case; not a population performance estimate or a new experiment",
+        interpretation="posthoc explanation of one explicitly caller-selected recorded case; not a population performance estimate or a new experiment",
+        case_selection_note=selection_note or "调用者显式指定案例；不由本工具根据成功状态筛选案例。",
         generation=dict(simulation_calls=0,model_calls=0,training_calls=0,reranked=False,
                         generator_sha256=file_sha(__file__)),
         planner=planners.get("top_k", next(iter(planners.values()))), observation=primary_inputs.get("observation"),
@@ -289,6 +290,7 @@ def markdown(summary):
     planner = summary["planner"]
     lines = ["# 滑台装配完整流程：指定记录案例", "",
         f"案例：`{summary['explicitly_selected_case']}`。这是一次已有记录的讲解；没有重新采样候选、重新排序或重新仿真。", "",
+        summary["case_selection_note"], "",
         "本文件保留该案例 TopK 与全量验证两种策略的全部候选结果和目标试验。总体性能请以所有预注册案例的汇总报告为准。", "",
         "## 1. 任务与规划来源", "", planner.get("task_text", "未记录"), "",
         f"来源：{cell(planner.get('source'))}；提供方：{cell(planner.get('provider'))}；模型：{cell(planner.get('model'))}。", "",
@@ -389,6 +391,7 @@ def markdown(summary):
         lines += [f"[所选 TopK 目标的记录状态重放视频](<{replay['video_path']}>)。它与目标执行文件、扰动试验、状态轨迹和视频 SHA256 绑定，没有新物理积分。", ""]
     else:
         lines += ["未附加视频。若后续提供视频，只能绑定本案例所选目标的已记录状态重放；本工具不生成或重跑视频。", ""]
+    lines += ["场景阅读说明：供料区两个灰色圆筒是被动定位销支架，装配后仍留在原位，不是漏装的两枚销钉。左右销是否装配通过，应查看独立目标验收中的 pin_left / pin_right 结果。", ""]
     lines += ["- " + value for value in summary["limitations"]]
     lines += ["", "完整记录与核验文件 SHA256 见同目录 `walkthrough.json`。已核验：", ""]
     lines += ["- " + check for check in summary["integrity"]["checks"]]
@@ -402,12 +405,15 @@ def main():
     parser.add_argument("--case", required=True, help="Explicit case directory containing top_k/ and full/; never auto-selected")
     parser.add_argument("--out", required=True, help="Output directory for walkthrough.json and walkthrough.md")
     parser.add_argument("--replay", help="Optional existing selected TopK target replay JSON sidecar; matching .mp4 must exist")
+    parser.add_argument("--selection-note", help="Explicit posthoc reason this illustrative case was chosen; never affects results")
     args = parser.parse_args()
-    summary = build_walkthrough(args.case, args.replay)
+    summary = build_walkthrough(args.case, args.replay, args.selection_note)
     output = Path(args.out).resolve()
     require(output != Path(args.case).resolve() and Path(args.case).resolve() not in output.parents,
             "output must be outside the selected immutable case directory")
     output.mkdir(parents=True, exist_ok=True)
+    require(not any((output/name).exists() for name in ("walkthrough.json", "walkthrough.md")),
+            "refuse to overwrite an existing walkthrough; choose a new output directory")
     (output / "walkthrough.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False, allow_nan=False), encoding="utf-8")
     (output / "walkthrough.md").write_text(markdown(summary), encoding="utf-8")
     print(json.dumps(dict(output=str(output), candidates=len(summary["candidates"]),

@@ -23,13 +23,15 @@ if os.name != "nt":
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from scripts.run_value_v5_models import digest, read, sha, write_new, require_empty, validate_protocol
-from scripts.export_value_v5_predictions import frozen_checkpoint_paths, verify_selection
+from scripts.export_value_v5_predictions import verify_selection
 
 
-def validate_dispatch(spec, selection, planner, selected_checkpoint=None, checkpoint_root=None):
+def validate_dispatch(spec, selection, planner, selected_checkpoint=None):
     binding = validate_protocol(spec)
-    paths = frozen_checkpoint_paths(selection, checkpoint_root, selected_checkpoint)
+    paths = {name:row["path"] for name,row in selection["models"].items()}
     selected = selection["selected"]
+    if selected_checkpoint is not None:
+        paths[selected] = str(Path(selected_checkpoint).resolve())
     verify_selection(selection, paths, spec["source_sha256"])
     declared = {row["name"]:row for row in spec["models"]["kinds"]}
     if set(selection["models"]) != set(declared):
@@ -184,10 +186,9 @@ def combine(output, spec, binding, records, batch_wall):
     return batch
 
 
-def run_batch(protocol, selection_path, planner_path, output, selected_checkpoint=None, check_only=False,
-              checkpoint_root=None):
+def run_batch(protocol, selection_path, planner_path, output, selected_checkpoint=None, check_only=False):
     spec, selection, planner=read(protocol),read(selection_path),read(planner_path)
-    binding=validate_dispatch(spec,selection,planner,selected_checkpoint,checkpoint_root)
+    binding=validate_dispatch(spec,selection,planner,selected_checkpoint)
     if check_only:
         return dict(status="validated_only",**binding,seeds=spec["system"]["seeds"],workers=spec["system"]["workers"])
     output=Path(output).resolve();require_empty(output)
@@ -218,13 +219,10 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--protocol",required=True);parser.add_argument("--selection",required=True)
     parser.add_argument("--planner",required=True);parser.add_argument("--out",required=True)
-    location=parser.add_mutually_exclusive_group()
-    location.add_argument("--selected-checkpoint",help="relocate only selected checkpoint; other frozen model paths must exist")
-    location.add_argument("--checkpoint-root",help="relocate ALL frozen models to ROOT/NAME/best.pt; every frozen SHA256 must match")
+    parser.add_argument("--selected-checkpoint",help="relocated selected checkpoint, identical frozen SHA256 required")
     parser.add_argument("--check-only",action="store_true")
     args=parser.parse_args()
-    result=run_batch(args.protocol,args.selection,args.planner,args.out,args.selected_checkpoint,args.check_only,
-                     args.checkpoint_root)
+    result=run_batch(args.protocol,args.selection,args.planner,args.out,args.selected_checkpoint,args.check_only)
     print({k:v for k,v in result.items() if k!="records"},flush=True)
     if result["status"]=="error":raise SystemExit(1)
 
