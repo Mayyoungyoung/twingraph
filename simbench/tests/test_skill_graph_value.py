@@ -121,3 +121,9 @@ def test_within_pool_typed_cache_preserves_every_input():
     graphs=[compile_graph(a,p),compile_graph(b,q)]
     for cached,g in zip(encode_graphs(graphs),graphs):
         for k,value in encode_graph(g).items():np.testing.assert_array_equal(cached[k],value)
+
+
+def test_unmaterialized_explicit_id_selection_is_not_silently_dropped():
+    from simbench.value.plan import Argument
+    obs,p=example();p.calls[10].arguments["candidate_id"]=Argument("unbound_route",kind="category")
+    with pytest.raises(ValueError,match="materialized selected data"):compile_graph(obs,p)

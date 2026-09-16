@@ -48,6 +48,8 @@ def compile_graph(observation, plan):
         ports = []
         for declaration in spec.ports:
             key = declaration.name; value = plain(params[key])
+            if declaration.kind == "binding" and value is not None:
+                raise ValueError("explicit selection binding needs materialized selected data; graph v1 supports solver-default selection")
             original = call.arguments.get(key)
             row = {**asdict(declaration), "value": value, "status": "known", "source": None}
             if original:
