@@ -5,7 +5,7 @@ See the [Chinese experiment report](../../../VALUE_V4_REPORT.md) and [reproducti
 | Evidence | Contents |
 |---|---|
 | [frozen.json](frozen.json) | Twelve immutable model hashes and validation-selected `sequence_17`; published before test results |
-| [predictions.json](predictions.json) | Raw candidate outcomes, per-model logits/probabilities, source hashes and setup attrition |
+| [predictions.json](predictions.json) | Candidate empirical success fractions, per-model logits/probabilities, source hashes and setup attrition; individual trial outcomes remain in the formal data archive |
 | [ranking_audit.json](ranking_audit.json), [ranking_summary.csv](ranking_summary.csv) | All seeds, raw/calibrated errors, exact random expectations, checkpoint strata and configuration bootstrap |
 | [module_timing.json](module_timing.json) | Warm model, graph construction/checking/encoding/inference/export measurements |
 | [deployment_summary.json](deployment_summary.json) | Actual online validation and independent execution, requested denominators, parallel and per-policy timings |
