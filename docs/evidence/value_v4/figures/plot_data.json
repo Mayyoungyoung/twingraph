@@ -1,0 +1,535 @@
+{
+  "schema": "twingraph.value.figures.v4",
+  "sources": {
+    "audit": {
+      "path": "results/v4/evidence/ranking_audit.json",
+      "sha256": "f4f73c135848b915d252f5be2e60dbdb33a1b9ab5aba776ef497567af7ecf2ac"
+    },
+    "timing": {
+      "path": "results/v4/evidence/module_timing.json",
+      "sha256": "e1745318fc34c69170f6a836f4766f206be01b052e6551fb1d51a71dad1da948"
+    },
+    "deployment": {
+      "path": "results/v4/evidence/deployment_summary.json",
+      "sha256": "ab91838ba8e4b31b59dbc86a2b8c9f29a75b2db6c1f080cdea0af9ed3c708e00"
+    },
+    "freeze": {
+      "path": "results/v4/frozen.json",
+      "sha256": "635b29c83fd4f4a34681f5b7047ffaac578a650bbb10ccc0577e445876d8d7a0"
+    }
+  },
+  "ranking": {
+    "status": "available",
+    "rows": [
+      {
+        "name": "exact_uniform_random",
+        "label": "Exact uniform random",
+        "color": "#9AA4B2",
+        "values": {
+          "1": 0.3125,
+          "4": 0.3125
+        },
+        "model_seeds": 0
+      },
+      {
+        "name": "source_order",
+        "label": "Source order",
+        "color": "#64748B",
+        "values": {
+          "1": 0.25,
+          "4": 0.3125
+        },
+        "model_seeds": 0
+      },
+      {
+        "name": "shortest_initial",
+        "label": "Shortest initial path",
+        "color": "#C58B3A",
+        "values": {
+          "1": 0.3333333333333333,
+          "4": 0.3541666666666667
+        },
+        "model_seeds": 0
+      },
+      {
+        "name": "compact",
+        "label": "Compact ports\nmean of 3 model seeds",
+        "color": "#268B8D",
+        "values": {
+          "1": 0.5833333333333334,
+          "4": 0.5486111111111112
+        },
+        "model_seeds": 3,
+        "seed_names": [
+          "compact_17",
+          "compact_29",
+          "compact_43"
+        ],
+        "seed_values": {
+          "1": [
+            0.75,
+            0.5,
+            0.5
+          ],
+          "4": [
+            0.5625,
+            0.5625,
+            0.5208333333333334
+          ]
+        }
+      },
+      {
+        "name": "port_mlp",
+        "label": "All ports MLP\nmean of 3 model seeds",
+        "color": "#72AB91",
+        "values": {
+          "1": 0.5833333333333333,
+          "4": 0.5555555555555556
+        },
+        "model_seeds": 3,
+        "seed_names": [
+          "port_mlp_17",
+          "port_mlp_29",
+          "port_mlp_43"
+        ],
+        "seed_values": {
+          "1": [
+            0.6666666666666666,
+            0.6666666666666666,
+            0.4166666666666667
+          ],
+          "4": [
+            0.5625,
+            0.5625,
+            0.5416666666666666
+          ]
+        }
+      },
+      {
+        "name": "sequence",
+        "label": "Skill sequence\nmean of 3 model seeds",
+        "color": "#7975B5",
+        "values": {
+          "1": 0.4444444444444445,
+          "4": 0.4583333333333333
+        },
+        "model_seeds": 3,
+        "seed_names": [
+          "sequence_17",
+          "sequence_29",
+          "sequence_43"
+        ],
+        "seed_values": {
+          "1": [
+            0.4166666666666667,
+            0.4166666666666667,
+            0.5
+          ],
+          "4": [
+            0.5,
+            0.4375,
+            0.4375
+          ]
+        }
+      },
+      {
+        "name": "graph",
+        "label": "Skill graph\nmean of 3 model seeds",
+        "color": "#3578AE",
+        "values": {
+          "1": 0.4444444444444445,
+          "4": 0.4583333333333333
+        },
+        "model_seeds": 3,
+        "seed_names": [
+          "graph_17",
+          "graph_29",
+          "graph_43"
+        ],
+        "seed_values": {
+          "1": [
+            0.4166666666666667,
+            0.4166666666666667,
+            0.5
+          ],
+          "4": [
+            0.5,
+            0.4375,
+            0.4375
+          ]
+        }
+      },
+      {
+        "name": "selected",
+        "label": "Frozen selected policy\nSkill sequence, seed 17",
+        "color": "#24384E",
+        "values": {
+          "1": 0.4166666666666667,
+          "4": 0.5
+        },
+        "model_seeds": 1,
+        "source_method": "sequence_17"
+      }
+    ],
+    "counts": {
+      "configurations": 6,
+      "groups": 6,
+      "all_failure_groups": 1,
+      "pool_sizes": [
+        8
+      ],
+      "physical_repeats": [
+        2
+      ],
+      "model_seed_count_is_not_an_additional_configuration_count": true
+    },
+    "attrition": {
+      "expected_configurations": 8,
+      "expected_groups": 8,
+      "reached_groups": 6,
+      "failed_setup_groups": 2,
+      "disposition": [
+        {
+          "seed": 51300,
+          "checkpoint": 2,
+          "status": "checkpoint_reached",
+          "failure": null
+        },
+        {
+          "seed": 51301,
+          "checkpoint": 3,
+          "status": "checkpoint_setup_failed",
+          "failure": {
+            "request": {
+              "seed": 51301,
+              "out": "results/v4/data",
+              "split": "test",
+              "domain": "reference",
+              "n": 8,
+              "repeats": 2,
+              "checkpoint": 3
+            },
+            "error": "Traceback (most recent call last):\n  File \"/home/jia/twingraph-v4-20260916/simbench/value/schema_collect.py\", line 100, in worker\n    return collect_one(**request)\n  File \"/home/jia/twingraph-v4-20260916/simbench/value/schema_collect.py\", line 63, in collect_one\n    spec, session, path, targets = create_scene(seed, directory, checkpoint)\n  File \"/home/jia/twingraph-v4-20260916/simbench/value/schema_collect.py\", line 39, in create_scene\n    pick(session, part, terminal_targets=[dict(id=\"seated\", part=part, xyz=target)])\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/task.py\", line 36, in pick\n    execute_pick_candidate(s, chosen)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/candidates.py\", line 335, in execute_pick_candidate\n    execute_skeleton(session, candidate.steps)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/graph.py\", line 97, in execute_skeleton\n    session.call(row[\"skill\"], **row.get(\"params\", {}))\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/library.py\", line 195, in call\n    outcome = getattr(self, name)(**params)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/library.py\", line 748, in approach\n    ok = self.arm.move(goal[\"xyz\"], down(goal[\"yaw\"]), speed=0.045)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/control.py\", line 173, in move\n    q = self.ik(\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/control.py\", line 77, in ik\n    raise ValueError(\nValueError: IK unreachable: xyz=[-0.3675990470820044, -0.2197459161496285, 0.9485334378458671], residual=0.00015\n"
+          }
+        },
+        {
+          "seed": 51302,
+          "checkpoint": 2,
+          "status": "checkpoint_reached",
+          "failure": null
+        },
+        {
+          "seed": 51303,
+          "checkpoint": 3,
+          "status": "checkpoint_setup_failed",
+          "failure": {
+            "request": {
+              "seed": 51303,
+              "out": "results/v4/data",
+              "split": "test",
+              "domain": "reference",
+              "n": 8,
+              "repeats": 2,
+              "checkpoint": 3
+            },
+            "error": "Traceback (most recent call last):\n  File \"/home/jia/twingraph-v4-20260916/simbench/value/schema_collect.py\", line 100, in worker\n    return collect_one(**request)\n  File \"/home/jia/twingraph-v4-20260916/simbench/value/schema_collect.py\", line 63, in collect_one\n    spec, session, path, targets = create_scene(seed, directory, checkpoint)\n  File \"/home/jia/twingraph-v4-20260916/simbench/value/schema_collect.py\", line 39, in create_scene\n    pick(session, part, terminal_targets=[dict(id=\"seated\", part=part, xyz=target)])\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/task.py\", line 36, in pick\n    execute_pick_candidate(s, chosen)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/candidates.py\", line 335, in execute_pick_candidate\n    execute_skeleton(session, candidate.steps)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/graph.py\", line 97, in execute_skeleton\n    session.call(row[\"skill\"], **row.get(\"params\", {}))\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/library.py\", line 195, in call\n    outcome = getattr(self, name)(**params)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/library.py\", line 748, in approach\n    ok = self.arm.move(goal[\"xyz\"], down(goal[\"yaw\"]), speed=0.045)\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/control.py\", line 173, in move\n    q = self.ik(\n  File \"/home/jia/twingraph-v4-20260916/simbench/assembly/control.py\", line 77, in ik\n    raise ValueError(\nValueError: IK unreachable: xyz=[-0.36780826255699345, -0.21751045924676654, 0.9412269259280112], residual=0.00017\n"
+          }
+        },
+        {
+          "seed": 51304,
+          "checkpoint": 2,
+          "status": "checkpoint_reached",
+          "failure": null
+        },
+        {
+          "seed": 51305,
+          "checkpoint": 3,
+          "status": "checkpoint_reached",
+          "failure": null
+        },
+        {
+          "seed": 51306,
+          "checkpoint": 2,
+          "status": "checkpoint_reached",
+          "failure": null
+        },
+        {
+          "seed": 51307,
+          "checkpoint": 3,
+          "status": "checkpoint_reached",
+          "failure": null
+        }
+      ],
+      "note": "Candidate-ranking metrics condition on a physically reached checkpoint; setup failures count as zero in end-to-end feasible-hit denominators."
+    },
+    "aggregation": "Use saved equal-configuration quality means; average three model-seed means within each model kind."
+  },
+  "timing": {
+    "status": "available",
+    "rows": [
+      {
+        "name": "sequence_17",
+        "label": "Skill sequence, seed 17 [selected]",
+        "color": "#7975B5",
+        "module_total_ms": 569.1245354246348,
+        "inference_ms": 6.32668100297451,
+        "configurations": 6,
+        "groups": 6,
+        "timing_records": 30,
+        "repeats_per_group": [
+          5
+        ]
+      },
+      {
+        "name": "compact_29",
+        "label": "Compact ports, seed 29",
+        "color": "#268B8D",
+        "module_total_ms": 1328.114885953255,
+        "inference_ms": 0.5698830354958773,
+        "configurations": 6,
+        "groups": 6,
+        "timing_records": 30,
+        "repeats_per_group": [
+          5
+        ]
+      },
+      {
+        "name": "port_mlp_29",
+        "label": "All ports MLP, seed 29",
+        "color": "#72AB91",
+        "module_total_ms": 1264.7446419578046,
+        "inference_ms": 0.9411355713382363,
+        "configurations": 6,
+        "groups": 6,
+        "timing_records": 30,
+        "repeats_per_group": [
+          5
+        ]
+      },
+      {
+        "name": "sequence_29",
+        "label": "Skill sequence, seed 29",
+        "color": "#7975B5",
+        "module_total_ms": 524.0623323479667,
+        "inference_ms": 6.341102998703718,
+        "configurations": 6,
+        "groups": 6,
+        "timing_records": 30,
+        "repeats_per_group": [
+          5
+        ]
+      },
+      {
+        "name": "graph_29",
+        "label": "Skill graph, seed 29",
+        "color": "#3578AE",
+        "module_total_ms": 531.1613631201908,
+        "inference_ms": 6.375040509738028,
+        "configurations": 6,
+        "groups": 6,
+        "timing_records": 30,
+        "repeats_per_group": [
+          5
+        ]
+      },
+      {
+        "name": "source_order",
+        "label": "Source order",
+        "color": "#64748B",
+        "module_total_ms": 366.8723531300202,
+        "inference_ms": 0.0,
+        "configurations": 6,
+        "groups": 6,
+        "timing_records": 30,
+        "repeats_per_group": [
+          5
+        ]
+      },
+      {
+        "name": "shortest_initial",
+        "label": "Shortest initial path",
+        "color": "#C58B3A",
+        "module_total_ms": 370.0699304463342,
+        "inference_ms": 0.0,
+        "configurations": 6,
+        "groups": 6,
+        "timing_records": 30,
+        "repeats_per_group": [
+          5
+        ]
+      }
+    ],
+    "unavailable_methods": [],
+    "aggregation": "Saved median across configurations; each configuration averages checkpoint medians of repeated timings.",
+    "requested_groups": 8,
+    "reached_groups": 6,
+    "failed_setup_groups": 2
+  },
+  "deployment": {
+    "rows": [
+      {
+        "name": "sequence_17",
+        "label": "Skill sequence, seed 17 [selected]",
+        "status": "available",
+        "color": "#7975B5",
+        "requested_attempts": 8,
+        "actual_attempts": 4,
+        "successes": 3,
+        "success_fraction_requested": 0.375,
+        "configurations": 4,
+        "groups": 4,
+        "reached_configurations": 2,
+        "setup_failed_groups": 2,
+        "requested_validation_budgets_per_group": [
+          8
+        ],
+        "actual_validation_rollouts": 16,
+        "reached_policy_wall_seconds_by_configuration": [
+          346.3769147070125,
+          237.17040771013126
+        ],
+        "reached_policy_wall_median_seconds": 291.77366120857187,
+        "reached_policy_wall_configurations": 2,
+        "missing_reached_policy_wall_groups": 0
+      },
+      {
+        "name": "source_order",
+        "label": "Source order",
+        "status": "available",
+        "color": "#64748B",
+        "requested_attempts": 8,
+        "actual_attempts": 4,
+        "successes": 3,
+        "success_fraction_requested": 0.375,
+        "configurations": 4,
+        "groups": 4,
+        "reached_configurations": 2,
+        "setup_failed_groups": 2,
+        "requested_validation_budgets_per_group": [
+          8
+        ],
+        "actual_validation_rollouts": 16,
+        "reached_policy_wall_seconds_by_configuration": [
+          260.2547884678934,
+          189.8095945008099
+        ],
+        "reached_policy_wall_median_seconds": 225.03219148435164,
+        "reached_policy_wall_configurations": 2,
+        "missing_reached_policy_wall_groups": 0
+      },
+      {
+        "name": "shortest_initial",
+        "label": "Shortest initial path",
+        "status": "available",
+        "color": "#C58B3A",
+        "requested_attempts": 8,
+        "actual_attempts": 2,
+        "successes": 1,
+        "success_fraction_requested": 0.125,
+        "configurations": 4,
+        "groups": 4,
+        "reached_configurations": 2,
+        "setup_failed_groups": 2,
+        "requested_validation_budgets_per_group": [
+          8
+        ],
+        "actual_validation_rollouts": 16,
+        "reached_policy_wall_seconds_by_configuration": [
+          117.1242792729754,
+          225.32834619190544
+        ],
+        "reached_policy_wall_median_seconds": 171.22631273244042,
+        "reached_policy_wall_configurations": 2,
+        "missing_reached_policy_wall_groups": 0
+      },
+      {
+        "name": "exhaustive",
+        "label": "Exhaustive",
+        "status": "available",
+        "color": "#9B657D",
+        "requested_attempts": 8,
+        "actual_attempts": 4,
+        "successes": 3,
+        "success_fraction_requested": 0.375,
+        "configurations": 4,
+        "groups": 4,
+        "reached_configurations": 2,
+        "setup_failed_groups": 2,
+        "requested_validation_budgets_per_group": [
+          16
+        ],
+        "actual_validation_rollouts": 32,
+        "reached_policy_wall_seconds_by_configuration": [
+          391.9379826420918,
+          409.8439386729151
+        ],
+        "reached_policy_wall_median_seconds": 400.89096065750346,
+        "reached_policy_wall_configurations": 2,
+        "missing_reached_policy_wall_groups": 0
+      }
+    ],
+    "status": "available",
+    "requested_design": {
+      "seeds": [
+        51300,
+        51301,
+        51302,
+        51303
+      ],
+      "tasks": [
+        {
+          "seed": 51300,
+          "checkpoint": 2
+        },
+        {
+          "seed": 51301,
+          "checkpoint": 3
+        },
+        {
+          "seed": 51302,
+          "checkpoint": 2
+        },
+        {
+          "seed": 51303,
+          "checkpoint": 3
+        }
+      ],
+      "n": 8,
+      "k": 4,
+      "online_repeats": 2,
+      "deployment_repeats": 2,
+      "accept_rate": 0.5,
+      "selection": "success fraction descending, original rank ascending"
+    },
+    "parallel_workers": 4,
+    "recorded_overall_wall_seconds": 1139.3863629738335,
+    "wall_aggregation": "Average checkpoint siblings within a reached configuration, then show the median across configurations."
+  },
+  "intervals": "No new confidence intervals are estimated or displayed.",
+  "artifacts": [
+    {
+      "path": "ranking_quality.png",
+      "sha256": "a1207e7df3ec2df8aec420e26db3dee18d7119a6e7d092603e4dab8301ca54b8"
+    },
+    {
+      "path": "ranking_quality.svg",
+      "sha256": "ab58e5ea156f4fb5d46caa8d1f4da823d6cf39700c994c933fde77932abd1e71"
+    },
+    {
+      "path": "module_timing.png",
+      "sha256": "b0f9179e8b6ad7c906097f20e4566434d5b7a064b41d992eefd57cade4e23848"
+    },
+    {
+      "path": "module_timing.svg",
+      "sha256": "901ee88523f6e6146f771c41fa8c0a6c62d775bca30c687912343139fcaa7960"
+    },
+    {
+      "path": "deployment_outcomes.png",
+      "sha256": "d049e6120b1345f730f2dbd2fdfed51d48f88fbefa4bd5b325351947deaf60ea"
+    },
+    {
+      "path": "deployment_outcomes.svg",
+      "sha256": "9d16f1b29a28923209373be9d9b351a718c961a79d0059b4513ac39c78dc2f94"
+    }
+  ]
+}

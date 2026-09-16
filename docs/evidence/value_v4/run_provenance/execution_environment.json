@@ -1,0 +1,15 @@
+{
+  "python": "3.10.21 (main, Aug 27 2026, 14:42:07) [GCC 14.3.0]",
+  "platform": "Linux-5.15.92-rt57-x86_64-with-glibc2.31",
+  "numpy": "1.26.4",
+  "mujoco": "2.3.2",
+  "torch": "2.1.0+cu121",
+  "cuda": "12.1",
+  "matplotlib": "3.10.9",
+  "gpu_devices": [
+    "NVIDIA GeForce RTX 2080 Ti",
+    "NVIDIA GeForce RTX 2080 Ti"
+  ],
+  "nvidia_smi": "NVIDIA GeForce RTX 2080 Ti, 11264 MiB, 525.85.05\nNVIDIA GeForce RTX 2080 Ti, 11264 MiB, 525.85.05\n",
+  "record": "Post-run environment; OMP/OPENBLAS=1, MUJOCO_GL=egl; deployment CPU workers4; benchmark CUDA_VISIBLE_DEVICES=0, repeats5; tests 138 passed."
+}

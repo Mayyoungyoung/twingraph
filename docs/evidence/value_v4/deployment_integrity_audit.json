@@ -1,0 +1,491 @@
+{
+  "schema": "twingraph.deployment.integrity_audit.v1",
+  "record_type": "post_execution_read_only_integrity_audit",
+  "audit_utc": "2026-09-16T06:51:19.934493+00:00",
+  "audit_scope": "Saved deployment evidence only; no simulation, model fitting, selection changes, source edits or outcome edits.",
+  "freeze_sha256": "ca94044667b70f2d6e28b8d6e10726b2d63950d01c8c5bf79b6ac6e0ac93cd36",
+  "implementation_sha256": "85c27332916b9a840b8d6d7c4e56ef373b3c92fbdca89465a38c57274bb10b2f",
+  "frozen_selected": "sequence_17",
+  "frozen_selected_checkpoint_sha256": "45ba58112e52b4969c93d2ce2b17db12567dfff8d465462c03973068b8d6094e",
+  "audit_code_sha256": "bfa26457c46d92475b92ad974875a9a6fc9786bdc8a8f1c040c2e663e3a25a2b",
+  "audit_code": "import json,pathlib,hashlib,math,statistics,struct\nimport numpy as np\nbase=pathlib.Path('/home/jia/twingraph-v4-20260916');root=base/'results/v4/evidence'\nS=json.loads((root/'deployment_summary.json').read_text())\ndef H(v):return hashlib.sha256(json.dumps(v,sort_keys=True,allow_nan=False).encode()).hexdigest()\nidx={(r['seed'],r['method']):r for r in S['decisions']};assert len(idx)==len(S['decisions'])==16\nmethods=('sequence_17','source_order','shortest_initial','exhaustive');rows=[];paired={};gh={};renders=[]\nfor d in sorted(p for p in root.glob('deployment_*') if p.is_dir()):\n seed=int(d.name.split('_')[1])\n for m in methods:\n  r=json.loads((d/(m+'_decision.json')).read_text());s=idx[(seed,m)]\n  assert all(r[k]==v for k,v in s.items()),(seed,m,'summary drift')\n  assert r['requested_deployment_attempts']==2\n  if r['status']=='checkpoint_setup_failed':\n   assert seed in (51301,51303) and r['validation_calls']==r['deployment_attempts']==r['deployment_successes']==0\n   assert r['request']['freeze_sha256']==S['freeze_sha256'];continue\n  cfg=r['request']['config'];assert cfg['n']==8 and cfg['k']==4 and cfg['online_repeats']==cfg['deployment_repeats']==2 and cfg['accept_rate']==.5\n  assert H(r['request'])==r['request_sha256'] and r['request']['freeze_sha256']==S['freeze_sha256'] and r['request']['implementation_sha256']==S['implementation']['sha256']\n  inp=json.loads((d/'inputs.json').read_text());ids=[p['id'] for p in inp['candidates']]\n  assert H({k:inp[k] for k in ('observation','candidates')})==r['request']['input_sha256']\n  rank=r['ranking'];assert set(rank['order'])==set(ids) and len(ids)==8\n  if m=='sequence_17':assert rank['order']==[ids[i] for i in sorted(range(8),key=lambda i:-rank['logits'][i])]\n  elif m in ('source_order','exhaustive'):assert rank['order']==ids\n  else:\n   ds=[]\n   for p in inp['candidates']:\n    q=next(iter(p['prefix']['initial_artifacts'].values()));qs=[q['start_q']]+q['joints'];ds.append(sum(math.dist(a,b) for a,b in zip(qs,qs[1:])))\n   assert rank['order']==[ids[i] for i in sorted(range(8),key=lambda i:ds[i])]\n  top=rank['top_k'];ti=[t['candidate_id'] for t in top]\n  assert len(top)==r['k']==(8 if m=='exhaustive' else 4) and ti==rank['order'][:r['k']]\n  graphs={t['candidate_id']:H(t['graph']) for t in top}\n  for t in top:\n   assert t['graph_sha256']==graphs[t['candidate_id']] and t['graph']['plan']==t['plan'] and t['plan']['id']==t['candidate_id']\n   key=(seed,t['candidate_id']);assert key not in gh or gh[key]==graphs[t['candidate_id']];gh[key]=graphs[t['candidate_id']]\n  assert len(r['validated'])==r['validation_calls']==r['online_budget']==2*r['k']\n  for c in r['candidate_results']:\n   ts=[t for t in r['validated'] if t['candidate_id']==c['candidate_id']]\n   assert sorted(t['trial']['repeat'] for t in ts)==[0,1] and c['rank']==ti.index(c['candidate_id']) and c['success_rate']==sum(t['success'] for t in ts)/2\n  accepted=sorted([c for c in r['candidate_results'] if c['success_rate']>=.5],key=lambda c:(-c['success_rate'],c['rank']))\n  assert r['chosen']==(accepted[0] if accepted else None)\n  assert len(r['deployment'])==r['deployment_attempts']==(2 if r['chosen'] else 0) and r['deployment_successes']==sum(t['success'] for t in r['deployment']) and r['deployment_success_rate']==r['deployment_successes']/2\n  for kind,domain in (('validated','online'),('deployment','deployment')):\n   for t in r[kind]:\n    assert t['valid'] is True and t['timeout'] is False and t['success']==bool(t['prefix_success'] and t['suffix_success'])==t['full_success'] and t['input_graph_sha256']==graphs[t['candidate_id']]\n    if kind=='deployment':assert t['candidate_id']==r['chosen']['candidate_id']\n    if t['success']:assert t['goal_check']['success'] is True and all(x['success'] for x in t['goal_check']['goals'])\n    tr=t['trial'];assert tr['domain']==domain and tr['repeat'] in (0,1) and t['trial_sha256']==H(tr)\n    rng=np.random.default_rng(np.random.SeedSequence([seed,tr['repeat'],{'online':1753,'deployment':2909}[domain]]))\n    assert tr==dict(domain=domain,repeat=tr['repeat'],friction_scale=float(rng.uniform(.85,1.15)),actuator_gain_scale=float(rng.uniform(.985,1.015)))\n    key=(seed,domain,tr['repeat']);assert key not in paired or paired[key]==H(tr);paired[key]=H(tr)\n  assert r['physics_steps']['validation']==sum(t['physics_steps'] for t in r['validated']) and r['physics_steps']['deployment']==sum(t['physics_steps'] for t in r['deployment'])\n  tm=r['timing'];assert abs(tm['policy_wall_seconds']-tm['decision_seconds']-tm['independent_deployment_seconds'])<1e-8 and abs(tm['validation_rollout_seconds']-sum(t['wall_seconds'] for t in r['validated']))<1e-7\n  if r['deployment']:\n   side=json.loads((d/(m+'_final.json')).read_text());last=r['deployment'][-1]\n   assert all(side[k]==last[k] for k in ('candidate_id','success','input_graph_sha256','trial','trial_sha256')) and side['method']==m and side['seed']==seed\n   image=d/side['image'];data=image.read_bytes();assert data[:8]==bytes([137,80,78,71,13,10,26,10]);renders.append(dict(seed=seed,method=m,success=side['success'],dimensions=struct.unpack('>II',data[16:24]),bytes=len(data)))\n  else:assert not (d/(m+'_final.json')).exists()\n  rows.append(dict(seed=seed,method=m,chosen=r['chosen'],online_successes=sum(t['success'] for t in r['validated']),validation_calls=r['validation_calls'],deployment_successes=r['deployment_successes'],deployment_attempts=r['deployment_attempts'],last_success=r['deployment'][-1]['success'] if r['deployment'] else None,wall=tm['policy_wall_seconds'],decision=tm['decision_seconds']))\nassert len(set(paired.values()))==len(paired)\n\nimport datetime\nfrozen_path=base/'results/v4/frozen.json'\nfrozen=json.loads(frozen_path.read_text())\nassert H(frozen)==S['freeze_sha256'] and frozen['selected']=='sequence_17'\nselected=next(r for r in frozen['models'] if r['name']==frozen['selected'])\nchecked=[root/'deployment_summary.json',frozen_path]\nfor d in sorted(p for p in root.glob('deployment_*') if p.is_dir()):\n for m in methods:\n  decision_path=d/(m+'_decision.json');checked.append(decision_path)\n  decision=json.loads(decision_path.read_text())\n  if decision['status']=='checkpoint_setup_failed':\n   failure=d/'failure.json'\n   assert json.loads(failure.read_text())==decision['failure']\n   checked.append(failure)\n  else:\n   checked.append(d/'inputs.json')\n   if m==frozen['selected']:\n    assert decision['ranking']['checkpoint_sha256']==selected['sha256']\n   if decision['deployment']:\n    checked.extend([d/(m+'_final.json'),d/(m+'_final.png')])\noverlapping={};duplicate_count=0\nfor d in sorted(p for p in root.glob('deployment_*') if p.is_dir()):\n for m in methods:\n  decision=json.loads((d/(m+'_decision.json')).read_text())\n  for t in decision.get('validated',[])+decision.get('deployment',[]):\n   key=(decision['seed'],t['candidate_id'],t['trial_sha256'])\n   signature={k:t[k] for k in ('success','full_success','prefix_success','suffix_success','error','sim_seconds','physics_steps','executed_steps','final_positions','goal_check')}\n   if key in overlapping:\n    duplicate_count+=1\n    assert overlapping[key]==signature\n   else:overlapping[key]=signature\nmethod_results={}\nfor m in methods:\n rr=[r for r in rows if r['method']==m];aa=[r for r in S['decisions'] if r['method']==m]\n inclusive=[r['timing']['policy_wall_seconds']+sum(r['timing'].get(k,0.) for k in ('shared_checkpoint_seconds','shared_candidate_seconds','shared_graph_construction_seconds')) for r in aa]\n reached_inclusive=[r['timing']['policy_wall_seconds']+sum(r['timing'].get(k,0.) for k in ('shared_checkpoint_seconds','shared_candidate_seconds','shared_graph_construction_seconds')) for r in aa if r['status']!='checkpoint_setup_failed']\n method_results[m]=dict(requested_configurations=len(aa),reached_configurations=len(rr),\n  successful_deployments=sum(r['deployment_successes'] for r in rr),\n  requested_deployment_trials=8,actual_deployment_trials=sum(r['deployment_attempts'] for r in rr),\n  success_rate_requested_denominator=sum(r['deployment_successes'] for r in rr)/8,\n  actual_validation_calls=sum(r['validation_calls'] for r in rr),\n  mean_reached_policy_wall_seconds=statistics.mean(r['wall'] for r in rr),\n  mean_reached_decision_seconds=statistics.mean(r['decision'] for r in rr),\n  mean_reached_policy_plus_shared_preparation_seconds=statistics.mean(reached_inclusive),\n  mean_requested_policy_plus_shared_preparation_seconds=statistics.mean(inclusive))\nfiles=[dict(path=str(p.relative_to(base)),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sorted(set(checked))]\nrecord=dict(schema='twingraph.deployment.integrity_audit.v1',\n record_type='post_execution_read_only_integrity_audit',\n audit_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),\n audit_scope='Saved deployment evidence only; no simulation, model fitting, selection changes, source edits or outcome edits.',\n freeze_sha256=H(frozen),implementation_sha256=S['implementation']['sha256'],\n frozen_selected=frozen['selected'],frozen_selected_checkpoint_sha256=selected['sha256'],\n audit_code_sha256=hashlib.sha256(audit_code.encode()).hexdigest(),audit_code=audit_code,\n checks=dict(all_16_summary_rows_match_raw_decisions=True,request_and_input_hashes_match=True,\n  frozen_selection_and_checkpoint_match=True,top_k_membership_and_raw_logit_order_match=True,\n  baseline_orders_match_saved_inputs=True,acceptance_rate_and_rank_tie_break_match=True,\n  deployment_candidate_is_selected_from_online_top_k=True,per_trial_graph_hashes_match=True,\n  trial_hashes_and_namespace_rng_values_reproduced=True,disturbances_paired_across_candidates_and_methods=True,\n  online_and_deployment_namespaces_distinct=True,overlapping_paired_records_identical=True,\n  successful_trials_pass_independent_goal_checks=True,physical_steps_and_rollout_time_sums_match=True,\n  final_render_sidecars_match_last_actual_deployment_trial=True,png_signatures_and_dimensions_valid=True,\n  setup_failures_retained_with_zero_success_requested_denominator=True),\n counts=dict(decision_files=16,requested_configurations=4,reached_configurations=2,setup_failed_configurations=2,\n  actual_online_validation_executions=sum(r['validation_calls'] for r in rows),\n  actual_independent_deployment_executions=sum(r['deployment_attempts'] for r in rows),\n  total_actual_execution_records=sum(r['validation_calls']+r['deployment_attempts'] for r in rows),\n  timeout_records=0,overlapping_paired_execution_records=duplicate_count,\n  unique_candidate_disturbance_combinations=len(overlapping),render_images=len(renders),\n  checked_files=len(files)),\n methods=method_results,reached_configuration_details=rows,render_checks=renders,\n overall_parallel_wall_seconds=S['overall_wall_seconds'],parallel_workers=S['parallel_workers'],\n checked_files=files,\n limitations=[\n  'Only two physically reached configurations; two real IK setup failures count in the four-configuration requested denominator.',\n  'Selected sequence_17, source_order and exhaustive each have3successes/8requested trials; no observed success gain over source_order or exhaustive.',\n  'Selected scorer mean reached policy wall time exceeds source_order under the recorded scheduling and concurrency.',\n  'Exhaustive performs twice the online validations; its larger verification budget is not a matched-budget advantage claim.',\n  'Overall parallel wall time includes all methods and preparation, and is not any one policy runtime; per-policy timing excludes final-render/file-export overhead.',\n  'Saved observations and logs verify artifact consistency but do not establish real-robot transfer, broad statistical superiority or unseen-length generalization.',\n  'PNG signatures, sizes and sidecar associations were checked; pixel content was not independently judged by this audit.',\n  'No training outcomes or model-fitting parameters were consulted or modified; frozen model metadata were used solely for identity binding.'\n ])\noutput=root/'deployment_integrity_audit.json'\noutput.write_text(json.dumps(record,indent=2,allow_nan=False)+'\\n')\nprint(json.dumps(dict(saved=str(output),bytes=output.stat().st_size,sha256=hashlib.sha256(output.read_bytes()).hexdigest(),counts=record['counts'],freeze_sha256=record['freeze_sha256'],implementation_sha256=record['implementation_sha256'],frozen_selected_checkpoint_sha256=record['frozen_selected_checkpoint_sha256'],audit_code_sha256=record['audit_code_sha256'])))\n",
+  "checks": {
+    "all_16_summary_rows_match_raw_decisions": true,
+    "request_and_input_hashes_match": true,
+    "frozen_selection_and_checkpoint_match": true,
+    "top_k_membership_and_raw_logit_order_match": true,
+    "baseline_orders_match_saved_inputs": true,
+    "acceptance_rate_and_rank_tie_break_match": true,
+    "deployment_candidate_is_selected_from_online_top_k": true,
+    "per_trial_graph_hashes_match": true,
+    "trial_hashes_and_namespace_rng_values_reproduced": true,
+    "disturbances_paired_across_candidates_and_methods": true,
+    "online_and_deployment_namespaces_distinct": true,
+    "overlapping_paired_records_identical": true,
+    "successful_trials_pass_independent_goal_checks": true,
+    "physical_steps_and_rollout_time_sums_match": true,
+    "final_render_sidecars_match_last_actual_deployment_trial": true,
+    "png_signatures_and_dimensions_valid": true,
+    "setup_failures_retained_with_zero_success_requested_denominator": true
+  },
+  "counts": {
+    "decision_files": 16,
+    "requested_configurations": 4,
+    "reached_configurations": 2,
+    "setup_failed_configurations": 2,
+    "actual_online_validation_executions": 80,
+    "actual_independent_deployment_executions": 14,
+    "total_actual_execution_records": 94,
+    "timeout_records": 0,
+    "overlapping_paired_execution_records": 52,
+    "unique_candidate_disturbance_combinations": 42,
+    "render_images": 7,
+    "checked_files": 36
+  },
+  "methods": {
+    "sequence_17": {
+      "requested_configurations": 4,
+      "reached_configurations": 2,
+      "successful_deployments": 3,
+      "requested_deployment_trials": 8,
+      "actual_deployment_trials": 4,
+      "success_rate_requested_denominator": 0.375,
+      "actual_validation_calls": 16,
+      "mean_reached_policy_wall_seconds": 291.77366120857187,
+      "mean_reached_decision_seconds": 230.9985921975458,
+      "mean_reached_policy_plus_shared_preparation_seconds": 311.1782608855283,
+      "mean_requested_policy_plus_shared_preparation_seconds": 167.44994827976916
+    },
+    "source_order": {
+      "requested_configurations": 4,
+      "reached_configurations": 2,
+      "successful_deployments": 3,
+      "requested_deployment_trials": 8,
+      "actual_deployment_trials": 4,
+      "success_rate_requested_denominator": 0.375,
+      "actual_validation_calls": 16,
+      "mean_reached_policy_wall_seconds": 225.03219148435164,
+      "mean_reached_decision_seconds": 173.5535564183956,
+      "mean_reached_policy_plus_shared_preparation_seconds": 244.43679116130807,
+      "mean_requested_policy_plus_shared_preparation_seconds": 134.07921341765905
+    },
+    "shortest_initial": {
+      "requested_configurations": 4,
+      "reached_configurations": 2,
+      "successful_deployments": 1,
+      "requested_deployment_trials": 8,
+      "actual_deployment_trials": 2,
+      "success_rate_requested_denominator": 0.125,
+      "actual_validation_calls": 16,
+      "mean_reached_policy_wall_seconds": 171.22631273244042,
+      "mean_reached_decision_seconds": 144.42127023241483,
+      "mean_reached_policy_plus_shared_preparation_seconds": 190.63091240939684,
+      "mean_requested_policy_plus_shared_preparation_seconds": 107.17627404170344
+    },
+    "exhaustive": {
+      "requested_configurations": 4,
+      "reached_configurations": 2,
+      "successful_deployments": 3,
+      "requested_deployment_trials": 8,
+      "actual_deployment_trials": 4,
+      "success_rate_requested_denominator": 0.375,
+      "actual_validation_calls": 32,
+      "mean_reached_policy_wall_seconds": 400.89096065750346,
+      "mean_reached_decision_seconds": 348.1635277654277,
+      "mean_reached_policy_plus_shared_preparation_seconds": 420.2955603344599,
+      "mean_requested_policy_plus_shared_preparation_seconds": 222.00859800423495
+    }
+  },
+  "reached_configuration_details": [
+    {
+      "seed": 51300,
+      "method": "sequence_17",
+      "chosen": {
+        "candidate_id": "e4e523e00211aa115a48",
+        "rank": 1,
+        "success_rate": 1.0
+      },
+      "online_successes": 4,
+      "validation_calls": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "last_success": true,
+      "wall": 346.3769147070125,
+      "decision": 272.8226365339942
+    },
+    {
+      "seed": 51300,
+      "method": "source_order",
+      "chosen": {
+        "candidate_id": "46dc4307038d62c3301b",
+        "rank": 1,
+        "success_rate": 1.0
+      },
+      "online_successes": 4,
+      "validation_calls": 8,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "last_success": true,
+      "wall": 260.2547884678934,
+      "decision": 199.30379129992798
+    },
+    {
+      "seed": 51300,
+      "method": "shortest_initial",
+      "chosen": null,
+      "online_successes": 0,
+      "validation_calls": 8,
+      "deployment_successes": 0,
+      "deployment_attempts": 0,
+      "last_success": null,
+      "wall": 117.1242792729754,
+      "decision": 117.12427904992364
+    },
+    {
+      "seed": 51300,
+      "method": "exhaustive",
+      "chosen": {
+        "candidate_id": "46dc4307038d62c3301b",
+        "rank": 1,
+        "success_rate": 1.0
+      },
+      "online_successes": 4,
+      "validation_calls": 16,
+      "deployment_successes": 2,
+      "deployment_attempts": 2,
+      "last_success": true,
+      "wall": 391.9379826420918,
+      "decision": 331.04779293900356
+    },
+    {
+      "seed": 51302,
+      "method": "sequence_17",
+      "chosen": {
+        "candidate_id": "5f5bed884ce5da3f1c4e",
+        "rank": 0,
+        "success_rate": 0.5
+      },
+      "online_successes": 2,
+      "validation_calls": 8,
+      "deployment_successes": 1,
+      "deployment_attempts": 2,
+      "last_success": true,
+      "wall": 237.17040771013126,
+      "decision": 189.17454786109738
+    },
+    {
+      "seed": 51302,
+      "method": "source_order",
+      "chosen": {
+        "candidate_id": "5f5bed884ce5da3f1c4e",
+        "rank": 0,
+        "success_rate": 0.5
+      },
+      "online_successes": 1,
+      "validation_calls": 8,
+      "deployment_successes": 1,
+      "deployment_attempts": 2,
+      "last_success": true,
+      "wall": 189.8095945008099,
+      "decision": 147.80332153686322
+    },
+    {
+      "seed": 51302,
+      "method": "shortest_initial",
+      "chosen": {
+        "candidate_id": "a756223b0269f503bf21",
+        "rank": 1,
+        "success_rate": 0.5
+      },
+      "online_successes": 2,
+      "validation_calls": 8,
+      "deployment_successes": 1,
+      "deployment_attempts": 2,
+      "last_success": false,
+      "wall": 225.32834619190544,
+      "decision": 171.718261414906
+    },
+    {
+      "seed": 51302,
+      "method": "exhaustive",
+      "chosen": {
+        "candidate_id": "5cfb11b2a8ad93122ea9",
+        "rank": 5,
+        "success_rate": 1.0
+      },
+      "online_successes": 4,
+      "validation_calls": 16,
+      "deployment_successes": 1,
+      "deployment_attempts": 2,
+      "last_success": false,
+      "wall": 409.8439386729151,
+      "decision": 365.2792625918519
+    }
+  ],
+  "render_checks": [
+    {
+      "seed": 51300,
+      "method": "sequence_17",
+      "success": true,
+      "dimensions": [
+        960,
+        600
+      ],
+      "bytes": 65417
+    },
+    {
+      "seed": 51300,
+      "method": "source_order",
+      "success": true,
+      "dimensions": [
+        960,
+        600
+      ],
+      "bytes": 67895
+    },
+    {
+      "seed": 51300,
+      "method": "exhaustive",
+      "success": true,
+      "dimensions": [
+        960,
+        600
+      ],
+      "bytes": 67908
+    },
+    {
+      "seed": 51302,
+      "method": "sequence_17",
+      "success": true,
+      "dimensions": [
+        960,
+        600
+      ],
+      "bytes": 65787
+    },
+    {
+      "seed": 51302,
+      "method": "source_order",
+      "success": true,
+      "dimensions": [
+        960,
+        600
+      ],
+      "bytes": 65768
+    },
+    {
+      "seed": 51302,
+      "method": "shortest_initial",
+      "success": false,
+      "dimensions": [
+        960,
+        600
+      ],
+      "bytes": 67845
+    },
+    {
+      "seed": 51302,
+      "method": "exhaustive",
+      "success": false,
+      "dimensions": [
+        960,
+        600
+      ],
+      "bytes": 67356
+    }
+  ],
+  "overall_parallel_wall_seconds": 1139.3863629738335,
+  "parallel_workers": 4,
+  "checked_files": [
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/exhaustive_decision.json",
+      "bytes": 3529857,
+      "sha256": "dc5be915b53d136fb0b7291fdab5556837e94d87dc7f14b46d1676f43b72fbc9"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/exhaustive_final.json",
+      "bytes": 624,
+      "sha256": "3f0a44abaa54cd2e5200bcaf9b287599564d8f5b41e8bffa3c1ae8a0f692d332"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/exhaustive_final.png",
+      "bytes": 67908,
+      "sha256": "b3297d0d28843755005c5964d75cf7f09a4f4116cda282d72813bf0d63e00955"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/inputs.json",
+      "bytes": 486997,
+      "sha256": "fa259b7339c29a1db24c30f6d5a95da6d650477810dc5171672911affea8fc9b"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/sequence_17_decision.json",
+      "bytes": 1856138,
+      "sha256": "cb4788dda11a4eca605cfd001d17adef57e6b89b98c2e14fbf62be5b46be88cf"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/sequence_17_final.json",
+      "bytes": 626,
+      "sha256": "a4a67ad330cd7ddb35a9fc5b829b971953e330adb7cea3e64f0496a259b0f62f"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/sequence_17_final.png",
+      "bytes": 65417,
+      "sha256": "69353bb856bcfc483e091768042914ddd3a58c0c6009afd14d3ab0a51b7bd981"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/shortest_initial_decision.json",
+      "bytes": 1677163,
+      "sha256": "04caa3d3e6c5b35334c7dbf7a2845ae14d17a0d8ab8ca375d3dd6370b0a63308"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/source_order_decision.json",
+      "bytes": 1836867,
+      "sha256": "13a43c46fb3837c9f88721f1fe35bcf6abf575023d7ee12194d95d2a75a30982"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/source_order_final.json",
+      "bytes": 628,
+      "sha256": "b2612b6757d80ac6359fdb234eb5fbbe0979a004a806a46c824800421f87c573"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51300_cp2/source_order_final.png",
+      "bytes": 67895,
+      "sha256": "2774ac497182007b6a1206065b42a4f41179fdfe8651ad6c5eecff3c9959ba8f"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51301_cp3/exhaustive_decision.json",
+      "bytes": 2415,
+      "sha256": "17ef248899e4d1d0025b31987c7821875e4fab509bed493432fc200dad7f4ed0"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51301_cp3/failure.json",
+      "bytes": 1776,
+      "sha256": "7801ff52bc1ae0a781f6c6b763e635e8a31f2f407dcf6b37a511b84125582a43"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51301_cp3/sequence_17_decision.json",
+      "bytes": 2415,
+      "sha256": "48e517ead9383ef5011621cf70523f537b4b4e9386f42563a8348aec8cb2da38"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51301_cp3/shortest_initial_decision.json",
+      "bytes": 2420,
+      "sha256": "e2e969b15849861e6b4152f6099c0f592dd4e32e8544adce49f2e0dd450efd8f"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51301_cp3/source_order_decision.json",
+      "bytes": 2416,
+      "sha256": "4ebe309eb1eebd122c28a4b1b4aa396d4af296f3147bbe6bee44da5ef5190711"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/exhaustive_decision.json",
+      "bytes": 3525865,
+      "sha256": "9ff04bf1f0bfe3c3c157c7ccc1e4b5ce85afd20bbb40eb5a946fb32b7dfc6833"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/exhaustive_final.json",
+      "bytes": 627,
+      "sha256": "cdba7f05412e1af09e999f503eb3b551e45bda3f5cd10c48b1a82b0a33db93b0"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/exhaustive_final.png",
+      "bytes": 67356,
+      "sha256": "c01c3c49d6431993ed1e4dbb171977bedf341065cdc141741646a5f33ff11ecf"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/inputs.json",
+      "bytes": 487051,
+      "sha256": "5a94a7aa8fb77775d14a64d7b5df67b99ad24917e11060e6faa5916d71ca0afb"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/sequence_17_decision.json",
+      "bytes": 1775963,
+      "sha256": "1a7b4f4d51f64f6fa32e92f4473f99a861d5cc39db69bc997ee5a0c9970803b2"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/sequence_17_final.json",
+      "bytes": 628,
+      "sha256": "46babdb122864134b8f6e9dbc0bf338c02b8800dc8262f68bb654b032c5a079a"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/sequence_17_final.png",
+      "bytes": 65787,
+      "sha256": "eb52cc4c84ba4819e146d4816d95a2389058f2b2c33c3d71566af5506125d26e"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/shortest_initial_decision.json",
+      "bytes": 1776009,
+      "sha256": "2186eb0d8e8fa1dc4b00901183ae4aea03eea75c6490d7b356cfadbaf35f88bf"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/shortest_initial_final.json",
+      "bytes": 639,
+      "sha256": "da5a1ffe18f303437549c6292fd3a360b079af75c96dfedd38bc19c4bef25af9"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/shortest_initial_final.png",
+      "bytes": 67845,
+      "sha256": "a2d5536a89acd5380f098dfed6442111e591b52b859a8a6c77e2edb191a95ef6"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/source_order_decision.json",
+      "bytes": 1751767,
+      "sha256": "1bad27f7eaec9a28ba10bedfc931df80e277ef90df2deafa9b799fa6c5171b73"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/source_order_final.json",
+      "bytes": 630,
+      "sha256": "b45a70e7d4ed1e6179c5c539895cbc12ef5c269071f5c1d0ae49f6a61f247aa5"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51302_cp2/source_order_final.png",
+      "bytes": 65768,
+      "sha256": "1a699103a39f8559bc4f1d198b401a24da8129ffdc85b96537d8e497713d111f"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51303_cp3/exhaustive_decision.json",
+      "bytes": 2418,
+      "sha256": "e349b6b20aaced318a20816f22960a0123b0aeeddf852b4baacb55b5ba92d643"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51303_cp3/failure.json",
+      "bytes": 1778,
+      "sha256": "bc3f84f403c68bf9a1cd4724682fc1bc9ca84b27328cbdc592edff67665bb3fb"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51303_cp3/sequence_17_decision.json",
+      "bytes": 2418,
+      "sha256": "7f8856e3807b7b544ed9eb0840b9d71d6dfdd395aca6a366e075275f078b15a9"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51303_cp3/shortest_initial_decision.json",
+      "bytes": 2423,
+      "sha256": "3cbddfd549a06dc8a22f894ac525679c21b1c1c45880ae3a571b2d72c4fa58b2"
+    },
+    {
+      "path": "results/v4/evidence/deployment_51303_cp3/source_order_decision.json",
+      "bytes": 2419,
+      "sha256": "0cfe0116ce43bc2011b96a7b5e0585528d9ef8054429949283f319c27af36078"
+    },
+    {
+      "path": "results/v4/evidence/deployment_summary.json",
+      "bytes": 19549,
+      "sha256": "ab91838ba8e4b31b59dbc86a2b8c9f29a75b2db6c1f080cdea0af9ed3c708e00"
+    },
+    {
+      "path": "results/v4/frozen.json",
+      "bytes": 27019,
+      "sha256": "635b29c83fd4f4a34681f5b7047ffaac578a650bbb10ccc0577e445876d8d7a0"
+    }
+  ],
+  "limitations": [
+    "Only two physically reached configurations; two real IK setup failures count in the four-configuration requested denominator.",
+    "Selected sequence_17, source_order and exhaustive each have3successes/8requested trials; no observed success gain over source_order or exhaustive.",
+    "Selected scorer mean reached policy wall time exceeds source_order under the recorded scheduling and concurrency.",
+    "Exhaustive performs twice the online validations; its larger verification budget is not a matched-budget advantage claim.",
+    "Overall parallel wall time includes all methods and preparation, and is not any one policy runtime; per-policy timing excludes final-render/file-export overhead.",
+    "Saved observations and logs verify artifact consistency but do not establish real-robot transfer, broad statistical superiority or unseen-length generalization.",
+    "PNG signatures, sizes and sidecar associations were checked; pixel content was not independently judged by this audit.",
+    "No training outcomes or model-fitting parameters were consulted or modified; frozen model metadata were used solely for identity binding."
+  ]
+}

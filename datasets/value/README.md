@@ -1,4 +1,14 @@
-# Pin suffix dataset v1
+# Value datasets
+
+## Sliding-stage executable-plan dataset v4
+
+`stage_graph_v4.tar.gz` contains all 24 requested configurations, including 4 failed preparations. The 20 reached groups contain 160 unique candidate programs and 320 paired physical continuation executions: 160 train, 64 validation, 96 test. Plans start from robot-executed sliding-stage checkpoints and finish multiple remaining parts. Test was opened after validation model selection was frozen.
+
+`stage_graph_v4_execution.tar.gz` preserves the separate online validation and independent execution decisions, traces, failed preparations, and actual terminal-state PNGs. `stage_graph_v4_development.tar.gz` separately retains development pilots and models. `stage_graph_v4_source.tar.gz` contains source, assets, and exact formal source overlays; explicitly listed historical development source gaps are not claimed reproducible.
+
+The [release manifest](../../docs/evidence/value_v4/manifest.json) records every archived member and its hash. The [runbook](../../docs/value-v4-running.md) explains extraction, source reconstruction, and the release-to-repository path mapping. The [report](../../VALUE_V4_REPORT.md) gives actual denominators and limitations. These are simulation outcomes, not real-robot measurements; there is no LLM-generated or camera-image candidate distribution in this release.
+
+## Pin suffix dataset v1
 
 - 100 parameterized configurations (seeds 1000–1099).
 - 8 bound grasp/approach plans per configuration, 4 paired perturbations each.
