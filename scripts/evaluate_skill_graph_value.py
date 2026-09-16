@@ -35,9 +35,10 @@ def freeze(models,out):
                          source_sha256=saved["source_sha256"],split_sha256=saved["split_sha256"]))
     if not rows:raise ValueError("no checkpoints to freeze")
     candidates=[r for r in rows if r["kind"] in {"graph","sequence","port_mlp"}]
-    best=min(candidates,key=lambda r:r["validation"]["brier"])
-    result=dict(schema="twingraph.graph_experiment.freeze.v1",selection="minimum validation Brier among graph-derived models",
-                selected=best["name"],models=rows,created_unix=time.time())
+    calibrated=min(candidates,key=lambda r:r["validation"]["brier"])
+    best=max(candidates,key=lambda r:(r["validation"]["hit4"],r["validation"]["quality4"],r["validation"]["hit1"],-r["validation"]["brier"]))
+    result=dict(schema="twingraph.graph_experiment.freeze.v1",selection="validation Hit4, mean Top4 quality, Hit1, negative Brier; epoch selection remains minimum Brier",
+                selected=best["name"],calibration_selected=calibrated["name"],models=rows,created_unix=time.time())
     if Path(out).exists():raise ValueError("refuse to overwrite an existing test freeze")
     dump(out,result);print(json.dumps(dict(selected=best["name"],models=len(rows),validation_brier=best["validation"]["brier"])))
 
@@ -55,6 +56,13 @@ def intervals(result):
             boot=values[rng.integers(len(values),size=(5000,len(values)))].mean(1)
             result["intervals"][k]=np.quantile(boot,[.025,.975]).tolist()
     result["interval_note"]="empirical problem-group bootstrap; a degenerate 100% interval is not a reliability guarantee"
+    result["hit_wilson95"]={}
+    for k in ("hit1","hit2","hit4"):
+        values=[r[k] for r in rows if r[k] is not None];n=len(values)
+        if n:
+            z=1.959963984540054;p=sum(values)/n;den=1+z*z/n
+            center=(p+z*z/(2*n))/den;half=z*np.sqrt(p*(1-p)/n+z*z/(4*n*n))/den
+            result["hit_wilson95"][k]=[float(max(0,center-half)),float(min(1,center+half))]
 
 
 def evaluate(frozen,data,out,device):

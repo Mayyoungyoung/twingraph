@@ -85,3 +85,9 @@ execution order. MLP87, field Transformer and port-set MLP retain 60 epochs.
 The field control is a small width64/layers2 variant, not the unchanged v1
 ResNet18/128-wide model or an exact PIGINet reproduction. This round's primary
 graph models use available poses/geometry without images.
+
+Before opening test, choose the deployed graph-derived method/seed by validation
+Hit@4, then mean Top4 quality, then Hit@1, then lower Brier. Each run's epoch
+selection still uses minimum validation Brier. The freeze also records the
+calibration-selected method, so ranking and calibration choices are explicit.
+Report all seeds, not just the selected method.
