@@ -171,6 +171,24 @@ def diagnostics(rows):
     return result
 
 
+def value_call_latency(rows):
+    """One observation is one complete, resident-model candidate-pool call."""
+    def stats(values):
+        values=[float(value) for value in values if value is not None]
+        if any(not np.isfinite(value) or value<0 for value in values):
+            raise ValueError("value-call latency requires finite nonnegative measured times")
+        return dict(observed_calls=len(values),mean_seconds=float(np.mean(values)) if values else None,
+            median_seconds=float(np.median(values)) if values else None,
+            p95_seconds=float(np.quantile(values,.95)) if values else None,
+            min_seconds=min(values) if values else None,max_seconds=max(values) if values else None)
+    return dict(candidate_counts=sorted({len(row["candidate_ids"]) for row in rows}),
+        available_pool_rows=len(rows),physical_configurations=len({row["config_id"] for row in rows}),
+        whole_call=stats([row.get("measured_rank_wall_seconds") for row in rows]),
+        phases={phase:stats([(row.get("seconds") or {}).get(phase) for row in rows])
+                for phase in ("graph_construction","encoding","inference","export","total")},
+        scope="Resident model, one entire candidate pool per call. Whole-call wall includes rank invocation overhead; phase total overlaps other phases and must not be summed with them. Excludes model loading, process startup and offline LLM proxy generation; system acceleration comes only from paired actual pipeline clocks.")
+
+
 def model_details(name,metadata,roots=()):
     paths=[]
     if metadata.get("path"):
@@ -322,7 +340,8 @@ def build_summary(*,protocol=None,validation=None,test=None,metrics=None,selecti
             threshold=(thresholds or {}).get("methods",{}).get(name,{}).get("threshold"),
             classification_nominal=section.get("classification_nominal"),
             top4={k:v for k,v in screening.items() if k!="rows"},score_diagnostics=report.get("score_diagnostics"),
-            input_diagnostics={split:diagnostics(methods[name]["rows"]) for split,methods in checked.items() if name in methods})
+            input_diagnostics={split:diagnostics(methods[name]["rows"]) for split,methods in checked.items() if name in methods},
+            value_call_latency={split:value_call_latency(methods[name]["rows"]) for split,methods in checked.items() if name in methods})
     baseline=controls(validation,test,4) if validation and test else None
     system=system_audit(system_roots,protocol)
     if system["status"]=="pending":pending.append("independent_system_results")
@@ -368,6 +387,17 @@ def markdown(summary):
     for name,row in summary["models"].items():
         details=row["model_details"]
         lines.append(f"| {name} | {details['parameters'] if details['parameters'] is not None else '待补'} | {details['raw_input_dim'] if details['raw_input_dim'] is not None else '待补'} | {details['retained_input_dim'] if details['retained_input_dim'] is not None else '待补'} | {details['status']} |")
+    lines += ["","价值调用延迟按模型已加载后的整池调用统计，正式协议每池 N=12；实际候选数及观测次数列于下表。下列数值单位均为毫秒，阶段括号内为该阶段的实际观测次数。内部 total 与各阶段重叠，不可相加；整体加速仍以独立运行的成对系统计时为准。", "",
+        "| 模型/划分 | 实测N | 整池调用次数/可用池 | 整池均值 | 整池P95 | 建图均值(n) | 编码均值(n) | 推理均值(n) | 导出均值(n) | 内部total均值(n) |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for name,row in summary["models"].items():
+        for split,latency in row["value_call_latency"].items():
+            whole=latency["whole_call"]
+            ms=lambda value:number(value*1000 if value is not None else None)
+            phases=[f"{ms(latency['phases'][phase]['mean_seconds'])} ({latency['phases'][phase]['observed_calls']})"
+                    for phase in ("graph_construction","encoding","inference","export","total")]
+            lines.append("| "+" | ".join([f"{name}/{split}",str(latency["candidate_counts"]),
+                f"{whole['observed_calls']}/{latency['available_pool_rows']}",ms(whole["mean_seconds"]),ms(whole["p95_seconds"]),*phases])+" |")
     control=summary["controls"]
     if control:
         m=control["majority"];s=control["source_order"]
@@ -390,8 +420,8 @@ def markdown(summary):
         for name,row in paired["methods"].items():
             s=row["summary"]
             lines += ["",f"{name} 成对决策时间：全量 {number(s.get('decision_full_seconds',{}).get('mean'))} 秒，筛选 {number(s.get('decision_screened_seconds',{}).get('mean'))} 秒；实际成对时间比均值 {number(s.get('decision_speedup',{}).get('mean'))}。",
-                f"端到端时间：全量 {number(s.get('total_full_seconds',{}).get('mean'))} 秒，筛选 {number(s.get('total_screened_seconds',{}).get('mean'))} 秒。均值仅来自完成相同候选预算的成对配置；详细分母和置信区间见 summary.json。"]
-        lines += ["","这里的系统总时间从该策略创建场景开始，遵循原始 timing_boundaries；不包含调用前已完成的模型加载，也不代表多进程批次的总墙钟时间。少量配置的退化置信区间不构成可靠性保证。"]
+                f"场景创建至独立执行和终态渲染（不含离线LLM代理生成与进程启动）：全量 {number(s.get('total_full_seconds',{}).get('mean'))} 秒，筛选 {number(s.get('total_screened_seconds',{}).get('mean'))} 秒。均值仅来自完成相同候选预算的成对配置；详细分母和置信区间见 summary.json。"]
+        lines += ["","上述系统时间遵循原始 timing_boundaries；模型加载在调用前已完成，提前准备的LLM代理规划记录及进程启动均不在计时内，也不代表多进程批次的总墙钟时间。少量配置的退化置信区间不构成可靠性保证。"]
     cold=summary["system"].get("cold_start",{})
     if cold.get("paired"):
         loads=[row["seconds"] for row in cold["model_initialization"] if row["method"]=="top_k"]

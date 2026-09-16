@@ -103,6 +103,8 @@ def render(args):
     model.vis.global_.offheight = max(int(model.vis.global_.offheight), args.height)
     data = mujoco.MjData(model)
     renderer = mujoco.Renderer(model, height=args.height, width=args.width)
+    margin_height = 68
+    video_height = args.height + margin_height
     writer = None
     last_frame = None
     try:
@@ -121,14 +123,15 @@ def render(args):
             # controllers are intentionally absent from this replay script.
             mujoco.mj_forward(model, data)
             renderer.update_scene(data, camera=args.camera)
-            picture = Image.fromarray(renderer.render())
+            scene_frame = Image.fromarray(renderer.render())
+            picture = Image.new("RGB", (args.width, video_height), color=(18, 24, 30))
+            picture.paste(scene_frame, (0, 0))
             draw = ImageDraw.Draw(picture)
-            draw.rectangle((0, 0, args.width, 68), fill=(18, 24, 30))
-            draw.text((12, 9), f"RECORDED TARGET-STATE TRACE REPLAY | {args.speed:g}x | no physics re-run",
+            draw.text((12, args.height + 9), f"RECORDED TARGET-STATE TRACE REPLAY | {args.speed:g}x | no physics re-run",
                       font=font, fill=(244, 248, 252))
             elapsed = data.time - float(arrays["time_s"][0])
             outcome = "SUCCESS" if row.get("success") else "FAILURE"
-            draw.text((12, 39), f"Recorded t={data.time:.2f}s (+{elapsed:.2f}s) | saved terminal result: {outcome}",
+            draw.text((12, args.height + 39), f"Recorded t={data.time:.2f}s (+{elapsed:.2f}s) | saved terminal result: {outcome}",
                       font=font, fill=(200, 221, 232))
             last_frame = np.asarray(picture)
             writer.append_data(last_frame)
@@ -157,7 +160,11 @@ def render(args):
         recorded_duration_s=float(arrays["time_s"][-1] - arrays["time_s"][0]),
         sampling=record.get("sampling"), replay_sampling="previous recorded sample at requested video time; terminal sample included; no state interpolation",
         fps=args.fps, nominal_speed_multiplier=args.speed, frames=len(indices),
-        video_duration_s=len(indices) / args.fps, width=args.width, height=args.height,
+        video_duration_s=len(indices) / args.fps, width=args.width, height=video_height,
+        render_width=args.width, render_height=args.height,
+        video_width=args.width, video_height=video_height,
+        annotation_margin_px=margin_height, annotation_position="bottom_outside_rendered_frame",
+        passive_pin_holders_note="The two gray cylinders remaining at the supply positions are passive pin holders; the two assembly pins are seated in the end stop at task completion.",
         camera=args.camera, sampled_indices=indices.tolist(),
         maximum_sample_lag_s=float(np.max(requested_times - selected_times)),
         unique_displayed_states=int(len(np.unique(indices))),
@@ -181,7 +188,8 @@ def main():
     parser.add_argument("--fps", type=float, default=25.)
     parser.add_argument("--speed", type=float, default=4.)
     parser.add_argument("--width", type=int, default=1280)
-    parser.add_argument("--height", type=int, default=800)
+    parser.add_argument("--height", type=int, default=800,
+                        help="scene render height; output video adds a separate 68 px bottom caption margin")
     parser.add_argument("--max-frames", type=int, default=20000)
     args = parser.parse_args()
     if (not math.isfinite(args.fps) or not math.isfinite(args.speed) or not 1 <= args.fps <= 120

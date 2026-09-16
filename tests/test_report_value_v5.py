@@ -118,3 +118,21 @@ def test_model_dimensions_come_from_bound_neighbor_or_relocated_summary(tmp_path
     assert report.model_details("missing",dict(sha256="a"*64),[tmp_path/"models"])["status"]=="pending_summary_detail"
     with pytest.raises(ValueError,match="checkpoint binding mismatch"):
         report.model_details("mlp_17",dict(sha256="b"*64),[tmp_path/"models"])
+
+
+def test_value_call_latency_uses_whole_pool_measurements_and_observed_phase_counts():
+    rows=[dict(config_id="a",candidate_ids=list(range(12)),measured_rank_wall_seconds=.12,
+               seconds=dict(graph_construction=.05,encoding=.03,inference=.01,export=.01,total=.10)),
+          dict(config_id="b",candidate_ids=list(range(12)),measured_rank_wall_seconds=.20,
+               seconds=dict(graph_construction=.09,encoding=.07,inference=.01,total=.18)),
+          dict(config_id="c",candidate_ids=list(range(12)))]
+    measured=report.value_call_latency(rows)
+    assert measured["candidate_counts"]==[12] and measured["available_pool_rows"]==3
+    assert measured["whole_call"]["observed_calls"]==2
+    assert measured["whole_call"]["mean_seconds"]==pytest.approx(.16)
+    assert measured["phases"]["export"]["observed_calls"]==1
+    assert measured["phases"]["total"]["mean_seconds"]==pytest.approx(.14)
+    assert report.value_call_latency([rows[-1]])["whole_call"]["mean_seconds"] is None
+    rows[0]["measured_rank_wall_seconds"]=-1
+    with pytest.raises(ValueError,match="finite nonnegative measured times"):
+        report.value_call_latency(rows)
