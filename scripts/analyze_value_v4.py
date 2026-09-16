@@ -152,6 +152,8 @@ def analyze(payload, *, ks=(1, 2, 4), epsilon=.1, tolerance=1e-6,
             order = np.argsort(-ranking_scores, kind="stable")
             best = float(y.max())
             row = dict(group_id=group_id, config_id=binding[0], seed=source.get("seed"),
+                       checkpoint=source.get("checkpoint"), plan_lengths=source.get("plan_lengths"),
+                       candidate_ids=source.get("candidate_ids"),
                        n=len(y), pool_type="all_failure" if best == 0 else
                        "all_success" if y.min() == 1 else "mixed",
                        empirical_best=best, empirical_pool_quality=float(y.mean()),
@@ -201,6 +203,14 @@ def analyze(payload, *, ks=(1, 2, 4), epsilon=.1, tolerance=1e-6,
             mixed_groups=sum(r["pool_type"] == "mixed" for r in rows),
             summary=summary, rows=rows,
         )
+        checkpoints = sorted({r["checkpoint"] for r in rows if r["checkpoint"] is not None})
+        results[name]["by_checkpoint"] = {}
+        for checkpoint in checkpoints:
+            subset = [r for r in rows if r["checkpoint"] == checkpoint]
+            results[name]["by_checkpoint"][str(checkpoint)] = dict(
+                groups=len(subset),configurations=len({r["config_id"] for r in subset}),
+                all_failure_groups=sum(r["pool_type"]=="all_failure" for r in subset),
+                summary={key:cluster_summary(subset,key,bootstrap_samples=bootstrap_samples,seed=seed) for key in keys})
     return dict(schema="twingraph.value.ranking_audit.v1", methods=results,
                 settings=dict(ks=list(ks), epsilon=epsilon, tie_tolerance=tolerance,
                               bootstrap_samples=bootstrap_samples, bootstrap_seed=seed),
@@ -220,18 +230,21 @@ def save_outputs(result, output):
     csv_path = output / "ranking_summary.csv"
     json_path.write_text(json.dumps(result, indent=2, allow_nan=False), encoding="utf-8")
     with csv_path.open("w", newline="", encoding="utf-8") as stream:
-        fields = ("method", "metric", "mean", "ci95_low", "ci95_high", "groups",
+        fields = ("method", "stratum", "metric", "mean", "ci95_low", "ci95_high", "groups",
                   "configurations", "eligible_groups", "eligible_configurations", "all_failure_groups")
         writer = csv.DictWriter(stream, fieldnames=fields)
         writer.writeheader()
         for name, method in result["methods"].items():
-            for metric, value in method["summary"].items():
-                interval = value["bootstrap95"] or (None, None)
-                writer.writerow(dict(method=name, metric=metric, mean=value["mean"],
-                    ci95_low=interval[0], ci95_high=interval[1], groups=method["groups"],
-                    configurations=method["configurations"], eligible_groups=value["eligible_groups"],
-                    eligible_configurations=value["eligible_configurations"],
-                    all_failure_groups=method["all_failure_groups"]))
+            strata = [("overall",method)] + [(f"checkpoint_{key}",value)
+                      for key,value in method.get("by_checkpoint",{}).items()]
+            for stratum, subset in strata:
+                for metric, value in subset["summary"].items():
+                    interval = value["bootstrap95"] or (None, None)
+                    writer.writerow(dict(method=name, stratum=stratum, metric=metric, mean=value["mean"],
+                        ci95_low=interval[0], ci95_high=interval[1], groups=subset["groups"],
+                        configurations=subset["configurations"], eligible_groups=value["eligible_groups"],
+                        eligible_configurations=value["eligible_configurations"],
+                        all_failure_groups=subset["all_failure_groups"]))
     return json_path, csv_path
 
 

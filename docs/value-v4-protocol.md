@@ -91,6 +91,20 @@ checkpoint 3: 4 trials, 1 success, no timeouts. These are feasibility pilots.
   checkpoints. K4, two `online` trials per candidate, select by online success
   fraction then original rank; two independent `deployment` trials. Include
   source-order and shortest-initial-joint-path controls under the same budget.
+  An additional exhaustive control validates all N8 with the same two online
+  repetitions, then independently executes the selected plan twice. Its larger
+  measured budget is reported explicitly, not presented as a matched-budget
+  baseline or an assumed N/K speedup. Four configurations may run in parallel;
+  policy wall times and overall parallel elapsed are separate quantities.
+
+Before test collection, define setup attrition as a recorded pre-input robot
+SkillFailure, IK-unreachable result or exhausted materialized-candidate solver.
+Do not treat an arbitrary programming ValueError as attrition. Expected test
+configurations must have either a complete reached decision group or this
+explicit setup failure; missing/incomplete groups are errors. Ranking metrics
+condition on reaching the decision point; full workflow outcomes also count
+failed setup configurations with zero success. Training seeds51107/51109 have
+already demonstrated why this distinction is needed. They are not resampled.
 
 This prospective small dataset can test implementation and an initial ranking
 effect. It cannot establish broad RAL-level generalization, real-robot validity,
