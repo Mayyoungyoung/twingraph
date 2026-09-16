@@ -1,0 +1,12 @@
+# Linux/Python 3.10 environment used for the v5 experiments.
+# Separate from the repository's default Torch version; no torchvision required.
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.1.0+cu121
+mujoco==2.3.2
+numpy==1.26.4
+scipy==1.15.3
+matplotlib==3.10.9
+Pillow==12.3.0
+imageio==2.37.4
+imageio-ffmpeg==0.6.0
+pytest==9.1.1
