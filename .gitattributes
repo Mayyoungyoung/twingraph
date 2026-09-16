@@ -9,3 +9,8 @@
 # Immutable v4 evidence and checkpoint sidecars retain their published bytes.
 /docs/evidence/value_v4/** -text
 /models/value/v4/** -text
+# Immutable v5 protocol, evidence, checkpoint sidecars and archive manifests.
+/experiments/value_v5/** -text
+/docs/evidence/value_v5/** -text
+/models/value/v5/** -text
+/datasets/value/v5/** -text
