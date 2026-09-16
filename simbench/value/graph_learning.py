@@ -11,12 +11,13 @@ import torch
 from torch import nn
 from .plan import PlanIR,digest
 from .skill_graph import compile_graph,validate_graph,interface_hash
-from .graph_encode import encode_graph,collate_graph
+from .graph_encode import encode_graph,encode_graphs,collate_graph
 from .graph_network import GraphConfig,GraphValueNet
 from .research_learning import NumericNet,numeric_features
 from .encode import encode_plan,collate
 from .network import ModelConfig,PlanValueNet
 from .collect import dump
+from .port_pool import PortPoolNet,fit_vocabulary,vectorize
 
 
 def load_groups(roots, include_test=False):
@@ -52,7 +53,7 @@ def load_groups(roots, include_test=False):
                 for p,g in zip(plans,graphs):
                     if any(r.get("input_graph_sha256")!=digest(g) for r in records[p.id]):raise ValueError("executed graph mismatch")
             groups.append(dict(id=gid,seed=inp["task"]["seed"],split=split,inputs=inp,plans=plans,graphs=graphs,path=str(d),
-                encoded=[encode_graph(g,check=False) for g in graphs],
+                encoded=encode_graphs(graphs,check=False),
                 field=[encode_plan(inp["observation"],p) for p in plans],
                 x=np.stack([numeric_features(inp["observation"],p,g) for p,g in zip(plans,geo["features"])]),
                 geometry=np.asarray(geo["features"]),
@@ -81,6 +82,7 @@ def metrics(groups,scores):
 
 
 def forward(model,kind,group,indices,device,relation_mode="correct"):
+    if kind=="port_mlp":return model(torch.as_tensor(group["port_x"][indices],device=device))
     if kind=="mlp":return model(torch.as_tensor(group["x"][indices],device=device))
     if kind=="field":return model(collate([group["field"][i] for i in indices],device=device),direct_only=True)["direct_logit"]
     return model(collate_graph([group["encoded"][i] for i in indices],device,relation_mode))
@@ -97,7 +99,8 @@ def predict(model,kind,group,device="cuda",relation_mode="correct"):
 
 def load_model(path,device="cpu"):
     saved=torch.load(path,map_location=device,weights_only=False);kind=saved["kind"]
-    if kind=="mlp":model=NumericNet(saved["dim"],"mlp")
+    if kind=="port_mlp":model=PortPoolNet(saved["dim"])
+    elif kind=="mlp":model=NumericNet(saved["dim"],"mlp")
     elif kind=="field":model=PlanValueNet(ModelConfig(**saved["config"]))
     else:model=GraphValueNet(GraphConfig(**saved["config"]))
     model.load_state_dict(saved["state_dict"]);model.to(device).eval()
@@ -110,16 +113,31 @@ def train(args):
     torch.manual_seed(args.seed);random.seed(args.seed);np.random.seed(args.seed)
     groups=load_groups(args.data);tr=[g for g in groups if g["split"]=="train"];va=[g for g in groups if g["split"]=="val"]
     if not tr or not va:raise ValueError("nonempty train/val required")
-    cfg=GraphConfig(relations=args.kind=="graph")
-    if args.kind=="mlp":model=NumericNet(tr[0]["x"].shape[1],"mlp")
+    cfg=GraphConfig(relations=args.kind=="graph",pooling=args.pooling,normalize=args.normalize)
+    vocabulary=[]
+    if args.kind=="port_mlp":
+        vocabulary=fit_vocabulary([e for g in tr for e in g["encoded"]])
+        for g in groups:g["port_x"]=np.stack([vectorize(e,vocabulary) for e in g["encoded"]])
+        model=PortPoolNet(tr[0]["port_x"].shape[1])
+    elif args.kind=="mlp":model=NumericNet(tr[0]["x"].shape[1],"mlp")
     elif args.kind=="field":
         cfg=ModelConfig(width=64,layers=2,heads=4,vision=False);model=PlanValueNet(cfg)
     else:model=GraphValueNet(cfg)
     model.to(args.device)
-    if args.kind=="mlp":
-        x=torch.as_tensor(np.concatenate([g["x"] for g in tr]),device=args.device)
+    if args.kind in {"graph","sequence"} and cfg.normalize:
+        from .encode import VOCAB,NUMERIC
+        keys=np.concatenate([e["keys"] for g in tr for e in g["encoded"]])
+        values=np.concatenate([e["numbers"] for g in tr for e in g["encoded"]])
+        count=np.bincount(keys,minlength=VOCAB).clip(1)[:,None]
+        total=np.zeros((VOCAB,NUMERIC));squares=np.zeros_like(total)
+        np.add.at(total,keys,values);np.add.at(squares,keys,values.astype(float)**2)
+        mean=total/count;std=np.sqrt(np.maximum(squares/count-mean**2,0)).clip(.01)
+        model.number_mean.copy_(torch.as_tensor(mean,device=args.device))
+        model.number_std.copy_(torch.as_tensor(std,device=args.device))
+    if args.kind in {"mlp","port_mlp"}:
+        x=torch.as_tensor(np.concatenate([g["port_x" if args.kind=="port_mlp" else "x"] for g in tr]),device=args.device)
         model.mean.copy_(x.mean(0));model.std.copy_(x.std(0).clamp_min(.01))
-    opt=torch.optim.AdamW(model.parameters(),lr=.003 if args.kind=="mlp" else .0005,weight_decay=.01)
+    opt=torch.optim.AdamW(model.parameters(),lr=.003 if args.kind in {"mlp","port_mlp"} else .0005,weight_decay=.01)
     out=Path(args.out);out.mkdir(parents=True,exist_ok=True)
     manifest={split:[dict(id=g["id"],seed=g["seed"],input_sha256=g["input_sha256"]) for g in gs] for split,gs in (("train",tr),("val",va))}
     dump(out/"split.json",manifest)
@@ -140,7 +158,8 @@ def train(args):
         history.append(summary)
         if validation["brier"]<best:
             best=validation["brier"]
-            torch.save(dict(schema="twingraph.value.graph.v1",kind=args.kind,config=asdict(cfg),dim=tr[0]["x"].shape[1],
+            torch.save(dict(schema="twingraph.value.graph.v1",kind=args.kind,config=asdict(cfg),
+                       dim=tr[0]["port_x" if args.kind=="port_mlp" else "x"].shape[1],vocabulary=vocabulary,
                        state_dict=model.state_dict(),epoch=epoch+1,training=vars(args),validation=validation,
                        interface_sha256=interface_hash(),source_sha256=source,split_sha256=digest(manifest)),out/"best.pt")
         dump(out/"history.json",history)
@@ -153,8 +172,10 @@ def train(args):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument("--data",nargs="+",required=True);p.add_argument("--out",required=True)
-    p.add_argument("--kind",choices=["graph","sequence","mlp","field"],default="graph")
+    p.add_argument("--kind",choices=["graph","sequence","mlp","field","port_mlp"],default="graph")
     p.add_argument("--seed",type=int,default=17);p.add_argument("--epochs",type=int,default=60);p.add_argument("--device",default="cuda")
+    p.add_argument("--pooling",choices=["mean","attention"],default="mean")
+    p.add_argument("--normalize",action="store_true",help="fit per-typed-port numeric normalization on training inputs only")
     train(p.parse_args())
 
 

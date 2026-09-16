@@ -18,6 +18,8 @@ class GraphConfig:
     heads:int=4
     dropout:float=.1
     relations:bool=True
+    pooling:str="mean"
+    normalize:bool=False
 
 
 class RelationLayer(nn.Module):
@@ -46,20 +48,28 @@ class GraphValueNet(nn.Module):
         super().__init__();self.config=config or GraphConfig();c=self.config;w=c.width
         self.key=nn.Embedding(VOCAB,w,padding_idx=0);self.category=nn.Embedding(VOCAB,w,padding_idx=0)
         self.status=nn.Embedding(4,w,padding_idx=0)
+        if c.normalize:
+            self.register_buffer("number_mean",torch.zeros(VOCAB,NUMERIC))
+            self.register_buffer("number_std",torch.ones(VOCAB,NUMERIC))
         self.number=nn.Sequential(nn.Linear(NUMERIC,w),nn.GELU(),nn.Linear(w,w))
         self.port=nn.Sequential(nn.LayerNorm(w),nn.Linear(w,w),nn.GELU(),nn.Linear(w,w))
+        self.pool=nn.Linear(w,1) if c.pooling=="attention" else None
+        if c.pooling not in {"mean","attention"}:raise ValueError(c.pooling)
         self.norm=nn.LayerNorm(w);self.cls=nn.Parameter(torch.randn(1,1,w)*.02)
         self.layers=nn.ModuleList([RelationLayer(c) for _ in range(c.layers)])
         self.head=nn.Sequential(nn.LayerNorm(w),nn.Linear(w,1))
 
     def forward(self,b):
-        x=self.key(b["keys"])+self.category(b["categories"])+self.status(b["statuses"])+self.number(b["numbers"])
-        x=self.port(x);valid=(~b["padding"]).unsqueeze(-1);x=x*valid
+        numbers=b["numbers"]
+        if self.config.normalize:numbers=(numbers-self.number_mean[b["keys"]])/self.number_std[b["keys"]]
+        x=self.key(b["keys"])+self.category(b["categories"])+self.status(b["statuses"])+self.number(numbers)
+        x=self.port(x);valid=(~b["padding"]).unsqueeze(-1)
+        weights=valid.to(x.dtype) if self.pool is None else self.pool(x).clamp(-15,15).exp()*valid
         batch,nodes=b["positions"].shape;w=self.config.width
         pooled=x.new_zeros((batch,nodes,w));counts=x.new_zeros((batch,nodes,1))
-        pooled.scatter_add_(1,b["owner"].unsqueeze(-1).expand(-1,-1,w),x)
-        counts.scatter_add_(1,b["owner"].unsqueeze(-1),valid.to(x.dtype))
-        pooled=self.norm(pooled/counts.clamp_min(1))
+        pooled.scatter_add_(1,b["owner"].unsqueeze(-1).expand(-1,-1,w),x*weights)
+        counts.scatter_add_(1,b["owner"].unsqueeze(-1),weights)
+        pooled=self.norm(pooled/counts.clamp_min(1e-8))
         pos=b["positions"].float().unsqueeze(-1)
         freq=torch.exp(torch.arange(0,w,2,device=x.device)*(-math.log(10000.)/w))
         pe=torch.zeros_like(pooled);pe[:,:,0::2]=torch.sin(pos*freq);pe[:,:,1::2]=torch.cos(pos*freq)

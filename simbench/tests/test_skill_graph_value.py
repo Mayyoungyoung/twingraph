@@ -66,10 +66,11 @@ def test_identity_and_storage_order_are_not_features():
     for k in before:np.testing.assert_array_equal(before[k],after[k])
 
 
-def test_model_padding_candidate_order_and_parameter_sensitivity():
+@pytest.mark.parametrize("pooling",["mean","attention"])
+def test_model_padding_candidate_order_and_parameter_sensitivity(pooling):
     torch.manual_seed(9);a,p=example();b,q=example(("a","b"))
     one=encode_graph(compile_graph(a,p));two=encode_graph(compile_graph(b,q))
-    model=GraphValueNet(GraphConfig(dropout=0.)).eval()
+    model=GraphValueNet(GraphConfig(dropout=0.,pooling=pooling)).eval()
     with torch.no_grad():
         alone=model(collate_graph([one]))
         batch=model(collate_graph([one,two]))
@@ -92,3 +93,31 @@ def test_unknown_is_not_zero_and_future_labels_are_ignored():
     for node in g["nodes"]:
         for port in node["ports"]:
             if port["source"]:assert port["source"]["call"]<node["index"]
+
+
+def test_port_vocabulary_is_training_only_and_pooled_order_invariant():
+    from simbench.value.port_pool import fit_vocabulary,vectorize,entries
+    obs,p=example();e=encode_graph(compile_graph(obs,p));v=fit_vocabulary([e])
+    x=vectorize(e,v)
+    reference=entries(e)
+    np.testing.assert_allclose(x,np.concatenate([reference[k] for k in v]),atol=1e-6)
+    reordered=copy.deepcopy(e);ix=np.random.default_rng(5).permutation(len(e["keys"]))
+    # Within each node, preserve its first type token; arbitrary parameter order
+    # is not an execution-order change.
+    first={};indices=[]
+    for i,n in enumerate(e["owner"]):first.setdefault(n,i)
+    for n in sorted(first):
+        indices += [first[n]]+[int(i) for i in ix if e["owner"][i]==n and i!=first[n]]
+    for key in ("keys","categories","statuses","numbers","owner"):reordered[key]=e[key][indices]
+    np.testing.assert_allclose(x,vectorize(reordered,v),atol=1e-6)
+    unknown=copy.deepcopy(e);unknown["keys"]=e["keys"]+10000
+    assert np.count_nonzero(vectorize(unknown,v))==0
+    assert v==fit_vocabulary([e])
+
+
+def test_within_pool_typed_cache_preserves_every_input():
+    from simbench.value.graph_encode import encode_graphs
+    a,p=example();b,q=example(("a","b"))
+    graphs=[compile_graph(a,p),compile_graph(b,q)]
+    for cached,g in zip(encode_graphs(graphs),graphs):
+        for k,value in encode_graph(g).items():np.testing.assert_array_equal(cached[k],value)

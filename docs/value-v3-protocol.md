@@ -65,3 +65,23 @@ token fusion; it is not an exact PIGINet reproduction. The proposed distinction
 is shared executable interfaces with explicit state provenance, evaluated by a
 matched information/architecture relation ablation. A representation or residual
 formula alone is not evidence of a new effective method.
+
+## Development amendment before test opening
+
+Training/validation-only trials found port-mean and attention pooling with only
+fixed multiscale tanh values stayed near constant BCE after 60 epochs; extending
+that model to 300 epochs did not fix it. Per-typed-port numerical normalization
+(statistics fitted on training inputs only) lowered validation Brier. The final
+matched graph/sequence comparison therefore uses attention pooling, this
+normalization and 180 epochs, keeping minimum validation Brier selection. Seeds
+17/29/43 are retained; all pilot histories are archived. This changes the initial
+60-epoch graph budget, before inspecting any fresh test outcomes.
+
+A generic port-set MLP is added to separate interface-derived inputs from the
+need for a Transformer. Its vocabulary is formed from training graph input
+keys/types, with generic numeric channels and occurrence counts; there are no
+product-specific columns or geometric ranking proxies. It sacrifices exact
+execution order. MLP87, field Transformer and port-set MLP retain 60 epochs.
+The field control is a small width64/layers2 variant, not the unchanged v1
+ResNet18/128-wide model or an exact PIGINet reproduction. This round's primary
+graph models use available poses/geometry without images.

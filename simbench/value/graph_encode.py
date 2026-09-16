@@ -9,12 +9,16 @@ from .encode import bucket, NUMERIC, sample_path
 from .skill_graph import RELATIONS, validate_graph
 
 
-def encode_graph(graph, check=True):
+def encode_graph(graph, check=True, cache=None):
     if check: validate_graph(graph)
     obs = graph["observation"]; objects = obs["objects"]
     nodes = []; tokens = []; owner = []
+    cache={} if cache is None else cache
 
     def leaf(key, value, node, status="known", kind="record", unit="", frame=""):
+        identity=(key,status,kind,unit,frame,tuple(value) if isinstance(value,(tuple,list)) else value)
+        if identity in cache:
+            tokens.append(cache[identity]);owner.append(node);return
         category = 0
         if isinstance(value, (bool, int, float)):
             values = [value]
@@ -34,6 +38,7 @@ def encode_graph(graph, check=True):
             numbers[8*i:8*i+len(vals)] = np.tanh(vals*scale)
         tokens.append((bucket(f"{key}|{kind}|{unit}|{frame}"), category,
                        {"known":1,"deferred":2,"unknown":3}[status], numbers))
+        cache[identity]=tokens[-1]
         owner.append(node)
 
     def visit(key, value, node, **meta):
@@ -83,6 +88,13 @@ def encode_graph(graph, check=True):
     return dict(keys=np.asarray([x[0] for x in tokens]),categories=np.asarray([x[1] for x in tokens]),
                 statuses=np.asarray([x[2] for x in tokens]),numbers=np.stack([x[3] for x in tokens]),
                 owner=np.asarray(owner),positions=np.asarray(nodes),relations=relations)
+
+
+def encode_graphs(graphs,check=True):
+    # Cache pure typed values only within one candidate pool. No cross-request
+    # cache, labels, geometry proxies or rollout results are retained.
+    cache={}
+    return [encode_graph(g,check=check,cache=cache) for g in graphs]
 
 
 def collate_graph(rows, device="cpu", relation_mode="correct"):
