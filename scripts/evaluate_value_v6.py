@@ -20,14 +20,18 @@ def balanced_accuracy(y, pred):
 
 def threshold_from_rows(rows):
     p = np.concatenate([np.asarray(r["scores"], float) for r in rows])
-    y = np.concatenate([(np.asarray(r["success_rates"], float) >= .5).astype(int) for r in rows])
+    rates = np.concatenate([np.asarray(r["success_rates"], float) for r in rows])
     candidates = np.unique(np.r_[0., p, 1.])
+    # Brier is naturally defined on the empirical success-rate target. A
+    # threshold turns probabilities into a hard 0/1 forecast, so choose the
+    # threshold minimizing that same squared-error criterion. Balanced
+    # accuracy is intentionally not used for threshold selection.
     choices = []
     for threshold in candidates:
-        pred = p >= threshold
-        choices.append((balanced_accuracy(y, pred), float(np.mean(pred == y)),
-                        -abs(float(threshold)-.5), -float(threshold), float(threshold)))
-    return max(choices)[-1]
+        hard = (p >= threshold).astype(float)
+        brier = float(np.mean((hard - rates) ** 2))
+        choices.append((brier, abs(float(threshold)-.5), float(threshold)))
+    return min(choices)[-1]
 
 
 def auc(y, score):
@@ -71,6 +75,7 @@ def evaluate(checkpoint, data, device):
     y = np.concatenate(all_y); p = np.concatenate(all_p); rates = np.concatenate(all_rates)
     pred = p >= threshold
     return dict(checkpoint=str(checkpoint), view_mode=mode, threshold=threshold,
+        threshold_selection="minimum validation hard-forecast Brier to empirical success rate; distance-to-0.5 then lower threshold tie break",
         test_configurations=len(rows), test_candidates=len(y),
         accuracy=float(np.mean(pred == y)), balanced_accuracy=balanced_accuracy(y, pred),
         roc_auc=auc(y, p), brier_to_empirical_rate=float(np.mean((p-rates)**2)),
@@ -108,7 +113,7 @@ def main():
     tests = {mode: evaluate(row["checkpoint"], a.data, a.device)
              for mode, row in sorted(best_by_view.items())}
     result = dict(schema="twingraph.value_v6.evaluation", selection_rule=
-        "minimum configuration-mean validation Brier; name tie break; no test retuning",
+        "minimum configuration-mean validation Brier; model-name tie break; threshold minimum validation hard-forecast Brier; no test retuning",
         selected=selected["name"], selected_view_mode=selected["view_mode"],
         all_models=summaries, best_by_view=best_by_view, held_out_test=tests,
         selected_test=tests[selected["view_mode"]])

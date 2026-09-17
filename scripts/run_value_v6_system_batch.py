@@ -46,15 +46,53 @@ def worker(request):
         from simbench.value.physical_v6 import RobustPhysicalRunner
         from simbench.value.system_v5 import SystemConfig, run_pair
         from simbench.value.value_v6 import ValueScorer
+        from simbench.value.skill_graph import compile_graph
         from simbench.value import stage_v6
-        scorer = ValueScorer(request["checkpoint"], "cpu")
+        class SystemValueScorer(ValueScorer):
+            """Add the audited executable graph payload required by system_v5.
+
+            v6's scorer already binds graph_sha256, while system_v5 additionally
+            checks the serialized graph itself. Reconstructing it from the same
+            pre-execution observation and candidate plans keeps both checks
+            identical without changing the frozen value model or collection
+            interfaces.
+            """
+            def rank(self, state, plans, k=4, vision=None):
+                result = super().rank(state, plans, k=k, vision=vision)
+                graphs = [compile_graph(state, plan) for plan in plans]
+                by_id = {plan.id: graph for plan, graph in zip(plans, graphs)}
+                for row in result["top_k"]:
+                    row["graph"] = by_id[row["candidate_id"]]
+                return result
+
+        class PairedStage:
+            """Keep paired policy inputs identical while using fresh sessions.
+
+            Concurrent MuJoCo EGL renders can differ at the decoded-pixel level
+            despite identical deterministic scene seeds. The RGB-D observation
+            is pre-execution, so cache the first twin capture for the paired
+            full-policy run; physical sessions remain fresh and independent.
+            """
+            def __init__(self, base):
+                self.base = base
+                self._vision = None
+
+            def capture_vision(self, session):
+                if self._vision is None:
+                    self._vision = self.base.capture_vision(session)
+                return {key: value.copy() for key, value in self._vision.items()}
+
+            def __getattr__(self, name):
+                return getattr(self.base, name)
+
+        scorer = SystemValueScorer(request["checkpoint"], "cpu")
         if scorer.checkpoint_sha256 != request["checkpoint_sha256"]:
             raise ValueError("checkpoint changed after dispatch")
         config = SystemConfig(seed=request["seed"], n=12, k=4,
             validation_repeats=3, target_repeats=3, accept_rate=.5,
             timeout=240., friction_span=.08, gain_span=.015, render=True)
         pair = run_pair(config, request["planner"], scorer, output,
-                        stage=stage_v6, runner_factory=RobustPhysicalRunner)
+                        stage=PairedStage(stage_v6), runner_factory=RobustPhysicalRunner)
         record.update(status="completed", target_successes=pair["target_successes"],
                       decision_seconds=pair["decision_seconds"],
                       pair_sha256=sha(output / "pair.json"))

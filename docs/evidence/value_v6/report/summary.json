@@ -1,0 +1,100 @@
+{
+  "schema": "twingraph.value_v6.report",
+  "selected_model": "both_43",
+  "selected_view_mode": "both",
+  "value_metrics": {
+    "test_configurations": 16,
+    "test_candidates": 192,
+    "threshold": 0.7206604504191565,
+    "accuracy": 0.6458333333333334,
+    "balanced_accuracy": 0.6482848458532349,
+    "roc_auc": 0.7048415110725141,
+    "brier_to_empirical_rate": 0.18940007833709727,
+    "top4_hit_rate": 0.75,
+    "top4_mean_success_rate": 0.5885416744276881,
+    "pool_mean_success_rate": 0.4895833497866988,
+    "random_top4_hit_expectation": 0.8617424242424243
+  },
+  "configuration_bootstrap_95": {
+    "accuracy": {
+      "value": 0.6458333333333334,
+      "low": 0.5677083333333334,
+      "high": 0.7135416666666667,
+      "unit": "physical configuration",
+      "samples": 5000
+    },
+    "top4_hit": {
+      "value": 0.75,
+      "low": 0.5,
+      "high": 0.9375,
+      "unit": "physical configuration",
+      "samples": 5000
+    }
+  },
+  "view_ablation": {
+    "both": {
+      "validation_brier": 0.11718309143768174,
+      "validation_accuracy": 0.7760416666666666,
+      "test_accuracy": 0.6458333333333334,
+      "test_brier": 0.18940007833709727,
+      "test_top4_hit": 0.75
+    },
+    "none": {
+      "validation_brier": 0.11827888818513957,
+      "validation_accuracy": 0.7864583333333334,
+      "test_accuracy": 0.640625,
+      "test_brier": 0.19595529175303603,
+      "test_top4_hit": 0.875
+    },
+    "task": {
+      "validation_brier": 0.1313802815980205,
+      "validation_accuracy": 0.7864583333333334,
+      "test_accuracy": 0.6666666666666666,
+      "test_brier": 0.19315804680797055,
+      "test_top4_hit": 0.875
+    },
+    "top": {
+      "validation_brier": 0.13355286730401725,
+      "validation_accuracy": 0.765625,
+      "test_accuracy": 0.671875,
+      "test_brier": 0.19720139157049502,
+      "test_top4_hit": 0.875
+    }
+  },
+  "system": {
+    "top_k": {
+      "requested_configurations": 12,
+      "completed_configurations": 12,
+      "target_successes": 25,
+      "requested_target_trials": 36,
+      "target_success_rate": 0.6944444444444444,
+      "mean_decision_seconds": 674.5343668490532,
+      "mean_total_seconds": 835.8997116254371,
+      "twin_validation_calls": 144,
+      "target_execution_calls": 30,
+      "target_executed_configurations": 10,
+      "abstained_configurations": 2
+    },
+    "full": {
+      "requested_configurations": 12,
+      "completed_configurations": 12,
+      "target_successes": 27,
+      "requested_target_trials": 36,
+      "target_success_rate": 0.75,
+      "mean_decision_seconds": 1678.991008206426,
+      "mean_total_seconds": 1819.3361470405362,
+      "twin_validation_calls": 432,
+      "target_execution_calls": 30,
+      "target_executed_configurations": 10,
+      "abstained_configurations": 2
+    },
+    "decision_time_reduction": 0.5982501612265206,
+    "decision_speedup": 2.4891111420304393
+  },
+  "limitations": [
+    "independent target is MuJoCo, not hardware",
+    "classification uses empirical majority over three perturbation draws",
+    "LLM plans are supplied by the recorded assistant proxy",
+    "two configurations had no candidate meeting the twin acceptance rule; their target trials remain failures in the fixed denominator"
+  ]
+}

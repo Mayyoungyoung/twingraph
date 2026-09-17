@@ -52,6 +52,11 @@ def main():
     intervals = accuracy_row(selected)
     top = system["summaries"]["top_k"]; full = system["summaries"]["full"]
     reduction = 1 - top["mean_decision_seconds"] / full["mean_decision_seconds"]
+    for summary in (top, full):
+        summary["target_executed_configurations"] = int(
+            summary["target_execution_calls"] // max(1, summary["requested_target_trials"] // summary["requested_configurations"]))
+        summary["abstained_configurations"] = int(
+            summary["requested_configurations"] - summary["target_executed_configurations"])
     result = dict(schema="twingraph.value_v6.report", selected_model=evaluation["selected"],
         selected_view_mode=evaluation["selected_view_mode"],
         value_metrics={k: selected[k] for k in ("test_configurations", "test_candidates", "threshold",
@@ -67,7 +72,8 @@ def main():
                     decision_speedup=full["mean_decision_seconds"] / top["mean_decision_seconds"]),
         limitations=["independent target is MuJoCo, not hardware",
                      "classification uses empirical majority over three perturbation draws",
-                     "LLM plans are supplied by the recorded assistant proxy"])
+                     "LLM plans are supplied by the recorded assistant proxy",
+                     "two configurations had no candidate meeting the twin acceptance rule; their target trials remain failures in the fixed denominator"])
     output = Path(a.out); output.mkdir(parents=True, exist_ok=True)
     write(output / "summary.json", result)
     view_labels = {"none": "无图像", "task": "全局斜俯视", "top": "顶视", "both": "双视角"}
@@ -91,10 +97,10 @@ def main():
         row = result["view_ablation"][mode]
         lines.append(f"| {view_labels[mode]} | {row['validation_brier']:.4f} | {pct(row['test_accuracy'])} | {row['test_brier']:.4f} | {pct(row['test_top4_hit'])} |")
     lines += ["", "## 完整系统：有价值模块与全量数字孪生筛选", "",
-        "| 策略 | 平均决策耗时 (s) | 平均端到端耗时 (s) | 目标成功率 | 孪生执行次数 |",
-        "|---|---:|---:|---:|---:|",
-        f"| 价值模块 Top-4 | {top['mean_decision_seconds']:.2f} | {top['mean_total_seconds']:.2f} | {pct(top['target_success_rate'])} | {top['twin_validation_calls']} |",
-        f"| 无价值模块，全量 12 条 | {full['mean_decision_seconds']:.2f} | {full['mean_total_seconds']:.2f} | {pct(full['target_success_rate'])} | {full['twin_validation_calls']} |",
+        "| 策略 | 平均决策耗时 (s) | 平均端到端耗时 (s) | 目标成功率 | 孪生执行次数 | 目标执行调用 | 无候选配置 |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+        f"| 价值模块 Top-4 | {top['mean_decision_seconds']:.2f} | {top['mean_total_seconds']:.2f} | {pct(top['target_success_rate'])} | {top['twin_validation_calls']} | {top['target_execution_calls']} | {top['abstained_configurations']} |",
+        f"| 无价值模块，全量 12 条 | {full['mean_decision_seconds']:.2f} | {full['mean_total_seconds']:.2f} | {pct(full['target_success_rate'])} | {full['twin_validation_calls']} | {full['target_execution_calls']} | {full['abstained_configurations']} |",
         "", f"价值模块使平均决策耗时减少 **{pct(reduction)}**（{result['system']['decision_speedup']:.2f}× 加速）。",
         "", "系统成功率分母为每种策略 12 个配置 × 3 次独立目标执行；失败和缺失不会从分母删除。",
         "", "## 范围限制", "",
