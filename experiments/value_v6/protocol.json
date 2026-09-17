@@ -1,0 +1,94 @@
+{
+  "schema": "twingraph.value_v6.protocol",
+  "status": "frozen_before_formal_collection",
+  "reference": "PIGINet (RSS 2023), arXiv:2211.01576v2",
+  "decision_boundary": "score complete executable candidate programs before any candidate rollout or active wrist inspection",
+  "task": {
+    "family": "sliding_stage_full_v6",
+    "parts": 5,
+    "candidates_per_configuration": 12,
+    "terminal": "all five parts seated, released, final acceptance checks pass and robot returns home"
+  },
+  "scene_randomization": {
+    "supply_xy_half_width_m": 0.012,
+    "supply_yaw_half_width_deg": 7.0,
+    "light_scale": [0.78, 1.22],
+    "object_color_scale": [0.86, 1.14],
+    "camera_xy_jitter_m": [-0.006, 0.006]
+  },
+  "paired_rollout_randomization": {
+    "repeats_per_candidate": 3,
+    "repeat_0": {
+      "friction_scale": 1.0,
+      "actuator_gain_scale": 1.0,
+      "mass_scale": 1.0,
+      "damping_scale": 1.0,
+      "position_noise_std_m": 0.00035
+    },
+    "repeat_1_and_2": {
+      "friction_scale": [0.92, 1.08],
+      "actuator_gain_scale": [0.985, 1.015],
+      "mass_scale": [0.96, 1.04],
+      "damping_scale": [0.94, 1.06],
+      "position_noise_std_m": [0.00025, 0.00125]
+    },
+    "pairing": "same repeat draw for every candidate in one configuration; disjoint deterministic train/reference/twin/target namespaces"
+  },
+  "vision": {
+    "modalities": "RGB plus metric depth",
+    "resolution": [80, 80],
+    "views": {
+      "task": "fixed global oblique camera covering robot, supplies and nest",
+      "top": "fixed overhead camera covering supplies and nest"
+    },
+    "excluded": "wrist close-up, because it is unavailable before an explicit active-sensing motion",
+    "ablations": ["none", "task", "top", "both"],
+    "augmentation": "brightness, contrast, RGB sensor noise and depth noise; no left-right flips"
+  },
+  "collection": {
+    "train_seed_range_inclusive": [71000, 71095],
+    "validation_seed_range_inclusive": [71200, 71223],
+    "test_seed_range_inclusive": [71300, 71323],
+    "configurations": {"train": 96, "validation": 24, "test": 24},
+    "candidate_programs": 1728,
+    "physical_rollouts": 5184,
+    "timeout_seconds_per_rollout": 240,
+    "retain_failures": true,
+    "no_failed_configuration_replacement": true
+  },
+  "training": {
+    "target": "empirical complete-program success rate over the three paired perturbation repeats",
+    "loss": "binary cross entropy with soft empirical-rate targets, equal total weight per configuration",
+    "model_seeds": [17, 29, 43],
+    "epochs": 140,
+    "batch_size": 64,
+    "learning_rate": 0.0008,
+    "selection": "lowest configuration-mean validation Brier; model-name tie break",
+    "classification_threshold": "validation balanced accuracy, then ordinary accuracy, distance to 0.5 and lower threshold",
+    "no_test_retuning": true
+  },
+  "held_out_metrics": [
+    "robust binary accuracy",
+    "balanced accuracy",
+    "ROC-AUC",
+    "Brier score to empirical success rate",
+    "Top-4 robust hit rate",
+    "Top-4 mean empirical success rate",
+    "full-pool mean empirical success rate"
+  ],
+  "system": {
+    "seed_range_inclusive": [71400, 71411],
+    "configurations": 12,
+    "top_k": 4,
+    "exhaustive_n": 12,
+    "twin_validation_repeats": 3,
+    "independent_target_repeats": 3,
+    "comparison": "actual Top-4 rollouts and actual all-12 rollouts; no cached outcomes",
+    "report": ["decision time", "end-to-end time", "twin rollout count", "target success rate"]
+  },
+  "planner": {
+    "source": "current assistant as an explicit LLM proxy",
+    "record": "experiments/value_v5/planner_record.json",
+    "scope": "proposes legal symbolic part orders; existing compilers and solvers instantiate executable parameters"
+  }
+}
