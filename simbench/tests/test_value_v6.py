@@ -6,7 +6,7 @@ import pytest
 torch = pytest.importorskip("torch")
 
 from simbench.value.collect_v6 import trial_spec
-from simbench.value.stage_v6 import PARTS, StageV6Spec, write_scene
+from simbench.value.stage_v6 import PARTS, StageV6Spec, save_vision, write_scene
 from simbench.value.value_v6 import RobustProgramNet, _vision_array
 
 
@@ -44,3 +44,11 @@ def test_v6_view_ablation_channels_and_network_shapes():
     x = torch.zeros(3, 11)
     assert RobustProgramNet(11, "none")(x).shape == (3,)
     assert RobustProgramNet(11, "both")(x, torch.zeros(3, 8, 80, 80)).shape == (3,)
+
+
+def test_v6_vision_manifest_binds_values_not_zip_timestamp(tmp_path):
+    arrays = {"task_view_rgb": np.zeros((2, 2, 3), np.uint8),
+              "task_view_depth_mm": np.ones((2, 2), np.uint16)}
+    left = save_vision(tmp_path / "left.npz", arrays)
+    right = save_vision(tmp_path / "right.npz", arrays)
+    assert left["sha256"] == right["sha256"]

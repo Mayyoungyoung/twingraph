@@ -185,8 +185,17 @@ def save_vision(path, arrays):
     path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(path, **arrays)
     import hashlib
+    content = hashlib.sha256()
+    for key in sorted(arrays):
+        value = np.ascontiguousarray(arrays[key])
+        content.update(key.encode())
+        content.update(str(value.dtype).encode())
+        content.update(json.dumps(value.shape).encode())
+        content.update(value.tobytes())
     return dict(schema="twingraph.rgbd.v6", file=path.name,
-                sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
+                # Bind decoded sensor values rather than ZIP container bytes;
+                # np.savez timestamps would otherwise break paired-policy IDs.
+                sha256=content.hexdigest(),
                 cameras=list(VIEW_NAMES), image_size=IMAGE_SIZE,
                 channels="uint8 RGB plus uint16 metric depth in millimetres",
                 decision_boundary="pre-execution")

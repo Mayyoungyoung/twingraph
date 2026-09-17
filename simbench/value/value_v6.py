@@ -41,10 +41,18 @@ def encoding_hash():
 
 def _load_vision(directory, manifest):
     path = directory / manifest["file"]
-    if not path.is_file() or file_sha(path) != manifest["sha256"]:
-        raise ValueError("RGB-D artifact is missing or does not match its manifest")
+    if not path.is_file():
+        raise ValueError("RGB-D artifact is missing")
     with np.load(path, allow_pickle=False) as saved:
-        return {key: saved[key] for key in saved.files}
+        arrays = {key: saved[key] for key in saved.files}
+    content = hashlib.sha256()
+    for key in sorted(arrays):
+        value = np.ascontiguousarray(arrays[key])
+        content.update(key.encode()); content.update(str(value.dtype).encode())
+        content.update(json.dumps(value.shape).encode()); content.update(value.tobytes())
+    if content.hexdigest() != manifest["sha256"]:
+        raise ValueError("RGB-D artifact does not match its value manifest")
+    return arrays
 
 
 def _vision_array(arrays, mode):
