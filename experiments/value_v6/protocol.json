@@ -46,12 +46,12 @@
     "augmentation": "brightness, contrast, RGB sensor noise and depth noise; no left-right flips"
   },
   "collection": {
-    "train_seed_range_inclusive": [71000, 71095],
-    "validation_seed_range_inclusive": [71200, 71223],
-    "test_seed_range_inclusive": [71300, 71323],
-    "configurations": {"train": 96, "validation": 24, "test": 24},
-    "candidate_programs": 1728,
-    "physical_rollouts": 5184,
+    "train_seed_range_inclusive": [71000, 71063],
+    "validation_seed_range_inclusive": [71200, 71215],
+    "test_seed_range_inclusive": [71300, 71315],
+    "configurations": {"train": 64, "validation": 16, "test": 16},
+    "candidate_programs": 1152,
+    "physical_rollouts": 3456,
     "timeout_seconds_per_rollout": 240,
     "retain_failures": true,
     "no_failed_configuration_replacement": true
