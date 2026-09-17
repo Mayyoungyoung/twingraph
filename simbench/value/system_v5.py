@@ -323,6 +323,18 @@ def run_system(config, planner_record, scorer, output, method="top_k", *, stage=
     seconds["scene_setup"] = clock() - started
     result["twin"] = _scene_record(spec, twin, scene_path, "twin")
     observation = stage.observed(twin, targets)
+    # Later protocols may add a pre-execution sensor artifact while retaining
+    # this audited orchestration.  The default v5 stage has no such hook and is
+    # therefore byte-for-byte equivalent in its inputs and execution path.
+    vision_arrays = None
+    vision_manifest = None
+    if hasattr(stage, "capture_vision"):
+        started = clock()
+        vision_arrays = stage.capture_vision(twin)
+        vision_manifest = stage.save_vision(output / "vision.npz", vision_arrays)
+        seconds["artifact_writing"] += clock() - started
+        result["perception_scope"] = "pre-execution fixed-camera RGB-D plus structured detector-state contract"
+        result["vision"] = vision_manifest
     started = clock()
     try:
         plans, counts = stage.build_pool(twin, targets, config.seed, n=config.n,
@@ -350,8 +362,11 @@ def run_system(config, planner_record, scorer, output, method="top_k", *, stage=
         if digest(validate_graph(graph).to_dict()) != digest(plan.to_dict()):
             raise ValueError("compiled graph does not recover the executable PlanIR")
     seconds["integrity"] += clock() - started
-    inputs = dict(schema="twingraph.system_inputs.v5", observation=observation,
-                  candidates=[p.to_dict() for p in plans], planner_sha256=digest(planner))
+    inputs = dict(schema="twingraph.system_inputs.v6" if vision_manifest else "twingraph.system_inputs.v5",
+                  observation=observation, candidates=[p.to_dict() for p in plans],
+                  planner_sha256=digest(planner))
+    if vision_manifest:
+        inputs["vision"] = vision_manifest
     result["inputs_sha256"] = digest(inputs)
     started = clock()
     write_json(output / "inputs.json", inputs)
@@ -360,7 +375,10 @@ def run_system(config, planner_record, scorer, output, method="top_k", *, stage=
         if scorer is None:
             raise ValueError("TopK policy requires a trained value scorer")
         started = clock()
-        ranked = scorer.rank(copy.deepcopy(observation), copy.deepcopy(plans), k=min(config.k, len(plans)))
+        rank_kwargs = dict(k=min(config.k, len(plans)))
+        if vision_arrays is not None:
+            rank_kwargs["vision"] = copy.deepcopy(vision_arrays)
+        ranked = scorer.rank(copy.deepcopy(observation), copy.deepcopy(plans), **rank_kwargs)
         rank_wall = clock() - started
         claimed = ranked.get("seconds", {})
         scorer_phases = ("graph_construction", "integrity", "encoding", "inference")
@@ -387,7 +405,9 @@ def run_system(config, planner_record, scorer, output, method="top_k", *, stage=
     for plan, graph in subset:
         for repeat in range(config.validation_repeats):
             started = clock()
-            row, trace = rollout_with_state_trace(runner, graph, trial_for(config, repeat, "twin"))
+            trial = (stage.trial_for(config, repeat, "twin")
+                     if hasattr(stage, "trial_for") else trial_for(config, repeat, "twin"))
+            row, trace = rollout_with_state_trace(runner, graph, trial)
             seconds["validation"] += clock() - started
             if row["candidate_id"] != plan.id or row["input_graph_sha256"] != digest(graph):
                 raise ValueError("physical result is not bound to submitted twin graph")
@@ -453,7 +473,9 @@ def run_system(config, planner_record, scorer, output, method="top_k", *, stage=
         seconds["artifact_writing"] += clock() - started
         started = clock()
         target_runner = runner_factory(target, timeout=config.timeout)
-        execution, trace = rollout_with_state_trace(target_runner, target_graph, trial_for(config, repeat, "target"))
+        trial = (stage.trial_for(config, repeat, "target")
+                 if hasattr(stage, "trial_for") else trial_for(config, repeat, "target"))
+        execution, trace = rollout_with_state_trace(target_runner, target_graph, trial)
         seconds["deployment"] += clock() - started
         if execution["candidate_id"] != rebound.id or execution["input_graph_sha256"] != digest(target_graph):
             raise ValueError("physical result is not bound to submitted target graph")
