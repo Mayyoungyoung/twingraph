@@ -79,7 +79,7 @@ class TwinRecorder:
 
     def pause(self, seconds=.5):
         frame=self.frame()
-        for _ in range(max(1,int(seconds*20))): self._append(frame); self.frames+=1
+        for _ in range(max(1,int(seconds*self.fps))): self._append(frame); self.frames+=1
 
     def close(self):
         if self.writer is not None: self.writer.close()
