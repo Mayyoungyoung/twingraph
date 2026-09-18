@@ -21,7 +21,9 @@ from simbench.value.video_v7 import TwinRecorder
 
 
 def run(seed: int, out: Path, level: str = "L1", pin_force: float = 8.0,
-        pin_speed: float = 0.0045, timeout: float = 1800.0, record: bool = True):
+        pin_speed: float = 0.0045, timeout: float = 1800.0, record: bool = True,
+        video_width: int = 480, video_height: int = 360,
+        video_stride: int = 3):
     out.mkdir(parents=True, exist_ok=True)
     spec, session, _xml, targets = stage_v7.make_scene(seed, out / "scene", level=level)
     order = stage_v5.legal_orders()[0]
@@ -39,7 +41,10 @@ def run(seed: int, out: Path, level: str = "L1", pin_force: float = 8.0,
         session, targets, order, choices, wipe_variant=0,
         wipe_force=1.5, wipe_duration=14.0, stroke_minimum=0.08,
     )
-    recorder = TwinRecorder(session, out / "full_task.mp4", score=None) if record else None
+    recorder = (TwinRecorder(session, out / "full_task.mp4", score=None,
+                             width=video_width, height=video_height,
+                             frame_stride=video_stride)
+                if record else None)
     if recorder is not None:
         session.rec = recorder
         session.ctx.on_control_step = recorder
@@ -58,6 +63,10 @@ def run(seed: int, out: Path, level: str = "L1", pin_force: float = 8.0,
         "pin_speed_m_s": pin_speed,
         "candidate_id": plan.id,
         "video": str((out / "full_task.mp4").resolve()) if recorder is not None else None,
+        "video_config": (dict(width=video_width, height=video_height,
+                               frame_stride=video_stride,
+                               fps=20.0 / max(1, int(video_stride)))
+                         if recorder is not None else None),
         "result": result,
         "source": "real MuJoCo state trajectory with rgbd_geometry execution observations",
         "spec": spec.__dict__,
@@ -78,7 +87,12 @@ if __name__ == "__main__":
     parser.add_argument("--pin-force", type=float, default=8.0)
     parser.add_argument("--pin-speed", type=float, default=0.0045)
     parser.add_argument("--timeout", type=float, default=1800.0)
+    parser.add_argument("--video-width", type=int, default=480)
+    parser.add_argument("--video-height", type=int, default=360)
+    parser.add_argument("--video-stride", type=int, default=3,
+                        help="record every Nth control step; playback fps is divided by N")
     parser.add_argument("--no-video", action="store_true")
     args = parser.parse_args()
     run(args.seed, Path(args.out), args.level, args.pin_force, args.pin_speed,
-        args.timeout, not args.no_video)
+        args.timeout, not args.no_video, args.video_width, args.video_height,
+        args.video_stride)

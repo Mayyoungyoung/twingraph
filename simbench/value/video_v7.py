@@ -16,13 +16,18 @@ from .physical import PhysicalRunner, perturbation
 
 
 class TwinRecorder:
-    def __init__(self, session, path, score=None, width=640, height=480):
+    def __init__(self, session, path, score=None, width=640, height=480,
+                 frame_stride=1):
         self.session = session; self.path = Path(path); self.path.parent.mkdir(parents=True, exist_ok=True)
         self.width=width; self.height=height
+        self.frame_stride=max(1, int(frame_stride)); self._control_steps=0
+        # Dropped frames use a lower playback rate, preserving the physical
+        # trajectory duration instead of silently speeding up the clip.
+        self.fps=20.0 / self.frame_stride
         self.renderer = mujoco.Renderer(session.ctx.model, height=height, width=width)
         self._cv_writer = None
         try:
-            self.writer = imageio.get_writer(str(self.path), fps=20, codec="libx264", quality=7, macro_block_size=2)
+            self.writer = imageio.get_writer(str(self.path), fps=self.fps, codec="libx264", quality=7, macro_block_size=2)
         except (ValueError, RuntimeError):
             if cv2 is None:
                 raise
@@ -30,7 +35,7 @@ class TwinRecorder:
             # OpenCV writes the same real frames to an ordinary MP4.
             self.writer = None
             self._cv_writer = cv2.VideoWriter(
-                str(self.path), cv2.VideoWriter_fourcc(*"mp4v"), 20.0,
+                str(self.path), cv2.VideoWriter_fourcc(*"mp4v"), self.fps,
                 (self.width * 2, self.height + 70),
             )
             if not self._cv_writer.isOpened():
@@ -67,6 +72,9 @@ class TwinRecorder:
             self._cv_writer.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
     def __call__(self, ctx):
+        self._control_steps += 1
+        if (self._control_steps - 1) % self.frame_stride:
+            return
         self._append(self.frame()); self.frames+=1
 
     def pause(self, seconds=.5):
