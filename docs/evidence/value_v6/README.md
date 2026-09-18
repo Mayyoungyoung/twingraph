@@ -10,10 +10,19 @@
 
 评估更正和系统适配层修复记录见 [`../../value-v6-evaluation-amendment.md`](../../value-v6-evaluation-amendment.md)。修复只改动 `scripts/` 评估/批处理适配，不改动 `simbench/value`、`simbench/assembly` 或 `simbench/core` 的冻结采集源码。
 
-实现、输入输出、采集协议和 Top-4 最终选择规则见 [`value_module_summary_zh.md`](value_module_summary_zh.md)。71400 案例的 12 个候选视频、4 个 Top 视频和实际 target 执行视频均为独立 MP4，见 [`videos/separate/`](videos/separate/)。
+实现、输入输出、采集协议和 Top-4 最终选择规则见 [`value_module_summary_zh.md`](value_module_summary_zh.md)。
+
+当前推荐的展示证据是 [`videos/live_physics_v5/`](videos/live_physics_v5/)：12 个候选和独立 target 都在正式 `swdp` 环境中重新经历候选生成/目标重绑定、技能图编译和 `RobustPhysicalRunner` 闭环执行；画面只在 `MjContext.step → mujoco.mj_step` 后读取状态，渲染器对物体 `qpos` 写入次数为 0。12 个候选的成功/失败、仿真时长和末态均与正式记录完全一致，末态最大位置误差为 0。地板仅改为灰白棋盘格材质，摩擦和碰撞参数未改。主要文件：
+
+- [12 候选 4×3 实时物理同步视频](videos/live_physics_v5/case_71400_12_candidates_live_physics_4x3.mp4)
+- [Top-4 2×2 实时物理同步视频](videos/live_physics_v5/case_71400_top4_live_physics_2x2.mp4)
+- [最终独立 target 实际执行视频](videos/live_physics_v5/actual_target_0_57ed526f426891e1124a_live.mp4)
+- [逐候选审计、视频哈希和环境清单](videos/live_physics_v5/manifest.json)
+
+`videos/separate/`、`videos/showcase/`、`videos/showcase_v2/` 和 `videos/environment_v3/` 是早期基于已记录状态轨迹的展示版本，保留作历史对照，不再作为“实时物理执行”证据。
 
 用于汇报展示的 1920×1080、4×3 同步候选墙见 [`videos/showcase/case_71400_candidates_grid_piginet_style.mp4`](videos/showcase/case_71400_candidates_grid_piginet_style.mp4)。每个候选格上半部为俯视、下半部为全局斜视，绿色边框表示 Top-4，金色边框表示最终实际执行方案。
 
-第三版单一 3D 大场景见 [`videos/environment_v3/case_71400_12_candidates_shared_world_v3_physical_time.mp4`](videos/environment_v3/case_71400_12_candidates_shared_world_v3_physical_time.mp4)：12 套机器人/工作台存在于同一个 MuJoCo 模型中，采用 PIGINet 风格的较低第三方斜视角、中等亮度和蓝灰棋盘格地面。该版按共同物理时间同步，以固定 4×、15 fps 回放约 207 秒的正式记录轨迹，全片 51.87 秒；使用前一条已记录控制状态且不插值，不再把长短不一的轨迹统一压缩到 15 秒。可复现脚本、复合 MJCF、映射清单与方块运动连续性审计分别见 `scripts/render_value_v6_shared_showcase.py` 和视频同目录。
+第三版单一 3D 大场景见 [`videos/environment_v3/case_71400_12_candidates_shared_world_v3_physical_time.mp4`](videos/environment_v3/case_71400_12_candidates_shared_world_v3_physical_time.mp4)。该版是历史轨迹回放，不是实时重执行；请使用上面的 `live_physics_v5` 版本作为物理执行证据。
 
 Top-4 的双视角 2×2 同步展示见 [`videos/showcase_v2/case_71400_top4_2x2_dual_view.mp4`](videos/showcase_v2/case_71400_top4_2x2_dual_view.mp4)，每格同时展示 `task_view`、`top_view`、排名、候选 ID 和价值分数；金色边框表示最终实际执行方案。对应的 1080p 实际执行视频见 [`videos/showcase_v2/case_71400_actual_execution_dual_view_1080p.mp4`](videos/showcase_v2/case_71400_actual_execution_dual_view_1080p.mp4)。

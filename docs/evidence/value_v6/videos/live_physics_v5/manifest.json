@@ -1,0 +1,320 @@
+{
+  "schema": "twingraph.showcase.live_physics_manifest.v1",
+  "generated_at_utc": "2026-09-18T05:58:20.981208+00:00",
+  "case": 71400,
+  "formal_environment": {
+    "conda": "swdp",
+    "mujoco": "3.3.0",
+    "numpy": "2.2.6"
+  },
+  "execution_chain": [
+    "stage_v6.make_scene",
+    "stage_v6.build_pool or stage_v6.rebind_plan",
+    "compile_graph",
+    "RobustPhysicalRunner",
+    "MjContext.step",
+    "mujoco.mj_step",
+    "read-only renderer callback"
+  ],
+  "rendering_claims": {
+    "object_qpos_writes": 0,
+    "recorded_state_playback": false,
+    "each_candidate_tile": "independent live MuJoCo physics world",
+    "synchronization": "physical time at 4x playback, 15 fps",
+    "floor": "gray-white checker material; collision and friction unchanged",
+    "camera": "lower third-person free camera"
+  },
+  "formal_reproduction": {
+    "candidate_count": 12,
+    "all_outcomes_match": true,
+    "all_sim_durations_match": true,
+    "maximum_terminal_position_error_m": 0.0
+  },
+  "top4_candidate_indices_by_score": [
+    12,
+    10,
+    7,
+    1
+  ],
+  "candidates": [
+    {
+      "candidate_index": 1,
+      "candidate_id": "57ed526f426891e1124a",
+      "score": 0.30357704653003303,
+      "success": true,
+      "sim_seconds": 205.66000000026153,
+      "physics_steps": 102830,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_01_57ed526f426891e1124a_live.json",
+      "video": "candidate_01_57ed526f426891e1124a_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 915876,
+        "sha256": "7e5685aa69c34e92725b8c7ae7a84d14d93d478a459227b9a619c355e846d097"
+      }
+    },
+    {
+      "candidate_index": 2,
+      "candidate_id": "4ea815b900509b86a58b",
+      "score": 0.09612468826423355,
+      "success": true,
+      "sim_seconds": 204.9000000002579,
+      "physics_steps": 102450,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_02_4ea815b900509b86a58b_live.json",
+      "video": "candidate_02_4ea815b900509b86a58b_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 875288,
+        "sha256": "ea8f25551f5538fac3093ae373fe3b494bdefbc50d7fffb1124344c7c0b8be0e"
+      }
+    },
+    {
+      "candidate_index": 3,
+      "candidate_id": "ec4d26554fd5cb502a8e",
+      "score": 0.20475383864896562,
+      "success": true,
+      "sim_seconds": 202.10000000024453,
+      "physics_steps": 101050,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_03_ec4d26554fd5cb502a8e_live.json",
+      "video": "candidate_03_ec4d26554fd5cb502a8e_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 884913,
+        "sha256": "d03c2b2a12d76573885596be8ce361fd71feb24d6a2d99666d597409fcbc8195"
+      }
+    },
+    {
+      "candidate_index": 4,
+      "candidate_id": "4be3f53ed43b56c51e63",
+      "score": 0.1464099272416701,
+      "success": false,
+      "sim_seconds": 155.44000000002174,
+      "physics_steps": 77720,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_04_4be3f53ed43b56c51e63_live.json",
+      "video": "candidate_04_4be3f53ed43b56c51e63_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 699292,
+        "sha256": "3f132ff777b4e671893aada93ef494df3fd9683548a69bbba3f5ec11fb9eaf06"
+      }
+    },
+    {
+      "candidate_index": 5,
+      "candidate_id": "c875010444c67684f1b6",
+      "score": 0.014535456363900419,
+      "success": true,
+      "sim_seconds": 207.1600000002687,
+      "physics_steps": 103580,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_05_c875010444c67684f1b6_live.json",
+      "video": "candidate_05_c875010444c67684f1b6_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 861396,
+        "sha256": "cf3d667fdcf2d446ccb77c68570b8814a23d20a7659932d5104fe42fa117101d"
+      }
+    },
+    {
+      "candidate_index": 6,
+      "candidate_id": "e03e5bc8b264dc7897e8",
+      "score": 0.017085886344380755,
+      "success": false,
+      "sim_seconds": 118.55999999990136,
+      "physics_steps": 59280,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_06_e03e5bc8b264dc7897e8_live.json",
+      "video": "candidate_06_e03e5bc8b264dc7897e8_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 602180,
+        "sha256": "e289409a519ce1ace0fe484d3db2fee2a3865b61990d0ae881f440e4805a48a0"
+      }
+    },
+    {
+      "candidate_index": 7,
+      "candidate_id": "b2df063756dbea03a712",
+      "score": 0.57224029197987,
+      "success": true,
+      "sim_seconds": 206.2400000002643,
+      "physics_steps": 103120,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_07_b2df063756dbea03a712_live.json",
+      "video": "candidate_07_b2df063756dbea03a712_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 892349,
+        "sha256": "620599cf6ebac25ed380becd90362e0e8ab46c22b7c279f7e2e79bb225225ca8"
+      }
+    },
+    {
+      "candidate_index": 8,
+      "candidate_id": "2ef21e72b5df67cda08a",
+      "score": 0.2152903190326282,
+      "success": true,
+      "sim_seconds": 203.1600000002496,
+      "physics_steps": 101580,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_08_2ef21e72b5df67cda08a_live.json",
+      "video": "candidate_08_2ef21e72b5df67cda08a_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 864322,
+        "sha256": "992c336f09a7c5fd51d160a057e22f75e9fe4f195d111670bdd594af2b0197f6"
+      }
+    },
+    {
+      "candidate_index": 9,
+      "candidate_id": "3536869bd0cbcd74a6bc",
+      "score": 0.1808761741668723,
+      "success": true,
+      "sim_seconds": 204.8800000002578,
+      "physics_steps": 102440,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_09_3536869bd0cbcd74a6bc_live.json",
+      "video": "candidate_09_3536869bd0cbcd74a6bc_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 872051,
+        "sha256": "dd8cec8161c199a75339f51d46a8ba4c21c8a1e0a42a449e8c8cf9f15b845bfe"
+      }
+    },
+    {
+      "candidate_index": 10,
+      "candidate_id": "e83f0990783267c02a3b",
+      "score": 0.8813199868491216,
+      "success": true,
+      "sim_seconds": 205.3600000002601,
+      "physics_steps": 102680,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_10_e83f0990783267c02a3b_live.json",
+      "video": "candidate_10_e83f0990783267c02a3b_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 914247,
+        "sha256": "b9abd1714ab50d2eb2c5c0c048e9ba7b71005947387ddc29a45c26d789954035"
+      }
+    },
+    {
+      "candidate_index": 11,
+      "candidate_id": "7cf5222311fde636efd8",
+      "score": 0.12257401274254273,
+      "success": true,
+      "sim_seconds": 205.4000000002603,
+      "physics_steps": 102700,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_11_7cf5222311fde636efd8_live.json",
+      "video": "candidate_11_7cf5222311fde636efd8_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 915285,
+        "sha256": "1061d8374bc9d04442536466b6a0b7f428fa17e8f630d3484398d236ff3ca88d"
+      }
+    },
+    {
+      "candidate_index": 12,
+      "candidate_id": "e29adb7ac28b5567e9ec",
+      "score": 0.9756215828910014,
+      "success": true,
+      "sim_seconds": 206.2600000002644,
+      "physics_steps": 103130,
+      "terminal_error_m": 0.0,
+      "audit": "candidate_12_e29adb7ac28b5567e9ec_live.json",
+      "video": "candidate_12_e29adb7ac28b5567e9ec_live.mp4",
+      "video_probe": {
+        "width": 480,
+        "height": 360,
+        "avg_frame_rate": "15/1",
+        "frames": 780,
+        "duration_seconds": 52.0,
+        "bytes": 892092,
+        "sha256": "b972ca8d31c105869f35ec1731ff4c1b2b26088fbff31447ccb1e6df857b9ea2"
+      }
+    }
+  ],
+  "composites": {
+    "case_71400_12_candidates_live_physics_4x3.mp4": {
+      "width": 1920,
+      "height": 1080,
+      "avg_frame_rate": "15/1",
+      "frames": 780,
+      "duration_seconds": 52.0,
+      "bytes": 8139554,
+      "sha256": "ba286da2b1cb95d2fd79f3f1f6c931c7711f849fb961df89ba37a1be02448610"
+    },
+    "case_71400_top4_live_physics_2x2.mp4": {
+      "width": 960,
+      "height": 720,
+      "avg_frame_rate": "15/1",
+      "frames": 780,
+      "duration_seconds": 52.0,
+      "bytes": 3425833,
+      "sha256": "69c73949a71b0e78c7dda3466d935a42e3461b295eff6ebf045645c493bb467c"
+    }
+  },
+  "actual_target_execution": {
+    "candidate_index": 1,
+    "candidate_id": "57ed526f426891e1124a",
+    "success": true,
+    "sim_seconds": 205.48000000026067,
+    "physics_steps": 102740,
+    "terminal_error_m": 0.0,
+    "audit": "actual_target_0_57ed526f426891e1124a_live.json",
+    "video": "actual_target_0_57ed526f426891e1124a_live.mp4",
+    "video_probe": {
+      "width": 480,
+      "height": 360,
+      "avg_frame_rate": "15/1",
+      "frames": 780,
+      "duration_seconds": 52.0,
+      "bytes": 915162,
+      "sha256": "b97298d68a49d4886bb86197487a9361222ee1fe16a6ec25104e96c58d650c4b"
+    }
+  }
+}

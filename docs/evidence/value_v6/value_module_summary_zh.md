@@ -50,12 +50,19 @@
 
 ## 5. 同一案例的视频
 
-视频均由已保存的 MuJoCo 状态轨迹渲染，不是重新采样的数据，也不是硬件相机录像。每个方案现在是一个独立 MP4；画面左侧是完整高度的 `task_view`，右侧是完整高度的 `top_view`，底部只显示视角标签。
+当前推荐视频不是状态轨迹回放，而是在正式 `swdp` 环境（MuJoCo 3.3.0、NumPy 2.2.6）中重新执行完整调用链：建场景、生成同一候选池或目标重绑定、编译同一技能图、`RobustPhysicalRunner` 闭环控制、`MjContext.step → mujoco.mj_step`。视频回调只读物理状态，从不写物体 `qpos`。12 个候选重跑的成功/失败、仿真时长和零件末态与正式记录逐项一致，末态最大位置误差为 0。
 
 此前合并版截图中两个 view 下方的区域是旧渲染脚本的错误填充行，不代表第三个相机、深度图或额外仿真状态；该合并版已从证据目录移除。
 
-- 12 个候选方案的独立视频：[`videos/separate/candidates/`](videos/separate/candidates/)
-- 4 个 Top 候选的独立视频：[`videos/separate/top4/`](videos/separate/top4/)
+- [12 候选 4×3 实时物理同步展示](videos/live_physics_v5/case_71400_12_candidates_live_physics_4x3.mp4)：每格是独立 MuJoCo 物理世界，按同一物理时间以 4×、15 fps 同步展示；较低第三方视角，灰白棋盘格地面。
+- [Top-4 2×2 实时物理同步展示](videos/live_physics_v5/case_71400_top4_live_physics_2x2.mp4)：按价值分数依次为 C12、C10、C07、C01。
+- [最后独立 target 实际执行](videos/live_physics_v5/actual_target_0_57ed526f426891e1124a_live.mp4)：最终选择 C01，真实物理重跑成功，并与正式 target repeat 0 的时长和末态完全一致。
+- 12 个候选各自的独立 MP4、逐项 JSON 审计和完整哈希清单：[`videos/live_physics_v5/`](videos/live_physics_v5/) / [`manifest.json`](videos/live_physics_v5/manifest.json)
+
+以下为早期轨迹回放版，仅保留作视觉历史对照，不作为实时物理执行证据：
+
+- 12 个候选方案的早期独立视频：[`videos/separate/candidates/`](videos/separate/candidates/)
+- 4 个 Top 候选的早期独立视频：[`videos/separate/top4/`](videos/separate/top4/)
 - [最终实际执行（target repeat 0；该案例三次均成功）](videos/separate/actual_execution_target_repeat0.mp4)
 - [独立视频与候选排序映射](videos/separate/manifest_separate.json)
 - [PIGINet 风格 4×3 候选墙展示视频](videos/showcase/case_71400_candidates_grid_piginet_style.mp4)：每格上半部为 `top_view`、下半部为 `task_view`；Top-4 为绿色边框，最终执行方案为金色边框。
