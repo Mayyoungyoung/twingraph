@@ -1,0 +1,36 @@
+{
+  "schema": "twingraph.showcase.physical_motion_audit.v1",
+  "seed": 71400,
+  "scope": "all 12 full-policy validation repeat-0 state traces",
+  "source_scene": "results/v6/formal/systems/case_71400/full/twin_scene/stage_scene.xml",
+  "method": {
+    "moving_state_threshold_m_per_control_step": 0.00035,
+    "rising_state_threshold_m_per_control_step": 0.0002,
+    "distance": "Euclidean distance between the recorded part body center and eef_site after mj_forward",
+    "coverage": "every qualifying recorded control state; no temporal subsampling"
+  },
+  "block_parts": {
+    "carriage": {
+      "max_step_translation_m": 0.010251464713572408,
+      "max_eef_center_distance_while_moving_m": 0.028674570802350093,
+      "max_eef_center_distance_while_rising_m": 0.02822047511240267,
+      "moving_states": 6792,
+      "rising_states": 2064
+    },
+    "end_stop": {
+      "max_step_translation_m": 0.008566091257165055,
+      "max_eef_center_distance_while_moving_m": 0.047075966478311373,
+      "max_eef_center_distance_while_rising_m": 0.04365885947190145,
+      "moving_states": 3572,
+      "rising_states": 1779
+    },
+    "handle": {
+      "max_step_translation_m": 0.009528496349570996,
+      "max_eef_center_distance_while_moving_m": 0.001254076254109764,
+      "max_eef_center_distance_while_rising_m": 0.0012508149666489643,
+      "moving_states": 2740,
+      "rising_states": 1501
+    }
+  },
+  "interpretation": "The recorded block-part motion stays spatially close to the end effector. This audit checks geometric proximity and continuity; it does not replace the rollout's contact and success records."
+}

@@ -1,0 +1,63 @@
+{
+  "schema": "twingraph.showcase.shared_world.v3",
+  "seed": 71400,
+  "source": "formal full-policy validation repeat-0 qpos traces; presentation-only replay",
+  "candidate_ids": [
+    "57ed526f426891e1124a",
+    "4ea815b900509b86a58b",
+    "ec4d26554fd5cb502a8e",
+    "4be3f53ed43b56c51e63",
+    "c875010444c67684f1b6",
+    "e03e5bc8b264dc7897e8",
+    "b2df063756dbea03a712",
+    "2ef21e72b5df67cda08a",
+    "3536869bd0cbcd74a6bc",
+    "e83f0990783267c02a3b",
+    "7cf5222311fde636efd8",
+    "e29adb7ac28b5567e9ec"
+  ],
+  "scores": {
+    "57ed526f426891e1124a": 0.30357704653003303,
+    "4ea815b900509b86a58b": 0.09612468826423355,
+    "ec4d26554fd5cb502a8e": 0.20475383864896562,
+    "4be3f53ed43b56c51e63": 0.1464099272416701,
+    "c875010444c67684f1b6": 0.014535456363900419,
+    "e03e5bc8b264dc7897e8": 0.017085886344380755,
+    "b2df063756dbea03a712": 0.57224029197987,
+    "2ef21e72b5df67cda08a": 0.2152903190326282,
+    "3536869bd0cbcd74a6bc": 0.1808761741668723,
+    "e83f0990783267c02a3b": 0.8813199868491216,
+    "7cf5222311fde636efd8": 0.12257401274254273,
+    "e29adb7ac28b5567e9ec": 0.9756215828910014
+  },
+  "top4": [
+    "e29adb7ac28b5567e9ec",
+    "e83f0990783267c02a3b",
+    "b2df063756dbea03a712",
+    "57ed526f426891e1124a"
+  ],
+  "selected_candidate_id": "57ed526f426891e1124a",
+  "camera": {
+    "distance": 8.2,
+    "azimuth": 90.0,
+    "elevation": -34.0,
+    "lookat": [
+      -0.2,
+      0.0,
+      0.72
+    ]
+  },
+  "lighting": "medium neutral headlight and key/fill; blue-gray checkerboard",
+  "replay": {
+    "physical_duration_seconds": 207.14000000026869,
+    "speed_multiplier": 4.0,
+    "sampling": "previous recorded control state at one shared physical time; no interpolation",
+    "simulation_steps_during_render": 0
+  },
+  "physical_motion_audit": "physical_motion_audit.json",
+  "video": "case_71400_12_candidates_shared_world_v3_physical_time.mp4",
+  "fps": 15,
+  "frames": 778,
+  "duration_seconds": 51.86666666666667,
+  "model": "multi_candidate_shared_world_styled_v3.xml"
+}

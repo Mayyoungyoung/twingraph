@@ -59,7 +59,7 @@
 - [最终实际执行（target repeat 0；该案例三次均成功）](videos/separate/actual_execution_target_repeat0.mp4)
 - [独立视频与候选排序映射](videos/separate/manifest_separate.json)
 - [PIGINet 风格 4×3 候选墙展示视频](videos/showcase/case_71400_candidates_grid_piginet_style.mp4)：每格上半部为 `top_view`、下半部为 `task_view`；Top-4 为绿色边框，最终执行方案为金色边框。
-- [改进后的单一 3D 大环境并行展示视频](videos/environment_v2/case_71400_12_candidates_shared_world_v2.mp4)：12 套工作单元实际复制到同一个 MuJoCo 世界中，采用紧凑俯视构图、柔和低亮度灯光和蓝灰棋盘格地面同步回放；绿色地台为 Top-4，金色地台为最终执行方案。该视频不是二维拼接。
+- [按物理时间同步的单一 3D 大环境并行展示视频](videos/environment_v3/case_71400_12_candidates_shared_world_v3_physical_time.mp4)：12 套工作单元实际复制到同一个 MuJoCo 世界中，采用较低第三方斜视角、中等亮度和蓝灰棋盘格地面；按共同物理时间以固定 4×、15 fps 回放，不再将约 118–207 秒的轨迹分别归一化压缩到 15 秒。绿色地台为 Top-4，金色地台为最终执行方案。该视频不是二维拼接。
 - [Top-4 双视角 2×2 同步展示](videos/showcase_v2/case_71400_top4_2x2_dual_view.mp4)：每格包含 `task_view`、`top_view`、排名、候选 ID 和价值分数；金色边框为最终执行方案。
 - [最后实际执行双视角 1080p 视频](videos/showcase_v2/case_71400_actual_execution_dual_view_1080p.mp4)：正式 target repeat 0，候选 `57ed526f426891e1124a`，执行成功。
 
