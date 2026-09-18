@@ -106,7 +106,9 @@ def surface_force(s, part, surface):
     total = 0.0
     for i, c in enumerate(s.ctx.data.contact):
         bodies = set(map(int, s.ctx.model.geom_bodyid[[c.geom1, c.geom2]]))
-        if bodies == {a, b}:
+        names = {s.ctx.model.geom(c.geom1).name, s.ctx.model.geom(c.geom2).name}
+        pad_only = part != "wipe_tool" or "wipe_pad" in names
+        if bodies == {a, b} and pad_only:
             f = np.zeros(6)
             mujoco.mj_contactForce(s.ctx.model, s.ctx.data, i, f)
             total += max(0.0, f[0])
@@ -168,6 +170,10 @@ def execute(s, part, artifact, target_force, force_limit, minimum_coverage):
                 np.abs(grid - actual[:2]) <= np.asarray(p["footprint"]), axis=1
             )
         s.wipe_telemetry.update(force=force, coverage=float(covered.mean()))
+    dirty = {}
+    if getattr(s, "dirty_state", None) is not None:
+        from simbench.value.cleaning import apply_contact
+        dirty = apply_contact(s, trace, forces, p["footprint"], surface_ok=True)
     metrics = dict(
         coverage=float(covered.mean()),
         contact_fraction=float(np.mean(np.asarray(forces) > 0.15)),
@@ -175,6 +181,7 @@ def execute(s, part, artifact, target_force, force_limit, minimum_coverage):
         mean_force_n=float(np.mean(forces)),
         xy_rmse_m=float(np.sqrt(np.mean(np.square(errors)))),
         policy=str(POLICY),
+        **dirty,
     )
     ok = (
         metrics["coverage"] >= minimum_coverage

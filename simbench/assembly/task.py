@@ -17,7 +17,8 @@ PIN_L = np.r_[CENTER + [-0.092, -0.032], 0.855]
 PIN_R = np.r_[CENTER + [-0.092, 0.032], 0.855]
 
 
-def pick(s, part, lift=True, candidate_id=None, terminal_targets=None):
+def pick(s, part, lift=True, candidate_id=None, terminal_targets=None,
+         execution_feedback=False):
     from .candidates import (
         build_pick_candidates,
         choose_candidate,
@@ -26,7 +27,10 @@ def pick(s, part, lift=True, candidate_id=None, terminal_targets=None):
     )
 
     s.call("detect")
-    s.call("estimate_pose", part=part)
+    if execution_feedback:
+        s.call("observe_execution_pose", part=part)
+    else:
+        s.call("estimate_pose", part=part)
     s.call("estimate_grasp", part=part)
     # Open before construction: candidates all start at this actual shared state.
     s.call("gripper", mode="open")

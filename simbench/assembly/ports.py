@@ -41,6 +41,7 @@ def declare_ports(fn):
         if name in {"part", "surface"}: kind = "object_ref"
         elif name in {"artifact", "grasp_artifact", "as_"}: kind = "artifact_ref"
         elif name in {"candidate_id", "index"}: kind = "binding"
+        elif name in {"order", "choices"}: kind = "record"
         elif name in {"quantity", "policy"}: kind = "category"
         ports.append(Port(name, kind, unit, frame, p.default is inspect.Parameter.empty))
     return tuple(ports)

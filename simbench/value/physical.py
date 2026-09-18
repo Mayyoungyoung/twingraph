@@ -6,7 +6,8 @@ from .plan import digest, execute_prefix, execute_suffix
 from simbench.assembly.candidates import fingerprint
 from simbench.assembly.library import SkillFailure
 
-DOMAINS={"train":731,"online":1753,"deployment":2909,"reference":4001,"regression":0}
+DOMAINS={"train":731,"online":1753,"deployment":2909,"reference":4001,
+         "development":877,"regression":0}
 
 
 def perturbation(seed, repeat, domain):
@@ -60,6 +61,12 @@ class PhysicalRunner:
                 if not goal_result["success"]:
                     suffix = False
                     error = "independent task goal not satisfied"
+            if suffix and getattr(s, "stage_passes", None):
+                required = ("cleaning_pass", "assembly_pass", "functional_test_pass",
+                            "final_release_and_retraction_pass")
+                if not all(bool(s.stage_passes.get(k)) for k in required):
+                    suffix = False
+                    error = "complete-task stage predicate not satisfied"
         except TimeoutError as exc:
             error=str(exc);timeout=True
             if prefix:suffix=False
@@ -83,6 +90,7 @@ class PhysicalRunner:
                     input_graph_sha256=graph_hash,
                     goal_check=goal_result,
                     success=bool(prefix and suffix),full_success=bool(prefix and suffix),
+                    stage_passes=copy.deepcopy(getattr(s, "stage_passes", {})),
                     prefix_success=prefix,suffix_success=suffix,error=error,timeout=timeout,
                     restore_seconds=restore,wall_seconds=elapsed,sim_seconds=sim,
                     physics_steps=int(round(sim/s.ctx.model.opt.timestep)),executed_steps=len(steps),

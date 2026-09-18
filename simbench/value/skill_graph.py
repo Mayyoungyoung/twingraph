@@ -21,7 +21,7 @@ def compile_graph(observation, plan):
     if not isinstance(plan, PlanIR):
         plan = PlanIR.from_dict(plan)
     audit = audit_program(plan, observation["objects"])
-    if plan.prefix.get("execution") != "program":
+    if plan.prefix.get("execution") not in {"program", "full_task_v7"}:
         raise ValueError("graph v1 requires explicit program PlanIR; legacy scorer remains available")
     obs = copy.deepcopy(observation)
     # Whitelist initial observation fields. Rollout logs never enter this record.

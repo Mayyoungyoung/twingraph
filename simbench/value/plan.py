@@ -242,6 +242,17 @@ class PlanIR:
                 step.get("params", {})
             ):
                 raise ValueError("scoring calls disagree with executable prefix")
+        if self.prefix.get("execution") == "full_task_v7":
+            if self.protocol != "full_task.v7" or self.boundary != 1 or len(self.calls) != 1:
+                raise ValueError("invalid full-task v7 program envelope")
+            call = self.calls[0]
+            if call.skill != "run_full_task_v7" or call.roles.get("manipulated") != self.prefix.get("part"):
+                raise ValueError("full-task payload disagrees with executable call")
+            step = self.prefix.get("steps", [])
+            params = {k: a.value for k, a in call.arguments.items()}
+            if len(step) != 1 or step[0].get("skill") != call.skill or plain(step[0].get("params", {})) != plain(params):
+                raise ValueError("full-task scoring call disagrees with executable call")
+            return self
         if self.prefix.get("execution") == "program":
             if self.protocol != "assembly.program.feedback.v2":
                 raise ValueError("program payload requires v2 execution protocol")
@@ -256,6 +267,13 @@ class PlanIR:
                     if call.skill=="grasp": choices[current]["force"]=args["force"]
                     if call.skill=="plan_path" and "clearance" in args: choices[current]["clearance"]=args["clearance"]
                     if call.skill=="move" and args.get("mode")=="guarded": choices[current]["speed"]=args["speed"]
+                    # v7 pins use the contact insertion atom rather than the
+                    # legacy guarded descent.  Preserve its speed in the
+                    # executable semantic reconstruction so a slow/fast pin
+                    # candidate cannot be silently collapsed to metadata.
+                    if (call.skill == "plan_path" and args.get("method") == "contact"
+                            and "speed" in args and str(current).startswith("pin_")):
+                        choices[current]["speed"] = args["speed"]
             if plain(order)!=self.prefix["order"] or plain(choices)!=self.prefix["choices"]:
                 raise ValueError("program scoring/execution choices disagree")
             return self
@@ -344,6 +362,10 @@ def execute_prefix(session, plan):
     from simbench.assembly.candidates import Candidate, execute_pick_candidate
 
     plan.validate(session.parts)
+    if plan.prefix.get("execution") == "full_task_v7":
+        session.active_candidate_id = plan.id
+        execute_calls(session, plan, plan.calls[:plan.boundary])
+        return
     if plan.prefix.get("execution") == "program":
         from simbench.assembly.candidates import fingerprint
         if fingerprint(session) != plan.prefix["start_state"]:

@@ -1,0 +1,26 @@
+{
+  "schema": "twingraph.value_v7.videos.1",
+  "status": "development_failure_recorded_formal_recordings_pending",
+  "requirements": [
+    "完整成功案例：擦拭前污迹→接触擦拭→移开验收→五零件装配→把手后双向滑动→最终回收",
+    "解释性失败案例（漏擦、抓取或 pin 倾倒）",
+    "12 候选逐案独立视频，不合并为不可区分的拼图",
+    "同一场景 task_view/top_view、分数、排序、Top-4、twin 和 target 结果",
+    "随机 Top-4 与价值 Top-4 对照"
+  ],
+  "videos": [
+    {
+      "id": "development_candidate_01_timeout",
+      "role": "development_failure",
+      "scene_id": "71003-L0-candidate-01",
+      "candidate_id": "f3e77e789750a7832efe",
+      "trial_seed": 71003,
+      "twin_or_target": "target-like-development-rollout",
+      "model": null,
+      "path": "results/value_v7/videos/dev_failure_candidate01/candidate_01.mp4",
+      "record": "results/value_v7/videos/dev_failure_candidate01/candidate_01.json",
+      "source": "real MuJoCo control-step trajectory",
+      "result": "timeout during physical rollout; not a successful complete-task video"
+    }
+  ]
+}

@@ -165,7 +165,7 @@ def legal_orders(orders=None):
     return result
 
 
-def stage_calls(part, target, choice, stage):
+def stage_calls(part, target, choice, stage, v7=False):
     """Original task.py operations, with feedback transforms kept deferred."""
     calls = []
     target = np.asarray(target, float)
@@ -212,34 +212,63 @@ def stage_calls(part, target, choice, stage):
             add("plan_path", method="cartesian", target=feedback(align, held))
             add("move", path="linear", space="cartesian")
         add("move", reference="object", part=part, target=xyz(align))
-        add("move", mode="guarded", part=part, target_z=argument(float(target[2]), unit="m"),
-            force_stop=argument(2. if part == "end_stop" else 3., unit="N"),
-            speed=argument(choice["speed"], unit="m/s"))
+        if v7 and part.startswith("pin_"):
+            # The full-task branch uses the existing contact insertion atom
+            # for pins; the legacy v5/v6 guarded descent remains unchanged.
+            add("plan_path", method="contact", part=part, target=xyz(target),
+                axis=argument([0., 0., -1.], unit="1"),
+                speed=argument(choice.get("speed", .006), unit="m/s"), force_limit=argument(12., unit="N"))
+            add("insert", part=part)
+            # Contact insertion can leave a narrow pin with a sub-mm lateral
+            # residual.  Re-centre while it is still physically held before
+            # pressing and releasing; otherwise gravity can tip the head at
+            # the bore edge.  This is execution feedback, not a target-label
+            # or privileged future-state correction.
+            add("align_axis", part=part, target=xyz(target), tolerance=argument(.0006, unit="m"))
+        else:
+            add("move", mode="guarded", part=part, target_z=argument(float(target[2]), unit="m"),
+                force_stop=argument(2. if part == "end_stop" else 3., unit="N"),
+                speed=argument(choice.get("speed", .006), unit="m/s"))
     press = dict(part=part, target_z=argument(float(target[2]), unit="m"))
     if part == "handle":
         press["force_stop"] = argument(2., unit="N")
     add("press", **press)
-    add("place", part=part, target=xyz(target), tol=argument(.003, unit="m"), settle=argument(.35, unit="s"))
-    add("move", delta=xyz([0, 0, .10]))
-    add("inspect", part=part, target=xyz(target), tol=argument(.0015, unit="m"))
+    place_tol = .0025 if (v7 and part.startswith("pin_")) else .003
+    add("place", part=part, target=xyz(target), tol=argument(place_tol, unit="m"), settle=argument(.35, unit="s"))
+    # A released narrow pin must not be swept sideways by the old 100 mm
+    # vertical retreat.  In the v7 branch the release routine has already
+    # verified support and clears the fingers; a short 20 mm lift is the
+    # physically safe retraction.  Legacy v5/v6 keeps its original retreat.
+    if v7 and part.startswith("pin_"):
+        # Clear the pin head laterally before lifting.  Raising the fingers
+        # while they are still above a narrow, slightly tilted head can drag
+        # the released pin out of its hole even though contact has ceased.
+        side = -0.030 if part == "pin_left" else 0.030
+        add("move", delta=xyz([0, side, 0.0]))
+        add("move", delta=xyz([0, 0, .10]))
+    else:
+        add("move", delta=xyz([0, 0, .10]))
+    inspect_tol = .0025 if (v7 and part.startswith("pin_")) else .0015
+    add("inspect", part=part, target=xyz(target), tol=argument(inspect_tol, unit="m"))
     if part == "carriage":
         add("measure", quantity="clearance", part=part)
         add("inspect", what="measurement", minimum=argument(1.e-12, unit="m"))
     return calls
 
 
-def program(session, targets, order, choices, initial_route_index=0):
+def program(session, targets, order, choices, initial_route_index=0, v7=False):
     if tuple(order) not in legal_orders([order]):
         raise ValueError("invalid full-stage order")
     if set(targets) != set(PARTS) or set(choices) != set(PARTS):
         raise ValueError("complete five-part goals and choices are required")
     if initial_route_index not in (0, 1, 2):
         raise ValueError("invalid initial route index")
-    calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i)]
+    calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i, v7=v7)]
     for part in PARTS:
+        accept_tol = .0025 if (v7 and part.startswith("pin_")) else .0015
         calls.append(Call(f"accept_{part}", "inspect", dict(part=argument(part),
             target=Argument(plain(targets[part]), "position", frame="world", unit="m"),
-            tol=argument(.0015, unit="m")), {"manipulated": part}, "checker"))
+            tol=argument(accept_tol, unit="m")), {"manipulated": part}, "checker"))
     calls.append(Call("final_home", "move", dict(target=argument("home"))))
     semantics = dict(order=list(order), choices=plain(choices), task_scope=TASK_SCOPE,
                      initial_route_index=int(initial_route_index), targets=plain(targets))
@@ -262,8 +291,14 @@ def _scratch(session):
     ctx.on_control_step = None
     ctx._state_clients = {}
     mujoco.mj_forward(ctx.model, ctx.data)
-    return Session(ctx, seed=0, noise=0., parts=session.parts,
+    preview = Session(ctx, seed=0, noise=0., parts=session.parts,
                    grasp_specs=session.grasp_specs, capabilities=session.capabilities)
+    # Candidate geometry is planned from the frozen decision observation.  A
+    # scratch MjData is still used for collision/IK checks, but it does not
+    # become a privileged pose source for the planner.
+    if session.decision_observation is not None:
+        preview.set_decision_observation(session.decision_observation)
+    return preview
 
 
 def _predecessors(part):
@@ -339,7 +374,11 @@ def semantic_key(plan):
 
 
 def _initial_routes(session, choice):
-    target = session.ctx.obj_pos("carriage") + [0, 0, session.grasp_specs["carriage"][0] + choice["height"] + .10]
+    if session.decision_observation is not None:
+        base = np.asarray(session.decision_observation["objects"]["carriage"]["position_m"], dtype=float)
+    else:
+        base = session.ctx.obj_pos("carriage")
+    target = base + [0, 0, session.grasp_specs["carriage"][0] + choice["height"] + .10]
     return transfer_routes(session, target, clearance=choice["clearance"], yaw=choice["yaw"], grasp=None)
 
 

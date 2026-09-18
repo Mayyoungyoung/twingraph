@@ -120,6 +120,7 @@ AUXILIARY_INTERFACES = {
         "pose": "inspect_seat",
         "grasp": "verify_grasp",
         "stroke": "verify_stroke",
+        "clean": "verify_clean",
         "measurement": "inspect_measurement",
     },
 }

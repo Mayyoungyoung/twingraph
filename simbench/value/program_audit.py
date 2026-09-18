@@ -8,6 +8,10 @@ from .plan import initial_artifacts
 
 def audit_program(plan,objects):
     plan.validate(objects)
+    if plan.prefix.get("execution") == "full_task_v7":
+        return dict(status="full_task_v7_runtime_obligations", unknown=[
+            dict(call=0, obligation="contact-gated cleaning and complete-task physical execution")
+        ], interpretation="the custom full-task atom is evaluated only by an independent rollout")
     if plan.prefix.get("execution")!="program":
         return dict(status="legacy_bound_prefix",unknown=["physical suffix feasibility"])
     state=State(parts=tuple(objects),grasp_epoch=plan.prefix.get("initial_grasp_epoch",0),
