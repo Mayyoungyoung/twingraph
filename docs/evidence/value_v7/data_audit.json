@@ -3,7 +3,7 @@
   "branch": "research/value-v7-fulltask-view-ablation",
   "base_commit": "55707a4",
   "formal_target": {"train_scenes": 128, "val_scenes": 32, "test_scenes": 64, "candidates_per_scene": 12, "train_val_repeats": 3, "test_repeats": 5, "complete_task_executions": 9600},
-  "development": {"requested_scenes": 1, "completed_scenes": 0, "attempted_scenes": 24, "completed_task_labels": 0, "cleaning_pass_observed": true, "assembly_pass_observed": true, "functional_pass_observed": false},
+  "development": {"requested_scenes": 1, "completed_scenes": 0, "attempted_scenes": 25, "completed_task_labels": 0, "cleaning_pass_observed": true, "assembly_pass_observed": true, "functional_pass_observed": false},
   "formal": {"train": {"complete_scenes": 0, "executions": 0}, "val": {"complete_scenes": 0, "executions": 0}, "test": {"complete_scenes": 0, "executions": 0}},
   "status": "development_control_debugging_in_progress",
   "notes": ["No formal v7 result is claimed yet.", "A representative L0/L1 trace is retained under results/value_v7/.", "Old v6 data and results are not relabeled or overwritten."]
