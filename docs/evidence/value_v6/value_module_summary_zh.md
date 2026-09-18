@@ -59,5 +59,6 @@
 - [最终实际执行（target repeat 0；该案例三次均成功）](videos/separate/actual_execution_target_repeat0.mp4)
 - [独立视频与候选排序映射](videos/separate/manifest_separate.json)
 - [PIGINet 风格 4×3 候选墙展示视频](videos/showcase/case_71400_candidates_grid_piginet_style.mp4)：每格上半部为 `top_view`、下半部为 `task_view`；Top-4 为绿色边框，最终执行方案为金色边框。
+- [单一 3D 大环境并行展示视频](videos/environment/case_71400_12_candidates_shared_world_checkerboard.mp4)：12 套工作单元实际复制到同一个 MuJoCo 世界中，在统一灰色棋盘格地面上同步回放；绿色地台为 Top-4，金色地台为最终执行方案。该视频不是二维拼接。
 
 原始 JSON 审计和模型报告见同目录的 `system_case_summary.json`、`system_batch.json`、`report/report.md` 和 `README.md`。

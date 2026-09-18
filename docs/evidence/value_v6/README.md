@@ -13,3 +13,5 @@
 实现、输入输出、采集协议和 Top-4 最终选择规则见 [`value_module_summary_zh.md`](value_module_summary_zh.md)。71400 案例的 12 个候选视频、4 个 Top 视频和实际 target 执行视频均为独立 MP4，见 [`videos/separate/`](videos/separate/)。
 
 用于汇报展示的 1920×1080、4×3 同步候选墙见 [`videos/showcase/case_71400_candidates_grid_piginet_style.mp4`](videos/showcase/case_71400_candidates_grid_piginet_style.mp4)。每个候选格上半部为俯视、下半部为全局斜视，绿色边框表示 Top-4，金色边框表示最终实际执行方案。
+
+真正的单一 3D 大场景版本见 [`videos/environment/case_71400_12_candidates_shared_world_checkerboard.mp4`](videos/environment/case_71400_12_candidates_shared_world_checkerboard.mp4)：12 套机器人/工作台存在于同一个 MuJoCo 模型中，在统一棋盘格地面上同步回放，而不是后期二维拼接。可复现的复合 MJCF 与映射清单保存在同目录。
