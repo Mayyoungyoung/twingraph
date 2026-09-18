@@ -21,7 +21,8 @@
 完成清洁、五零件装配、两销松爪后插入、安装后把手 RGB-D 重定位、双向滑动和最终
 释放/回位（`full_success=true`）。`dev_full_success_video_record4` 是同一冻结输入的
 带录像复跑，使用 480×360、每3个控制步采样，最终 `full_success=true`；视频与
-`result.json` 一一对应。此前 `dev_full_success_video`/`record3` 的截断文件仍保留为
-失败证据，不能覆盖成功记录。
+`result.json` 一一对应。`dev_full_success_video_record5` 修正了暂停帧的时间基准，
+是当前推荐展示文件。此前 `dev_full_success_video`/`record3` 的截断文件仍保留为失败
+证据，不能覆盖成功记录。
 
 这些是仿真物理执行，不是单元测试；旧 v6/v7 标签不重命名为新完整任务标签。

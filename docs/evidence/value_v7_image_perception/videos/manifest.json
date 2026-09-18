@@ -23,6 +23,16 @@
     },
     {
       "scene_id": 1200,
+      "candidate_id": "08fafc1b0668beb1f7c5",
+      "trial": 0,
+      "role": "development_full_task_success_video_compact",
+      "perception_backend": "rgbd_geometry",
+      "path": "results/value_v7_image_perception/dev_full_success_video_record5/full_task.mp4",
+      "record": "results/value_v7_image_perception/dev_full_success_video_record5/result.json",
+      "note": "完整真实 MuJoCo 成功轨迹；同一冻结 seed，录像暂停帧与采样帧率一致，full_success=true。"
+    },
+    {
+      "scene_id": 1200,
       "candidate_id": "fe11d39bc04e88e0fae45",
       "trial": 0,
       "role": "development_real_trajectory_timeout",
