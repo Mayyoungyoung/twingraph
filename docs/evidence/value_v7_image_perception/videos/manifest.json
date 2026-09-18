@@ -29,6 +29,9 @@
       "perception_backend": "rgbd_geometry",
       "path": "results/value_v7_image_perception/dev_full_success_video_record5/full_task.mp4",
       "record": "results/value_v7_image_perception/dev_full_success_video_record5/result.json",
+      "sha256": "8797aae488657429df5b385296129db6af523e3b1116c5791c7086263f686b32",
+      "bytes": 42935610,
+      "duration_s": 1051.897405,
       "note": "完整真实 MuJoCo 成功轨迹；同一冻结 seed，录像暂停帧与采样帧率一致，full_success=true。"
     },
     {
