@@ -10,4 +10,4 @@
 
 评估更正和系统适配层修复记录见 [`../../value-v6-evaluation-amendment.md`](../../value-v6-evaluation-amendment.md)。修复只改动 `scripts/` 评估/批处理适配，不改动 `simbench/value`、`simbench/assembly` 或 `simbench/core` 的冻结采集源码。
 
-实现、输入输出、采集协议和 Top-4 最终选择规则见 [`value_module_summary_zh.md`](value_module_summary_zh.md)。71400 案例的 12 候选、Top-4 和实际 target 执行状态轨迹视频见 [`videos/`](videos/)。
+实现、输入输出、采集协议和 Top-4 最终选择规则见 [`value_module_summary_zh.md`](value_module_summary_zh.md)。71400 案例的 12 个候选视频、4 个 Top 视频和实际 target 执行视频均为独立 MP4，见 [`videos/separate/`](videos/separate/)。

@@ -50,11 +50,13 @@
 
 ## 5. 同一案例的视频
 
-视频均由已保存的 MuJoCo 状态轨迹渲染，不是重新采样的数据，也不是硬件相机录像。画面左侧是 `task_view`、右侧是 `top_view`，并在顶部标出候选 ID 和分数。
+视频均由已保存的 MuJoCo 状态轨迹渲染，不是重新采样的数据，也不是硬件相机录像。每个方案现在是一个独立 MP4；画面左侧是完整高度的 `task_view`，右侧是完整高度的 `top_view`，底部只显示视角标签。
 
-- [12 个候选方案（完整候选池，71400）](videos/case_71400_all12_candidates.mp4)
-- [选出的 Top-4（各自 twin 验证轨迹，71400）](videos/case_71400_top4.mp4)
-- [最终实际执行（target repeat 0；该案例三次均成功）](videos/case_71400_actual_execution.mp4)
-- [视频与候选排序映射 manifest](videos/manifest.json)
+此前合并版截图中两个 view 下方的区域是旧渲染脚本的错误填充行，不代表第三个相机、深度图或额外仿真状态；该合并版已从证据目录移除。
+
+- 12 个候选方案的独立视频：[`videos/separate/candidates/`](videos/separate/candidates/)
+- 4 个 Top 候选的独立视频：[`videos/separate/top4/`](videos/separate/top4/)
+- [最终实际执行（target repeat 0；该案例三次均成功）](videos/separate/actual_execution_target_repeat0.mp4)
+- [独立视频与候选排序映射](videos/separate/manifest_separate.json)
 
 原始 JSON 审计和模型报告见同目录的 `system_case_summary.json`、`system_batch.json`、`report/report.md` 和 `README.md`。

@@ -1,0 +1,126 @@
+{
+  "seed": 71400,
+  "layout": "task_view and top_view side-by-side, each 320x360; no padding below views",
+  "candidates": [
+    {
+      "index": 1,
+      "candidate_id": "57ed526f426891e1124a",
+      "score": 0.30357704653003303,
+      "video": "separate/candidates/candidate_01_57ed526f426891e1124a.mp4",
+      "frames": 120
+    },
+    {
+      "index": 2,
+      "candidate_id": "4ea815b900509b86a58b",
+      "score": 0.09612468826423355,
+      "video": "separate/candidates/candidate_02_4ea815b900509b86a58b.mp4",
+      "frames": 120
+    },
+    {
+      "index": 3,
+      "candidate_id": "ec4d26554fd5cb502a8e",
+      "score": 0.20475383864896562,
+      "video": "separate/candidates/candidate_03_ec4d26554fd5cb502a8e.mp4",
+      "frames": 120
+    },
+    {
+      "index": 4,
+      "candidate_id": "4be3f53ed43b56c51e63",
+      "score": 0.1464099272416701,
+      "video": "separate/candidates/candidate_04_4be3f53ed43b56c51e63.mp4",
+      "frames": 120
+    },
+    {
+      "index": 5,
+      "candidate_id": "c875010444c67684f1b6",
+      "score": 0.014535456363900419,
+      "video": "separate/candidates/candidate_05_c875010444c67684f1b6.mp4",
+      "frames": 120
+    },
+    {
+      "index": 6,
+      "candidate_id": "e03e5bc8b264dc7897e8",
+      "score": 0.017085886344380755,
+      "video": "separate/candidates/candidate_06_e03e5bc8b264dc7897e8.mp4",
+      "frames": 120
+    },
+    {
+      "index": 7,
+      "candidate_id": "b2df063756dbea03a712",
+      "score": 0.57224029197987,
+      "video": "separate/candidates/candidate_07_b2df063756dbea03a712.mp4",
+      "frames": 120
+    },
+    {
+      "index": 8,
+      "candidate_id": "2ef21e72b5df67cda08a",
+      "score": 0.2152903190326282,
+      "video": "separate/candidates/candidate_08_2ef21e72b5df67cda08a.mp4",
+      "frames": 120
+    },
+    {
+      "index": 9,
+      "candidate_id": "3536869bd0cbcd74a6bc",
+      "score": 0.1808761741668723,
+      "video": "separate/candidates/candidate_09_3536869bd0cbcd74a6bc.mp4",
+      "frames": 120
+    },
+    {
+      "index": 10,
+      "candidate_id": "e83f0990783267c02a3b",
+      "score": 0.8813199868491216,
+      "video": "separate/candidates/candidate_10_e83f0990783267c02a3b.mp4",
+      "frames": 120
+    },
+    {
+      "index": 11,
+      "candidate_id": "7cf5222311fde636efd8",
+      "score": 0.12257401274254273,
+      "video": "separate/candidates/candidate_11_7cf5222311fde636efd8.mp4",
+      "frames": 120
+    },
+    {
+      "index": 12,
+      "candidate_id": "e29adb7ac28b5567e9ec",
+      "score": 0.9756215828910014,
+      "video": "separate/candidates/candidate_12_e29adb7ac28b5567e9ec.mp4",
+      "frames": 120
+    }
+  ],
+  "top4": [
+    {
+      "rank": 1,
+      "candidate_id": "e29adb7ac28b5567e9ec",
+      "score": 0.9756215828910014,
+      "video": "separate/top4/top4_01_e29adb7ac28b5567e9ec.mp4",
+      "frames": 150
+    },
+    {
+      "rank": 2,
+      "candidate_id": "e83f0990783267c02a3b",
+      "score": 0.8813199868491216,
+      "video": "separate/top4/top4_02_e83f0990783267c02a3b.mp4",
+      "frames": 150
+    },
+    {
+      "rank": 3,
+      "candidate_id": "b2df063756dbea03a712",
+      "score": 0.57224029197987,
+      "video": "separate/top4/top4_03_b2df063756dbea03a712.mp4",
+      "frames": 150
+    },
+    {
+      "rank": 4,
+      "candidate_id": "57ed526f426891e1124a",
+      "score": 0.30357704653003303,
+      "video": "separate/top4/top4_04_57ed526f426891e1124a.mp4",
+      "frames": 150
+    }
+  ],
+  "actual": {
+    "candidate_id": "57ed526f426891e1124a",
+    "video": "separate/actual_execution_target_repeat0.mp4",
+    "frames": 240,
+    "success": true
+  }
+}
