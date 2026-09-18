@@ -5,11 +5,21 @@
       "scene_id": 1200,
       "candidate_id": "08fafc1b0668beb1f7c5",
       "trial": 0,
-      "role": "development_full_task_success_pending_video",
+      "role": "development_full_task_video_timeout",
       "perception_backend": "rgbd_geometry",
       "path": "results/value_v7_image_perception/dev_full_success_video/full_task.mp4",
       "record": "results/value_v7_image_perception/dev_full_success_video/result.json",
-      "note": "同一冻结 seed 的完整真实轨迹；视频生成完成后以 result.json 和视频为准。"
+      "note": "同一冻结 seed 的真实轨迹；录像器墙钟超时，保留为截断失败证据。"
+    },
+    {
+      "scene_id": 1200,
+      "candidate_id": "08fafc1b0668beb1f7c5",
+      "trial": 0,
+      "role": "development_full_task_success_video",
+      "perception_backend": "rgbd_geometry",
+      "path": "results/value_v7_image_perception/dev_full_success_video_record4/full_task.mp4",
+      "record": "results/value_v7_image_perception/dev_full_success_video_record4/result.json",
+      "note": "完整真实 MuJoCo 成功轨迹；双视角 480x360，每3个控制步采样，等效 6.67 fps；状态和标签来自同一执行。"
     },
     {
       "scene_id": 1200,

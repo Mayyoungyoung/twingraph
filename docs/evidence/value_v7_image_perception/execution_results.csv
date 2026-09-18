@@ -1,5 +1,5 @@
 scene_id,candidate_id,trial,perception_backend,cleaning_pass,assembly_pass,functional_test_pass,full_success,failure_reason,source
-1200,08fafc1b0668beb1f7c5,0,rgbd_geometry,true,true,true,true,"none; complete development task; pin effective insertion and handle-driven bidirectional stroke passed","dev_full_success_candidate20/result.json"
+1200,08fafc1b0668beb1f7c5,0,rgbd_geometry,true,true,true,true,"none; complete development task; pin effective insertion and handle-driven bidirectional stroke passed","dev_full_success_candidate20/result.json; video=dev_full_success_video_record4/full_task.mp4"
 1200,fe11d39bc04e88e0fae45,0,rgbd_geometry,true,false,false,false,"physical rollout wall-time limit after end_stop relocation","dev_full_pinforce8/full_task.mp4"
 1200,recorded3,0,rgbd_geometry,true,false,false,false,"slide_insert: grasp lost at hole entry","dev_exec_recorded3/steps.json"
 1201,e91e078c5b4610f64a65,0,rgbd_geometry,false,false,false,false,"wipe press height/contact failure under L1 friction","dev_full_success_candidate13/result.json"
