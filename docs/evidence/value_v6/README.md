@@ -9,3 +9,5 @@
 系统实验包含 71400–71411 共 12 个配置；Top-4 与全量 12 条策略分别实际完成 30 次目标调用（另有 2 个配置因没有满足双策略共同接受规则而 abstain），成功率分母固定为 36 次目标试验。Top-4 平均决策/端到端耗时 674.53/835.90 秒，目标成功率 69.44%；全量策略为 1678.99/1819.34 秒、75.00%。完整中文报告和图见 [`report/report.md`](report/report.md) 与 [`report/overview.png`](report/overview.png)。
 
 评估更正和系统适配层修复记录见 [`../../value-v6-evaluation-amendment.md`](../../value-v6-evaluation-amendment.md)。修复只改动 `scripts/` 评估/批处理适配，不改动 `simbench/value`、`simbench/assembly` 或 `simbench/core` 的冻结采集源码。
+
+实现、输入输出、采集协议和 Top-4 最终选择规则见 [`value_module_summary_zh.md`](value_module_summary_zh.md)。71400 案例的 12 候选、Top-4 和实际 target 执行状态轨迹视频见 [`videos/`](videos/)。
