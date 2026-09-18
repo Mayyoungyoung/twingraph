@@ -1,14 +1,26 @@
 """Independent final task predicates, separate from candidate-authored checkers."""
 import numpy as np
+from .pin_geometry import PinInsertionConfig, evaluate_pin_context
 
 
 def validate_goals(goals):
     if not goals:
         raise ValueError("physical value labels require declared task goals")
     for goal in goals:
-        if goal.get("predicate") not in {"seated_released_retracted", "seated"}:
+        if goal.get("predicate") not in {"seated_released_retracted", "seated", "pin_inserted_in_hole"}:
             raise ValueError("unsupported independent task goal")
-        if not goal.get("manipulated") or np.asarray(goal.get("position")).shape != (3,):
+        if not goal.get("manipulated"):
+            raise ValueError("goal requires manipulated object")
+        if goal.get("predicate") == "pin_inserted_in_hole":
+            if not str(goal["manipulated"]).startswith("pin_") or not goal.get("hole_part"):
+                raise ValueError("pin goal requires a fixture hole")
+            if np.asarray(goal.get("hole_offset_m")).shape != (3,):
+                raise ValueError("pin goal requires fixture-local hole offset")
+            depth = float(goal.get("minimum_insertion_depth_m", 0.0))
+            if not np.isfinite(depth) or depth <= 0:
+                raise ValueError("pin goal requires positive insertion depth")
+            continue
+        if np.asarray(goal.get("position")).shape != (3,):
             raise ValueError("goal requires object and world position")
         scalars = [goal.get("position_tolerance", .0015), goal.get("tilt_tolerance_deg", 3.),
                    goal.get("minimum_eef_clearance_m", 0.)]
@@ -28,6 +40,28 @@ def evaluate_goals(session, goals):
     ctx = session.ctx
     for goal in goals:
         part = goal["manipulated"]
+        if goal["predicate"] == "pin_inserted_in_hole":
+            touching_finger = False
+            bid = ctx.body_id(part)
+            for contact in ctx.data.contact:
+                b1, b2 = map(int, ctx.model.geom_bodyid[[contact.geom1, contact.geom2]])
+                if bid not in (b1, b2):
+                    continue
+                other = b2 if b1 == bid else b1
+                if "finger" in ctx.model.body(other).name and contact.dist <= 0:
+                    touching_finger = True
+            phase = goal.get("phase", "inserted_after_release")
+            metrics = evaluate_pin_context(
+                ctx, part, fixture_part=goal["hole_part"],
+                hole_offset_m=goal["hole_offset_m"], phase=phase,
+                released=session.held != part, touching_finger=touching_finger,
+                config=PinInsertionConfig(required_depth_m=float(goal["minimum_insertion_depth_m"])),
+            )
+            metrics["eef_clearance_m"] = float(ctx.eef_pos()[2] - ctx.obj_pos(part)[2])
+            metrics["eef_clearance_ok"] = metrics["eef_clearance_m"] >= goal.get("minimum_eef_clearance_m", 0.)
+            metrics["success"] = bool(metrics["success"] and metrics["eef_clearance_ok"])
+            rows.append(dict(part=part, **metrics))
+            continue
         error = float(np.linalg.norm(ctx.obj_pos(part) - np.asarray(goal["position"])))
         tilt = float(np.degrees(np.arccos(np.clip(ctx.obj_axis(part)[2], -1, 1))))
         released = session.held != part

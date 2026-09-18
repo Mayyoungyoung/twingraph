@@ -29,6 +29,10 @@ METRIC = {
     "speed": ("scalar", "m/s", ""), "settle": ("scalar", "s", ""),
     "duration": ("scalar", "s", ""), "center": ("position", "m", "world"),
     "halfspan": ("vector", "m", "surface"),
+    "hole_offset_m": ("vector", "m", "fixture"),
+    "minimum_insertion_depth_m": ("scalar", "m", "fixture"),
+    "acceptance": ("category", "", ""), "hole_part": ("object_ref", "", ""),
+    "phase": ("category", "", ""),
 }
 
 

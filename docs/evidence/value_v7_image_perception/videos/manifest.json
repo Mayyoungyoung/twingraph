@@ -1,0 +1,45 @@
+{
+  "schema": "twingraph.value_v7_image_perception.v1",
+  "videos": [
+    {
+      "scene_id": 1200,
+      "candidate_id": "08fafc1b0668beb1f7c5",
+      "trial": 0,
+      "role": "development_full_task_success_pending_video",
+      "perception_backend": "rgbd_geometry",
+      "path": "results/value_v7_image_perception/dev_full_success_video/full_task.mp4",
+      "record": "results/value_v7_image_perception/dev_full_success_video/result.json",
+      "note": "同一冻结 seed 的完整真实轨迹；视频生成完成后以 result.json 和视频为准。"
+    },
+    {
+      "scene_id": 1200,
+      "candidate_id": "fe11d39bc04e88e0fae45",
+      "trial": 0,
+      "role": "development_real_trajectory_timeout",
+      "perception_backend": "rgbd_geometry",
+      "path": "results/value_v7_image_perception/dev_full_pinforce8/full_task.mp4",
+      "record": "results/value_v7_image_perception/dev_full_pinforce8/result.json",
+      "note": "真实双视角轨迹；清洁和滑块通过，因录像墙钟超时在挡块后截断，不是成功案例。"
+    },
+    {
+      "scene_id": 1200,
+      "candidate_id": "recorded3",
+      "trial": 0,
+      "role": "development_pin_grasp_loss",
+      "perception_backend": "rgbd_geometry",
+      "path": "results/value_v7_image_perception/dev_exec_recorded3/steps.json",
+      "record": "results/value_v7_image_perception/dev_exec_recorded3/result_summary.json",
+      "note": "真实插销执行记录；孔口接触时丢失夹持，保留为失败证据。"
+    },
+    {
+      "scene_id": 1200,
+      "candidate_id": "fe11d39bc04e88e0fae45",
+      "trial": 0,
+      "role": "development_full_task_pending",
+      "perception_backend": "rgbd_geometry",
+      "path": "results/value_v7_image_perception/dev_full_pinforce8_record2/full_task.mp4",
+      "record": "results/value_v7_image_perception/dev_full_pinforce8_record2/result.json",
+      "note": "pin 8 N、延长墙钟预算的完整开发执行；以 result.json 为准。"
+    }
+  ]
+}

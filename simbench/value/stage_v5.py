@@ -219,12 +219,6 @@ def stage_calls(part, target, choice, stage, v7=False):
                 axis=argument([0., 0., -1.], unit="1"),
                 speed=argument(choice.get("speed", .006), unit="m/s"), force_limit=argument(12., unit="N"))
             add("insert", part=part)
-            # Contact insertion can leave a narrow pin with a sub-mm lateral
-            # residual.  Re-centre while it is still physically held before
-            # pressing and releasing; otherwise gravity can tip the head at
-            # the bore edge.  This is execution feedback, not a target-label
-            # or privileged future-state correction.
-            add("align_axis", part=part, target=xyz(target), tolerance=argument(.0006, unit="m"))
         else:
             add("move", mode="guarded", part=part, target_z=argument(float(target[2]), unit="m"),
                 force_stop=argument(2. if part == "end_stop" else 3., unit="N"),
@@ -234,7 +228,8 @@ def stage_calls(part, target, choice, stage, v7=False):
         press["force_stop"] = argument(2., unit="N")
     add("press", **press)
     place_tol = .0025 if (v7 and part.startswith("pin_")) else .003
-    add("place", part=part, target=xyz(target), tol=argument(place_tol, unit="m"), settle=argument(.35, unit="s"))
+    add("place", part=part, target=xyz(target), tol=argument(place_tol, unit="m"), settle=argument(.35, unit="s"),
+        acceptance=argument("pin_inserted" if (v7 and part.startswith("pin_")) else "pose"))
     # A released narrow pin must not be swept sideways by the old 100 mm
     # vertical retreat.  In the v7 branch the release routine has already
     # verified support and clears the fingers; a short 20 mm lift is the
@@ -249,7 +244,12 @@ def stage_calls(part, target, choice, stage, v7=False):
     else:
         add("move", delta=xyz([0, 0, .10]))
     inspect_tol = .0025 if (v7 and part.startswith("pin_")) else .0015
-    add("inspect", part=part, target=xyz(target), tol=argument(inspect_tol, unit="m"))
+    if v7 and part.startswith("pin_"):
+        add("inspect", what="pin", part=part, hole_part="end_stop",
+            hole_offset_m=argument([0., -.032 if part == "pin_left" else .032, 0.], unit="m"),
+            minimum_insertion_depth_m=argument(.006, unit="m"), phase=argument("inserted_after_release"))
+    else:
+        add("inspect", part=part, target=xyz(target), tol=argument(inspect_tol, unit="m"))
     if part == "carriage":
         add("measure", quantity="clearance", part=part)
         add("inspect", what="measurement", minimum=argument(1.e-12, unit="m"))
@@ -265,10 +265,17 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
         raise ValueError("invalid initial route index")
     calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i, v7=v7)]
     for part in PARTS:
-        accept_tol = .0025 if (v7 and part.startswith("pin_")) else .0015
-        calls.append(Call(f"accept_{part}", "inspect", dict(part=argument(part),
-            target=Argument(plain(targets[part]), "position", frame="world", unit="m"),
-            tol=argument(accept_tol, unit="m")), {"manipulated": part}, "checker"))
+        if v7 and part.startswith("pin_"):
+            calls.append(Call(f"accept_{part}", "inspect", dict(what=argument("pin"), part=argument(part),
+                hole_part=argument("end_stop"),
+                hole_offset_m=argument([0., -.032 if part == "pin_left" else .032, 0.], unit="m"),
+                minimum_insertion_depth_m=argument(.006, unit="m"),
+                phase=argument("inserted_after_release")), {"manipulated": part}, "checker"))
+        else:
+            accept_tol = .0015
+            calls.append(Call(f"accept_{part}", "inspect", dict(part=argument(part),
+                target=Argument(plain(targets[part]), "position", frame="world", unit="m"),
+                tol=argument(accept_tol, unit="m")), {"manipulated": part}, "checker"))
     calls.append(Call("final_home", "move", dict(target=argument("home"))))
     semantics = dict(order=list(order), choices=plain(choices), task_scope=TASK_SCOPE,
                      initial_route_index=int(initial_route_index), targets=plain(targets))
@@ -404,8 +411,11 @@ def build_pool(session, targets, seed, n=12, orders=None, precheck=True):
         row = np.unravel_index(int(index), sizes)
         raw += 1
         order = orders[row[0]]
-        force, speed, route_index = (2.8, 3., 3.2)[row[-3]], (.006, .007)[row[-2]], row[-1]
-        choices = {part: dict(**catalogue[part][row[i + 1]], clearance=.98, force=force,
+        base_force = (2.8, 3., 3.2)[row[-3]]
+        pin_force = (5.0, 6.5, 8.0)[row[-3]]
+        speed, route_index = (.006, .007)[row[-2]], row[-1]
+        choices = {part: dict(**catalogue[part][row[i + 1]], clearance=.98,
+                   force=pin_force if part.startswith("pin_") else base_force,
                    **({} if part == "carriage" else dict(speed=speed))) for i, part in enumerate(PARTS)}
         plan = program(session, targets, order, choices, int(route_index))
         choice = choices["carriage"]

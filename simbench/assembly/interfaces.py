@@ -118,6 +118,7 @@ AUXILIARY_INTERFACES = {
     "measure": {"value": "measure_value"},
     "inspect": {
         "pose": "inspect_seat",
+        "pin": "inspect_pin_inserted",
         "grasp": "verify_grasp",
         "stroke": "verify_stroke",
         "clean": "verify_clean",

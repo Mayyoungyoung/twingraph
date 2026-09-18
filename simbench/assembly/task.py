@@ -18,7 +18,7 @@ PIN_R = np.r_[CENTER + [-0.092, 0.032], 0.855]
 
 
 def pick(s, part, lift=True, candidate_id=None, terminal_targets=None,
-         execution_feedback=False):
+         execution_feedback=False, grasp_force=3.0, required_parts=None):
     from .candidates import (
         build_pick_candidates,
         choose_candidate,
@@ -26,7 +26,12 @@ def pick(s, part, lift=True, candidate_id=None, terminal_targets=None,
         save_batch,
     )
 
-    s.call("detect")
+    previous_required = getattr(s, "_required_observation_parts", None)
+    s._required_observation_parts = tuple(required_parts) if required_parts is not None else None
+    try:
+        s.call("detect")
+    finally:
+        s._required_observation_parts = previous_required
     if execution_feedback:
         s.call("observe_execution_pose", part=part)
     else:
@@ -34,7 +39,9 @@ def pick(s, part, lift=True, candidate_id=None, terminal_targets=None,
     s.call("estimate_grasp", part=part)
     # Open before construction: candidates all start at this actual shared state.
     s.call("gripper", mode="open")
-    candidates = build_pick_candidates(s, part, lift, terminal_targets=terminal_targets)
+    controls = [dict(strategy="feedback", force=float(grasp_force))]
+    candidates = build_pick_candidates(s, part, lift, terminal_targets=terminal_targets,
+                                       control_options=controls)
     chosen = choose_candidate(candidates, candidate_id)
     save_batch(s, candidates, chosen)
     execute_pick_candidate(s, chosen)
