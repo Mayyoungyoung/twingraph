@@ -14,4 +14,6 @@
 
 用于汇报展示的 1920×1080、4×3 同步候选墙见 [`videos/showcase/case_71400_candidates_grid_piginet_style.mp4`](videos/showcase/case_71400_candidates_grid_piginet_style.mp4)。每个候选格上半部为俯视、下半部为全局斜视，绿色边框表示 Top-4，金色边框表示最终实际执行方案。
 
-真正的单一 3D 大场景版本见 [`videos/environment/case_71400_12_candidates_shared_world_checkerboard.mp4`](videos/environment/case_71400_12_candidates_shared_world_checkerboard.mp4)：12 套机器人/工作台存在于同一个 MuJoCo 模型中，在统一棋盘格地面上同步回放，而不是后期二维拼接。可复现的复合 MJCF 与映射清单保存在同目录。
+改进后的单一 3D 大场景版本见 [`videos/environment_v2/case_71400_12_candidates_shared_world_v2.mp4`](videos/environment_v2/case_71400_12_candidates_shared_world_v2.mp4)：12 套机器人/工作台存在于同一个 MuJoCo 模型中，使用紧凑俯视构图、低亮度灯光和蓝灰棋盘格地面同步回放，而不是后期二维拼接。可复现的展示脚本、复合 MJCF 与映射清单分别见 `scripts/render_value_v6_shared_showcase.py` 和视频同目录。
+
+Top-4 的双视角 2×2 同步展示见 [`videos/showcase_v2/case_71400_top4_2x2_dual_view.mp4`](videos/showcase_v2/case_71400_top4_2x2_dual_view.mp4)，每格同时展示 `task_view`、`top_view`、排名、候选 ID 和价值分数；金色边框表示最终实际执行方案。对应的 1080p 实际执行视频见 [`videos/showcase_v2/case_71400_actual_execution_dual_view_1080p.mp4`](videos/showcase_v2/case_71400_actual_execution_dual_view_1080p.mp4)。
