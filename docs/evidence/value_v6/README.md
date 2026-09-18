@@ -11,3 +11,5 @@
 评估更正和系统适配层修复记录见 [`../../value-v6-evaluation-amendment.md`](../../value-v6-evaluation-amendment.md)。修复只改动 `scripts/` 评估/批处理适配，不改动 `simbench/value`、`simbench/assembly` 或 `simbench/core` 的冻结采集源码。
 
 实现、输入输出、采集协议和 Top-4 最终选择规则见 [`value_module_summary_zh.md`](value_module_summary_zh.md)。71400 案例的 12 个候选视频、4 个 Top 视频和实际 target 执行视频均为独立 MP4，见 [`videos/separate/`](videos/separate/)。
+
+用于汇报展示的 1920×1080、4×3 同步候选墙见 [`videos/showcase/case_71400_candidates_grid_piginet_style.mp4`](videos/showcase/case_71400_candidates_grid_piginet_style.mp4)。每个候选格上半部为俯视、下半部为全局斜视，绿色边框表示 Top-4，金色边框表示最终实际执行方案。
