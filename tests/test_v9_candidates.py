@@ -2,7 +2,8 @@
 
 from simbench.value import stage_v5
 from simbench.value.plan import plain
-from simbench.value.v9_candidates import proposals, reference_proposal, SOURCE
+from simbench.value.v9_candidates import proposals, SOURCE
+from scripts.run_v9_target_screening import reference_proposal
 
 
 def _command_signature(proposal):

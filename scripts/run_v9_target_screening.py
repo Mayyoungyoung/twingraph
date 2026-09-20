@@ -6,10 +6,18 @@ from pathlib import Path
 import random
 import time
 
-from analyze_v9_candidate_matrix import rank_model, rule_score
-from collect_v9_candidate_matrix import collect, CONDITIONS
+from scripts.analyze_v9_candidate_matrix import rank_model, rule_score
+from scripts.collect_v9_candidate_matrix import collect, CONDITIONS
 from simbench.value import stage_v9
-from simbench.value.v9_candidates import proposals, reference_proposal
+from simbench.value.v9_candidates import proposals, reference_choices, SOURCE
+from simbench.value import stage_v5, stage_v7
+
+
+def reference_proposal():
+    return dict(name="reference", source=SOURCE,
+                order=list(stage_v5.legal_orders()[0]), choices=reference_choices(),
+                wipe_variant=0, wipe_force=1.5, wipe_duration=14.,
+                stroke_minimum=stage_v7.TASK_STROKE_MINIMUM_M)
 
 
 def run(seed, condition, method, k, out, checkpoint=None):

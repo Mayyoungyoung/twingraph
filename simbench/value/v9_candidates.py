@@ -17,13 +17,6 @@ def reference_choices():
             for part in stage_v5.PARTS}
 
 
-def reference_proposal():
-    return dict(name="reference", source=SOURCE,
-                order=list(stage_v5.legal_orders()[0]), choices=reference_choices(),
-                wipe_variant=0, wipe_force=1.5, wipe_duration=14.,
-                stroke_minimum=stage_v7.TASK_STROKE_MINIMUM_M)
-
-
 def proposals():
     order = tuple(stage_v5.legal_orders()[0])
     reversed_pins = tuple(stage_v5.legal_orders()[1])
