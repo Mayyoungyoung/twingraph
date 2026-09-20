@@ -1,0 +1,124 @@
+{
+  "archive": "docs\\evidence\\value_v9_candidate_screening\\dev_raw_archives\\seed_1305.tar.gz",
+  "base_commit": "60f5689",
+  "archived_source_file_count": 99,
+  "mismatched_files": {
+    "simbench/tests/test_standalone_demos.py": {
+      "archive_sha256": "4b21497f5c941898959a2783165badab31b6a4f2caa453b41dd8517206c2be03",
+      "base_commit_sha256": "7587dee4fca0fb891ccc544ba4a970d018328259d60235c997894d95fe8b79c5"
+    },
+    "simbench/tests/test_atomic_interface.py": {
+      "archive_sha256": "a78d818b92c2b1c711c11e773cc0a39882d2589316cc7eb769bb03ea24ee2a6f",
+      "base_commit_sha256": "69cebc4b0bc6ea155d3d848372caae8e8335fcb4c9198e9e5757f4ad3ceec2ed"
+    },
+    "simbench/tests/test_tabletop.py": {
+      "archive_sha256": "6e996de18637698344a83d769cdfa5cea4a734d8b1f528534a24dabafe843366",
+      "base_commit_sha256": "16165d3b4a810efeb99242b96e0b00dca00756281baf1de51e1cf4f4867077e6"
+    },
+    "simbench/tests/test_contract_candidates.py": {
+      "archive_sha256": "2a7aaaec33a660196712f9ed350d67f2481a558fad7e01aa88cafe4095f0dc96",
+      "base_commit_sha256": "b1cd90d0f987d71068415a182d4ad03a68940abbd9f8f9e56a1cc7cee7e7a3ae"
+    },
+    "simbench/tests/test_wiping.py": {
+      "archive_sha256": "9bb5a13396d35476b24a21b30bb2331e54b489386e06bed8d6dd3e8706437ee9",
+      "base_commit_sha256": "942b37d2fe492c78ce7aee8b008db275b80b95c64a24144223941827e21c8723"
+    },
+    "simbench/tests/test_replay.py": {
+      "archive_sha256": "ab6c5829f1a5db8fc6b83bc0b6888228bce798caa358d5b78c52dd79c6d8cfcb",
+      "base_commit_sha256": "c172ef7835030d45c712f299cfced5212c6999a405f46d27698cd7319059822a"
+    },
+    "simbench/assembly/interfaces.py": {
+      "archive_sha256": "6062997c5b61073d3d1140da904ea2300e3d83e00055aba1489502d9fd8b0927",
+      "base_commit_sha256": "834725cd041387577ad533cec00fccdee3365b37c58f1b788741c3560e2092b6"
+    },
+    "simbench/assembly/task.py": {
+      "archive_sha256": "c717b53326ac6f32fa1e49adb81c1d2b7d13daee936c49a1f69679a4c91c2f70",
+      "base_commit_sha256": "6ea12ef277443f59d0334fd4ce7b35d75d5dc4bc3af7ad5fd946cb2fe86ac340"
+    },
+    "simbench/assembly/atomic_demo.py": {
+      "archive_sha256": "528459c7991b486509285def115be9e98e67b0ca0039d6d8cc771043a81a49f3",
+      "base_commit_sha256": "0abaf2518a2b22bc0d188a256da8f708a12a388ea96539e26ea7774aed203308"
+    },
+    "simbench/assembly/control.py": {
+      "archive_sha256": "abae97d7fa90839ff0c91fa56a9d3c3abef2fe845546c982ef35071f12662102",
+      "base_commit_sha256": "383f15ac4294425d3be20ff929643db9570ebfef0bcc6f538f8d0caae1803703"
+    },
+    "simbench/assembly/graph_figure.py": {
+      "archive_sha256": "442fca3ab04bfc738600df683fa01d205e0dfeabe8c04f302ed6d9d11dd01721",
+      "base_commit_sha256": "f1384bdfa496340bf7596afb30ebf3a46fd4ce2dfbb42fbceaf42b99a17280fd"
+    },
+    "simbench/assembly/contracts.py": {
+      "archive_sha256": "62e508bf816fb04d8a8d3b1daa7473b7d5d1b42e57b35ddf004158868cdff327",
+      "base_commit_sha256": "3025da20945c588d78acad02c7b40f5c290471a90ccca6665b03842a0de66f0d"
+    },
+    "simbench/assembly/candidate_demo.py": {
+      "archive_sha256": "2e72d51ae5fc6e1ca94a73685c9e775300b4cd53f7186fdff90a022ae071aac2",
+      "base_commit_sha256": "b5d37ba14aac11878de1be709da1618d5668c5989009cf0477074083d5e12215"
+    },
+    "simbench/assembly/demo_scenes.py": {
+      "archive_sha256": "00f6dc777218b0d7b834ea11778e57e6ef41da7b5da4a6e33b3771873eba18a2",
+      "base_commit_sha256": "8cf36e84a087455ed4995daefa9fe36169a6344972a87bbfa7a33d762183d4dd"
+    },
+    "simbench/assembly/__init__.py": {
+      "archive_sha256": "4640da374fade0ef4fa12a035cc20f9d43688c6a9e23f4aa6cb46037d9fb1ae6",
+      "base_commit_sha256": "1850c036633f2a4b21471a9f2f2c0ee779731976b782541e741972578e0cd188"
+    },
+    "simbench/assembly/learning.py": {
+      "archive_sha256": "bf9139e5a863523c49745cf0b5560f91ba3447ff71c755fdde55c43fe14670b0",
+      "base_commit_sha256": "b1604b236bb8e48c1725c161e7b6e0aa33eae9b0da5b6a7ec7503a2996c9d575"
+    },
+    "simbench/assembly/graph.py": {
+      "archive_sha256": "21b96d82e29da8214834cc53817173bd4373d5466bc4178514eaf7bc0a6e19dd",
+      "base_commit_sha256": "3977f44aadf48cf5822f93e0238053fd415b1c30eec89a320597f29831345dcc"
+    },
+    "simbench/assembly/standalone_demos.py": {
+      "archive_sha256": "b1b401147a5345f9964facdac60b4b070296fbdc6c19fd73220552259a6fb8e8",
+      "base_commit_sha256": "d3b236b4856ca60ee80cb48cad06845d72bc390866ac733430ef6087dd0792c4"
+    },
+    "simbench/assembly/full_demos.py": {
+      "archive_sha256": "1124afd7302eab51257a4bac877587adb26e713b9e7a3637f2f98bbb3daf55d8",
+      "base_commit_sha256": "9657e66e7ccb3ad44ec50e3d3aa1d145b96a7a855ff48358aef0a09cbdb249a0"
+    },
+    "simbench/assembly/deliver_demos.py": {
+      "archive_sha256": "0c40efce22fdfe2dffa2529e82388a2bcda5d4d8688ab287d28b963e26fc7ae5",
+      "base_commit_sha256": "ade67e20928c7e1dc2771ad6fd372a544b60e921d57fb63453a32251c55bab6b"
+    },
+    "simbench/assembly/evaluate.py": {
+      "archive_sha256": "b14bf525347c38efe8afac3852342a1cb674c9bf76571677358bba0d40b81286",
+      "base_commit_sha256": "aa12ff187d9c774760a6c3d122badf722759da22abe5fa266110f8f11218cd9a"
+    },
+    "simbench/assembly/wiping.py": {
+      "archive_sha256": "2ddb57024ef5fca41db0950271c12513c42dc009fb85d36e9430a4e0ed42d912",
+      "base_commit_sha256": "6f7a5138e5048f033bcadf86ad2cb530f63e747f0ca5fbcfe1b9c17d8274bf81"
+    },
+    "simbench/assembly/scene.py": {
+      "archive_sha256": "5cb3be48e569b776633c7592d77f2173656710889d609a10fca0fed10b5b7b42",
+      "base_commit_sha256": "c71ca5fd29dbc98c1692531243277e89ef9e762b84a967892bb156ada6bc218f"
+    },
+    "simbench/assembly/recording.py": {
+      "archive_sha256": "c1ea15fe1dd27be1b33baee0b657068afebb284fb41013f5c04f99a8392fdc91",
+      "base_commit_sha256": "621515bd91f13127735c002724517ede3e80c655c4a10e2fa2f20e960c0c3795"
+    },
+    "simbench/assembly/library.py": {
+      "archive_sha256": "9a9a7974bd1a451b08a19361d158831bc9852acaeef175caf1281dd53f7289e4",
+      "base_commit_sha256": "3cb9be35fe3ab541f3cb81fb9cdc514a1bdb9efb27f49b56d299c8a59d39d9a5"
+    },
+    "simbench/assembly/demo_visuals.py": {
+      "archive_sha256": "3407b222ab1c26d9fe1d1aacec3048a3372401ebffdc43896d7f1525fc92e9e5",
+      "base_commit_sha256": "11cc0e7017d4c643227de77252923e976b4aa20a484da5788c2fba815c36f6c2"
+    },
+    "simbench/assembly/atomic_demos.py": {
+      "archive_sha256": "3b766c0b595880c244b4cd0a3f16c4c2e94e4143d43682e2ee24a5b9d8f7e8ea",
+      "base_commit_sha256": "391e097961f399d8a569b91a5d047662a6815be1e13284bf7ce9c8a29bf5bd9b"
+    },
+    "simbench/assembly/candidates.py": {
+      "archive_sha256": "37053754f0a99944bcb2e6b1f157f3c40637b6ed636e9c74bb679e45d3ff44f9",
+      "base_commit_sha256": "9b6c5863e789bac1ea6b972f508f468e23a917726bd7678d2c5570a670373be8"
+    },
+    "simbench/core/sim_context.py": {
+      "archive_sha256": "a445648ebcfdeee7e1920caadd5df3a7e03a4eb7f1129cfe066a0dd6acc0a52e",
+      "base_commit_sha256": "13462d5744d3025a442edb6855041e8a1395a3b3f7da3e938929f310037378ac"
+    }
+  },
+  "absent_at_base_commit": []
+}
