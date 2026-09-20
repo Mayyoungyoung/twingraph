@@ -5,8 +5,8 @@ import csv
 from collections import Counter
 import hashlib
 import json
+from math import comb
 from pathlib import Path
-import random
 import time
 import xml.etree.ElementTree as ET
 
@@ -224,8 +224,30 @@ def outcome(case, order, k, overhead=0.):
                 tried=selected)
 
 
-def replay(cases, names, seeds, checkpoints, draws=256):
-    rng = random.Random(5117)
+def random_expectation(case, names, k, overhead=0.):
+    """Exact expectation over uniformly random candidate permutations."""
+    n = len(names)
+    failures = sum(not case[name]["summary"]["success"] for name in names)
+    def choose(a, b):
+        return comb(a, b) if 0 <= b <= a else 0
+    success = 1. - choose(failures, k) / comb(n, k)
+    count = verification = total = 0.
+    for position in range(1, k + 1):
+        count += choose(failures, position - 1) / comb(n, position - 1)
+        denominator = n * comb(n - 1, position - 1)
+        for name in names:
+            entry = case[name]["summary"]
+            available_failures = failures - (not entry["success"])
+            weight = choose(available_failures, position - 1) / denominator
+            verification += weight * entry["wall_seconds"]
+            total += weight * entry["total_wall_seconds"]
+    return dict(success=success, verification_count=count,
+                verification_wall_seconds=verification,
+                full_system_wall_seconds=total + overhead,
+                tried="exact_uniform_random_order_expectation")
+
+
+def replay(cases, names, seeds, checkpoints):
     rows = []
     for (seed, condition), case in sorted(cases.items()):
         if seed not in seeds:
@@ -251,13 +273,9 @@ def replay(cases, names, seeds, checkpoints, draws=256):
             for k in (KS if method != "fixed_reference" else (1,)):
                 row = outcome(case, order, k, overheads[method])
                 rows.append(dict(seed=seed, condition=condition, method=method, k=k, **row))
-        for _ in range(draws):
-            t0 = time.perf_counter()
-            order = rng.sample(names, len(names))
-            overhead = generation_seconds + time.perf_counter() - t0
-            for k in KS:
-                row = outcome(case, order, k, overhead)
-                rows.append(dict(seed=seed, condition=condition, method="random", k=k, **row))
+        for k in KS:
+            row = random_expectation(case, names, k, generation_seconds)
+            rows.append(dict(seed=seed, condition=condition, method="random", k=k, **row))
     return rows
 
 
@@ -294,7 +312,7 @@ def main():
     (out / "split.json").write_text(json.dumps(dict(train=train_seeds, validation=val_seeds,
             independent_target=[], successes_by_seed=labels), indent=2))
     summary = dict(layouts=len(seeds), candidates=len(names), conditions=3,
-                   random_replay_per_case=256, random_seed=5117,
+                   random_baseline="exact expectation over all uniform candidate orders",
                    successes=sum(labels.values()), successes_by_seed=labels,
                    successes_by_candidate={name: sum(int(cases[(seed, cond)][name]["summary"]["success"])
                        for seed in seeds for cond in CONDITIONS) for name in names},
