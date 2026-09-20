@@ -837,11 +837,19 @@ class Session:
             # mandatory. Legacy v5/v6 sessions retain the strict behavior.
             if not self.stage_passes:
                 raise
-            # Clear a fixture-limited jaw from the seated part before the
-            # second release attempt.  This is a real retreat, not a pose
-            # assignment; the settled-pose check below still decides.
-            self.arm.move(self.ctx.eef_pos() + [0, 0, .018], speed=.025)
-            self.call("open_gripper")
+            if (str(part).startswith("pin_")
+                    and str(getattr(self, "task_version", "")).startswith("functional_assembly_v9")):
+                # Keep an inserted pin stationary while the already commanded
+                # fingers finish opening. Moving a partly gripping jaw upward
+                # can extract the pin; a second in-place release must still
+                # pass the live contact-free check.
+                self.hold(.20)
+                self.call("open_gripper")
+            else:
+                # Legacy recovery clears a fixture-limited jaw physically
+                # before retrying the release.
+                self.arm.move(self.ctx.eef_pos() + [0, 0, .018], speed=.025)
+                self.call("open_gripper")
         # The physical open command is the ownership boundary.  Keeping the
         # bookkeeping field populated after a successful release lets later
         # motion/planning treat a released pin as still carried and obscures

@@ -26,8 +26,13 @@ def test_v9_physical_bore_holder_and_templates():
         assert float(supply.get("pos").split()[0]) >= stage_v9.PIN_SUPPLY_MIN_X_M
         assert float(supply.get("pos").split()[0]) == float(holder.get("pos").split()[0])
         assert len(holder.findall("geom")) == 12
+        assert all(g.get("contype") != "0" and g.get("conaffinity") != "0"
+                   for g in holder.findall("geom"))
         assert all(float(g.get("size").split()[2]) == stage_v9.HOLDER_HALF_HEIGHT_M
                    for g in holder.findall("geom"))
+        shaft = supply.find(f"geom[@name='{part}_shaft']")
+        assert float(shaft.get("size").split()[0]) == stage_v9.PIN_CONFIG.shaft_radius_m
+    assert root.find("equality") is None
     templates = stage_v9.visual_templates()
     assert templates["end_stop"]["through_hole_half_width_m"] == stage_v9.PIN_CONFIG.plate_hole_half_width_m
     assert templates["end_stop"]["guide_inner_radius_m"] == stage_v9.PIN_CONFIG.guide_inner_radius_m

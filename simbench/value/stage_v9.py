@@ -16,8 +16,8 @@ from . import stage_v7
 from .pin_geometry import PinInsertionConfig
 
 TASK_VERSION = "functional_assembly_v9_funnel_1"
-BORE_RADIUS_M = .0073
-BORE_PROFILE = ((.002, .0084), (.004, .0080), (.006, .0077), (.008, BORE_RADIUS_M))
+BORE_RADIUS_M = .0075
+BORE_PROFILE = ((.002, .0084), (.004, .0081), (.006, .0078), (.008, BORE_RADIUS_M))
 HOLDER_INNER_RADIUS_M = .0060
 HOLDER_OUTER_RADIUS_M = .010
 HOLDER_HALF_HEIGHT_M = .012

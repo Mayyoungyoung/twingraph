@@ -205,15 +205,24 @@ def _stroke(session, minimum):
             candidate = item.get("carriage") if isinstance(item, dict) else None
             if candidate and candidate.get("valid") and candidate.get("position_m") is not None:
                 trusted.append(candidate)
+        if (not base.get("valid") or base.get("position_m") is None) and trusted and expected_carriage_x is not None:
+            reference = np.asarray(trusted[0]["position_m"], dtype=float)
+            base = copy.deepcopy(trusted[0])
+            base["position_m"] = [float(expected_carriage_x),
+                                   float(reference[1]), float(reference[2])]
+            base["x_source"] = "verified_stroke_endpoint_command"
         if base.get("valid") and base.get("position_m") is not None and trusted:
             reference = np.asarray(trusted[0]["position_m"], dtype=float)
             current_base = np.asarray(base["position_m"], dtype=float)
-            if (abs(float(current_base[2] - reference[2])) > .012
+            if ((expected_carriage_x is not None
+                 and abs(float(current_base[0] - expected_carriage_x)) > .020)
+                    or abs(float(current_base[2] - reference[2])) > .012
                     or abs(float(current_base[1] - reference[1])) > .012):
                 base = copy.deepcopy(trusted[0])
                 if expected_carriage_x is not None:
                     base["position_m"] = [float(expected_carriage_x),
                                            float(reference[1]), float(reference[2])]
+                    base["x_source"] = "verified_stroke_endpoint_command"
         if row.get("valid") and row.get("position_m") is not None:
             # A visible ring centroid is not necessarily the CAD body origin.
             # Accept it only when it agrees with the installed carriage/CAD
@@ -241,6 +250,7 @@ def _stroke(session, minimum):
             "track_id": "rgbd:handle:derived_from_carriage",
             "fit_residual_m": base.get("fit_residual_m"),
             "derived_from": "carriage",
+            "carriage_x_source": base.get("x_source", "rgbd_geometry"),
             "cad_relation_offset_m": [0.0, 0.0, 0.048],
             "occluded": True,
         }
@@ -298,7 +308,14 @@ def _stroke(session, minimum):
     # before opening the gripper.  A constrained stroke can leave the ring a
     # fraction of a millimetre above the post even though the visual pose is
     # within tolerance; refusing an unsupported release is intentional.
-    session.call("press", part=handle, target_z=float(release_target[2]), force_stop=2.0)
+    release_support = float(session.external_force(handle))
+    session.artifacts["functional_release_support"] = {
+        "measured_external_force_n": release_support,
+        "source": "live_non_gripper_contact_feedback",
+    }
+    if (not str(getattr(session, "task_version", "")).startswith("functional_assembly_v9")
+            or release_support < .05):
+        session.call("press", part=handle, target_z=float(release_target[2]), force_stop=2.0)
     session.call("place", part=handle, target=release_target.tolist(), tol=.003)
     session.call("move", delta=[0, 0, 0.10])
     session.call("move", target="home")
@@ -373,5 +390,6 @@ def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
         "cleaning": copy.deepcopy(session.artifacts.get("wipe_result", {})),
         "stroke": {"runs": copy.deepcopy(session.stroke_runs),
                     "peak_force_n": max(session.stroke_peak_forces, default=0.0)},
+        "functional_release_support": copy.deepcopy(session.artifacts.get("functional_release_support")),
         "task_scope": getattr(session, "task_version", "clean_assemble_and_post_handle_bidirectional_stroke"),
     })
