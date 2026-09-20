@@ -15,6 +15,7 @@ import numpy as np
 class PinInsertionConfig:
     shaft_radius_m: float = 0.0033
     guide_inner_radius_m: float = 0.0055
+    plate_hole_half_width_m: float = 0.004  # scene.holed_plate square aperture
     guide_length_m: float = 0.008  # v7_bore ring: centre z=.014, half=.004
     required_depth_m: float = 0.006  # 75% of the physical guide length
     shaft_tip_offset_m: float = -0.047
@@ -25,6 +26,7 @@ class PinInsertionConfig:
         return {
             "shaft_radius_m": self.shaft_radius_m,
             "guide_inner_radius_m": self.guide_inner_radius_m,
+            "plate_hole_half_width_m": self.plate_hole_half_width_m,
             "guide_length_m": self.guide_length_m,
             "required_depth_m": self.required_depth_m,
             "shaft_tip_offset_m": self.shaft_tip_offset_m,
@@ -57,8 +59,14 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
     depth = -rel @ haxis
     radial_vec = rel + depth[:, None] * haxis[None, :]
     radial = np.linalg.norm(radial_vec, axis=1)
-    allowed = (depth >= 0.0) & (depth <= config.guide_length_m) & (
-        radial <= config.guide_inner_radius_m - config.radial_clearance_m)
+    # The square plate aperture surrounds the same axial region as the added
+    # annular guide. Its inscribed circle is a conservative bound independent
+    # of the fixture's unprovided transverse frame. At a tilted shaft's
+    # constant-depth section, its circular radius projects by 1/|cos(theta)|.
+    axial = abs(float(np.dot(paxis, haxis)))
+    bore_radius = min(config.guide_inner_radius_m, config.plate_hole_half_width_m)
+    permitted = bore_radius - config.radial_clearance_m - config.shaft_radius_m / max(axial, 1e-12)
+    allowed = (depth >= 0.0) & (depth <= config.guide_length_m) & (radial <= permitted)
     valid_depths = depth[allowed]
     max_depth = float(valid_depths.max(initial=0.0))
     if valid_depths.size:
@@ -69,12 +77,24 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
         span = float(ordered[-1] - ordered[0]) if not gaps.size else float(ordered[-1] - ordered[0])
     else:
         span = 0.0
-    inserted = bool(max_depth >= config.required_depth_m and span >= config.required_depth_m * .75)
+    # Require an uninterrupted solid shaft from the entry plane through the
+    # required depth. Endpoint checks suffice because radial offset is convex
+    # along a straight shaft and the bore bound is constant over this interval.
+    along = float(np.dot(paxis, haxis))
+    full_depth = abs(along) > 1e-9 and permitted >= 0
+    for boundary in (0., config.required_depth_m):
+        offset = float(np.dot(entry - origin, haxis) - boundary) / along if abs(along) > 1e-9 else float('inf')
+        point = origin + offset * paxis
+        transverse = point - entry + boundary * haxis
+        full_depth = full_depth and (config.shaft_tip_offset_m <= offset <= config.shaft_head_offset_m) and (np.linalg.norm(transverse) <= permitted + 1e-12)
+    inserted = bool(full_depth and config.required_depth_m <= config.guide_length_m)
     return {
         "inserted": inserted,
         "max_insertion_depth_m": max_depth,
         "valid_depth_span_m": span,
         "minimum_required_depth_m": config.required_depth_m,
+        "limiting_bore_radius_m": bore_radius,
+        "permitted_center_offset_m": permitted,
         "max_radial_error_m": float(radial[allowed].max()) if allowed.any() else float("inf"),
         "samples": int(samples),
     }

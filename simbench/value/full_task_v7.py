@@ -291,6 +291,9 @@ def _stroke(session, minimum):
 
 def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
                       wipe_duration=14.0, stroke_minimum=.08):
+    from .stage_v7 import TASK_STROKE_MINIMUM_M
+    if float(stroke_minimum) != TASK_STROKE_MINIMUM_M:
+        raise SkillFailure("candidate cannot change task stroke requirement")
     required = set(assembly.PARTS)
     if tuple(order) not in assembly.legal_orders([tuple(order)]):
         raise SkillFailure("full-task candidate violates assembly precedence")

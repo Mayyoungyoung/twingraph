@@ -26,6 +26,7 @@ PARTS = base.PARTS
 WIPE_TOOL = "wipe_tool"
 ALL_PARTS = (*PARTS, WIPE_TOOL)
 TASK_SCOPE = "clean_assemble_five_parts_and_post_handle_bidirectional_stroke"
+TASK_STROKE_MINIMUM_M = .08
 FAMILY = "sliding_stage_full_v7"
 VIEW_NAMES = ("task_view", "top_view")
 IMAGE_SIZE = 80
@@ -333,6 +334,8 @@ def save_vision(path, arrays):
 
 
 def _full_plan(session, targets, order, choices, wipe_variant, wipe_force, wipe_duration, stroke_minimum):
+    if float(stroke_minimum) != TASK_STROKE_MINIMUM_M:
+        raise ValueError("candidate cannot change task stroke requirement")
     params = dict(order=list(order), choices=plain(choices), wipe_variant=int(wipe_variant), wipe_force=float(wipe_force),
                   wipe_duration=float(wipe_duration), stroke_minimum=float(stroke_minimum))
     cid = digest(dict(scope=TASK_SCOPE, params=params, start=fingerprint(session)))[:20]
@@ -363,7 +366,7 @@ def build_pool(session, targets, seed, n=12, level=None):
                                  # pin during vertical seating.
                                  speed=float(rng.choice([.003, .0045, .006, .007])))
         params = (tuple(order), tuple((p, tuple(sorted(choices[p].items()))) for p in PARTS),
-                  int(rng.integers(4)), float(rng.choice([1.3, 1.5, 1.7])), float(rng.choice([12., 14., 16.])), float(rng.choice([.08, .09])))
+                  int(rng.integers(4)), float(rng.choice([1.3, 1.5, 1.7])), float(rng.choice([12., 14., 16.])), TASK_STROKE_MINIMUM_M)
         key = repr(params)
         if key in seen: continue
         seen.add(key)

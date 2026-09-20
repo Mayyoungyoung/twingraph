@@ -18,8 +18,7 @@ from .physical import PhysicalRunner, perturbation
 from .skill_graph import compile_graph
 
 
-def trial_spec(seed, repeat, domain, friction_span=.08, gain_span=.015,
-               mass_span=.10, damping_span=.15):
+def trial_spec(seed, repeat, domain, friction_span=.08, gain_span=.015):
     namespaces = {"train": 881, "val": 883, "test": 887,
                   "twin": 889, "target": 893, "development": 877}
     if domain not in namespaces or repeat < 0:
@@ -30,11 +29,8 @@ def trial_spec(seed, repeat, domain, friction_span=.08, gain_span=.015,
         domain=domain, repeat=int(repeat),
         friction_scale=1. if nominal else float(rng.uniform(1-friction_span, 1+friction_span)),
         actuator_gain_scale=1. if nominal else float(rng.uniform(1-gain_span, 1+gain_span)),
-        mass_scale=1. if nominal else float(rng.uniform(1-mass_span, 1+mass_span)),
-        damping_scale=1. if nominal else float(rng.uniform(1-damping_span, 1+damping_span)),
-        perception_seed=int(rng.integers(0, 2**31-1)),
-        position_noise_std_m=.001 if domain != "test" else .002,
-        yaw_noise_std_rad=float(np.deg2rad(1.0 if domain != "test" else 2.0)),
+        # The v7 runner changes friction and actuator gain. Mass, damping and
+        # perception draws were previously advertised but never applied.
     )
 
 

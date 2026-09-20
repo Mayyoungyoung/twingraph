@@ -24,6 +24,9 @@ class PhysicalRunner:
         self.timeout=timeout
 
     def run(self,plan,trial,keep_trace=False):
+        unsupported = set(trial) - {"domain", "repeat", "friction_scale", "actuator_gain_scale"}
+        if unsupported and type(self) is PhysicalRunner:
+            raise ValueError(f"unsupported physical trial fields: {sorted(unsupported)}")
         graph_hash = None
         goals = None
         if isinstance(plan, dict) and plan.get("schema") == "twingraph.executable_skill_graph.v1":
@@ -41,6 +44,10 @@ class PhysicalRunner:
         s.ctx.model.geom_friction[:]*=trial["friction_scale"]
         s.ctx.model.actuator_gainprm[:,:3]*=trial["actuator_gain_scale"]
         s.ctx.model.actuator_biasprm[:,:3]*=trial["actuator_gain_scale"]
+        applied_parameters = dict(friction_scale=float(trial["friction_scale"]),
+                                  actuator_gain_scale=float(trial["actuator_gain_scale"]),
+                                  geom_friction_sha256=digest(s.ctx.model.geom_friction.tolist()),
+                                  actuator_gain_sha256=digest(s.ctx.model.actuator_gainprm.tolist()))
         p=copy.deepcopy(plan); p.prefix["start_state"]=fingerprint(s)
         s.results.clear(); s.arm.trace.clear()
         start_sim=float(s.ctx.data.time);wall=time.perf_counter()
@@ -87,6 +94,10 @@ class PhysicalRunner:
         steps=copy.deepcopy(s.results)
         sim=float(s.ctx.data.time-start_sim)
         result=dict(candidate_id=plan.id,trial=trial,trial_sha256=digest(trial),valid=True,
+                    requested_parameters=copy.deepcopy(trial),applied_parameters=applied_parameters,
+                    restored_parameters={"actuator_gainprm": bool(np.array_equal(s.ctx.model.actuator_gainprm,self.gain)),
+                                         "actuator_biasprm": bool(np.array_equal(s.ctx.model.actuator_biasprm,self.bias)),
+                                         "friction_restored_on_next_run": True},
                     input_graph_sha256=graph_hash,
                     goal_check=goal_result,
                     success=bool(prefix and suffix),full_success=bool(prefix and suffix),

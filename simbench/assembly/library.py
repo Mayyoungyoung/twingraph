@@ -300,6 +300,8 @@ class Session:
             failure_reasons=list(self.failure_reasons),
             perception_backend=self.perception_backend,
             visual_calibration=copy.deepcopy(self.visual_calibration),
+            stage_targets=copy.deepcopy(getattr(self, "stage_targets", None)),
+            execution_relocalizations=copy.deepcopy(getattr(self, "execution_relocalizations", None)),
         )
 
     def restore(self, state):
@@ -327,6 +329,12 @@ class Session:
         self.failure_reasons = list(state.get("failure_reasons", []))
         self.perception_backend = state.get("perception_backend", self.perception_backend)
         self.visual_calibration = copy.deepcopy(state.get("visual_calibration"))
+        for name in ("stage_targets", "execution_relocalizations"):
+            if state.get(name) is None:
+                if hasattr(self, name):
+                    delattr(self, name)
+            else:
+                setattr(self, name, copy.deepcopy(state[name]))
         if self.dirty_state is not None:
             from simbench.value.cleaning import restore_visual
             restore_visual(self)
