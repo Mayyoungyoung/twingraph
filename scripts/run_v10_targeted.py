@@ -22,13 +22,16 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--seeds", type=int, nargs="+", default=list(CASES))
     parser.add_argument("--condition", default="nominal")
+    parser.add_argument("--candidates", nargs="+", default=None)
     args = parser.parse_args()
     pool = {row["name"]: row for row in proposals()}
     args.out.mkdir(parents=True, exist_ok=True)
     for seed in args.seeds:
         if seed not in CASES:
             raise ValueError(f"unregistered diagnosis seed {seed}")
-        for name in CASES[seed]:
+        for name in (args.candidates or CASES[seed]):
+            if name not in pool:
+                raise ValueError(f"unknown candidate {name}")
             directory = args.out / f"seed_{seed}" / args.condition / name
             if (directory / "result.json").exists():
                 continue

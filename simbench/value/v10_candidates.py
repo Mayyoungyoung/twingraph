@@ -21,9 +21,15 @@ def proposals():
         ("pin_left_yaw90", "pin_left", {"yaw": pi / 2}),
         ("pin_left_grasp_high", "pin_left", {"height": .003}),
         ("pin_left_yaw90_high", "pin_left", {"yaw": pi / 2, "height": .003}),
+        ("pin_left_yaw45", "pin_left", {"yaw": pi / 4}),
+        ("pin_left_yaw_neg45", "pin_left", {"yaw": -pi / 4}),
+        ("pin_left_grasp_low", "pin_left", {"height": -.002}),
         ("handle_yaw90", "handle", {"yaw": pi / 2}),
         ("handle_grasp_high", "handle", {"height": .004}),
         ("handle_yaw90_high", "handle", {"yaw": pi / 2, "height": .004}),
+        ("handle_yaw45", "handle", {"yaw": pi / 4}),
+        ("handle_yaw_neg45", "handle", {"yaw": -pi / 4}),
+        ("handle_grasp_low", "handle", {"height": -.004}),
     ]
     result = [reference]
     for name, part, changes in variants:
