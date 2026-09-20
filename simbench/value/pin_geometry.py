@@ -21,6 +21,7 @@ class PinInsertionConfig:
     shaft_tip_offset_m: float = -0.047
     shaft_head_offset_m: float = 0.006
     radial_clearance_m: float = 0.0002
+    source: str = "stage_v7._add_pin_guides and scene.holed_plate CAD"
 
     def manifest(self):
         return {
@@ -32,7 +33,7 @@ class PinInsertionConfig:
             "shaft_tip_offset_m": self.shaft_tip_offset_m,
             "shaft_head_offset_m": self.shaft_head_offset_m,
             "radial_clearance_m": self.radial_clearance_m,
-            "source": "stage_v7._add_pin_guides and scene.holed_plate CAD",
+            "source": self.source,
         }
 
 

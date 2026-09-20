@@ -165,7 +165,7 @@ def legal_orders(orders=None):
     return result
 
 
-def stage_calls(part, target, choice, stage, v7=False):
+def stage_calls(part, target, choice, stage, v7=False, functional_clearance=False):
     """Original task.py operations, with feedback transforms kept deferred."""
     calls = []
     target = np.asarray(target, float)
@@ -238,9 +238,12 @@ def stage_calls(part, target, choice, stage, v7=False):
         # Clear the pin head laterally before lifting.  Raising the fingers
         # while they are still above a narrow, slightly tilted head can drag
         # the released pin out of its hole even though contact has ceased.
-        side = -0.030 if part == "pin_left" else 0.030
-        add("move", delta=xyz([0, side, 0.0]))
-        add("move", delta=xyz([0, 0, .10]))
+        if functional_clearance:
+            add("move", delta=xyz([0, 0, .10]))
+        else:
+            side = -0.030 if part == "pin_left" else 0.030
+            add("move", delta=xyz([0, side, 0.0]))
+            add("move", delta=xyz([0, 0, .10]))
     else:
         add("move", delta=xyz([0, 0, .10]))
     inspect_tol = .0025 if (v7 and part.startswith("pin_")) else .0015
@@ -263,7 +266,9 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
         raise ValueError("complete five-part goals and choices are required")
     if initial_route_index not in (0, 1, 2):
         raise ValueError("invalid initial route index")
-    calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i, v7=v7)]
+    functional_clearance = bool(getattr(session, "task_version", "").startswith("functional_assembly_v9"))
+    calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i, v7=v7,
+                                                                functional_clearance=functional_clearance)]
     for part in PARTS:
         if v7 and part.startswith("pin_"):
             calls.append(Call(f"accept_{part}", "inspect", dict(what=argument("pin"), part=argument(part),

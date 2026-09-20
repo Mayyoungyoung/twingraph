@@ -781,7 +781,7 @@ class Session:
             pin_geometry_ready = evaluate_pin_context(
                 self.ctx, part, fixture_part="end_stop", hole_offset_m=hole_offset,
                 phase="inserted_while_held", released=False,
-                touching_finger=True, config=PinInsertionConfig(required_depth_m=.006),
+                touching_finger=True, config=getattr(self, "pin_insertion_config", PinInsertionConfig(required_depth_m=.006)),
             )
         support = 0.0
         bid = self.ctx.body_id(part)
@@ -1177,7 +1177,7 @@ class Session:
             metrics = evaluate_pin_context(
                 self.ctx, part, fixture_part="end_stop", hole_offset_m=hole_offset,
                 phase="inserted_while_held", released=False,
-                touching_finger=True, config=PinInsertionConfig(required_depth_m=.006),
+                touching_finger=True, config=getattr(self, "pin_insertion_config", PinInsertionConfig(required_depth_m=.006)),
             )
             if metrics.get("success"):
                 return Result(True, {**result.metrics, "insertion_geometry": metrics,
@@ -1323,7 +1323,7 @@ class Session:
         metrics = evaluate_pin_context(
             self.ctx, part, fixture_part=hole_part, hole_offset_m=hole_offset_m,
             phase=phase, released=self.held != part, touching_finger=touching,
-            config=PinInsertionConfig(required_depth_m=float(minimum_insertion_depth_m)),
+            config=getattr(self, "pin_insertion_config", PinInsertionConfig(required_depth_m=float(minimum_insertion_depth_m))),
         )
         self.artifact(f"{part}_{phase}", "pin_insertion", part, **metrics)
         return Result(bool(metrics["success"]), metrics, "pin not effectively inserted in hole")

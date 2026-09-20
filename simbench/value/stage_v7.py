@@ -301,7 +301,8 @@ def capture_detector(session, size=DETECTOR_SIZE):
 def install_visual(session, parts=ALL_PARTS, size=DETECTOR_SIZE):
     frames, calibrations = capture_detector(session, size=size)
     installed = bool(getattr(session, "stage_passes", {}).get("assembly_pass"))
-    result = estimate_scene(frames, calibrations, visual_templates(installed=installed))
+    templates_fn = getattr(session, "visual_templates_fn", visual_templates)
+    result = estimate_scene(frames, calibrations, templates_fn(installed=installed))
     observation = to_sensor_observation(result, parts)
     observation["calibration"] = {k: v.manifest() for k, v in calibrations.items()}
     observation["detector_resolution"] = [int(size[1]), int(size[0])] if isinstance(size, (tuple, list)) else [int(size), int(size)]
@@ -338,10 +339,11 @@ def _full_plan(session, targets, order, choices, wipe_variant, wipe_force, wipe_
         raise ValueError("candidate cannot change task stroke requirement")
     params = dict(order=list(order), choices=plain(choices), wipe_variant=int(wipe_variant), wipe_force=float(wipe_force),
                   wipe_duration=float(wipe_duration), stroke_minimum=float(stroke_minimum))
-    cid = digest(dict(scope=TASK_SCOPE, params=params, start=fingerprint(session)))[:20]
+    task_scope = getattr(session, "task_version", TASK_SCOPE)
+    cid = digest(dict(scope=task_scope, params=params, start=fingerprint(session)))[:20]
     call = Call("full_task", "run_full_task_v7", {k: argument(v) for k, v in params.items()}, {"manipulated": WIPE_TOOL}, "executable")
     payload = dict(id=cid, part=WIPE_TOOL, execution="full_task_v7", start_state=fingerprint(session), steps=[dict(skill=call.skill, params=params)],
-                   task_scope=TASK_SCOPE, order=list(order), choices=plain(choices), wipe_variant=int(wipe_variant),
+                   task_scope=task_scope, order=list(order), choices=plain(choices), wipe_variant=int(wipe_variant),
                    wipe_force=float(wipe_force), wipe_duration=float(wipe_duration), stroke_minimum=float(stroke_minimum), semantic_program_id=cid)
     return PlanIR(cid, [call], 1, payload, "unknown", protocol="full_task.v7").validate(session.parts)
 
