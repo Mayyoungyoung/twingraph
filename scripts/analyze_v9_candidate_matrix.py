@@ -330,7 +330,8 @@ def main():
                          for cond in ("nominal", "light_low", "light_high") for name in names)
               for seed in seeds}
     (out / "split.json").write_text(json.dumps(dict(train=train_seeds, validation=val_seeds,
-            independent_target=[], successes_by_seed=labels), indent=2))
+            selection_validation=list(range(1314, 1320)),
+            independent_target=[1400, 1401, 1402], successes_by_seed=labels), indent=2))
     summary = dict(layouts=len(seeds), candidates=len(names), conditions=3,
                    random_baseline="exact expectation over all uniform candidate orders",
                    successes=sum(labels.values()), successes_by_seed=labels,

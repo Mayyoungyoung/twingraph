@@ -20,6 +20,8 @@ def main():
     development_path = Path(args.development_analysis) / "summary.json"
     development = json.loads(development_path.read_text())
     split = json.loads((Path(args.development_analysis) / "split.json").read_text())
+    if seeds != split["selection_validation"]:
+        raise ValueError("selection validation differs from frozen development split")
     if set(seeds) & set(split["train"] + split["validation"]):
         raise ValueError("selection validation overlaps model training or early stopping layouts")
     training = development.get("model_training", {})
