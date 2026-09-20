@@ -1,0 +1,1142 @@
+{
+  "task_version": "functional_assembly_v9_funnel_r1",
+  "seed": 1203,
+  "part": "pin_right",
+  "pose_mode": "rgbd",
+  "grasp_height_m": 0.001,
+  "grasp_yaw_rad": 0.0,
+  "spec": {
+    "source_spec": {
+      "seed": 1203,
+      "level": "L1",
+      "supply_shifts": {
+        "carriage": [
+          -0.023794922933213464,
+          0.004207193002469734
+        ],
+        "end_stop": [
+          0.01176617488755708,
+          -0.024487654762717873
+        ],
+        "pin_left": [
+          -0.022293736447355512,
+          -0.00047014773756017675
+        ],
+        "pin_right": [
+          0.0124434801446517,
+          -0.02111772534794913
+        ],
+        "handle": [
+          0.006501376064754247,
+          -0.0026876584646272246
+        ]
+      },
+      "supply_yaws_rad": {
+        "carriage": -0.0957301166959097,
+        "end_stop": 0.16812892769995658,
+        "pin_left": 0.05748347781239621,
+        "pin_right": -0.03286266714809863,
+        "handle": 0.009844753099700787
+      },
+      "camera_xy_jitter_m": [
+        0.004409173451589064,
+        0.00740012173526459
+      ],
+      "friction_scale": 0.8877817873875243,
+      "mass_scale": 1.0497916156302955,
+      "damping_scale": 0.9572702744371587,
+      "family": "sliding_stage_full_v7",
+      "scope": "clean_assemble_five_parts_and_post_handle_bidirectional_stroke"
+    },
+    "task_version": "functional_assembly_v9_funnel_r1",
+    "collision_bore_radius_m": 0.0075,
+    "holder_inner_radius_m": 0.006,
+    "holder_half_height_m": 0.012,
+    "pin_supply_min_x_m": -0.357,
+    "setup": "isolated_pin_preinstalled_fixture"
+  },
+  "scene": "results\\value_v9_functional_assembly\\frozen_single_1203_pin_right\\scene\\stage_v9_scene.xml",
+  "fixture_initial_position_m": [
+    -0.016136882980156336,
+    0.08428799257347751,
+    0.8397983634566066
+  ],
+  "commanded_pin_target_m": [
+    -0.016431070110087348,
+    0.11320358381379036,
+    0.855
+  ],
+  "passed": true,
+  "error": null,
+  "executed_steps": 19,
+  "insertion": {
+    "success": true,
+    "phase": "inserted_after_release",
+    "inserted_while_held": true,
+    "inserted_after_release": true,
+    "retained_after_stroke": false,
+    "released": true,
+    "touching_finger": false,
+    "inserted": true,
+    "max_insertion_depth_m": 0.007967279562839852,
+    "valid_depth_span_m": 0.007806728885877231,
+    "minimum_required_depth_m": 0.006,
+    "limiting_bore_radius_m": 0.0075,
+    "permitted_center_offset_m": 0.004174443402669448,
+    "center_offsets_entry_required_m": [
+      [
+        0.0011156324022718114,
+        -3.363491758531789e-05,
+        -0.000577478411321497
+      ],
+      [
+        0.0015565851966453951,
+        -1.7778530763512546e-05,
+        -0.0011816860202925536
+      ]
+    ],
+    "center_offsets_by_depth": [
+      {
+        "depth_m": 0.0,
+        "transverse_m": [
+          0.0011156324022718114,
+          -3.363491758531789e-05,
+          -0.000577478411321497
+        ],
+        "bore_radius_m": 0.0084,
+        "permitted_center_offset_m": 0.005074443402669448
+      },
+      {
+        "depth_m": 0.002,
+        "transverse_m": [
+          0.001262616667063006,
+          -2.834945531137367e-05,
+          -0.0007788809476451455
+        ],
+        "bore_radius_m": 0.0081,
+        "permitted_center_offset_m": 0.004774443402669448
+      },
+      {
+        "depth_m": 0.004,
+        "transverse_m": [
+          0.0014096009318542006,
+          -2.3063993037443324e-05,
+          -0.000980283483968905
+        ],
+        "bore_radius_m": 0.0078,
+        "permitted_center_offset_m": 0.004474443402669448
+      },
+      {
+        "depth_m": 0.006,
+        "transverse_m": [
+          0.0015565851966453951,
+          -1.7778530763512546e-05,
+          -0.0011816860202925536
+        ],
+        "bore_radius_m": 0.0075,
+        "permitted_center_offset_m": 0.004174443402669448
+      }
+    ],
+    "max_radial_error_m": 0.002190422355669645,
+    "samples": 257
+  },
+  "states": [
+    {
+      "step": 0,
+      "skill": "detect",
+      "pin_position_m": [
+        -0.3475690352033567,
+        -0.3610810421392468,
+        0.8479667742532836
+      ],
+      "pin_axis": [
+        -0.00026157641011123974,
+        0.0007623651056333702,
+        0.9999996751885611
+      ],
+      "eef_position_m": [
+        -0.17540693327905016,
+        -5.714496033665049e-24,
+        1.2743555064104302
+      ]
+    },
+    {
+      "step": 1,
+      "skill": "estimate_pose",
+      "pin_position_m": [
+        -0.3475690352033567,
+        -0.3610810421392468,
+        0.8479667742532836
+      ],
+      "pin_axis": [
+        -0.00026157641011123974,
+        0.0007623651056333702,
+        0.9999996751885611
+      ],
+      "eef_position_m": [
+        -0.17540693327905016,
+        -5.714496033665049e-24,
+        1.2743555064104302
+      ]
+    },
+    {
+      "step": 2,
+      "skill": "estimate_grasp",
+      "pin_position_m": [
+        -0.3475690352033567,
+        -0.3610810421392468,
+        0.8479667742532836
+      ],
+      "pin_axis": [
+        -0.00026157641011123974,
+        0.0007623651056333702,
+        0.9999996751885611
+      ],
+      "eef_position_m": [
+        -0.17540693327905016,
+        -5.714496033665049e-24,
+        1.2743555064104302
+      ]
+    },
+    {
+      "step": 3,
+      "skill": "select_grasp",
+      "pin_position_m": [
+        -0.3475690352033567,
+        -0.3610810421392468,
+        0.8479667742532836
+      ],
+      "pin_axis": [
+        -0.00026157641011123974,
+        0.0007623651056333702,
+        0.9999996751885611
+      ],
+      "eef_position_m": [
+        -0.17540693327905016,
+        -5.714496033665049e-24,
+        1.2743555064104302
+      ]
+    },
+    {
+      "step": 4,
+      "skill": "plan_path",
+      "pin_position_m": [
+        -0.3475690352033567,
+        -0.3610810421392468,
+        0.8479667742532836
+      ],
+      "pin_axis": [
+        -0.00026157641011123974,
+        0.0007623651056333702,
+        0.9999996751885611
+      ],
+      "eef_position_m": [
+        -0.17540693327905016,
+        -5.714496033665049e-24,
+        1.2743555064104302
+      ]
+    },
+    {
+      "step": 5,
+      "skill": "move",
+      "pin_position_m": [
+        -0.3476079163822056,
+        -0.3611072443911313,
+        0.847966613339948
+      ],
+      "pin_axis": [
+        -0.001072812575900209,
+        0.00021464754750766924,
+        0.9999994014996249
+      ],
+      "eef_position_m": [
+        -0.3482965445752186,
+        -0.3618741159435431,
+        0.9550224086535264
+      ]
+    },
+    {
+      "step": 6,
+      "skill": "move",
+      "pin_position_m": [
+        -0.3475532434191584,
+        -0.36107798594670026,
+        0.8479666800926323
+      ],
+      "pin_axis": [
+        6.552211969878262e-05,
+        0.0008244745079501574,
+        0.9999996579742605
+      ],
+      "eef_position_m": [
+        -0.3482933071270326,
+        -0.3618872416483594,
+        0.8550359562754056
+      ]
+    },
+    {
+      "step": 7,
+      "skill": "grasp",
+      "pin_position_m": [
+        -0.3475528218024772,
+        -0.36188181808063147,
+        0.8480033938677162
+      ],
+      "pin_axis": [
+        7.463576344543336e-05,
+        -0.00042424530730845447,
+        0.9999999072227066
+      ],
+      "eef_position_m": [
+        -0.34829239790195565,
+        -0.36188605336761226,
+        0.8550358478148734
+      ]
+    },
+    {
+      "step": 8,
+      "skill": "inspect",
+      "pin_position_m": [
+        -0.3475528218024772,
+        -0.36188181808063147,
+        0.8480033938677162
+      ],
+      "pin_axis": [
+        7.463576344543336e-05,
+        -0.00042424530730845447,
+        0.9999999072227066
+      ],
+      "eef_position_m": [
+        -0.34829239790195565,
+        -0.36188605336761226,
+        0.8550358478148734
+      ]
+    },
+    {
+      "step": 9,
+      "skill": "move",
+      "pin_position_m": [
+        -0.34741458907602824,
+        -0.36187699971167814,
+        0.9478635592511522
+      ],
+      "pin_axis": [
+        -8.834927873471585e-05,
+        -0.0007120613939023747,
+        0.9999997425814554
+      ],
+      "eef_position_m": [
+        -0.34829566381362836,
+        -0.3618825053880095,
+        0.9549471090650596
+      ]
+    },
+    {
+      "step": 10,
+      "skill": "plan_path",
+      "pin_position_m": [
+        -0.34741458907602824,
+        -0.36187699971167814,
+        0.9478635592511522
+      ],
+      "pin_axis": [
+        -8.834927873471585e-05,
+        -0.0007120613939023747,
+        0.9999997425814554
+      ],
+      "eef_position_m": [
+        -0.34829566381362836,
+        -0.3618825053880095,
+        0.9549471090650596
+      ]
+    },
+    {
+      "step": 11,
+      "skill": "move",
+      "pin_position_m": [
+        -0.015093371970177264,
+        0.11321001737499357,
+        0.9238733224398659
+      ],
+      "pin_axis": [
+        0.000728222286145383,
+        0.0005823830160576322,
+        0.999999565261068
+      ],
+      "eef_position_m": [
+        -0.017333246752531478,
+        0.11320742555532388,
+        0.9310700707065369
+      ]
+    },
+    {
+      "step": 12,
+      "skill": "move",
+      "pin_position_m": [
+        -0.01636532499099887,
+        0.11320069039493011,
+        0.9239207464756974
+      ],
+      "pin_axis": [
+        0.0010622757487356272,
+        0.00024023352009449884,
+        0.9999994069288688
+      ],
+      "eef_position_m": [
+        -0.01867172315364351,
+        0.1131994674410425,
+        0.9311868824038962
+      ]
+    },
+    {
+      "step": 13,
+      "skill": "plan_path",
+      "pin_position_m": [
+        -0.01636532499099887,
+        0.11320069039493011,
+        0.9239207464756974
+      ],
+      "pin_axis": [
+        0.0010622757487356272,
+        0.00024023352009449884,
+        0.9999994069288688
+      ],
+      "eef_position_m": [
+        -0.01867172315364351,
+        0.1131994674410425,
+        0.9311868824038962
+      ]
+    },
+    {
+      "step": 14,
+      "skill": "insert",
+      "pin_position_m": [
+        -0.01589477672171757,
+        0.11493880280710415,
+        0.8580377410784481
+      ],
+      "pin_axis": [
+        0.017401460712678594,
+        -0.021011002315025992,
+        0.9996277942048147
+      ],
+      "eef_position_m": [
+        -0.018753876630346708,
+        0.11362085820340699,
+        0.8623170104134127
+      ]
+    },
+    {
+      "step": 15,
+      "skill": "press",
+      "pin_position_m": [
+        -0.015857550593129877,
+        0.11546674580373607,
+        0.8558144545385991
+      ],
+      "pin_axis": [
+        0.018417594600829118,
+        -0.007534778595573641,
+        0.9998019900563487
+      ],
+      "eef_position_m": [
+        -0.018714973400008186,
+        0.11410967334025922,
+        0.8589487046262488
+      ]
+    },
+    {
+      "step": 16,
+      "skill": "place",
+      "pin_position_m": [
+        -0.01577137691195324,
+        0.11430854814457445,
+        0.8572553782541198
+      ],
+      "pin_axis": [
+        0.013432759692441064,
+        -0.0505626325950158,
+        0.9986305528833506
+      ],
+      "eef_position_m": [
+        -0.018413773659568176,
+        0.11785993157366767,
+        0.860021130653553
+      ]
+    },
+    {
+      "step": 17,
+      "skill": "move",
+      "pin_position_m": [
+        -0.013352928725041442,
+        0.11865362775485175,
+        0.8314994413489292
+      ],
+      "pin_axis": [
+        -0.003562805589855389,
+        0.9843031505993842,
+        0.17645003297379916
+      ],
+      "eef_position_m": [
+        -0.01841381972417993,
+        0.11785975427670162,
+        0.9599464048976607
+      ]
+    },
+    {
+      "step": 18,
+      "skill": "inspect",
+      "pin_position_m": [
+        -0.013352928725041442,
+        0.11865362775485175,
+        0.8314994413489292
+      ],
+      "pin_axis": [
+        -0.003562805589855389,
+        0.9843031505993842,
+        0.17645003297379916
+      ],
+      "eef_position_m": [
+        -0.01841381972417993,
+        0.11785975427670162,
+        0.9599464048976607
+      ]
+    }
+  ],
+  "results": [
+    {
+      "index": 0,
+      "skill": "observe_parts",
+      "interface": "detect",
+      "atom": "detect",
+      "params": {
+        "required_parts": null
+      },
+      "ok": true,
+      "metrics": {
+        "detected": [
+          "carriage",
+          "end_stop",
+          "pin_left",
+          "pin_right",
+          "handle",
+          "wipe_tool"
+        ],
+        "backend": "rgbd_geometry",
+        "noise_std_m": null,
+        "frozen": true
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 3.0199997127056122e-05
+    },
+    {
+      "index": 1,
+      "skill": "estimate_pose",
+      "interface": "estimate_pose",
+      "atom": "estimate_pose",
+      "params": {
+        "part": "pin_right",
+        "as_": "pose"
+      },
+      "ok": true,
+      "metrics": {
+        "position_m": [
+          -0.3482934434371211,
+          -0.36188742742185165,
+          0.84799999666214
+        ],
+        "quaternion_wxyz": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "uncertainty": {
+          "position_noise_std_m": null,
+          "yaw_noise_std_rad": null
+        }
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 0.0003472999669611454
+    },
+    {
+      "index": 2,
+      "skill": "propose_grasps",
+      "interface": "estimate_grasp",
+      "atom": "estimate_grasp",
+      "params": {
+        "part": "pin_right",
+        "artifact": "pose",
+        "as_": "grasps",
+        "yaws": [
+          0.0
+        ],
+        "height_offset": 0.001
+      },
+      "ok": true,
+      "metrics": {
+        "feasible_candidates": 1,
+        "unknown_candidates": 0
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 0.009587399894371629
+    },
+    {
+      "index": 3,
+      "skill": "select_grasp",
+      "interface": "select_grasp",
+      "atom": "estimate_grasp",
+      "params": {
+        "part": "pin_right",
+        "artifact": "grasps",
+        "as_": "grasp",
+        "index": null,
+        "candidate_id": null
+      },
+      "ok": true,
+      "metrics": {
+        "chosen_index": 0,
+        "yaw_rad": 0.0,
+        "jaw_width_m": 0.018
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 2.4699955247342587e-05
+    },
+    {
+      "index": 4,
+      "skill": "plan_transfer",
+      "interface": "plan_path",
+      "atom": "plan_path",
+      "params": {
+        "target": [
+          -0.3482934434371211,
+          -0.36188742742185165,
+          0.95499999666214
+        ],
+        "as_": "transfer",
+        "clearance": 0.98,
+        "yaw": 0.0,
+        "candidate_id": null,
+        "grasp_artifact": "grasp"
+      },
+      "ok": true,
+      "metrics": {
+        "waypoints": 3,
+        "clearance_m": 0.98,
+        "collision_checks": [
+          {
+            "route_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:0",
+            "valid": true,
+            "samples": 51,
+            "resolution_rad": 0.035,
+            "ik_restart": 0
+          },
+          {
+            "route_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:1",
+            "valid": true,
+            "samples": 51,
+            "resolution_rad": 0.035,
+            "ik_restart": 0
+          },
+          {
+            "route_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:2",
+            "valid": true,
+            "samples": 51,
+            "resolution_rad": 0.035,
+            "ik_restart": 0
+          }
+        ],
+        "candidate_count": 3,
+        "selected_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:0"
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 0.35092350002378225
+    },
+    {
+      "index": 5,
+      "skill": "execute_joint_path",
+      "interface": "move",
+      "atom": "move",
+      "params": {
+        "artifact": "transfer"
+      },
+      "ok": true,
+      "metrics": {
+        "target_error_m": 2.625090227333487e-05
+      },
+      "reason": "",
+      "sim_seconds": 6.99999999999954,
+      "wall_seconds": 2.0563791000749916
+    },
+    {
+      "index": 6,
+      "skill": "approach",
+      "interface": "move",
+      "atom": "move",
+      "params": {
+        "part": "pin_right",
+        "artifact": "grasp"
+      },
+      "ok": true,
+      "metrics": {
+        "position_error_m": 3.596035147832496e-05
+      },
+      "reason": "",
+      "sim_seconds": 4.720000000001576,
+      "wall_seconds": 1.7454971999395639
+    },
+    {
+      "index": 7,
+      "skill": "close_gripper",
+      "interface": "grasp",
+      "atom": "grasp",
+      "params": {
+        "part": "pin_right",
+        "force": 8.0
+      },
+      "ok": true,
+      "metrics": {
+        "held": true,
+        "left_n": 7.810467989901834,
+        "right_n": 7.845499228587006
+      },
+      "reason": "",
+      "sim_seconds": 5.399999999999386,
+      "wall_seconds": 2.0620667000766844
+    },
+    {
+      "index": 8,
+      "skill": "verify_grasp",
+      "interface": "inspect",
+      "atom": null,
+      "params": {
+        "part": "pin_right"
+      },
+      "ok": true,
+      "metrics": {
+        "held": true,
+        "left_n": 7.810467989901834,
+        "right_n": 7.845499228587006
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 0.001128199975937605
+    },
+    {
+      "index": 9,
+      "skill": "lift",
+      "interface": "move",
+      "atom": "move",
+      "params": {
+        "part": "pin_right",
+        "height": 0.1
+      },
+      "ok": true,
+      "metrics": {
+        "object_lift_m": 0.099860165383436,
+        "held": true
+      },
+      "reason": "",
+      "sim_seconds": 3.6599999999979715,
+      "wall_seconds": 1.3713461000006646
+    },
+    {
+      "index": 10,
+      "skill": "plan_transfer",
+      "interface": "plan_path",
+      "atom": "plan_path",
+      "params": {
+        "target": [
+          -0.01731214484768745,
+          0.11319807813745902,
+          0.9310835498139074
+        ],
+        "as_": "transfer",
+        "clearance": 0.98,
+        "yaw": 0.0,
+        "candidate_id": null,
+        "grasp_artifact": "grasp"
+      },
+      "ok": true,
+      "metrics": {
+        "waypoints": 3,
+        "clearance_m": 0.98,
+        "collision_checks": [
+          {
+            "route_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:0",
+            "valid": true,
+            "samples": 35,
+            "resolution_rad": 0.035,
+            "ik_restart": 0
+          },
+          {
+            "route_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:1",
+            "valid": true,
+            "samples": 45,
+            "resolution_rad": 0.035,
+            "ik_restart": 0
+          },
+          {
+            "route_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:2",
+            "valid": true,
+            "samples": 54,
+            "resolution_rad": 0.035,
+            "ik_restart": 0
+          }
+        ],
+        "candidate_count": 3,
+        "selected_id": "pin_right:yaw:0.000000:pose:1d6e10f52bcf:route:0"
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 0.7057508000871167
+    },
+    {
+      "index": 11,
+      "skill": "execute_joint_path",
+      "interface": "move",
+      "atom": "move",
+      "params": {
+        "artifact": "transfer"
+      },
+      "ok": true,
+      "metrics": {
+        "target_error_m": 2.672734450505321e-05
+      },
+      "reason": "",
+      "sim_seconds": 6.139999999996597,
+      "wall_seconds": 1.9600351999979466
+    },
+    {
+      "index": 12,
+      "skill": "align_axis",
+      "interface": "move",
+      "atom": "move",
+      "params": {
+        "part": "pin_right",
+        "target": [
+          -0.016431070110087348,
+          0.11320358381379036,
+          0.9239999999999999
+        ],
+        "tolerance": 0.0007
+      },
+      "ok": true,
+      "metrics": {
+        "object_error_m": 0.00010301414306309902
+      },
+      "reason": "",
+      "sim_seconds": 0.9999999999994458,
+      "wall_seconds": 0.3543657000409439
+    },
+    {
+      "index": 13,
+      "skill": "plan_insertion",
+      "interface": "plan_path",
+      "atom": "plan_path",
+      "params": {
+        "part": "pin_right",
+        "target": [
+          -0.016431070110087348,
+          0.11320358381379036,
+          0.855
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "as_": "insert",
+        "speed": 0.006,
+        "force_limit": 12.0
+      },
+      "ok": true,
+      "metrics": {
+        "target_m": [
+          -0.016431070110087348,
+          0.11320358381379036,
+          0.855
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "speed_m_s": 0.006,
+        "force_limit_n": 12.0
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 0.005782000022009015
+    },
+    {
+      "index": 14,
+      "skill": "slide_insert",
+      "interface": "insert",
+      "atom": "insert",
+      "params": {
+        "part": "pin_right",
+        "artifact": "insert"
+      },
+      "ok": true,
+      "metrics": {
+        "error_m": 0.0035392748427972077,
+        "travel_m": 0.06590760844246332,
+        "peak_force_n": 6.1387431259528,
+        "tracking_tolerance_m": 0.004
+      },
+      "reason": "",
+      "sim_seconds": 22.160000000022677,
+      "wall_seconds": 15.010500199976377
+    },
+    {
+      "index": 15,
+      "skill": "press_seat",
+      "interface": "press",
+      "atom": "press",
+      "params": {
+        "part": "pin_right",
+        "target_z": 0.855,
+        "force_stop": 2.5
+      },
+      "ok": true,
+      "metrics": {
+        "height_error_m": 0.0008144545385990742,
+        "contact_force_n": 2.2970686967153235,
+        "extra_descent_m": 0.0034999999999999927,
+        "passive_support_n": null,
+        "contacts": []
+      },
+      "reason": "",
+      "sim_seconds": 2.800000000003422,
+      "wall_seconds": 1.7413029000163078
+    },
+    {
+      "index": 16,
+      "skill": "open_gripper",
+      "interface": "open_gripper",
+      "atom": "place",
+      "params": {},
+      "ok": true,
+      "metrics": {
+        "jaw_span_m": 0.060009265507960693,
+        "contact_free": true
+      },
+      "reason": "",
+      "sim_seconds": 1.0000000000012221,
+      "wall_seconds": 0.3561872000573203
+    },
+    {
+      "index": 17,
+      "skill": "place_object",
+      "interface": "place",
+      "atom": "place",
+      "params": {
+        "part": "pin_right",
+        "target": [
+          -0.016431070110087348,
+          0.11320358381379036,
+          0.855
+        ],
+        "tol": 0.0025,
+        "settle": 0.35,
+        "minimum_support": 0.01,
+        "acceptance": "pin_inserted"
+      },
+      "ok": true,
+      "metrics": {
+        "acceptance": "pin_inserted",
+        "support_force_n": 0.0,
+        "support_force_feedback_n": 0.0,
+        "pin_geometry_while_held": {
+          "success": true,
+          "phase": "inserted_while_held",
+          "inserted_while_held": true,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": false,
+          "touching_finger": true,
+          "inserted": true,
+          "max_insertion_depth_m": 0.007917554290453536,
+          "valid_depth_span_m": 0.007865630205677696,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.004199346642146996,
+          "center_offsets_entry_required_m": [
+            [
+              0.0009686837806587405,
+              -0.001786285129459747,
+              -2.2932596932534466e-09
+            ],
+            [
+              0.0008581782050850393,
+              -0.0017410633497724254,
+              -1.9217875129803885e-09
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                0.0009686837806587405,
+                -0.001786285129459747,
+                -2.2932596932534466e-09
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.0050993466421469956
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                0.0009318485888008389,
+                -0.0017712112028973066,
+                -2.1694356333069875e-09
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.004799346642146996
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                0.0008950133969429373,
+                -0.001756137276334866,
+                -2.0456115733605285e-09
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.004499346642146996
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                0.0008581782050850393,
+                -0.0017410633497724254,
+                -1.9217875129803885e-09
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.004199346642146996
+            }
+          ],
+          "max_radial_error_m": 0.0020312343626684754,
+          "samples": 257
+        },
+        "jaw_span_m": 0.060433157748031846
+      },
+      "reason": "",
+      "sim_seconds": 1.3400000000016377,
+      "wall_seconds": 0.44268320000264794
+    },
+    {
+      "index": 18,
+      "skill": "retreat",
+      "interface": "move",
+      "atom": "move",
+      "params": {
+        "height": 0.1
+      },
+      "ok": true,
+      "metrics": {
+        "height_m": 0.9599464048976607
+      },
+      "reason": "",
+      "sim_seconds": 2.3800000000029087,
+      "wall_seconds": 0.729057600023225
+    },
+    {
+      "index": 19,
+      "skill": "inspect_pin_inserted",
+      "interface": "inspect",
+      "atom": null,
+      "params": {
+        "part": "pin_right",
+        "hole_part": "end_stop",
+        "hole_offset_m": [
+          0.0,
+          0.032,
+          0.0
+        ],
+        "minimum_insertion_depth_m": 0.006,
+        "phase": "inserted_after_release"
+      },
+      "ok": true,
+      "metrics": {
+        "success": true,
+        "phase": "inserted_after_release",
+        "inserted_while_held": true,
+        "inserted_after_release": true,
+        "retained_after_stroke": false,
+        "released": true,
+        "touching_finger": false,
+        "inserted": true,
+        "max_insertion_depth_m": 0.007967279562839852,
+        "valid_depth_span_m": 0.007806728885877231,
+        "minimum_required_depth_m": 0.006,
+        "limiting_bore_radius_m": 0.0075,
+        "permitted_center_offset_m": 0.004174443402669448,
+        "center_offsets_entry_required_m": [
+          [
+            0.0011156324022718114,
+            -3.363491758531789e-05,
+            -0.000577478411321497
+          ],
+          [
+            0.0015565851966453951,
+            -1.7778530763512546e-05,
+            -0.0011816860202925536
+          ]
+        ],
+        "center_offsets_by_depth": [
+          {
+            "depth_m": 0.0,
+            "transverse_m": [
+              0.0011156324022718114,
+              -3.363491758531789e-05,
+              -0.000577478411321497
+            ],
+            "bore_radius_m": 0.0084,
+            "permitted_center_offset_m": 0.005074443402669448
+          },
+          {
+            "depth_m": 0.002,
+            "transverse_m": [
+              0.001262616667063006,
+              -2.834945531137367e-05,
+              -0.0007788809476451455
+            ],
+            "bore_radius_m": 0.0081,
+            "permitted_center_offset_m": 0.004774443402669448
+          },
+          {
+            "depth_m": 0.004,
+            "transverse_m": [
+              0.0014096009318542006,
+              -2.3063993037443324e-05,
+              -0.000980283483968905
+            ],
+            "bore_radius_m": 0.0078,
+            "permitted_center_offset_m": 0.004474443402669448
+          },
+          {
+            "depth_m": 0.006,
+            "transverse_m": [
+              0.0015565851966453951,
+              -1.7778530763512546e-05,
+              -0.0011816860202925536
+            ],
+            "bore_radius_m": 0.0075,
+            "permitted_center_offset_m": 0.004174443402669448
+          }
+        ],
+        "max_radial_error_m": 0.002190422355669645,
+        "samples": 257
+      },
+      "reason": "",
+      "sim_seconds": 0.0,
+      "wall_seconds": 0.0012774000642821193
+    }
+  ]
+}

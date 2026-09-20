@@ -1,0 +1,213 @@
+[
+  {
+    "backend": "rgbd_geometry",
+    "end_stop": {
+      "position_m": [
+        -0.018157066454780546,
+        0.08309317605307387,
+        0.8359999790191651
+      ],
+      "quat_wxyz": [
+        0.9999887019297095,
+        0.0,
+        0.0,
+        -0.004753526368354899
+      ],
+      "valid": true,
+      "quality": 0.8317552618012553,
+      "source_view": "top_view",
+      "track_id": "rgbd:end_stop:0",
+      "bbox_xyxy": [
+        405,
+        99,
+        423,
+        124
+      ],
+      "fit_residual_m": 0.0029134474303469556,
+      "cad_origin_correction_m": [
+        0.0,
+        -0.0045,
+        0.0
+      ]
+    },
+    "carriage": {
+      "position_m": [
+        0.10534020645380919,
+        0.0845841958823716,
+        0.8240000176429749
+      ],
+      "quat_wxyz": [
+        0.9994564700997829,
+        0.0,
+        0.0,
+        -0.03296610950175641
+      ],
+      "valid": true,
+      "quality": 0.8892536387796685,
+      "source_view": "top_view",
+      "track_id": "rgbd:carriage:0",
+      "bbox_xyxy": [
+        490,
+        105,
+        522,
+        125
+      ],
+      "fit_residual_m": 4.356756036822974e-05,
+      "cad_origin_correction_m": [
+        0.006,
+        0.003,
+        0.0
+      ]
+    },
+    "pin_targets": {
+      "pin_left": [
+        -0.018461288705192057,
+        0.05109462219790169,
+        0.855
+      ],
+      "pin_right": [
+        -0.017852844204369035,
+        0.11509172990824605,
+        0.855
+      ],
+      "handle": [
+        0.10534020645380919,
+        0.0845841958823716,
+        0.872000017642975
+      ]
+    }
+  },
+  {
+    "backend": "rgbd_geometry",
+    "end_stop": {
+      "position_m": [
+        -0.01682527668181527,
+        0.08309317605307387,
+        0.8359999790191651
+      ],
+      "quat_wxyz": [
+        0.999992650606957,
+        0.0,
+        0.0,
+        -0.0038338925483667858
+      ],
+      "valid": true,
+      "quality": 0.8314778015987372,
+      "source_view": "top_view",
+      "track_id": "rgbd:end_stop:0",
+      "bbox_xyxy": [
+        406,
+        98,
+        424,
+        125
+      ],
+      "fit_residual_m": 0.0027863262103288025,
+      "cad_origin_correction_m": [
+        0.0,
+        -0.0045,
+        0.0
+      ]
+    },
+    "carriage": {
+      "position_m": [
+        0.10720260204948759,
+        0.07099216644056933,
+        0.789999978542328
+      ],
+      "quat_wxyz": [
+        0.9999113859717836,
+        0.0,
+        0.0,
+        -0.013312407895900399
+      ],
+      "valid": true,
+      "quality": 0.8988038230793058,
+      "source_view": "top_view",
+      "track_id": "rgbd:carriage:0",
+      "bbox_xyxy": [
+        479,
+        128,
+        517,
+        134
+      ],
+      "fit_residual_m": 1.554312234475269e-15,
+      "cad_origin_correction_m": [
+        0.006,
+        0.003,
+        0.0
+      ]
+    },
+    "pin_targets": {
+      "pin_left": [
+        -0.017070644001596618,
+        0.051094116771926504,
+        0.855
+      ],
+      "pin_right": [
+        -0.016579909362033924,
+        0.11509223533422124,
+        0.855
+      ]
+    }
+  },
+  {
+    "backend": "rgbd_geometry",
+    "handle": {
+      "position_m": [
+        0.10534020645380919,
+        0.0845841958823716,
+        0.872000017642975
+      ],
+      "quat_wxyz": [
+        0.9994564700997829,
+        0.0,
+        0.0,
+        -0.03296610950175641
+      ],
+      "valid": true,
+      "quality": 0.7114029110237348,
+      "source_view": "derived_from_carriage_rgbd",
+      "track_id": "rgbd:handle:derived_from_carriage",
+      "fit_residual_m": 4.356756036822974e-05,
+      "derived_from": "carriage",
+      "carriage_x_source": "rgbd_geometry",
+      "cad_relation_offset_m": [
+        0.0,
+        0.0,
+        0.048
+      ],
+      "occluded": true
+    },
+    "derived_from_carriage_rgbd": true
+  },
+  {
+    "backend": "rgbd_geometry",
+    "handle": {
+      "position_m": [
+        0.135,
+        0.0845841958823716,
+        0.872000017642975
+      ],
+      "quat_wxyz": [
+        0.9994564700997829,
+        0.0,
+        0.0,
+        -0.03296610950175641
+      ],
+      "valid": true,
+      "quality": 0.7114029110237348,
+      "source_view": "derived_from_carriage_rgbd",
+      "track_id": "rgbd:handle:derived_from_carriage",
+      "fit_residual_m": 4.356756036822974e-05,
+      "derived_from": "carriage",
+      "carriage_x_source": "verified_stroke_endpoint_command",
+      "cad_relation_offset_m": [
+        0.0,
+        0.0,
+        0.048
+      ],
+      "occluded": true
+    },
+    "derived_from_carriage_rgbd": true
+  }
+]

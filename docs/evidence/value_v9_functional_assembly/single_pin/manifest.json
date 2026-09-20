@@ -1,0 +1,14 @@
+{
+  "task_version": "functional_assembly_v9_funnel_r1",
+  "protocol": "isolated_pin_preinstalled_fixture; each case starts a new Session",
+  "environment": "Windows MuJoCo 2.3.7, NumPy 1.26.4, OpenCV 4.11.0",
+  "pose_source_for_reported_visual_results": "rgbd_geometry",
+  "cases": [
+    {"file": "seed_1200_left_rgbd.json", "seed": 1200, "part": "pin_left", "pose_mode": "rgbd", "passed": false},
+    {"file": "seed_1200_right_rgbd.json", "seed": 1200, "part": "pin_right", "pose_mode": "rgbd", "passed": true},
+    {"file": "seed_1203_left_rgbd.json", "seed": 1203, "part": "pin_left", "pose_mode": "rgbd", "passed": true},
+    {"file": "seed_1203_right_rgbd.json", "seed": 1203, "part": "pin_right", "pose_mode": "rgbd", "passed": true},
+    {"file": "seed_1200_left_ideal_diagnostic.json", "seed": 1200, "part": "pin_left", "pose_mode": "ideal_diagnostic", "passed": true, "excluded_from_visual_results": true}
+  ],
+  "interpretation": "A local skill result does not establish full-task success; the preinstalled fixture setup differs from the complete assembly prefix."
+}
