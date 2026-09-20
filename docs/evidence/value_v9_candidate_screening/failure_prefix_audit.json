@@ -1,0 +1,1153 @@
+{
+  "layout": {
+    "1302": {
+      "successes": 32,
+      "total": 36,
+      "category": "mixed"
+    },
+    "1303": {
+      "successes": 2,
+      "total": 36,
+      "category": "mixed"
+    },
+    "1304": {
+      "successes": 32,
+      "total": 36,
+      "category": "mixed"
+    },
+    "1305": {
+      "successes": 12,
+      "total": 36,
+      "category": "mixed"
+    },
+    "1306": {
+      "successes": 0,
+      "total": 36,
+      "category": "all_failure"
+    },
+    "1307": {
+      "successes": 0,
+      "total": 36,
+      "category": "all_failure"
+    },
+    "1308": {
+      "successes": 0,
+      "total": 36,
+      "category": "all_failure"
+    },
+    "1309": {
+      "successes": 33,
+      "total": 36,
+      "category": "mixed"
+    },
+    "1310": {
+      "successes": 36,
+      "total": 36,
+      "category": "all_success"
+    },
+    "1311": {
+      "successes": 0,
+      "total": 36,
+      "category": "all_failure"
+    },
+    "1312": {
+      "successes": 0,
+      "total": 36,
+      "category": "all_failure"
+    },
+    "1313": {
+      "successes": 0,
+      "total": 36,
+      "category": "all_failure"
+    }
+  },
+  "case_categories": {
+    "mixed": 11,
+    "all_success": 6,
+    "all_failure": 19
+  },
+  "reference_success": 13,
+  "alternative_only": 4,
+  "failure_part_skill": {
+    "approach:handle": 77,
+    "lift:pin_left": 66,
+    "inspect_pin_inserted:pin_left": 43,
+    "lift:handle": 36,
+    "slide_insert:pin_left": 25,
+    "inspect_seat:carriage": 24,
+    "inspect_pin_inserted:pin_right": 11,
+    "slide_insert:pin_right": 2,
+    "place_object:handle": 1
+  },
+  "failure_examples": {
+    "inspect_pin_inserted:pin_left:pin not effectively inserted in hole": [
+      [
+        1302,
+        "nominal",
+        "pin_order",
+        106,
+        {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.007972632323570556,
+          "valid_depth_span_m": 0.007536145974560374,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.00414569718920888,
+          "center_offsets_entry_required_m": [
+            [
+              -0.001239451972784248,
+              0.00494019934694067,
+              -1.925714210315732e-08
+            ],
+            [
+              -0.0008508318109912182,
+              0.0039186754595998885,
+              -1.4498108018810851e-08
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                -0.001239451972784248,
+                0.00494019934694067,
+                -1.925714210315732e-08
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.0050456971892088795
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                -0.0011099119188532382,
+                0.004599691384493745,
+                -1.7670797334504856e-08
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.00474569718920888
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                -0.000980371864922228,
+                0.00425918342204682,
+                -1.6084452676874694e-08
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.00444569718920888
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                -0.0008508318109912182,
+                0.0039186754595998885,
+                -1.4498108018810851e-08
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.00414569718920888
+            }
+          ],
+          "max_radial_error_m": 0.005014359728310742,
+          "samples": 257
+        }
+      ],
+      [
+        1302,
+        "light_high",
+        "pin_order",
+        106,
+        {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.007948834599516329,
+          "valid_depth_span_m": 0.007526445361995803,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.0041413739276389624,
+          "center_offsets_entry_required_m": [
+            [
+              -0.0025110353652552583,
+              0.004447839527355321,
+              -2.7187824436225583e-08
+            ],
+            [
+              -0.0018846515034185315,
+              0.003500147804692376,
+              -2.0787470200039904e-08
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                -0.0025110353652552583,
+                0.004447839527355321,
+                -2.7187824436225583e-08
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.005041373927638962
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                -0.002302240744643015,
+                0.00413194228646767,
+                -2.5054373061460244e-08
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.004741373927638962
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                -0.002093446124030775,
+                0.003816045045580027,
+                -2.2920921575672604e-08
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.004441373927638962
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                -0.0018846515034185315,
+                0.003500147804692376,
+                -2.0787470200039904e-08
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.0041413739276389624
+            }
+          ],
+          "max_radial_error_m": 0.005027925366239778,
+          "samples": 257
+        }
+      ],
+      [
+        1303,
+        "nominal",
+        "reference",
+        86,
+        {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.0,
+          "valid_depth_span_m": 0.0,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.004199500059132851,
+          "center_offsets_entry_required_m": [
+            [
+              0.0011815700672789045,
+              0.06535872915807568,
+              -1.2295777063187074e-07
+            ],
+            [
+              0.001105910897278803,
+              0.06528672695683498,
+              -1.2291209975506812e-07
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                0.0011815700672789045,
+                0.06535872915807568,
+                -1.2295777063187074e-07
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.00509950005913285
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                0.0011563503439455361,
+                0.06533472842432879,
+                -1.229425470061253e-07
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.0047995000591328505
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                0.0011311306206121714,
+                0.06531072769058188,
+                -1.2292732338037987e-07
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.0044995000591328506
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                0.001105910897278803,
+                0.06528672695683498,
+                -1.2291209975506812e-07
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.004199500059132851
+            }
+          ],
+          "max_radial_error_m": Infinity,
+          "samples": 257
+        }
+      ]
+    ],
+    "inspect_seat:carriage:assembly pose outside tolerance": [
+      [
+        1302,
+        "nominal",
+        "transfer_high",
+        126,
+        {
+          "position_error_m": 0.00158596179169719,
+          "tilt_deg": 0.00011720667305249597
+        }
+      ],
+      [
+        1302,
+        "light_high",
+        "pin_gentle",
+        126,
+        {
+          "position_error_m": 0.0015405899876869535,
+          "tilt_deg": 9.967967287000615e-05
+        }
+      ],
+      [
+        1304,
+        "light_low",
+        "pin_slow",
+        126,
+        {
+          "position_error_m": 0.0015035418390854551,
+          "tilt_deg": 8.35041257291998e-05
+        }
+      ]
+    ],
+    "slide_insert:pin_right:contact motion tracking residual": [
+      [
+        1303,
+        "nominal",
+        "pin_order",
+        81,
+        {
+          "error_m": 0.010014165993161397,
+          "travel_m": 0.05870250933831521,
+          "peak_force_n": 3.8706844080048137,
+          "tracking_tolerance_m": 0.004
+        }
+      ],
+      [
+        1303,
+        "light_high",
+        "pin_order",
+        81,
+        {
+          "error_m": 0.010014666907826382,
+          "travel_m": 0.058701560869864604,
+          "peak_force_n": 3.865698072267328,
+          "tracking_tolerance_m": 0.004
+        }
+      ]
+    ],
+    "inspect_pin_inserted:pin_right:pin not effectively inserted in hole": [
+      [
+        1303,
+        "light_low",
+        "pin_order",
+        86,
+        {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.0,
+          "valid_depth_span_m": 0.0,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.004199599586212443,
+          "center_offsets_entry_required_m": [
+            [
+              -0.001200288831719562,
+              -0.06541400883023331,
+              -1.2176347552461664e-07
+            ],
+            [
+              -0.001119330033024048,
+              -0.06536729155555124,
+              -1.2175565354544116e-07
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                -0.001200288831719562,
+                -0.06541400883023331,
+                -1.2176347552461664e-07
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.005099599586212443
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                -0.0011733025654877241,
+                -0.06539843640533928,
+                -1.2176086823523224e-07
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.004799599586212443
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                -0.001146316299255886,
+                -0.06538286398044527,
+                -1.2175826094584785e-07
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.004499599586212443
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                -0.001119330033024048,
+                -0.06536729155555124,
+                -1.2175565354544116e-07
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.004199599586212443
+            }
+          ],
+          "max_radial_error_m": Infinity,
+          "samples": 257
+        }
+      ],
+      [
+        1306,
+        "nominal",
+        "pin_order",
+        86,
+        {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.007949759056654645,
+          "valid_depth_span_m": 0.007322470980092964,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.004141118473959738,
+          "center_offsets_entry_required_m": [
+            [
+              0.003025807832321783,
+              0.004136450373334141,
+              -2.5911210843609922e-08
+            ],
+            [
+              0.0021820224598557763,
+              0.003372136723173422,
+              -1.88331806521419e-08
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                0.003025807832321783,
+                0.004136450373334141,
+                -2.5911210843609922e-08
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.005041118473959738
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                0.002744546041499781,
+                0.0038816791566139014,
+                -2.355186748360591e-08
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.004741118473959738
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                0.0024632842506777794,
+                0.0036269079398936616,
+                -2.1192524012579594e-08
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.004441118473959738
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                0.0021820224598557763,
+                0.003372136723173422,
+                -1.88331806521419e-08
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.004141118473959738
+            }
+          ],
+          "max_radial_error_m": 0.00500849134783388,
+          "samples": 257
+        }
+      ],
+      [
+        1306,
+        "light_low",
+        "pin_order",
+        86,
+        {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.00797051005935882,
+          "valid_depth_span_m": 0.0075256309383052115,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.004141010457165345,
+          "center_offsets_entry_required_m": [
+            [
+              0.0030776518042187253,
+              0.004084523193020523,
+              -2.8002387297831888e-08
+            ],
+            [
+              0.002202507029377322,
+              0.0033546810503870253,
+              -2.0181510659682267e-08
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                0.0030776518042187253,
+                0.004084523193020523,
+                -2.8002387297831888e-08
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.005041010457165345
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                0.00278593687927159,
+                0.0038412424788093614,
+                -2.539542841859324e-08
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.004741010457165345
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                0.002494221954324457,
+                0.0035979617645981866,
+                -2.2788469539354594e-08
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.004441010457165345
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                0.002202507029377322,
+                0.0033546810503870253,
+                -2.0181510659682267e-08
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.004141010457165345
+            }
+          ],
+          "max_radial_error_m": 0.005031990483314539,
+          "samples": 257
+        }
+      ]
+    ],
+    "lift:pin_left:no checked lift fallback path": [
+      [
+        1306,
+        "nominal",
+        "reference",
+        76,
+        {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_1"
+            ],
+            "penetration_m": 0.0010793397677763502
+          },
+          "ik_seeds_checked": 25
+        }
+      ],
+      [
+        1306,
+        "nominal",
+        "pin_slow",
+        76,
+        {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_1"
+            ],
+            "penetration_m": 0.0010793397677763502
+          },
+          "ik_seeds_checked": 25
+        }
+      ],
+      [
+        1306,
+        "nominal",
+        "pin_firm",
+        76,
+        {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_1"
+            ],
+            "penetration_m": 0.0010793397677763502
+          },
+          "ik_seeds_checked": 25
+        }
+      ]
+    ],
+    "slide_insert:pin_left:contact motion tracking residual": [
+      [
+        1308,
+        "nominal",
+        "reference",
+        81,
+        {
+          "error_m": 0.010061729378406947,
+          "travel_m": 0.058719442987957046,
+          "peak_force_n": 3.845137505241919,
+          "tracking_tolerance_m": 0.004
+        }
+      ],
+      [
+        1308,
+        "nominal",
+        "pin_slow",
+        81,
+        {
+          "error_m": 0.010062361243779223,
+          "travel_m": 0.058719043239709716,
+          "peak_force_n": 3.0756564731132636,
+          "tracking_tolerance_m": 0.004
+        }
+      ],
+      [
+        1308,
+        "nominal",
+        "pin_firm",
+        81,
+        {
+          "error_m": 0.010061729378406947,
+          "travel_m": 0.058719442987957046,
+          "peak_force_n": 3.845137505241919,
+          "tracking_tolerance_m": 0.004
+        }
+      ]
+    ],
+    "approach:handle:approach error": [
+      [
+        1308,
+        "light_low",
+        "reference",
+        113,
+        {
+          "position_error_m": 0.04970930505434218
+        }
+      ],
+      [
+        1308,
+        "light_low",
+        "pin_order",
+        113,
+        {
+          "position_error_m": 0.03299502901180794
+        }
+      ],
+      [
+        1308,
+        "light_low",
+        "pin_slow",
+        113,
+        {
+          "position_error_m": 0.04974761174433418
+        }
+      ]
+    ],
+    "place_object:handle:no supporting contact; refusing air release": [
+      [
+        1309,
+        "light_high",
+        "pin_order",
+        144,
+        {
+          "support_force_n": 0.0,
+          "support_force_feedback_n": 0.03275345230547388
+        }
+      ]
+    ],
+    "lift:handle:lift or retention failed": [
+      [
+        1313,
+        "nominal",
+        "reference",
+        116,
+        {
+          "object_lift_m": 5.875204831762293e-05,
+          "held": false
+        }
+      ],
+      [
+        1313,
+        "nominal",
+        "pin_order",
+        116,
+        {
+          "object_lift_m": 5.870492670223548e-05,
+          "held": false
+        }
+      ],
+      [
+        1313,
+        "nominal",
+        "pin_slow",
+        116,
+        {
+          "object_lift_m": 5.8710544101892026e-05,
+          "held": false
+        }
+      ]
+    ]
+  },
+  "control_divergence": {
+    "pin_order": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "pin_slow": {
+      "after_failure_or_no_change": 19,
+      "before_or_at_failure": 17
+    },
+    "pin_firm": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "pin_gentle": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "pin_high_grasp": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "pin_low_grasp": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "transfer_high": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "transfer_low": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "stop_slow": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "wipe_reverse": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    },
+    "wipe_long": {
+      "after_failure_or_no_change": 13,
+      "before_or_at_failure": 23
+    }
+  },
+  "control_divergence_examples": {
+    "pin_order": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 68,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 68,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 68,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 68,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "pin_slow": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 80,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 80,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 80,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 80,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "pin_firm": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 74,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 74,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 74,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 74,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "pin_gentle": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 74,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 74,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 74,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 74,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "pin_high_grasp": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 69,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 69,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 69,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 69,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "pin_low_grasp": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 69,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 69,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 69,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 69,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "transfer_high": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 26,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 26,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 26,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 26,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "transfer_low": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 26,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 26,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 26,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 26,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "stop_slow": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 60,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 60,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 60,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 60,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "wipe_reverse": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 9,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 9,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 9,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 9,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ],
+    "wipe_long": [
+      {
+        "seed": 1302,
+        "condition": "nominal",
+        "first_different_step": 8,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_low",
+        "first_different_step": 8,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1302,
+        "condition": "light_high",
+        "first_different_step": 8,
+        "reference_first_failure": null,
+        "label": "after_failure_or_no_change"
+      },
+      {
+        "seed": 1303,
+        "condition": "nominal",
+        "first_different_step": 8,
+        "reference_first_failure": 86,
+        "label": "before_or_at_failure"
+      }
+    ]
+  }
+}
