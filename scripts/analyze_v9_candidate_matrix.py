@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 
 import numpy as np
 from simbench.value.v9_candidates import proposals
+from simbench.value.stage_v9 import TASK_VERSION
 from scripts.collect_v9_candidate_matrix import CONDITIONS
 
 PARTS = ("carriage", "end_stop", "pin_left", "pin_right", "handle", "wipe_tool")
@@ -152,6 +153,7 @@ def fit_models(cases, names, train_seeds, val_seeds, out, epochs=100):
     xv = torch.as_tensor(np.stack([r[0] for r in val]))
     yv = torch.as_tensor([r[1] for r in val], dtype=torch.float32)
     mean = x.mean(0); std = x.std(0, unbiased=False).clamp_min(1e-5)
+    training_data_sha256 = hashlib.sha256(x.numpy().tobytes() + y.numpy().tobytes()).hexdigest()
     summaries = {}
     for name in ("numeric_logistic", "existing_value_v6_architecture"):
         started = time.perf_counter()
@@ -181,6 +183,9 @@ def fit_models(cases, names, train_seeds, val_seeds, out, epochs=100):
         checkpoint = out / f"{name}.pt"
         torch.save(dict(state_dict=chosen, mean=mean, std=std,
                         input_dim=x.shape[1], architecture=name,
+                        task_version=TASK_VERSION, candidate_source="script_curated_v9_r1",
+                        feature_schema="rgbd_object_xyz_quality_valid_plus_executable_parameters_v1",
+                        training_data_sha256=training_data_sha256,
                         train_seeds=train_seeds, val_seeds=val_seeds,
                         epochs=epochs, best_val_brier=best), checkpoint)
         (out / f"{name}_history.json").write_text(json.dumps(history, indent=2))
@@ -195,6 +200,9 @@ def rank_model(case, names, checkpoint):
     from torch import nn
     from simbench.value.value_v6 import RobustProgramNet
     saved = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    if (saved.get("task_version") != TASK_VERSION
+            or saved.get("candidate_source") != "script_curated_v9_r1"):
+        raise ValueError("checkpoint is not bound to the frozen V9 task and candidate source")
     x = torch.as_tensor(np.stack([features(case[name]["observation"], case[name]["proposal"])
                                    for name in names]))
     if saved["architecture"] == "numeric_logistic":
