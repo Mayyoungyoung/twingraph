@@ -1,0 +1,44 @@
+[
+  {
+    "seed": 1314,
+    "rows": 36,
+    "archive": "seed_1314.tar.gz",
+    "bytes": 2310549,
+    "sha256": "7e1a588669064e4c64dfdaf518e1aad24f8045e796277ff6e4be261f7bc8e455"
+  },
+  {
+    "seed": 1315,
+    "rows": 36,
+    "archive": "seed_1315.tar.gz",
+    "bytes": 1880271,
+    "sha256": "7afdae4f8e4ff336ce04a6aba5c92be56257a46b3cfd20de9a18d8ce9778ae3e"
+  },
+  {
+    "seed": 1316,
+    "rows": 36,
+    "archive": "seed_1316.tar.gz",
+    "bytes": 1823478,
+    "sha256": "82f5b5d0d1469892086c7242ef229ddfac060472337faa3240567937e943c552"
+  },
+  {
+    "seed": 1317,
+    "rows": 36,
+    "archive": "seed_1317.tar.gz",
+    "bytes": 2187440,
+    "sha256": "a9776443b455380cfbf2bbbf2b87bcf95ddde7615764d6485d82b5b233d91a59"
+  },
+  {
+    "seed": 1318,
+    "rows": 36,
+    "archive": "seed_1318.tar.gz",
+    "bytes": 1421475,
+    "sha256": "6653415ab6de302b6481df51aebb7019c49268748f35d8d19a8d9721782edab5"
+  },
+  {
+    "seed": 1319,
+    "rows": 36,
+    "archive": "seed_1319.tar.gz",
+    "bytes": 1893891,
+    "sha256": "b50294b9e2602d6ae50b6b65c65610d6be23686fe77a237a8f78e37a3826e263"
+  }
+]
