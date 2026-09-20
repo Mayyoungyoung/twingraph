@@ -110,6 +110,7 @@ def main():
         pools = json.loads((root / "pools.json").read_text())
         paired_geometry = set()
         paired_observation = set()
+        paired_physics = set()
         for pool_name in ("old_v9", "new_v10"):
             generated_start = time.perf_counter()
             generated = old_proposals() if pool_name == "old_v9" else [p for p in new_proposals() if p["name"] in NEW_NAMES]
@@ -127,6 +128,12 @@ def main():
                 detail = json.loads(path.read_text())
                 assert detail["task_version"] == "functional_assembly_v9_funnel_r1"
                 assert detail["candidate"] == p
+                assert detail["result"]["valid"]
+                assert detail["result"]["full_success"] == next(r["success"] for r in summary["rows"]
+                    if r.get("pool") == pool_name and r.get("candidate") == p["name"])
+                applied = detail["result"]["applied_parameters"]
+                assert applied["friction_scale"] == applied["actuator_gain_scale"] == 1.0
+                paired_physics.add((applied["geom_friction_sha256"], applied["actuator_gain_sha256"]))
                 geometry.add(detail["geometry_sha256"])
                 observation_hashes.add(detail["pre_execution_observation"]["sha256"])
                 case[p["name"]] = dict(summary=next(r for r in summary["rows"] if r.get("pool") == pool_name and r.get("candidate") == p["name"]),
@@ -168,7 +175,7 @@ def main():
                              mode="budget_180s", order="uniform_sampled_permutations",
                              **random_budget(case, names, WALL_BUDGET_SECONDS,
                                  seed + (0 if pool_name == "old_v9" else 10000), generation_overhead)))
-        assert len(paired_geometry) == len(paired_observation) == 1
+        assert len(paired_geometry) == len(paired_observation) == len(paired_physics) == 1
     grouped = defaultdict(list)
     for row in rows:
         grouped[(row["pool"], row["method"], row["mode"], row["k"])].append(row)
