@@ -287,6 +287,18 @@ def replay(cases, names, seeds, checkpoints):
     return rows
 
 
+def aggregate_replay(rows):
+    grouped = {}
+    for row in rows:
+        grouped.setdefault((row["method"], row["k"]), []).append(row)
+    return [dict(method=method, k=k, cases=len(group),
+        success_rate=float(np.mean([r["success"] for r in group])),
+        mean_verifications=float(np.mean([r["verification_count"] for r in group])),
+        mean_verification_wall_seconds=float(np.mean([r["verification_wall_seconds"] for r in group])),
+        mean_full_system_wall_seconds=float(np.mean([r["full_system_wall_seconds"] for r in group])))
+        for (method, k), group in sorted(grouped.items())]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--matrix", required=True)
@@ -349,17 +361,7 @@ def main():
         summary["training_skipped"] = "no positive and varying layout outcomes"
     for split, selected in (("training", train_seeds), ("validation", val_seeds)):
         rows = replay(cases, names, selected, checkpoints)
-        grouped = {}
-        for row in rows:
-            key = (row["method"], row["k"])
-            acc = grouped.setdefault(key, [])
-            acc.append(row)
-        summary[split] = [dict(method=method, k=k, cases=len(group),
-            success_rate=float(np.mean([r["success"] for r in group])),
-            mean_verifications=float(np.mean([r["verification_count"] for r in group])),
-            mean_verification_wall_seconds=float(np.mean([r["verification_wall_seconds"] for r in group])),
-            mean_full_system_wall_seconds=float(np.mean([r["full_system_wall_seconds"] for r in group])))
-            for (method, k), group in sorted(grouped.items())]
+        summary[split] = aggregate_replay(rows)
         (out / f"{split}_replay.json").write_text(json.dumps(rows, indent=2))
     (out / "summary.json").write_text(json.dumps(summary, indent=2))
     print(json.dumps({key: summary[key] for key in ("layouts", "successes", "non_reference_successes")}), flush=True)

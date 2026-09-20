@@ -19,12 +19,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--matrix", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument("--expected-layouts", type=int, default=12)
     args = parser.parse_args()
     root, out = Path(args.matrix), Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     directories = sorted(root.glob("seed_*"))
-    if len(directories) != 12:
-        raise ValueError(f"expected 12 layout directories, found {len(directories)}")
+    if len(directories) != args.expected_layouts:
+        raise ValueError(f"expected {args.expected_layouts} layout directories, found {len(directories)}")
     rows = []
     for directory in directories:
         summary = json.loads((directory / "summary.json").read_text())

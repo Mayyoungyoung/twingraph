@@ -27,7 +27,7 @@ def main():
         validation_success_rate=best["success_rate"],
         validation_mean_full_system_wall_seconds=best["mean_full_system_wall_seconds"],
         selection_rule="maximize grouped validation success; tie: minimize full system wall; tie: smaller K",
-        development_summary_sha256=file_hash(summary_path),
+        selection_validation_summary_sha256=file_hash(summary_path),
         checkpoint=checkpoint,
         checkpoint_sha256=file_hash(checkpoint) if checkpoint else None,
         target_seeds=[1400, 1401, 1402],
