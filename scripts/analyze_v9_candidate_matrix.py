@@ -1,6 +1,7 @@
 """Group-safe V9 screening replay and two actually trained numeric scorers."""
 
 import argparse
+import csv
 import json
 from pathlib import Path
 import random
@@ -8,6 +9,7 @@ import time
 
 import numpy as np
 from simbench.value.v9_candidates import proposals
+from scripts.collect_v9_candidate_matrix import CONDITIONS
 
 PARTS = ("carriage", "end_stop", "pin_left", "pin_right", "handle", "wipe_tool")
 KS = (1, 2, 4, 8, 12)
@@ -18,9 +20,17 @@ def load(root):
     names = [p["name"] for p in candidates]
     cases = {}
     seen_geometry = {}
+    seen_observation = {}
+    seen_seed_geometry = {}
+    model_parameter_hashes = {}
+    frozen_sources = None
     issues = []
     for path in sorted(Path(root).glob("seed_*/summary.json")):
         summary = json.loads(path.read_text())
+        if frozen_sources is None:
+            frozen_sources = summary.get("source_sha256")
+        elif frozen_sources != summary.get("source_sha256"):
+            issues.append(f"source hash mismatch in {path.parent.name}")
         seed = int(path.parent.name.split("_")[-1])
         rows = summary["rows"]
         if len(rows) != 36:
@@ -38,15 +48,35 @@ def load(root):
             result_path = path.parent / f"seed_{seed}" / condition / row["candidate"] / "result.json"
             detail = json.loads(result_path.read_text())
             geometry = detail["geometry_sha256"]
+            old_geometry = seen_seed_geometry.setdefault(seed, geometry)
+            if old_geometry != geometry:
+                issues.append(f"seed {seed}: geometry changed between candidates or conditions")
             old_seed = seen_geometry.setdefault(geometry, seed)
             if old_seed != seed:
                 issues.append(f"geometry duplicate seeds {old_seed}, {seed}")
+            observation_hash = detail["pre_execution_observation"]["sha256"]
+            old_observation = seen_observation.setdefault(seed, observation_hash)
+            if old_observation != observation_hash:
+                issues.append(f"seed {seed}: initial RGB-D input changed between rollouts")
+            actual = detail["result"]["applied_parameters"]
+            expected_friction, expected_gain = CONDITIONS[condition]
+            if (abs(actual["friction_scale"] - expected_friction) > 1e-12
+                    or abs(actual["actuator_gain_scale"] - expected_gain) > 1e-12):
+                issues.append(f"seed {seed}: perturbation not applied for {condition}")
+            hashes = (actual["geom_friction_sha256"], actual["actuator_gain_sha256"])
+            previous_hashes = model_parameter_hashes.setdefault((seed, condition), hashes)
+            if previous_hashes != hashes:
+                issues.append(f"seed {seed}: physical condition differs between candidates")
             case[row["candidate"]] = dict(summary=row,
                 observation=detail["pre_execution_observation"],
                 proposal=detail["candidate"])
     for key, case in cases.items():
         if set(case) != set(names):
             issues.append(f"incomplete case {key}: {len(case)} of 12")
+    for seed in seen_seed_geometry:
+        hashes = [model_parameter_hashes.get((seed, condition)) for condition in CONDITIONS]
+        if all(item is not None for item in hashes) and len(set(hashes)) != len(hashes):
+            issues.append(f"seed {seed}: condition perturbations have identical model arrays")
     if issues:
         raise ValueError("matrix incomplete or duplicated:\n" + "\n".join(issues))
     return cases, candidates
@@ -230,6 +260,20 @@ def main():
     seeds = sorted({key[0] for key in cases})
     if len(seeds) != 12:
         raise ValueError(f"expected 12 distinct development geometries, got {len(seeds)}")
+    with (out / "candidate_matrix.csv").open("w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=("seed", "condition", "candidate", "success",
+            "error", "executed_steps", "verification_wall_seconds", "full_rollout_wall_seconds",
+            "geometry_sha256", "initial_observation_sha256"))
+        writer.writeheader()
+        for (seed, condition), case in sorted(cases.items()):
+            for name in names:
+                record = case[name]["summary"]
+                writer.writerow(dict(seed=seed, condition=condition, candidate=name,
+                    success=record["success"], error=record["error"],
+                    executed_steps=record["steps"], verification_wall_seconds=record["wall_seconds"],
+                    full_rollout_wall_seconds=record["total_wall_seconds"],
+                    geometry_sha256=record["geometry_sha256"],
+                    initial_observation_sha256=case[name]["observation"]["sha256"]))
     train_seeds, val_seeds = seeds[:8], seeds[8:]
     labels = {seed: sum(int(cases[(seed, cond)][name]["summary"]["success"])
                          for cond in ("nominal", "light_low", "light_high") for name in names)
@@ -243,8 +287,8 @@ def main():
                        for name in names[1:]))
     checkpoints = {}
     if len(set(labels.values())) > 1 and summary["successes"] > 0:
-        summary["training"] = fit_models(cases, names, train_seeds, val_seeds, out, args.epochs)
-        checkpoints = {name: row["checkpoint"] for name, row in summary["training"].items()}
+        summary["model_training"] = fit_models(cases, names, train_seeds, val_seeds, out, args.epochs)
+        checkpoints = {name: row["checkpoint"] for name, row in summary["model_training"].items()}
     else:
         summary["training_skipped"] = "no positive and varying layout outcomes"
     for split, selected in (("training", train_seeds), ("validation", val_seeds)):
