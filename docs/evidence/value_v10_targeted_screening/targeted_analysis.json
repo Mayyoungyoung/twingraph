@@ -1,0 +1,693 @@
+{
+  "archive_sha256": {
+    "seed_1305.tar.gz": "cb5d6e0e0dc15e2528642cc30a2e5c9866219cccc51ab3c5c15ba3618f8f0e7d",
+    "seed_1306.tar.gz": "86400aa37fd5e8038a10887d764482e108e216e0a21a840cdca6cd00c4db490f",
+    "seed_1311.tar.gz": "39e1f716ad0e8f1db5df4fc52912b3edad5168f9cc6402e9ed0126153e1cf699"
+  },
+  "completed": 24,
+  "infrastructure_exceptions": 4,
+  "full_successes": 2,
+  "first_failure_skill_counts": {
+    "inspect_pin_inserted": 2,
+    "lift": 10,
+    "approach": 6,
+    "close_gripper": 4
+  },
+  "rows": [
+    {
+      "seed": 1305,
+      "candidate": "reference",
+      "status": "completed",
+      "full_success": true,
+      "original_failure_skill": "inspect_seat:carriage",
+      "original_failure_skill_passed": true,
+      "first_failure": null,
+      "executed_steps": 150,
+      "wall_seconds": 89.05222958792001
+    },
+    {
+      "seed": 1305,
+      "candidate": "carriage_yaw90",
+      "status": "completed",
+      "full_success": true,
+      "original_failure_skill": "inspect_seat:carriage",
+      "original_failure_skill_passed": true,
+      "first_failure": null,
+      "executed_steps": 150,
+      "wall_seconds": 89.90342062385753
+    },
+    {
+      "seed": 1305,
+      "candidate": "carriage_grasp_low",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "inspect_seat:carriage",
+      "original_failure_skill_passed": true,
+      "first_failure": {
+        "index": 86,
+        "skill": "inspect_pin_inserted",
+        "part": "pin_left",
+        "reason": "pin not effectively inserted in hole",
+        "metrics": {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.007958656839820274,
+          "valid_depth_span_m": 0.0075620242799403214,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.004157176082857053,
+          "center_offsets_entry_required_m": [
+            [
+              0.004457392089147185,
+              0.002505084599855753,
+              -2.8394663731390324e-08
+            ],
+            [
+              0.003765294825865586,
+              0.0018258174743443988,
+              -2.3899296104634704e-08
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                0.004457392089147185,
+                0.002505084599855753,
+                -2.8394663731390324e-08
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.005057176082857053
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                0.004226693001386652,
+                0.0022786622246853015,
+                -2.6896207855949678e-08
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.004757176082857053
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                0.003995993913626119,
+                0.0020522398495148504,
+                -2.539775198050903e-08
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.004457176082857053
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                0.003765294825865586,
+                0.0018258174743443988,
+                -2.3899296104634704e-08
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.004157176082857053
+            }
+          ],
+          "max_radial_error_m": 0.005051244006416596,
+          "samples": 257
+        }
+      },
+      "executed_steps": 87,
+      "wall_seconds": 47.4532541281078
+    },
+    {
+      "seed": 1305,
+      "candidate": "pin_left_yaw90",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "inspect_seat:carriage",
+      "original_failure_skill_passed": true,
+      "first_failure": {
+        "index": 86,
+        "skill": "inspect_pin_inserted",
+        "part": "pin_left",
+        "reason": "pin not effectively inserted in hole",
+        "metrics": {
+          "success": false,
+          "phase": "inserted_after_release",
+          "inserted_while_held": false,
+          "inserted_after_release": false,
+          "retained_after_stroke": false,
+          "released": true,
+          "touching_finger": false,
+          "inserted": false,
+          "max_insertion_depth_m": 0.007941365094639153,
+          "valid_depth_span_m": 0.007551452282627775,
+          "minimum_required_depth_m": 0.006,
+          "limiting_bore_radius_m": 0.0075,
+          "permitted_center_offset_m": 0.004152496145257574,
+          "center_offsets_entry_required_m": [
+            [
+              -0.0006651753843698455,
+              0.005057464343772196,
+              -4.429520639170903e-09
+            ],
+            [
+              -0.0006630929424835064,
+              0.004035748487192917,
+              -3.824716572099762e-09
+            ]
+          ],
+          "center_offsets_by_depth": [
+            {
+              "depth_m": 0.0,
+              "transverse_m": [
+                -0.0006651753843698455,
+                0.005057464343772196,
+                -4.429520639170903e-09
+              ],
+              "bore_radius_m": 0.0084,
+              "permitted_center_offset_m": 0.005052496145257573
+            },
+            {
+              "depth_m": 0.002,
+              "transverse_m": [
+                -0.0006644812370744002,
+                0.004716892391579103,
+                -4.2279192833359625e-09
+              ],
+              "bore_radius_m": 0.0081,
+              "permitted_center_offset_m": 0.0047524961452575735
+            },
+            {
+              "depth_m": 0.004,
+              "transverse_m": [
+                -0.000663787089778955,
+                0.00437632043938601,
+                -4.026317927501022e-09
+              ],
+              "bore_radius_m": 0.0078,
+              "permitted_center_offset_m": 0.0044524961452575736
+            },
+            {
+              "depth_m": 0.006,
+              "transverse_m": [
+                -0.0006630929424835064,
+                0.004035748487192917,
+                -3.824716572099762e-09
+              ],
+              "bore_radius_m": 0.0075,
+              "permitted_center_offset_m": 0.004152496145257574
+            }
+          ],
+          "max_radial_error_m": 0.005035179705089211,
+          "samples": 257
+        }
+      },
+      "executed_steps": 87,
+      "wall_seconds": 46.09784284303896
+    },
+    {
+      "seed": 1306,
+      "candidate": "reference",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "no checked lift fallback path",
+        "metrics": {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_1"
+            ],
+            "penetration_m": 0.0010707608588972578
+          },
+          "ik_seeds_checked": 25
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 37.14187084301375
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_yaw90",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "lift or retention failed",
+        "metrics": {
+          "object_lift_m": -0.01797042717377051,
+          "held": false
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 35.66054118494503
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_grasp_high",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "no checked lift fallback path",
+        "metrics": {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_1"
+            ],
+            "penetration_m": 0.001395449373865702
+          },
+          "ik_seeds_checked": 25
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 38.645071097882465
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_yaw90_high",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "lift or retention failed",
+        "metrics": {
+          "object_lift_m": -0.028001554563522157,
+          "held": false
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 36.390610289992765
+    },
+    {
+      "seed": 1306,
+      "candidate": "carriage_yaw90",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "no checked lift fallback path",
+        "metrics": {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_1"
+            ],
+            "penetration_m": 0.0010703507556986509
+          },
+          "ik_seeds_checked": 25
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 40.32982099498622
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_yaw45",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "no checked lift fallback path",
+        "metrics": {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_2"
+            ],
+            "penetration_m": 0.0016278649455669237
+          },
+          "ik_seeds_checked": 25
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 36.11742893001065
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_yaw_neg45",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "no checked lift fallback path",
+        "metrics": {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_2"
+            ],
+            "penetration_m": 0.0017077253846604983
+          },
+          "ik_seeds_checked": 25
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 39.13278233492747
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_grasp_low",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "no checked lift fallback path",
+        "metrics": {
+          "collision": {
+            "valid": false,
+            "samples": 2,
+            "pair": [
+              "pin_left_shaft",
+              "v9_pin_left_holder_1"
+            ],
+            "penetration_m": 0.0009320457122262218
+          },
+          "ik_seeds_checked": 25
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 37.12120738206431
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_staged_lift",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": true,
+      "first_failure": {
+        "index": 114,
+        "skill": "approach",
+        "part": "handle",
+        "reason": "approach error",
+        "metrics": {
+          "position_error_m": 0.007664392346999844
+        }
+      },
+      "executed_steps": 115,
+      "wall_seconds": 72.0348377909977
+    },
+    {
+      "seed": 1306,
+      "candidate": "pin_left_yaw90_staged",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "lift:pin_left",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "lift or retention failed",
+        "metrics": {
+          "object_lift_m": 0.03468796470408575,
+          "held": true
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 36.04943709215149
+    },
+    {
+      "seed": 1311,
+      "candidate": "reference",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 113,
+        "skill": "approach",
+        "part": "handle",
+        "reason": "approach error",
+        "metrics": {
+          "position_error_m": 0.04753788550584386
+        }
+      },
+      "executed_steps": 114,
+      "wall_seconds": 55.252074263989925
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_yaw90",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": true,
+      "first_failure": {
+        "index": 114,
+        "skill": "close_gripper",
+        "part": "handle",
+        "reason": "bilateral part contact missing",
+        "metrics": {
+          "held": false,
+          "left_n": 0.0,
+          "right_n": 0.0
+        }
+      },
+      "executed_steps": 115,
+      "wall_seconds": 55.28170965705067
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_grasp_high",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 113,
+        "skill": "approach",
+        "part": "handle",
+        "reason": "approach error",
+        "metrics": {
+          "position_error_m": 0.04414614705325074
+        }
+      },
+      "executed_steps": 114,
+      "wall_seconds": 58.60828178189695
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_yaw90_high",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": true,
+      "first_failure": {
+        "index": 114,
+        "skill": "close_gripper",
+        "part": "handle",
+        "reason": "bilateral part contact missing",
+        "metrics": {
+          "held": false,
+          "left_n": 0.0,
+          "right_n": 0.0
+        }
+      },
+      "executed_steps": 115,
+      "wall_seconds": 55.45163374603726
+    },
+    {
+      "seed": 1311,
+      "candidate": "pin_left_yaw90",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 76,
+        "skill": "lift",
+        "part": "pin_left",
+        "reason": "lift or retention failed",
+        "metrics": {
+          "object_lift_m": 0.14319602729982195,
+          "held": true
+        }
+      },
+      "executed_steps": 77,
+      "wall_seconds": 22.01552934292704
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_yaw45",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": true,
+      "first_failure": {
+        "index": 114,
+        "skill": "close_gripper",
+        "part": "handle",
+        "reason": "bilateral part contact missing",
+        "metrics": {
+          "held": false,
+          "left_n": 0.0,
+          "right_n": 0.0
+        }
+      },
+      "executed_steps": 115,
+      "wall_seconds": 54.908004781929776
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_yaw_neg45",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 113,
+        "skill": "approach",
+        "part": "handle",
+        "reason": "approach error",
+        "metrics": {
+          "position_error_m": 0.015608691133982054
+        }
+      },
+      "executed_steps": 114,
+      "wall_seconds": 54.14664643886499
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_grasp_low",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 113,
+        "skill": "approach",
+        "part": "handle",
+        "reason": "approach error",
+        "metrics": {
+          "position_error_m": 0.053232999733963456
+        }
+      },
+      "executed_steps": 114,
+      "wall_seconds": 54.48976772581227
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_joint_approach",
+      "status": "infrastructure_error",
+      "error": "ValueError('nonfinite/non-numeric scalar port strategy')"
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_yaw90_joint",
+      "status": "infrastructure_error",
+      "error": "ValueError('nonfinite/non-numeric scalar port strategy')"
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_joint_approach",
+      "status": "infrastructure_error",
+      "error": "ValueError('program scoring/execution choices disagree')"
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_yaw90_joint",
+      "status": "infrastructure_error",
+      "error": "ValueError('program scoring/execution choices disagree')"
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_joint_approach",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": false,
+      "first_failure": {
+        "index": 113,
+        "skill": "approach",
+        "part": "handle",
+        "reason": "checked joint approach collision",
+        "metrics": {
+          "strategy": "joint_checked_v10",
+          "collision": {
+            "valid": false,
+            "samples": 6,
+            "pair": [
+              "finger2_pad_collision",
+              "stop_boss"
+            ],
+            "penetration_m": 0.006945402675023752
+          }
+        }
+      },
+      "executed_steps": 114,
+      "wall_seconds": 52.7489175950177
+    },
+    {
+      "seed": 1311,
+      "candidate": "handle_yaw90_joint",
+      "status": "completed",
+      "full_success": false,
+      "original_failure_skill": "approach:handle",
+      "original_failure_skill_passed": true,
+      "first_failure": {
+        "index": 114,
+        "skill": "close_gripper",
+        "part": "handle",
+        "reason": "bilateral part contact missing",
+        "metrics": {
+          "held": false,
+          "left_n": 0.0,
+          "right_n": 0.0
+        }
+      },
+      "executed_steps": 115,
+      "wall_seconds": 53.365890780929476
+    }
+  ]
+}
