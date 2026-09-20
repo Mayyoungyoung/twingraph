@@ -34,6 +34,13 @@ def collect(seed, proposal, condition, directory):
     directory.mkdir(parents=True, exist_ok=True)
     spec, session, scene, targets = stage_v9.make_scene(seed, directory / "scene")
     session.fixture_pose_mode = "rgbd"
+    initial = session.decision_observation
+    pre_execution_observation = dict(
+        backend=initial["backend"], sha256=initial["sha256"],
+        decision_boundary=initial["decision_boundary"],
+        objects={part: {key: value for key, value in item.items()
+                        if key in ("valid", "position_m", "quat_wxyz", "quality", "source_view", "fit_residual_m")}
+                 for part, item in initial["objects"].items()})
     plan = bind(session, targets, proposal)
     friction, gain = CONDITIONS[condition]
     trial = dict(domain="development", repeat=0, friction_scale=friction,
@@ -42,6 +49,7 @@ def collect(seed, proposal, condition, directory):
     manifest = json.loads((directory / "scene" / "geometry_manifest.json").read_text())
     row = dict(task_version=stage_v9.TASK_VERSION, seed=seed,
                geometry_sha256=geometry_signature(scene),
+               pre_execution_observation=pre_execution_observation,
                candidate=proposal, candidate_id=plan.id, condition=condition,
                trial=trial, result=result)
     (directory / "result.json").write_text(json.dumps(row, indent=2,
@@ -68,6 +76,9 @@ def main():
         if len(pool) != len(wanted):
             raise ValueError("unknown or duplicate candidate name")
     (root / "candidate_pool.json").write_text(json.dumps(pool, indent=2), encoding="utf-8")
+    source_root = Path(__file__).resolve().parents[1]
+    source_hashes = {str(path.relative_to(source_root)): hashlib.sha256(path.read_bytes()).hexdigest()
+                     for path in (source_root / "simbench").rglob("*.py")}
     summary_path = root / "summary.json"
     rows = json.loads(summary_path.read_text())["rows"] if summary_path.exists() else []
     completed = {(r["seed"], r["candidate"], r["condition"]) for r in rows}
@@ -89,7 +100,8 @@ def main():
                 row["total_wall_seconds"] = time.perf_counter() - t0
                 rows.append(row); completed.add(key)
                 summary_path.write_text(json.dumps(dict(task_version=stage_v9.TASK_VERSION,
-                    candidate_source=SOURCE, conditions=CONDITIONS, rows=rows), indent=2), encoding="utf-8")
+                    candidate_source=SOURCE, conditions=CONDITIONS,
+                    source_sha256=source_hashes, rows=rows), indent=2), encoding="utf-8")
                 print(json.dumps(row), flush=True)
 
 
