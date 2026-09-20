@@ -32,7 +32,7 @@ METRIC = {
     "hole_offset_m": ("vector", "m", "fixture"),
     "minimum_insertion_depth_m": ("scalar", "m", "fixture"),
     "acceptance": ("category", "", ""), "hole_part": ("object_ref", "", ""),
-    "phase": ("category", "", ""),
+    "phase": ("category", "", ""), "strategy": ("category", "", ""),
 }
 
 
