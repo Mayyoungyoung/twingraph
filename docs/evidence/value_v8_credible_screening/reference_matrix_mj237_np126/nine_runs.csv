@@ -1,0 +1,10 @@
+seed,repeat,success,steps,wall_seconds,first_failure,cleaning_pass,assembly_pass,functional_test_pass
+1200,0,False,82,40.645332971122116,slide_insert,True,False,False
+1200,1,False,82,41.415156204020604,slide_insert,True,False,False
+1200,2,False,82,41.69687439198606,slide_insert,True,False,False
+1202,0,False,82,41.21380588202737,slide_insert,True,False,False
+1202,1,False,82,40.41945618297905,slide_insert,True,False,False
+1202,2,False,82,40.131954027106985,slide_insert,True,False,False
+1203,0,False,77,37.77482834388502,lift,True,False,False
+1203,1,False,77,37.78460504789837,lift,True,False,False
+1203,2,False,77,38.32120205601677,lift,True,False,False

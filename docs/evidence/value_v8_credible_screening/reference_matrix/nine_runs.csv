@@ -1,0 +1,10 @@
+seed,repeat,success,steps,wall_seconds,first_failure,cleaning_pass,assembly_pass,functional_test_pass
+1200,0,False,111,74.89481130708009,inspect_pin_inserted,True,False,False
+1200,1,False,111,75.36022618808784,inspect_pin_inserted,True,False,False
+1200,2,False,111,75.05113711208105,inspect_pin_inserted,True,False,False
+1202,0,False,125,94.90113927703351,align_axis,True,False,False
+1202,1,False,125,95.0372928190045,align_axis,True,False,False
+1202,2,False,125,95.29499664204195,align_axis,True,False,False
+1203,0,False,77,28.68601027596742,lift,True,False,False
+1203,1,False,77,28.741937533952296,lift,True,False,False
+1203,2,False,77,28.991180022014305,lift,True,False,False
