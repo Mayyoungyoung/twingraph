@@ -2,7 +2,7 @@
 
 from simbench.value import stage_v5
 from simbench.value.plan import plain
-from simbench.value.v9_candidates import proposals, SOURCE
+from simbench.value.v9_candidates import proposals, reference_proposal, SOURCE
 
 
 def _command_signature(proposal):
@@ -26,6 +26,7 @@ def test_twelve_curated_v9_candidates_have_distinct_executable_commands():
     assert all(tuple(proposal["order"]) in stage_v5.legal_orders() for proposal in pool)
     assert len({_command_signature(proposal) for proposal in pool}) == 12
     reference = pool[0]
+    assert reference == reference_proposal()
     assert reference["name"] == "reference"
     assert pool[1]["order"] != reference["order"]
     assert pool[2]["choices"]["pin_left"]["speed"] != reference["choices"]["pin_left"]["speed"]
