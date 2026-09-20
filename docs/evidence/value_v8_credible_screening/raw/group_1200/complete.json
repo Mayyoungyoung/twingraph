@@ -1,0 +1,18 @@
+{
+  "request_sha256": "78ea874d5f047065cdc72de1f8be09839ababc1472d3c90ba5ce2507dd5340b9",
+  "input_sha256": "1279ccc28fa04fe5b67ed0189875688626c3160346e61b6111aa6473a6e0cf60",
+  "source_sha256": "a351a6f0e3e23a59fe06ea697f287dfeacf2a28189d8297a6ff6de2f6943201d",
+  "seed": 1200,
+  "split": "development",
+  "level": "L1",
+  "candidates": 2,
+  "trials": 2,
+  "repeats": 1,
+  "successes": 0,
+  "cleaning_passes": 1,
+  "assembly_passes": 0,
+  "functional_passes": 0,
+  "wall_seconds": 33.278276465134695,
+  "physical_wall_seconds": 32.36803242890164,
+  "physics_steps": 91570
+}

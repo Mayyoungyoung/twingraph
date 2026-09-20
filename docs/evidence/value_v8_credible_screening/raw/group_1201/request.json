@@ -1,0 +1,11 @@
+{
+  "seed": 1201,
+  "split": "development",
+  "level": "L1",
+  "n": 12,
+  "repeats": 1,
+  "timeout_seconds": 360.0,
+  "source_sha256": "a351a6f0e3e23a59fe06ea697f287dfeacf2a28189d8297a6ff6de2f6943201d",
+  "sensor_backend": "simulated_pose_sensor_proxy",
+  "task_scope": "clean_assemble_five_parts_and_post_handle_bidirectional_stroke"
+}

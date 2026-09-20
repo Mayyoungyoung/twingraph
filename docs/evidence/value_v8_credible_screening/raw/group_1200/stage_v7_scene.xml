@@ -1,0 +1,213 @@
+<mujoco model="sliding_stage_full_v7">
+  <compiler angle="radian" meshdir="../../../twingraph-v8-runtime/simbench/assets/panda" autolimits="true" />
+  <option timestep=".002" cone="elliptic" impratio="10" iterations="80" />
+  <visual>
+    <global offwidth="1600" offheight="1000" />
+    <quality shadowsize="2048" offsamples="4" />
+    <headlight ambient=".3 .3 .3" diffuse=".45 .45 .45" specular=".1 .1 .1" />
+    <map znear=".01" />
+  </visual>
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1=".55 .59 .63" rgb2=".77 .79 .81" width="512" height="3072" />
+    <texture name="v7_checker" type="2d" builtin="checker" rgb1=".66 .68 .70" rgb2=".88 .89 .90" width="512" height="512" />
+    <material name="v7_checker_mat" texture="v7_checker" texrepeat="8 8" reflectance=".05" />
+  </asset>
+  <include file="../../../twingraph-v8-runtime/simbench/assets/panda/panda.xml" />
+  <worldbody>
+    <light pos="-.3 -1 2.6" dir=".2 .4 -1" directional="true" diffuse=".6 .6 .6" />
+    <geom name="floor" type="box" pos="0 0 -0.03" size="3 3 0.03" rgba=".46 .48 .5 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" contype="0" conaffinity="0" material="v7_checker_mat" />
+    <geom name="table" type="box" pos="-0.21 0 0.775" size="0.65 0.65 0.025" rgba=".64 .58 .48 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="1000" />
+    <geom name="leg_-0.79_-0.58" type="box" pos="-0.79 -0.58 0.375" size="0.03 0.03 0.375" rgba=".28 .28 .29 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+    <geom name="leg_-0.79_0.58" type="box" pos="-0.79 0.58 0.375" size="0.03 0.03 0.375" rgba=".28 .28 .29 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+    <geom name="leg_0.37_-0.58" type="box" pos="0.37 -0.58 0.375" size="0.03 0.03 0.375" rgba=".28 .28 .29 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+    <geom name="leg_0.37_0.58" type="box" pos="0.37 0.58 0.375" size="0.03 0.03 0.375" rgba=".28 .28 .29 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+    <body name="guide_base" pos="0.075 0.085 0.812">
+      <geom name="base_0_0" type="box" pos="-0.107 -0.0425 0" size="0.011 0.0065 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_0_1" type="box" pos="-0.107 -0.032 0" size="0.011 0.004 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_0_2" type="box" pos="-0.107 0 0" size="0.011 0.028 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_0_3" type="box" pos="-0.107 0.032 0" size="0.011 0.004 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_0_4" type="box" pos="-0.107 0.0425 0" size="0.011 0.0065 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_1_0" type="box" pos="-0.092 -0.0425 0" size="0.004 0.0065 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_1_2" type="box" pos="-0.092 0 0" size="0.004 0.028 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_1_4" type="box" pos="-0.092 0.0425 0" size="0.004 0.0065 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_2_0" type="box" pos="0.015 -0.0425 0" size="0.103 0.0065 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_2_1" type="box" pos="0.015 -0.032 0" size="0.103 0.004 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_2_2" type="box" pos="0.015 0 0" size="0.103 0.028 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_2_3" type="box" pos="0.015 0.032 0" size="0.103 0.004 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="base_2_4" type="box" pos="0.015 0.0425 0" size="0.103 0.0065 0.006" rgba=".28 .31 .35 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="rail_-1" type="box" pos="0.02 -0.034 0.012" size="0.089 0.007 0.012" rgba=".65 .68 .71 1" friction=".2 .005 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="lip_-1" type="box" pos="0.02 -0.027 0.023" size="0.089 0.006 0.003" rgba=".73 .75 .77 1" friction=".2 .005 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="rail_1" type="box" pos="0.02 0.034 0.012" size="0.089 0.007 0.012" rgba=".65 .68 .71 1" friction=".2 .005 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="lip_1" type="box" pos="0.02 0.027 0.023" size="0.089 0.006 0.003" rgba=".73 .75 .77 1" friction=".2 .005 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="rear_stop" type="box" pos="0.108 0 0.014" size="0.009 0.026 0.014" rgba=".27 .30 .34 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_locator_-0.10723_-0.04623" type="cylinder" pos="-0.10723 -0.04623 0.008" size="0.004 0.009" rgba=".5 .53 .55 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_locator_-0.10723_0.04623" type="cylinder" pos="-0.10723 0.04623 0.008" size="0.004 0.009" rgba=".5 .53 .55 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_locator_-0.07677_-0.04623" type="cylinder" pos="-0.07677 -0.04623 0.008" size="0.004 0.009" rgba=".5 .53 .55 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_locator_-0.07677_0.04623" type="cylinder" pos="-0.07677 0.04623 0.008" size="0.004 0.009" rgba=".5 .53 .55 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_cradle_left_front" type="box" pos="-0.111 -0.042 0.021" size="0.004 0.008 0.021" rgba=".48 .51 .53 1" friction=".6 .01 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" />
+      <geom name="stop_cradle_left_back" type="box" pos="-0.111 0.042 0.021" size="0.004 0.008 0.021" rgba=".48 .51 .53 1" friction=".6 .01 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" />
+      <geom name="stop_cradle_right_front" type="box" pos="-0.073 -0.042 0.021" size="0.004 0.008 0.021" rgba=".48 .51 .53 1" friction=".6 .01 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" />
+      <geom name="stop_cradle_right_back" type="box" pos="-0.073 0.042 0.021" size="0.004 0.008 0.021" rgba=".48 .51 .53 1" friction=".6 .01 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" />
+      <geom name="stop_cradle_front" type="box" pos="-0.092 -0.052 0.021" size="0.016 0.004 0.021" rgba=".48 .51 .53 1" friction=".6 .01 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" />
+      <geom name="stop_cradle_back" type="box" pos="-0.092 0.052 0.021" size="0.016 0.004 0.021" rgba=".48 .51 .53 1" friction=".6 .01 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" />
+    </body>
+    <body name="carriage" pos="-0.2321887 -0.2103654 0.806" quat="0.999437 0 0 0.03355043">
+      <freejoint name="carriage_free" />
+      <geom name="carriage_shoe" type="box" pos="0 0 0" size="0.027 0.023 0.006" rgba=".25 .45 .64 1" friction=".25 .005 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="carriage_boss" type="box" pos="0 0 0.025" size="0.022 0.014 0.015" rgba=".26 .49 .70 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="handle_post" type="cylinder" pos="0 0 0.05" size="0.0055 0.012" rgba=".65 .67 .7 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+    </body>
+    <body name="end_stop" pos="-0.1244527 -0.2625532 0.818" quat="0.9962408 0 0 -0.08662711">
+      <freejoint name="end_stop_free" />
+      <geom name="stop_0_0" type="box" pos="-0.008 -0.0395 0" size="0.004 0.0035 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_0_1" type="box" pos="-0.008 -0.032 0" size="0.004 0.004 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_0_2" type="box" pos="-0.008 0 0" size="0.004 0.028 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_0_3" type="box" pos="-0.008 0.032 0" size="0.004 0.004 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_0_4" type="box" pos="-0.008 0.0395 0" size="0.004 0.0035 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_1_0" type="box" pos="0 -0.0395 0" size="0.004 0.0035 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_1_2" type="box" pos="0 0 0" size="0.004 0.028 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_1_4" type="box" pos="0 0.0395 0" size="0.004 0.0035 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_2_0" type="box" pos="0.008 -0.0395 0" size="0.004 0.0035 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_2_1" type="box" pos="0.008 -0.032 0" size="0.004 0.004 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_2_2" type="box" pos="0.008 0 0" size="0.004 0.028 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_2_3" type="box" pos="0.008 0.032 0" size="0.004 0.004 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_2_4" type="box" pos="0.008 0.0395 0" size="0.004 0.0035 0.018" rgba=".74 .45 .22 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="stop_boss" type="box" pos="0 0 0.023" size="0.011 0.013 0.008" rgba=".78 .48 .24 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" />
+      <geom name="v7_bore_left_0" type="box" pos="0.00825 -0.032 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="1 0 0 0" />
+      <geom name="v7_bore_left_1" type="box" pos="0.007622006 -0.02884286 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.9807853 0 0 0.1950903" />
+      <geom name="v7_bore_left_2" type="box" pos="0.005833631 -0.02616637 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.9238795 0 0 0.3826834" />
+      <geom name="v7_bore_left_3" type="box" pos="0.003157138 -0.02437799 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.8314696 0 0 0.5555702" />
+      <geom name="v7_bore_left_4" type="box" pos="5.051668e-19 -0.02375 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.7071068 0 0 0.7071068" />
+      <geom name="v7_bore_left_5" type="box" pos="-0.003157138 -0.02437799 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.5555702 0 0 0.8314696" />
+      <geom name="v7_bore_left_6" type="box" pos="-0.005833631 -0.02616637 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.3826834 0 0 0.9238795" />
+      <geom name="v7_bore_left_7" type="box" pos="-0.007622006 -0.02884286 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.1950903 0 0 0.9807853" />
+      <geom name="v7_bore_left_8" type="box" pos="-0.00825 -0.032 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="6.123234e-17 0 0 1" />
+      <geom name="v7_bore_left_9" type="box" pos="-0.007622006 -0.03515714 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.1950903 0 0 0.9807853" />
+      <geom name="v7_bore_left_10" type="box" pos="-0.005833631 -0.03783363 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.3826834 0 0 0.9238795" />
+      <geom name="v7_bore_left_11" type="box" pos="-0.003157138 -0.03962201 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.5555702 0 0 0.8314696" />
+      <geom name="v7_bore_left_12" type="box" pos="-1.5155e-18 -0.04025 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.7071068 0 0 0.7071068" />
+      <geom name="v7_bore_left_13" type="box" pos="0.003157138 -0.03962201 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.8314696 0 0 0.5555702" />
+      <geom name="v7_bore_left_14" type="box" pos="0.005833631 -0.03783363 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.9238795 0 0 0.3826834" />
+      <geom name="v7_bore_left_15" type="box" pos="0.007622006 -0.03515714 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.9807853 0 0 0.1950903" />
+      <geom name="v7_bore_right_0" type="box" pos="0.00825 0.032 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="1 0 0 0" />
+      <geom name="v7_bore_right_1" type="box" pos="0.007622006 0.03515714 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.9807853 0 0 0.1950903" />
+      <geom name="v7_bore_right_2" type="box" pos="0.005833631 0.03783363 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.9238795 0 0 0.3826834" />
+      <geom name="v7_bore_right_3" type="box" pos="0.003157138 0.03962201 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.8314696 0 0 0.5555702" />
+      <geom name="v7_bore_right_4" type="box" pos="5.051668e-19 0.04025 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.7071068 0 0 0.7071068" />
+      <geom name="v7_bore_right_5" type="box" pos="-0.003157138 0.03962201 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.5555702 0 0 0.8314696" />
+      <geom name="v7_bore_right_6" type="box" pos="-0.005833631 0.03783363 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.3826834 0 0 0.9238795" />
+      <geom name="v7_bore_right_7" type="box" pos="-0.007622006 0.03515714 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.1950903 0 0 0.9807853" />
+      <geom name="v7_bore_right_8" type="box" pos="-0.00825 0.032 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="6.123234e-17 0 0 1" />
+      <geom name="v7_bore_right_9" type="box" pos="-0.007622006 0.02884286 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.1950903 0 0 0.9807853" />
+      <geom name="v7_bore_right_10" type="box" pos="-0.005833631 0.02616637 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.3826834 0 0 0.9238795" />
+      <geom name="v7_bore_right_11" type="box" pos="-0.003157138 0.02437799 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.5555702 0 0 0.8314696" />
+      <geom name="v7_bore_right_12" type="box" pos="-1.5155e-18 0.02375 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.7071068 0 0 0.7071068" />
+      <geom name="v7_bore_right_13" type="box" pos="0.003157138 0.02437799 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.8314696 0 0 0.5555702" />
+      <geom name="v7_bore_right_14" type="box" pos="0.005833631 0.02616637 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.9238795 0 0 0.3826834" />
+      <geom name="v7_bore_right_15" type="box" pos="0.007622006 0.02884286 0.014" size="0.00275 0.002231797 0.004" rgba=".43 .45 .47 1" friction=".3 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.9807853 0 0 0.1950903" />
+    </body>
+    <body name="handle" pos="0.008825241 -0.247508 0.808" quat="0.9973137 0 0 -0.07324922">
+      <freejoint name="handle_free" />
+      <geom name="handle_ring_0" type="box" pos="0.01355 0 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="1 0 0 0" />
+      <geom name="handle_ring_1" type="box" pos="0.01288682 0.00418718 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.9876883 0 0 0.1564345" />
+      <geom name="handle_ring_2" type="box" pos="0.01096218 0.00796449 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.9510565 0 0 0.309017" />
+      <geom name="handle_ring_3" type="box" pos="0.00796449 0.01096218 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.8910065 0 0 0.4539905" />
+      <geom name="handle_ring_4" type="box" pos="0.00418718 0.01288682 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.809017 0 0 0.5877853" />
+      <geom name="handle_ring_5" type="box" pos="8.296982e-19 0.01355 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.7071068 0 0 0.7071068" />
+      <geom name="handle_ring_6" type="box" pos="-0.00418718 0.01288682 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.5877853 0 0 0.809017" />
+      <geom name="handle_ring_7" type="box" pos="-0.00796449 0.01096218 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.4539905 0 0 0.8910065" />
+      <geom name="handle_ring_8" type="box" pos="-0.01096218 0.00796449 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.309017 0 0 0.9510565" />
+      <geom name="handle_ring_9" type="box" pos="-0.01288682 0.00418718 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="0.1564345 0 0 0.9876883" />
+      <geom name="handle_ring_10" type="box" pos="-0.01355 1.659396e-18 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="6.123234e-17 0 0 1" />
+      <geom name="handle_ring_11" type="box" pos="-0.01288682 -0.00418718 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.1564345 0 0 0.9876883" />
+      <geom name="handle_ring_12" type="box" pos="-0.01096218 -0.00796449 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.309017 0 0 0.9510565" />
+      <geom name="handle_ring_13" type="box" pos="-0.00796449 -0.01096218 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.4539905 0 0 0.8910065" />
+      <geom name="handle_ring_14" type="box" pos="-0.00418718 -0.01288682 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.5877853 0 0 0.809017" />
+      <geom name="handle_ring_15" type="box" pos="-2.489095e-18 -0.01355 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.7071068 0 0 0.7071068" />
+      <geom name="handle_ring_16" type="box" pos="0.00418718 -0.01288682 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.809017 0 0 0.5877853" />
+      <geom name="handle_ring_17" type="box" pos="0.00796449 -0.01096218 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.8910065 0 0 0.4539905" />
+      <geom name="handle_ring_18" type="box" pos="0.01096218 -0.00796449 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.9510565 0 0 0.309017" />
+      <geom name="handle_ring_19" type="box" pos="0.01288682 -0.00418718 0" size="0.00745 0.003392595 0.008" rgba=".21 .23 .26 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="500" quat="-0.9876883 0 0 0.1564345" />
+    </body>
+    <body name="pin_left" pos="-0.3395116 -0.2412672 0.85" quat="0.9992323 0 0 0.03917546">
+      <freejoint name="pin_left_free" />
+      <geom name="pin_left_shaft" type="cylinder" pos="0 0 -0.0205" size="0.0033 0.0265" rgba=".7 .72 .74 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="2200" />
+      <geom name="pin_left_tip" type="cylinder" pos="0 0 -0.047" size="0.0027 0.001" rgba=".7 .72 .74 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="2200" />
+      <geom name="pin_left_head" type="cylinder" pos="0 0 0.006" size="0.009 0.007" rgba=".78 .62 .2 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="900" />
+    </body>
+    <body name="pin_left_holder" pos="-0.3395116 -0.2412672 0.819" quat="0.9992323 0 0 0.03917546">
+      <geom name="pin_left_holder_0" type="box" pos="0.0072 0 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="1 0 0 0" />
+      <geom name="pin_left_holder_1" type="box" pos="0.006235383 0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.9659258 0 0 0.258819" />
+      <geom name="pin_left_holder_2" type="box" pos="0.0036 0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.8660254 0 0 0.5" />
+      <geom name="pin_left_holder_3" type="box" pos="4.408728e-19 0.0072 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.7071068 0 0 0.7071068" />
+      <geom name="pin_left_holder_4" type="box" pos="-0.0036 0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.5 0 0 0.8660254" />
+      <geom name="pin_left_holder_5" type="box" pos="-0.006235383 0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.258819 0 0 0.9659258" />
+      <geom name="pin_left_holder_6" type="box" pos="-0.0072 8.817457e-19 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="6.123234e-17 0 0 1" />
+      <geom name="pin_left_holder_7" type="box" pos="-0.006235383 -0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.258819 0 0 0.9659258" />
+      <geom name="pin_left_holder_8" type="box" pos="-0.0036 -0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.5 0 0 0.8660254" />
+      <geom name="pin_left_holder_9" type="box" pos="-1.322619e-18 -0.0072 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.7071068 0 0 0.7071068" />
+      <geom name="pin_left_holder_10" type="box" pos="0.0036 -0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.8660254 0 0 0.5" />
+      <geom name="pin_left_holder_11" type="box" pos="0.006235383 -0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.9659258 0 0 0.258819" />
+    </body>
+    <body name="pin_right" pos="-0.3585504 -0.3192798 0.85" quat="0.9998929 0 0 0.01463572">
+      <freejoint name="pin_right_free" />
+      <geom name="pin_right_shaft" type="cylinder" pos="0 0 -0.0205" size="0.0033 0.0265" rgba=".7 .72 .74 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="2200" />
+      <geom name="pin_right_tip" type="cylinder" pos="0 0 -0.047" size="0.0027 0.001" rgba=".7 .72 .74 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="2200" />
+      <geom name="pin_right_head" type="cylinder" pos="0 0 0.006" size="0.009 0.007" rgba=".78 .62 .2 1" friction="1 .02 .001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="900" />
+    </body>
+    <body name="pin_right_holder" pos="-0.3585504 -0.3192798 0.819" quat="0.9998929 0 0 0.01463572">
+      <geom name="pin_right_holder_0" type="box" pos="0.0072 0 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="1 0 0 0" />
+      <geom name="pin_right_holder_1" type="box" pos="0.006235383 0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.9659258 0 0 0.258819" />
+      <geom name="pin_right_holder_2" type="box" pos="0.0036 0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.8660254 0 0 0.5" />
+      <geom name="pin_right_holder_3" type="box" pos="4.408728e-19 0.0072 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.7071068 0 0 0.7071068" />
+      <geom name="pin_right_holder_4" type="box" pos="-0.0036 0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.5 0 0 0.8660254" />
+      <geom name="pin_right_holder_5" type="box" pos="-0.006235383 0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="0.258819 0 0 0.9659258" />
+      <geom name="pin_right_holder_6" type="box" pos="-0.0072 8.817457e-19 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="6.123234e-17 0 0 1" />
+      <geom name="pin_right_holder_7" type="box" pos="-0.006235383 -0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.258819 0 0 0.9659258" />
+      <geom name="pin_right_holder_8" type="box" pos="-0.0036 -0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.5 0 0 0.8660254" />
+      <geom name="pin_right_holder_9" type="box" pos="-1.322619e-18 -0.0072 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.7071068 0 0 0.7071068" />
+      <geom name="pin_right_holder_10" type="box" pos="0.0036 -0.006235383 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.8660254 0 0 0.5" />
+      <geom name="pin_right_holder_11" type="box" pos="0.006235383 -0.0036 0" size="0.0028 0.002733082 0.019" rgba=".44 .44 .43 1" friction=".45 .01 .0001" condim="4" solref=".008 1" solimp=".95 .99 .001" density="700" quat="-0.9659258 0 0 0.258819" />
+    </body>
+    <camera name="task_view" pos="0.94 -1.38 1.98" xyaxes="0.768681 0.6396324 -0 -0.3033265 0.364524 0.8804063" fovy="36" />
+    <body name="wipe_tool" pos="-.24 -.08 .820">
+      <freejoint name="wipe_tool_free" />
+      <geom name="wipe_pad" type="box" pos="0 0 0" size=".018 .012 .010" rgba=".16 .66 .68 1" friction=".25 .01 .001" mass=".025" solref=".03 1" solimp=".8 .95 .002" />
+      <geom name="wipe_handle" type="box" pos="0 0 .047" size=".012 .014 .022" rgba=".85 .65 .25 1" friction="1 .02 .001" mass=".045" />
+      <geom name="wipe_stem" type="box" pos="0 0 .014" size=".006 .007 .011" rgba=".85 .65 .25 1" contype="0" conaffinity="0" mass="0" />
+    </body>
+    <site name="dirty_0" pos="0.02399391 0.08161973 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_1" pos="0.02511678 0.08511841 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_2" pos="0.02691801 0.08735485 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_3" pos="0.0252207 0.0908245 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_4" pos="0.03791564 0.08199071 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_5" pos="0.03688002 0.08185773 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_6" pos="0.03914135 0.08451266 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_7" pos="0.0370186 0.08888422 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_8" pos="0.05273289 0.0791659 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_9" pos="0.05321656 0.08454918 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_10" pos="0.05419273 0.08700479 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_11" pos="0.05144559 0.08941988 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_12" pos="0.06827052 0.08100744 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_13" pos="0.06954374 0.08345848 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_14" pos="0.0679083 0.08496989 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_15" pos="0.06627723 0.08872521 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_16" pos="0.07942115 0.08144957 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_17" pos="0.08050741 0.08247039 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_18" pos="0.08250442 0.08724939 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_19" pos="0.08502158 0.0878088 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_20" pos="0.09619114 0.08254437 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_21" pos="0.09937392 0.08449955 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_22" pos="0.09869315 0.08816907 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_23" pos="0.09493103 0.08894355 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_24" pos="0.1084613 0.08267065 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_25" pos="0.1120237 0.08177977 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_26" pos="0.1092016 0.08478234 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_27" pos="0.1107131 0.08855546 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_28" pos="0.1227646 0.08146003 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_29" pos="0.122435 0.08471033 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_30" pos="0.1255603 0.08698191 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <site name="dirty_31" pos="0.125184 0.08909053 0.821" type="box" size=".006 .003 .0005" rgba=".46 .22 .08 1" />
+    <camera name="top_view" pos="-0.1557394 -0.07101725 1.62" xyaxes="1 0 0 0 1 0" fovy="46" />
+  </worldbody>
+</mujoco>

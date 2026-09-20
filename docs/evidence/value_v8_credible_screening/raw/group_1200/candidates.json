@@ -1,0 +1,4260 @@
+[
+  {
+    "selected_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+    "ranker": "bootstrap_geometric_cost",
+    "candidates": [
+      {
+        "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 0.0,
+          "width": 0.028,
+          "q_hover": [
+            -0.10401769802882796,
+            -0.2938412317426057,
+            -0.17226365444796246,
+            -2.938399414028259,
+            -0.10466624373980023,
+            2.6463763166127574,
+            0.6090252178137899
+          ],
+          "cost": 1.2879483491412869
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              1.8932830235185062e-23,
+              -0.55,
+              -1.3006434617208025e-23,
+              -2.25,
+              8.883204339019816e-23,
+              1.7,
+              0.7854
+            ],
+            [
+              -0.06689723039152726,
+              -0.7273775250570131,
+              -0.12705280657803378,
+              -2.3663021591788858,
+              -0.0845797249068176,
+              1.642683393377655,
+              0.6299634689510568
+            ],
+            [
+              -0.0672584031616901,
+              -0.2957411312832039,
+              -0.2160790222191541,
+              -2.9378559924006136,
+              -0.13153861107204912,
+              2.6449870449640573,
+              0.6274636010673961
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 2.2695009177601833,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 0.0,
+          "width": 0.028,
+          "q_hover": [
+            -0.10401769802882796,
+            -0.2938412317426057,
+            -0.17226365444796246,
+            -2.938399414028259,
+            -0.10466624373980023,
+            2.6463763166127574,
+            0.6090252178137899
+          ],
+          "cost": 1.2879483491412869
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              1.8932830235185062e-23,
+              -0.55,
+              -1.3006434617208025e-23,
+              -2.25,
+              8.883204339019816e-23,
+              1.7,
+              0.7854
+            ],
+            [
+              -0.06689723039152726,
+              -0.7273775250570131,
+              -0.12705280657803378,
+              -2.3663021591788858,
+              -0.0845797249068176,
+              1.642683393377655,
+              0.6299634689510568
+            ],
+            [
+              -0.0672584031616901,
+              -0.2957411312832039,
+              -0.2160790222191541,
+              -2.9378559924006136,
+              -0.13153861107204912,
+              2.6449870449640573,
+              0.6274636010673961
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 2.3395009177601835,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 0.0,
+          "width": 0.028,
+          "q_hover": [
+            -0.10401769802882796,
+            -0.2938412317426057,
+            -0.17226365444796246,
+            -2.938399414028259,
+            -0.10466624373980023,
+            2.6463763166127574,
+            0.6090252178137899
+          ],
+          "cost": 1.2879483491412869
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              1.8932830235185062e-23,
+              -0.55,
+              -1.3006434617208025e-23,
+              -2.25,
+              8.883204339019816e-23,
+              1.7,
+              0.7854
+            ],
+            [
+              -0.06689723039152726,
+              -0.7273775250570131,
+              -0.12705280657803378,
+              -2.3663021591788858,
+              -0.0845797249068176,
+              1.642683393377655,
+              0.6299634689510568
+            ],
+            [
+              -0.0672584031616901,
+              -0.2957411312832039,
+              -0.2160790222191541,
+              -2.9378559924006136,
+              -0.13153861107204912,
+              2.6449870449640573,
+              0.6274636010673961
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 2.399500917760183,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 1.5707963267948966,
+          "width": 0.028,
+          "q_hover": [
+            0.20331052598583813,
+            -0.3259014355380015,
+            -0.5397695966052833,
+            -2.929708641553661,
+            -0.33901718976474526,
+            2.6228514472198774,
+            -0.8005972452283524
+          ],
+          "cost": 2.136116607754587
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              0.3317750130869757,
+              -0.5718747077653921,
+              -0.2518993760393355,
+              -2.2475895307271494,
+              -0.13625681366808753,
+              1.6890221323131844,
+              -0.6500263645542088
+            ],
+            [
+              0.24612809803817134,
+              -0.7768791017329388,
+              -0.3380039935377937,
+              -2.3593733806277593,
+              -0.23482693555371226,
+              1.6104603732951293,
+              -0.7748678425599441
+            ],
+            [
+              0.25720452287130224,
+              -0.3357281174544568,
+              -0.6040905840056948,
+              -2.9269141078446097,
+              -0.3818458069293258,
+              2.6154207705263635,
+              -0.7710059125809282
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              -1.0,
+              2.220446049250313e-16,
+              0.0
+            ],
+            [
+              2.220446049250313e-16,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 3.119207544782256,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 1.5707963267948966,
+          "width": 0.028,
+          "q_hover": [
+            0.20331052598583813,
+            -0.3259014355380015,
+            -0.5397695966052833,
+            -2.929708641553661,
+            -0.33901718976474526,
+            2.6228514472198774,
+            -0.8005972452283524
+          ],
+          "cost": 2.136116607754587
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              0.3317750130869757,
+              -0.5718747077653921,
+              -0.2518993760393355,
+              -2.2475895307271494,
+              -0.13625681366808753,
+              1.6890221323131844,
+              -0.6500263645542088
+            ],
+            [
+              0.24612809803817134,
+              -0.7768791017329388,
+              -0.3380039935377937,
+              -2.3593733806277593,
+              -0.23482693555371226,
+              1.6104603732951293,
+              -0.7748678425599441
+            ],
+            [
+              0.25720452287130224,
+              -0.3357281174544568,
+              -0.6040905840056948,
+              -2.9269141078446097,
+              -0.3818458069293258,
+              2.6154207705263635,
+              -0.7710059125809282
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              -1.0,
+              2.220446049250313e-16,
+              0.0
+            ],
+            [
+              2.220446049250313e-16,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 3.1892075447822563,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 1.5707963267948966,
+          "width": 0.028,
+          "q_hover": [
+            0.20331052598583813,
+            -0.3259014355380015,
+            -0.5397695966052833,
+            -2.929708641553661,
+            -0.33901718976474526,
+            2.6228514472198774,
+            -0.8005972452283524
+          ],
+          "cost": 2.136116607754587
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              0.3317750130869757,
+              -0.5718747077653921,
+              -0.2518993760393355,
+              -2.2475895307271494,
+              -0.13625681366808753,
+              1.6890221323131844,
+              -0.6500263645542088
+            ],
+            [
+              0.24612809803817134,
+              -0.7768791017329388,
+              -0.3380039935377937,
+              -2.3593733806277593,
+              -0.23482693555371226,
+              1.6104603732951293,
+              -0.7748678425599441
+            ],
+            [
+              0.25720452287130224,
+              -0.3357281174544568,
+              -0.6040905840056948,
+              -2.9269141078446097,
+              -0.3818458069293258,
+              2.6154207705263635,
+              -0.7710059125809282
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              -1.0,
+              2.220446049250313e-16,
+              0.0
+            ],
+            [
+              2.220446049250313e-16,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 3.249207544782256,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      }
+    ],
+    "continuations": [
+      {
+        "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "selected_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+        "candidates": [
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+            "clearance": 0.98,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              0.020684347066222186,
+              0.07841896933310426,
+              0.9498531509743496
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 0.982155252091841,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+              "start_q": [
+                -0.05913530060754769,
+                0.13990884748152227,
+                -0.1351660767965829,
+                -2.9077200830699277,
+                0.19525624385435736,
+                3.0445444372314387,
+                0.3984301575956976
+              ],
+              "joints": [
+                [
+                  -0.014548926361493637,
+                  -0.38540462191717045,
+                  -0.2782846742075442,
+                  -2.9250227327686065,
+                  -0.18490034842894768,
+                  2.545128514121458,
+                  0.6660608237191068
+                ],
+                [
+                  0.24436604613052657,
+                  0.3149620570135732,
+                  -0.11297451191625035,
+                  -2.078507858674379,
+                  0.05124065024681358,
+                  2.390965357487632,
+                  0.8852934173652285
+                ],
+                [
+                  0.2409556897580248,
+                  0.3705563922777435,
+                  -0.10821600450908778,
+                  -2.0863966420588014,
+                  0.061668872560156886,
+                  2.454046400357695,
+                  0.8782415035385438
+                ]
+              ],
+              "target": [
+                0.020684347066222186,
+                0.07841896933310426,
+                0.9498531509743496
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 43,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+            "clearance": 1.05,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              0.020684347066222186,
+              0.07841896933310426,
+              0.9498531509743496
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0526557693577545,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+              "start_q": [
+                -0.05913530060754769,
+                0.13990884748152227,
+                -0.1351660767965829,
+                -2.9077200830699277,
+                0.19525624385435736,
+                3.0445444372314387,
+                0.3984301575956976
+              ],
+              "joints": [
+                [
+                  -0.021402968271146374,
+                  -0.5836326804456855,
+                  -0.24811655318059364,
+                  -2.853876189058625,
+                  -0.17874736859498946,
+                  2.2765187313090376,
+                  0.6728047014935462
+                ],
+                [
+                  0.216990090269398,
+                  0.20518584760487096,
+                  -0.08609269359231614,
+                  -2.0316915760320833,
+                  0.022269279468246465,
+                  2.2360191135662313,
+                  0.904838831591136
+                ],
+                [
+                  0.21140942496428952,
+                  0.3695112046410439,
+                  -0.07824456866775217,
+                  -2.0865925817780813,
+                  0.04453421198829035,
+                  2.4545931652018904,
+                  0.8898752424668658
+                ]
+              ],
+              "target": [
+                0.020684347066222186,
+                0.07841896933310426,
+                0.9498531509743496
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 53,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+            "clearance": 1.1099999999999999,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              0.020684347066222186,
+              0.07841896933310426,
+              0.9498531509743496
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.1130174471750318,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+              "start_q": [
+                -0.05913530060754769,
+                0.13990884748152227,
+                -0.1351660767965829,
+                -2.9077200830699277,
+                0.19525624385435736,
+                3.0445444372314387,
+                0.3984301575956976
+              ],
+              "joints": [
+                [
+                  -0.017967691561674805,
+                  -0.6856706349995095,
+                  -0.22346524614887275,
+                  -2.756057546167142,
+                  -0.16115211900933682,
+                  2.077144577927445,
+                  0.6724832415458522
+                ],
+                [
+                  0.19251024117968246,
+                  0.13578038478283508,
+                  -0.06064543288925811,
+                  -1.9612593500366946,
+                  0.009486440071063793,
+                  2.0967749072960635,
+                  0.9135497037268717
+                ],
+                [
+                  0.18774059446819213,
+                  0.3689258415889213,
+                  -0.054242080350135585,
+                  -2.08672148204875,
+                  0.03085895979823114,
+                  2.454926807299264,
+                  0.8991636155392014
+                ]
+              ],
+              "target": [
+                0.020684347066222186,
+                0.07841896933310426,
+                0.9498531509743496
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 63,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          }
+        ]
+      },
+      {
+        "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "selected_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+        "candidates": [
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+            "clearance": 0.98,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.23095037691659231,
+              -0.08141698510641916,
+              0.9119838551576326
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 0.9821965058919594,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+              "start_q": [
+                0.20863734427380634,
+                0.6556223973458931,
+                -0.0972706746053339,
+                -1.5446529787171897,
+                0.07310570855409802,
+                2.19641513833478,
+                0.874455557637146
+              ],
+              "joints": [
+                [
+                  0.20917352097934494,
+                  0.6436883853806321,
+                  -0.09816263178431583,
+                  -1.5419016849073532,
+                  0.07188162651424848,
+                  2.182068683988381,
+                  0.8751642801813644
+                ],
+                [
+                  -0.007005355847733581,
+                  -0.3568516925009667,
+                  -0.27465781776582443,
+                  -2.901041457843514,
+                  -0.17065697157572357,
+                  2.5497588127649977,
+                  0.6628101683521543
+                ],
+                [
+                  0.0450978000023058,
+                  -0.09399385323439806,
+                  -0.31344838497098343,
+                  -2.9164483133674843,
+                  -0.09333607897613616,
+                  2.8257286436936155,
+                  0.6075801278708696
+                ]
+              ],
+              "target": [
+                -0.23095037691659231,
+                -0.08141698510641916,
+                0.9119838551576326
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 49,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+            "clearance": 1.05,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.23095037691659231,
+              -0.08141698510641916,
+              0.9119838551576326
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0527255260959598,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+              "start_q": [
+                0.20863734427380634,
+                0.6556223973458931,
+                -0.0972706746053339,
+                -1.5446529787171897,
+                0.07310570855409802,
+                2.19641513833478,
+                0.874455557637146
+              ],
+              "joints": [
+                [
+                  0.2121546800628727,
+                  0.5627894777426767,
+                  -0.10447463803389516,
+                  -1.4878303538818465,
+                  0.0626587689010317,
+                  2.0473554419816073,
+                  0.88081965739211
+                ],
+                [
+                  0.00312221080208006,
+                  -0.5539260022155756,
+                  -0.2657426821257886,
+                  -2.8311489099945786,
+                  -0.18381253050804555,
+                  2.2846623520346747,
+                  0.6826762539644928
+                ],
+                [
+                  0.07408421681741946,
+                  -0.09488631052183374,
+                  -0.3451808808083084,
+                  -2.9163001497910246,
+                  -0.10335620562291503,
+                  2.825419997865256,
+                  0.6144947982629653
+                ]
+              ],
+              "target": [
+                -0.23095037691659231,
+                -0.08141698510641916,
+                0.9119838551576326
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 60,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+            "clearance": 1.1099999999999999,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.23095037691659231,
+              -0.08141698510641916,
+              0.9119838551576326
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.11313082518106,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+              "start_q": [
+                0.20863734427380634,
+                0.6556223973458931,
+                -0.0972706746053339,
+                -1.5446529787171897,
+                0.07310570855409802,
+                2.19641513833478,
+                0.874455557637146
+              ],
+              "joints": [
+                [
+                  0.21223285603662762,
+                  0.5183548902662933,
+                  -0.10796245441079094,
+                  -1.4030339846528515,
+                  0.05681223523767115,
+                  1.9183642890472328,
+                  0.8848848899820887
+                ],
+                [
+                  0.02124837680500065,
+                  -0.6586765604178695,
+                  -0.2551981589520354,
+                  -2.7349038117143034,
+                  -0.17842641610930235,
+                  2.085211645433501,
+                  0.6921957095731163
+                ],
+                [
+                  0.09644427803786237,
+                  -0.09560379291442747,
+                  -0.3696905303957713,
+                  -2.916133900796277,
+                  -0.11109387897990192,
+                  2.825133851749816,
+                  0.6198043953184772
+                ]
+              ],
+              "target": [
+                -0.23095037691659231,
+                -0.08141698510641916,
+                0.9119838551576326
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 69,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "selected_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+    "ranker": "bootstrap_geometric_cost",
+    "candidates": [
+      {
+        "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 0.0,
+          "width": 0.028,
+          "q_hover": [
+            -0.10401769802882796,
+            -0.2938412317426057,
+            -0.17226365444796246,
+            -2.938399414028259,
+            -0.10466624373980023,
+            2.6463763166127574,
+            0.6090252178137899
+          ],
+          "cost": 1.2879483491412869
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              1.8932830235185062e-23,
+              -0.55,
+              -1.3006434617208025e-23,
+              -2.25,
+              8.883204339019816e-23,
+              1.7,
+              0.7854
+            ],
+            [
+              -0.06689723039152726,
+              -0.7273775250570131,
+              -0.12705280657803378,
+              -2.3663021591788858,
+              -0.0845797249068176,
+              1.642683393377655,
+              0.6299634689510568
+            ],
+            [
+              -0.0672584031616901,
+              -0.2957411312832039,
+              -0.2160790222191541,
+              -2.9378559924006136,
+              -0.13153861107204912,
+              2.6449870449640573,
+              0.6274636010673961
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 2.2695009177601833,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 0.0,
+          "width": 0.028,
+          "q_hover": [
+            -0.10401769802882796,
+            -0.2938412317426057,
+            -0.17226365444796246,
+            -2.938399414028259,
+            -0.10466624373980023,
+            2.6463763166127574,
+            0.6090252178137899
+          ],
+          "cost": 1.2879483491412869
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              1.8932830235185062e-23,
+              -0.55,
+              -1.3006434617208025e-23,
+              -2.25,
+              8.883204339019816e-23,
+              1.7,
+              0.7854
+            ],
+            [
+              -0.06689723039152726,
+              -0.7273775250570131,
+              -0.12705280657803378,
+              -2.3663021591788858,
+              -0.0845797249068176,
+              1.642683393377655,
+              0.6299634689510568
+            ],
+            [
+              -0.0672584031616901,
+              -0.2957411312832039,
+              -0.2160790222191541,
+              -2.9378559924006136,
+              -0.13153861107204912,
+              2.6449870449640573,
+              0.6274636010673961
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 2.3395009177601835,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 0.0,
+          "width": 0.028,
+          "q_hover": [
+            -0.10401769802882796,
+            -0.2938412317426057,
+            -0.17226365444796246,
+            -2.938399414028259,
+            -0.10466624373980023,
+            2.6463763166127574,
+            0.6090252178137899
+          ],
+          "cost": 1.2879483491412869
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              1.8932830235185062e-23,
+              -0.55,
+              -1.3006434617208025e-23,
+              -2.25,
+              8.883204339019816e-23,
+              1.7,
+              0.7854
+            ],
+            [
+              -0.06689723039152726,
+              -0.7273775250570131,
+              -0.12705280657803378,
+              -2.3663021591788858,
+              -0.0845797249068176,
+              1.642683393377655,
+              0.6299634689510568
+            ],
+            [
+              -0.0672584031616901,
+              -0.2957411312832039,
+              -0.2160790222191541,
+              -2.9378559924006136,
+              -0.13153861107204912,
+              2.6449870449640573,
+              0.6274636010673961
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 2.399500917760183,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 1.5707963267948966,
+          "width": 0.028,
+          "q_hover": [
+            0.20331052598583813,
+            -0.3259014355380015,
+            -0.5397695966052833,
+            -2.929708641553661,
+            -0.33901718976474526,
+            2.6228514472198774,
+            -0.8005972452283524
+          ],
+          "cost": 2.136116607754587
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              0.3317750130869757,
+              -0.5718747077653921,
+              -0.2518993760393355,
+              -2.2475895307271494,
+              -0.13625681366808753,
+              1.6890221323131844,
+              -0.6500263645542088
+            ],
+            [
+              0.24612809803817134,
+              -0.7768791017329388,
+              -0.3380039935377937,
+              -2.3593733806277593,
+              -0.23482693555371226,
+              1.6104603732951293,
+              -0.7748678425599441
+            ],
+            [
+              0.25720452287130224,
+              -0.3357281174544568,
+              -0.6040905840056948,
+              -2.9269141078446097,
+              -0.3818458069293258,
+              2.6154207705263635,
+              -0.7710059125809282
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              -1.0,
+              2.220446049250313e-16,
+              0.0
+            ],
+            [
+              2.220446049250313e-16,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:0",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 3.119207544782256,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 1.5707963267948966,
+          "width": 0.028,
+          "q_hover": [
+            0.20331052598583813,
+            -0.3259014355380015,
+            -0.5397695966052833,
+            -2.929708641553661,
+            -0.33901718976474526,
+            2.6228514472198774,
+            -0.8005972452283524
+          ],
+          "cost": 2.136116607754587
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              0.3317750130869757,
+              -0.5718747077653921,
+              -0.2518993760393355,
+              -2.2475895307271494,
+              -0.13625681366808753,
+              1.6890221323131844,
+              -0.6500263645542088
+            ],
+            [
+              0.24612809803817134,
+              -0.7768791017329388,
+              -0.3380039935377937,
+              -2.3593733806277593,
+              -0.23482693555371226,
+              1.6104603732951293,
+              -0.7748678425599441
+            ],
+            [
+              0.25720452287130224,
+              -0.3357281174544568,
+              -0.6040905840056948,
+              -2.9269141078446097,
+              -0.3818458069293258,
+              2.6154207705263635,
+              -0.7710059125809282
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              -1.0,
+              2.220446049250313e-16,
+              0.0
+            ],
+            [
+              2.220446049250313e-16,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:1",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 3.1892075447822563,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2:control:0:terminal:0",
+        "part": "wipe_tool",
+        "start_state": "ebee686a0aaf9f2a49c1823896171598a607c622e5ea28c5ccec6340f2719726",
+        "grasp": {
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8566195948833363
+          ],
+          "yaw": 1.5707963267948966,
+          "width": 0.028,
+          "q_hover": [
+            0.20331052598583813,
+            -0.3259014355380015,
+            -0.5397695966052833,
+            -2.929708641553661,
+            -0.33901718976474526,
+            2.6228514472198774,
+            -0.8005972452283524
+          ],
+          "cost": 2.136116607754587
+        },
+        "path": {
+          "type": "joint_path",
+          "part": null,
+          "id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2",
+          "start_q": [
+            1.8932830235185062e-23,
+            -0.55,
+            -1.3006434617208025e-23,
+            -2.25,
+            8.883204339019816e-23,
+            1.7,
+            0.7854
+          ],
+          "joints": [
+            [
+              0.3317750130869757,
+              -0.5718747077653921,
+              -0.2518993760393355,
+              -2.2475895307271494,
+              -0.13625681366808753,
+              1.6890221323131844,
+              -0.6500263645542088
+            ],
+            [
+              0.24612809803817134,
+              -0.7768791017329388,
+              -0.3380039935377937,
+              -2.3593733806277593,
+              -0.23482693555371226,
+              1.6104603732951293,
+              -0.7748678425599441
+            ],
+            [
+              0.25720452287130224,
+              -0.3357281174544568,
+              -0.6040905840056948,
+              -2.9269141078446097,
+              -0.3818458069293258,
+              2.6154207705263635,
+              -0.7710059125809282
+            ]
+          ],
+          "target": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.9566195948833363
+          ],
+          "rotation": [
+            [
+              -1.0,
+              2.220446049250313e-16,
+              0.0
+            ],
+            [
+              2.220446049250313e-16,
+              1.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "binding": {
+            "held": null,
+            "grasp_artifact": "grasp",
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+            "grasp_epoch": 1,
+            "prefix_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2:control:0:terminal:0"
+          }
+        },
+        "control": {
+          "strategy": "feedback",
+          "force": 8.0
+        },
+        "terminal": {
+          "id": "wipe",
+          "part": "wipe_tool",
+          "xyz": [
+            -0.23930689114080628,
+            -0.08141844238302932,
+            0.8096195948833362
+          ]
+        },
+        "bindings": {
+          "part": "wipe_tool",
+          "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530",
+          "route_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530:route:2",
+          "control_id": 0,
+          "terminal_id": 0,
+          "terminal_release_check": {
+            "status": "proxy",
+            "penalty": 0.0,
+            "summed_penetration_m": 0.0,
+            "pairs": [],
+            "samples": 9
+          },
+          "transport": {
+            "status": "deferred",
+            "after": "verified grasp",
+            "target": {
+              "id": "wipe",
+              "part": "wipe_tool",
+              "xyz": [
+                -0.23930689114080628,
+                -0.08141844238302932,
+                0.8096195948833362
+              ]
+            },
+            "grasp_id": "wipe_tool:yaw:1.570796:pose:67c6316b5530"
+          }
+        },
+        "status": "necessary_pass",
+        "unknown": [
+          "continuous swept collision",
+          "closed-loop execution",
+          "grasp retention",
+          "terminal suffix feasibility"
+        ],
+        "cost": 3.249207544782256,
+        "steps": [
+          {
+            "skill": "move",
+            "params": {
+              "path": "transfer"
+            }
+          },
+          {
+            "skill": "move",
+            "params": {
+              "grasp": "grasp",
+              "part": "wipe_tool"
+            }
+          },
+          {
+            "skill": "grasp",
+            "params": {
+              "part": "wipe_tool",
+              "force": 8.0
+            }
+          },
+          {
+            "skill": "inspect",
+            "params": {
+              "what": "grasp",
+              "part": "wipe_tool"
+            }
+          }
+        ]
+      }
+    ],
+    "continuations": [
+      {
+        "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "selected_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+        "candidates": [
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+            "clearance": 0.98,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              0.13072172800797774,
+              0.07841896933310426,
+              0.9498531509743496
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 0.9826992008128114,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+              "start_q": [
+                -0.05913530060754769,
+                0.13990884748152227,
+                -0.1351660767965829,
+                -2.9077200830699277,
+                0.19525624385435736,
+                3.0445444372314387,
+                0.3984301575956976
+              ],
+              "joints": [
+                [
+                  -0.014548926361493637,
+                  -0.38540462191717045,
+                  -0.2782846742075442,
+                  -2.9250227327686065,
+                  -0.18490034842894768,
+                  2.545128514121458,
+                  0.6660608237191068
+                ],
+                [
+                  0.21708792425377538,
+                  0.615065850649783,
+                  -0.1254001871445277,
+                  -1.5928111233265485,
+                  0.08952839964138228,
+                  2.202254198752488,
+                  0.8474384960835296
+                ],
+                [
+                  0.21441865656348183,
+                  0.6593545446278657,
+                  -0.12107831960340418,
+                  -1.6019305917956619,
+                  0.09566789635537852,
+                  2.255487958138018,
+                  0.8438205964676153
+                ]
+              ],
+              "target": [
+                0.13072172800797774,
+                0.07841896933310426,
+                0.9498531509743496
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 57,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+            "clearance": 1.05,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              0.13072172800797774,
+              0.07841896933310426,
+              0.9498531509743496
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0531778035477701,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+              "start_q": [
+                -0.05913530060754769,
+                0.13990884748152227,
+                -0.1351660767965829,
+                -2.9077200830699277,
+                0.19525624385435736,
+                3.0445444372314387,
+                0.3984301575956976
+              ],
+              "joints": [
+                [
+                  -0.021402968271146374,
+                  -0.5836326804456855,
+                  -0.24811655318059364,
+                  -2.853876189058625,
+                  -0.17874736859498946,
+                  2.2765187313090376,
+                  0.6728047014935462
+                ],
+                [
+                  0.19937160869854934,
+                  0.5300891825807983,
+                  -0.10648276145475706,
+                  -1.540839871398475,
+                  0.06116712544681584,
+                  2.067672478190742,
+                  0.8641190475433059
+                ],
+                [
+                  0.19414393433002627,
+                  0.6579222226645298,
+                  -0.09681637043985598,
+                  -1.6022480373518324,
+                  0.07644410901738198,
+                  2.256473977593359,
+                  0.8548770259991407
+                ]
+              ],
+              "target": [
+                0.13072172800797774,
+                0.07841896933310426,
+                0.9498531509743496
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 66,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+            "clearance": 1.1099999999999999,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              0.13072172800797774,
+              0.07841896933310426,
+              0.9498531509743496
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.1135423824359718,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+              "start_q": [
+                -0.05913530060754769,
+                0.13990884748152227,
+                -0.1351660767965829,
+                -2.9077200830699277,
+                0.19525624385435736,
+                3.0445444372314387,
+                0.3984301575956976
+              ],
+              "joints": [
+                [
+                  -0.017967691561674805,
+                  -0.6856706349995095,
+                  -0.22346524614887275,
+                  -2.756057546167142,
+                  -0.16115211900933682,
+                  2.077144577927445,
+                  0.6724832415458522
+                ],
+                [
+                  0.18215639906705625,
+                  0.4820503978966824,
+                  -0.08760577845505335,
+                  -1.4590308683227655,
+                  0.04349257750490338,
+                  1.93919104873233,
+                  0.8747106478544204
+                ],
+                [
+                  0.17765136732340361,
+                  0.6569919090603629,
+                  -0.0771029094388763,
+                  -1.6024597112719416,
+                  0.06085130048901823,
+                  2.2571146328516254,
+                  0.8638546088816139
+                ]
+              ],
+              "target": [
+                0.13072172800797774,
+                0.07841896933310426,
+                0.9498531509743496
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 76,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          }
+        ]
+      },
+      {
+        "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "selected_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+        "candidates": [
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+            "clearance": 0.98,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.2399856887301742,
+              -0.08141515140989193,
+              0.9148699450355106
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 0.9816338808691044,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0",
+              "start_q": [
+                0.291627674241698,
+                0.3303794882942278,
+                -0.13906252740119693,
+                -2.078676315734372,
+                0.06695548951534745,
+                2.4046945013154275,
+                0.8962558690990133
+              ],
+              "joints": [
+                [
+                  0.2926519497106078,
+                  0.3172055910459807,
+                  -0.14047267456089685,
+                  -2.0764977654645476,
+                  0.06396628888974358,
+                  2.3897684274348188,
+                  0.8982584538268771
+                ],
+                [
+                  0.030252009120908214,
+                  -0.3927682851505798,
+                  -0.33282625876903166,
+                  -2.9256749144159904,
+                  -0.22306668854366538,
+                  2.5408226743701507,
+                  0.6920015005722411
+                ],
+                [
+                  0.08845037569417781,
+                  -0.1314575375042618,
+                  -0.38142174834672987,
+                  -2.942634410092273,
+                  -0.1536191489790674,
+                  2.816968391362609,
+                  0.6416169628642566
+                ]
+              ],
+              "target": [
+                -0.2399856887301742,
+                -0.08141515140989193,
+                0.9148699450355106
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 35,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+            "clearance": 1.05,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.2399856887301742,
+              -0.08141515140989193,
+              0.9148699450355106
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0521970575153548,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:1",
+              "start_q": [
+                0.291627674241698,
+                0.3303794882942278,
+                -0.13906252740119693,
+                -2.078676315734372,
+                0.06695548951534745,
+                2.4046945013154275,
+                0.8962558690990133
+              ],
+              "joints": [
+                [
+                  0.30084121930433777,
+                  0.20796670038797752,
+                  -0.15090686827639355,
+                  -2.0298549194955857,
+                  0.039434798512857215,
+                  2.2351482403346488,
+                  0.9147078415979772
+                ],
+                [
+                  0.045866816681776695,
+                  -0.5966844438935671,
+                  -0.3220911160620836,
+                  -2.8535547781502095,
+                  -0.23405597290925043,
+                  2.2675264850531267,
+                  0.7142442634489568
+                ],
+                [
+                  0.1244868478444505,
+                  -0.13331696921703645,
+                  -0.4224524338177805,
+                  -2.9421741229764007,
+                  -0.1713116090152412,
+                  2.816037360470548,
+                  0.6537247005254986
+                ]
+              ],
+              "target": [
+                -0.2399856887301742,
+                -0.08141515140989193,
+                0.9148699450355106
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 45,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+            "clearance": 1.1099999999999999,
+            "binding": {
+              "held": "wipe_tool",
+              "grasp_artifact": "grasp",
+              "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+              "grasp_epoch": 2,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.2399856887301742,
+              -0.08141515140989193,
+              0.9148699450355106
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.112597216547404,
+            "path": {
+              "type": "joint_path",
+              "part": "wipe_tool",
+              "id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:2",
+              "start_q": [
+                0.291627674241698,
+                0.3303794882942278,
+                -0.13906252740119693,
+                -2.078676315734372,
+                0.06695548951534745,
+                2.4046945013154275,
+                0.8962558690990133
+              ],
+              "joints": [
+                [
+                  0.30445532631377625,
+                  0.13843906195945085,
+                  -0.15473937261252202,
+                  -1.9594737342784911,
+                  0.02458611968829245,
+                  2.0961506946136423,
+                  0.9247311909145193
+                ],
+                [
+                  0.0712402047860449,
+                  -0.7032350244646259,
+                  -0.30956587691578313,
+                  -2.755094151186394,
+                  -0.22569903533715754,
+                  2.06497576941547,
+                  0.726322110191194
+                ],
+                [
+                  0.15368820718853243,
+                  -0.13494652851617667,
+                  -0.4557580867436644,
+                  -2.941707297204666,
+                  -0.18577366591064293,
+                  2.8151651870850625,
+                  0.6635923931751249
+                ]
+              ],
+              "target": [
+                -0.2399856887301742,
+                -0.08141515140989193,
+                0.9148699450355106
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "wipe_tool",
+                "grasp_artifact": "grasp",
+                "grasp_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530",
+                "grasp_epoch": 2,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 56,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          }
+        ]
+      },
+      {
+        "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "selected_id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:0",
+        "candidates": [
+          {
+            "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:0",
+            "clearance": 0.96,
+            "binding": {
+              "held": null,
+              "grasp_artifact": "grasp",
+              "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+              "grasp_epoch": 3,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.2317150850897731,
+              -0.21407056697083401,
+              0.9310000109672547
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 0.9607901621200965,
+            "path": {
+              "type": "joint_path",
+              "part": null,
+              "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:0",
+              "start_q": [
+                0.04037276135855876,
+                -0.37800748318223953,
+                -0.34559568396393586,
+                -2.9283968456705884,
+                -0.22914445926345298,
+                2.5587243540003777,
+                0.6956724665141162
+              ],
+              "joints": [
+                [
+                  0.04037276135855876,
+                  -0.37800748318223953,
+                  -0.34559568396393586,
+                  -2.9283968456705884,
+                  -0.22914445926345298,
+                  2.5587243540003777,
+                  0.6956724665141162
+                ],
+                [
+                  -0.032185588677741205,
+                  -0.19935516648544546,
+                  -0.5795240609234309,
+                  -2.7402232464074037,
+                  -0.1998277799750316,
+                  2.5636073969532966,
+                  0.35133478459383877
+                ],
+                [
+                  0.02474955591156553,
+                  -0.039962671880325325,
+                  -0.6144401072798085,
+                  -2.754406747074114,
+                  -0.05648219712208886,
+                  2.7211670021368706,
+                  0.2481493092487533
+                ]
+              ],
+              "target": [
+                -0.2317150850897731,
+                -0.21407056697083401,
+                0.9310000109672547
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": null,
+                "grasp_artifact": "grasp",
+                "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+                "grasp_epoch": 3,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 17,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:1",
+            "clearance": 1.03,
+            "binding": {
+              "held": null,
+              "grasp_artifact": "grasp",
+              "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+              "grasp_epoch": 3,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.2317150850897731,
+              -0.21407056697083401,
+              0.9310000109672547
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0313067578193647,
+            "path": {
+              "type": "joint_path",
+              "part": null,
+              "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:1",
+              "start_q": [
+                0.04037276135855876,
+                -0.37800748318223953,
+                -0.34559568396393586,
+                -2.9283968456705884,
+                -0.22914445926345298,
+                2.5587243540003777,
+                0.6956724665141162
+              ],
+              "joints": [
+                [
+                  0.029438912134512517,
+                  -0.5462271329499425,
+                  -0.3146555500058267,
+                  -2.8798932001145556,
+                  -0.22632287603016366,
+                  2.342837346327864,
+                  0.7033477849228407
+                ],
+                [
+                  -0.05653665881877696,
+                  -0.3560553191760495,
+                  -0.5450207494980163,
+                  -2.697098593638506,
+                  -0.2626553912342396,
+                  2.3717653490246593,
+                  0.40331412136467526
+                ],
+                [
+                  0.045713559391906376,
+                  -0.04077431541196794,
+                  -0.6359101953093353,
+                  -2.7546268462272616,
+                  -0.059340728382613894,
+                  2.721384248995849,
+                  0.2502656225975222
+                ]
+              ],
+              "target": [
+                -0.2317150850897731,
+                -0.21407056697083401,
+                0.9310000109672547
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": null,
+                "grasp_artifact": "grasp",
+                "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+                "grasp_epoch": 3,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 26,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:2",
+            "clearance": 1.0899999999999999,
+            "binding": {
+              "held": null,
+              "grasp_artifact": "grasp",
+              "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+              "grasp_epoch": 3,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.2317150850897731,
+              -0.21407056697083401,
+              0.9310000109672547
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0917846225606507,
+            "path": {
+              "type": "joint_path",
+              "part": null,
+              "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:2",
+              "start_q": [
+                0.04037276135855876,
+                -0.37800748318223953,
+                -0.34559568396393586,
+                -2.9283968456705884,
+                -0.22914445926345298,
+                2.5587243540003777,
+                0.6956724665141162
+              ],
+              "joints": [
+                [
+                  0.030960798723004796,
+                  -0.6688407711971931,
+                  -0.2828388098101626,
+                  -2.7923753894954495,
+                  -0.20605170874406709,
+                  2.133471041460171,
+                  0.7037140130364159
+                ],
+                [
+                  -0.05483815393910471,
+                  -0.48091685126071043,
+                  -0.5134376240624079,
+                  -2.6202551335270887,
+                  -0.2797299680353563,
+                  2.1750049492539136,
+                  0.42923865921670024
+                ],
+                [
+                  0.0722895594552613,
+                  -0.041467378791696305,
+                  -0.6632174688265249,
+                  -2.754427108512637,
+                  -0.0625408655914059,
+                  2.7210933035754232,
+                  0.25247699369700016
+                ]
+              ],
+              "target": [
+                -0.2317150850897731,
+                -0.21407056697083401,
+                0.9310000109672547
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": null,
+                "grasp_artifact": "grasp",
+                "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+                "grasp_epoch": 3,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 37,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          }
+        ]
+      },
+      {
+        "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "selected_id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:0",
+        "candidates": [
+          {
+            "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:0",
+            "clearance": 0.96,
+            "binding": {
+              "held": "carriage",
+              "grasp_artifact": "grasp",
+              "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+              "grasp_epoch": 4,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.07937954419830182,
+              0.0849898758522798,
+              0.8791537850370784
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 0.9614660958689367,
+            "path": {
+              "type": "joint_path",
+              "part": "carriage",
+              "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:0",
+              "start_q": [
+                0.03066552982197679,
+                -0.03985734722423457,
+                -0.6204342815793715,
+                -2.7543690219781896,
+                -0.05685230162259999,
+                2.7211910846804446,
+                0.24841230174710946
+              ],
+              "joints": [
+                [
+                  0.00756371159334647,
+                  -0.1501268206045636,
+                  -0.6178620387857431,
+                  -2.747432276412508,
+                  -0.17418501479351683,
+                  2.6181893140209698,
+                  0.3320833016463783
+                ],
+                [
+                  0.3875336213601317,
+                  0.11863136843063984,
+                  -0.20883555045926572,
+                  -2.437743430245431,
+                  0.044232958361474686,
+                  2.5533699209311678,
+                  0.929209707237235
+                ],
+                [
+                  0.3652948962960815,
+                  0.3272466259427059,
+                  -0.1698413054831813,
+                  -2.429258413564904,
+                  0.1423399310227381,
+                  2.74853969706275,
+                  0.85858217455988
+                ]
+              ],
+              "target": [
+                -0.07937954419830182,
+                0.0849898758522798,
+                0.8791537850370784
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "carriage",
+                "grasp_artifact": "grasp",
+                "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+                "grasp_epoch": 4,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 28,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:1",
+            "clearance": 1.03,
+            "binding": {
+              "held": "carriage",
+              "grasp_artifact": "grasp",
+              "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+              "grasp_epoch": 4,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.07937954419830182,
+              0.0849898758522798,
+              0.8791537850370784
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0320366177573823,
+            "path": {
+              "type": "joint_path",
+              "part": "carriage",
+              "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:1",
+              "start_q": [
+                0.03066552982197679,
+                -0.03985734722423457,
+                -0.6204342815793715,
+                -2.7543690219781896,
+                -0.05685230162259999,
+                2.7211910846804446,
+                0.24841230174710946
+              ],
+              "joints": [
+                [
+                  -0.036520215156032626,
+                  -0.36030143913372853,
+                  -0.5659551460289471,
+                  -2.6965764750574586,
+                  -0.2744548247109821,
+                  2.3696345854738423,
+                  0.41209376927269237
+                ],
+                [
+                  0.33926097341477485,
+                  -0.029719293739284666,
+                  -0.16409473635308405,
+                  -2.399656837108493,
+                  -0.006933927323949306,
+                  2.3703808104595048,
+                  0.9660970519178116
+                ],
+                [
+                  0.3219271013718515,
+                  0.32496783391255174,
+                  -0.13112407962152703,
+                  -2.430015147704155,
+                  0.1096673176279884,
+                  2.750264315606303,
+                  0.8820485164438396
+                ]
+              ],
+              "target": [
+                -0.07937954419830182,
+                0.0849898758522798,
+                0.8791537850370784
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "carriage",
+                "grasp_artifact": "grasp",
+                "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+                "grasp_epoch": 4,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 38,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:2",
+            "clearance": 1.0899999999999999,
+            "binding": {
+              "held": "carriage",
+              "grasp_artifact": "grasp",
+              "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+              "grasp_epoch": 4,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.07937954419830182,
+              0.0849898758522798,
+              0.8791537850370784
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.092427364609693,
+            "path": {
+              "type": "joint_path",
+              "part": "carriage",
+              "id": "carriage:yaw:0.000000:pose:aaefa23045c9:route:2",
+              "start_q": [
+                0.03066552982197679,
+                -0.03985734722423457,
+                -0.6204342815793715,
+                -2.7543690219781896,
+                -0.05685230162259999,
+                2.7211910846804446,
+                0.24841230174710946
+              ],
+              "joints": [
+                [
+                  -0.050477311464329565,
+                  -0.4821178974462025,
+                  -0.5176510980446715,
+                  -2.6201965849116666,
+                  -0.28244419486171496,
+                  2.174392103965662,
+                  0.43139120611834475
+                ],
+                [
+                  0.29483587990638666,
+                  -0.12469623038780303,
+                  -0.11786021405410455,
+                  -2.3350111423399005,
+                  -0.018250999667602616,
+                  2.21112530316337,
+                  0.9747008834041041
+                ],
+                [
+                  0.2834939051044117,
+                  0.3234386017229703,
+                  -0.09681302609813433,
+                  -2.4305363813603686,
+                  0.08085989790854131,
+                  2.7514164729791553,
+                  0.9027563827531622
+                ]
+              ],
+              "target": [
+                -0.07937954419830182,
+                0.0849898758522798,
+                0.8791537850370784
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": "carriage",
+                "grasp_artifact": "grasp",
+                "grasp_id": "carriage:yaw:0.000000:pose:aaefa23045c9",
+                "grasp_epoch": 4,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 48,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          }
+        ]
+      },
+      {
+        "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0",
+        "selected_id": "end_stop:yaw:0.000000:pose:62ec58798d9f:route:0",
+        "candidates": [
+          {
+            "id": "end_stop:yaw:0.000000:pose:62ec58798d9f:route:0",
+            "clearance": 1.02,
+            "binding": {
+              "held": null,
+              "grasp_artifact": "grasp",
+              "grasp_id": "end_stop:yaw:0.000000:pose:62ec58798d9f",
+              "grasp_epoch": 5,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.12505782859027034,
+              -0.26669749432427586,
+              0.9389999723434449
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0216293719370815,
+            "path": {
+              "type": "joint_path",
+              "part": null,
+              "id": "end_stop:yaw:0.000000:pose:62ec58798d9f:route:0",
+              "start_q": [
+                0.27823667756385073,
+                0.5911068802515633,
+                -0.17122242548084854,
+                -1.7259261679253055,
+                0.12838913666680132,
+                2.30612493478975,
+                0.8351383374305847
+              ],
+              "joints": [
+                [
+                  0.28848336115876805,
+                  0.4893712348711897,
+                  -0.18669151159301584,
+                  -1.694580642105632,
+                  0.1061622625649131,
+                  2.174093441558581,
+                  0.8487752819287209
+                ],
+                [
+                  -0.07181565889417223,
+                  0.05429624079540619,
+                  -0.47875170719173993,
+                  -2.3322461461215096,
+                  0.036240625912075386,
+                  2.3801203498771355,
+                  0.20968898362493343
+                ],
+                [
+                  -0.09213720932151746,
+                  0.24045920194521864,
+                  -0.4433626300881348,
+                  -2.362185504472798,
+                  0.19058236740969586,
+                  2.571901382172353,
+                  0.10054381353060667
+                ]
+              ],
+              "target": [
+                -0.12505782859027034,
+                -0.26669749432427586,
+                0.9389999723434449
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": null,
+                "grasp_artifact": "grasp",
+                "grasp_id": "end_stop:yaw:0.000000:pose:62ec58798d9f",
+                "grasp_epoch": 5,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 29,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "end_stop:yaw:0.000000:pose:62ec58798d9f:route:1",
+            "clearance": 1.09,
+            "binding": {
+              "held": null,
+              "grasp_artifact": "grasp",
+              "grasp_id": "end_stop:yaw:0.000000:pose:62ec58798d9f",
+              "grasp_epoch": 5,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.12505782859027034,
+              -0.26669749432427586,
+              0.9389999723434449
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.0920511988028403,
+            "path": {
+              "type": "joint_path",
+              "part": null,
+              "id": "end_stop:yaw:0.000000:pose:62ec58798d9f:route:1",
+              "start_q": [
+                0.27823667756385073,
+                0.5911068802515633,
+                -0.17122242548084854,
+                -1.7259261679253055,
+                0.12838913666680132,
+                2.30612493478975,
+                0.8351383374305847
+              ],
+              "joints": [
+                [
+                  0.29345131902628385,
+                  0.415977388389876,
+                  -0.19649607094991037,
+                  -1.6209165902457239,
+                  0.088044557184846,
+                  2.0282206466909423,
+                  0.8602617136826239
+                ],
+                [
+                  -0.03281948453448669,
+                  -0.06876257465484852,
+                  -0.5118511456872037,
+                  -2.261438161724386,
+                  -0.04172737768496412,
+                  2.201108271700905,
+                  0.26676999996218054
+                ],
+                [
+                  -0.05458898306164795,
+                  0.2451374334665338,
+                  -0.47965607765171353,
+                  -2.361500372230813,
+                  0.20852692760608707,
+                  2.569980265704969,
+                  0.08784255266539678
+                ]
+              ],
+              "target": [
+                -0.12505782859027034,
+                -0.26669749432427586,
+                0.9389999723434449
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": null,
+                "grasp_artifact": "grasp",
+                "grasp_id": "end_stop:yaw:0.000000:pose:62ec58798d9f",
+                "grasp_epoch": 5,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 38,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          },
+          {
+            "id": "end_stop:yaw:0.000000:pose:62ec58798d9f:route:2",
+            "clearance": 1.15,
+            "binding": {
+              "held": null,
+              "grasp_artifact": "grasp",
+              "grasp_id": "end_stop:yaw:0.000000:pose:62ec58798d9f",
+              "grasp_epoch": 5,
+              "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+            },
+            "target": [
+              -0.12505782859027034,
+              -0.26669749432427586,
+              0.9389999723434449
+            ],
+            "yaw": 0.0,
+            "status": "necessary_pass",
+            "cost": 1.152408581953033,
+            "path": {
+              "type": "joint_path",
+              "part": null,
+              "id": "end_stop:yaw:0.000000:pose:62ec58798d9f:route:2",
+              "start_q": [
+                0.27823667756385073,
+                0.5911068802515633,
+                -0.17122242548084854,
+                -1.7259261679253055,
+                0.12838913666680132,
+                2.30612493478975,
+                0.8351383374305847
+              ],
+              "joints": [
+                [
+                  0.2936695490391746,
+                  0.3787045261405844,
+                  -0.20162065961614326,
+                  -1.5212838374275321,
+                  0.07811138556340895,
+                  1.8920975731959864,
+                  0.8671669586992947
+                ],
+                [
+                  -0.012170186105082243,
+                  -0.14179144509760339,
+                  -0.5180937917313712,
+                  -2.1704430997686233,
+                  -0.07891977089688704,
+                  2.0458709558604653,
+                  0.2960456111715557
+                ],
+                [
+                  -0.03412151260470401,
+                  0.2478893830039596,
+                  -0.4994204624300087,
+                  -2.361115211867389,
+                  0.21855776521083273,
+                  2.568838412240045,
+                  0.08075214727989931
+                ]
+              ],
+              "target": [
+                -0.12505782859027034,
+                -0.26669749432427586,
+                0.9389999723434449
+              ],
+              "rotation": [
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  -1.0
+                ]
+              ],
+              "binding": {
+                "held": null,
+                "grasp_artifact": "grasp",
+                "grasp_id": "end_stop:yaw:0.000000:pose:62ec58798d9f",
+                "grasp_epoch": 5,
+                "prefix_id": "wipe_tool:yaw:0.000000:pose:67c6316b5530:route:0:control:0:terminal:0"
+              }
+            },
+            "check": {
+              "valid": true,
+              "samples": 46,
+              "resolution_rad": 0.035
+            },
+            "unknown": [
+              "continuous swept collision",
+              "closed-loop execution"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

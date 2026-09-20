@@ -1,0 +1,167 @@
+{
+  "input_sha256": "1279ccc28fa04fe5b67ed0189875688626c3160346e61b6111aa6473a6e0cf60",
+  "trials": [
+    {
+      "candidate_id": "35c965c07027314a3e0a",
+      "trial": {
+        "domain": "development",
+        "repeat": 0,
+        "friction_scale": 1.0,
+        "actuator_gain_scale": 1.0
+      },
+      "trial_sha256": "ab7ab056e5463f2e6f763b0ef5ef6aff69b65c69ea9a3a0a5e11542857c856a5",
+      "valid": true,
+      "requested_parameters": {
+        "domain": "development",
+        "repeat": 0,
+        "friction_scale": 1.0,
+        "actuator_gain_scale": 1.0
+      },
+      "applied_parameters": {
+        "friction_scale": 1.0,
+        "actuator_gain_scale": 1.0,
+        "geom_friction_sha256": "a9dc4b275062406677513661d6b9626a3f5a9e973b44b5e6a2080f8fa957a35d",
+        "actuator_gain_sha256": "c6efab5136cbf9787417e4402333cebff255107feede8e5af19f397cf302a3aa"
+      },
+      "restored_parameters": {
+        "actuator_gainprm": true,
+        "actuator_biasprm": true,
+        "friction_restored_on_next_run": true
+      },
+      "input_graph_sha256": "a102155378591d02a7f2a939817af991561e36bc9abaee53e4421049ce66b776",
+      "goal_check": null,
+      "success": false,
+      "full_success": false,
+      "stage_passes": {
+        "cleaning_pass": false,
+        "assembly_pass": false,
+        "functional_test_pass": false,
+        "final_release_and_retraction_pass": false
+      },
+      "prefix_success": false,
+      "suffix_success": null,
+      "error": "press_seat: shoulder contact/height not verified {'height_error_m': 0.0018601542747892497, 'contact_force_n': 2.3939574239565964}",
+      "timeout": false,
+      "restore_seconds": 0.0008972969371825457,
+      "wall_seconds": 11.514814191032201,
+      "sim_seconds": 62.060000000031835,
+      "physics_steps": 31030,
+      "executed_steps": 18,
+      "deferred_solving_seconds": 0.5073393911588937,
+      "final_positions": {
+        "carriage": [
+          -0.23218868273673388,
+          -0.21036550149435612,
+          0.8059914782969368
+        ],
+        "end_stop": [
+          -0.12445269999909928,
+          -0.26255320000183,
+          0.8179993444006857
+        ],
+        "pin_left": [
+          -0.3395149472427548,
+          -0.2412833807480012,
+          0.8479914292160503
+        ],
+        "pin_right": [
+          -0.35855506086093225,
+          -0.3192944163004463,
+          0.8479914160156603
+        ],
+        "handle": [
+          0.008825242532908702,
+          -0.24750800267769651,
+          0.8079995738602834
+        ],
+        "wipe_tool": [
+          -0.23705263127267262,
+          -0.08138601926271895,
+          0.8114797491581255
+        ]
+      },
+      "executed_parameters": null
+    },
+    {
+      "candidate_id": "04daae819fd9bd04bc37",
+      "trial": {
+        "domain": "development",
+        "repeat": 0,
+        "friction_scale": 1.0,
+        "actuator_gain_scale": 1.0
+      },
+      "trial_sha256": "ab7ab056e5463f2e6f763b0ef5ef6aff69b65c69ea9a3a0a5e11542857c856a5",
+      "valid": true,
+      "requested_parameters": {
+        "domain": "development",
+        "repeat": 0,
+        "friction_scale": 1.0,
+        "actuator_gain_scale": 1.0
+      },
+      "applied_parameters": {
+        "friction_scale": 1.0,
+        "actuator_gain_scale": 1.0,
+        "geom_friction_sha256": "a9dc4b275062406677513661d6b9626a3f5a9e973b44b5e6a2080f8fa957a35d",
+        "actuator_gain_sha256": "c6efab5136cbf9787417e4402333cebff255107feede8e5af19f397cf302a3aa"
+      },
+      "restored_parameters": {
+        "actuator_gainprm": true,
+        "actuator_biasprm": true,
+        "friction_restored_on_next_run": true
+      },
+      "input_graph_sha256": "8254b21ed5a77ba89a7ba4872407472be60548a0c212dfd5f494c5aaeabe4dde",
+      "goal_check": null,
+      "success": false,
+      "full_success": false,
+      "stage_passes": {
+        "cleaning_pass": true,
+        "assembly_pass": false,
+        "functional_test_pass": false,
+        "final_release_and_retraction_pass": false
+      },
+      "prefix_success": false,
+      "suffix_success": null,
+      "error": "approach: approach error {'position_error_m': 0.0015877570681090845}",
+      "timeout": false,
+      "restore_seconds": 0.0009483369067311287,
+      "wall_seconds": 20.851372604025528,
+      "sim_seconds": 121.07999999989549,
+      "physics_steps": 60540,
+      "executed_steps": 52,
+      "deferred_solving_seconds": 0.898122095502913,
+      "final_positions": {
+        "carriage": [
+          0.10504242782201738,
+          0.08500405939889742,
+          0.823991478296937
+        ],
+        "end_stop": [
+          -0.12398562517223385,
+          -0.26271053902627794,
+          0.8179896194222231
+        ],
+        "pin_left": [
+          -0.33951290400533246,
+          -0.24127816213418513,
+          0.8479914543300783
+        ],
+        "pin_right": [
+          -0.35855667255462703,
+          -0.3192992994430997,
+          0.8479914093626789
+        ],
+        "handle": [
+          0.008825242533335114,
+          -0.24750800267727618,
+          0.8079995738603043
+        ],
+        "wipe_tool": [
+          -0.23921511696275985,
+          -0.08135068586076649,
+          0.8098661062717729
+        ]
+      },
+      "executed_parameters": null
+    }
+  ]
+}
