@@ -116,8 +116,8 @@ def rule_score(observation, proposal):
     name = proposal["name"]
     objects = observation["objects"]
     pin_quality = min(float(objects[p].get("quality") or 0.) for p in ("pin_left", "pin_right"))
-    left_x = float(objects["pin_left"]["position_m"][0])
-    right_x = float(objects["pin_right"]["position_m"][0])
+    left_x = float((objects["pin_left"].get("position_m") or [0.])[0])
+    right_x = float((objects["pin_right"].get("position_m") or [0.])[0])
     score = {"reference": 1.0, "pin_slow": .7, "pin_order": .6,
              "pin_firm": .5, "pin_gentle": .4, "pin_high_grasp": .3,
              "pin_low_grasp": .2, "transfer_high": .15,

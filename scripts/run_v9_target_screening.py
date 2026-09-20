@@ -1,6 +1,7 @@
 """Actual sequential target-environment screening with ranks frozen first."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import random
@@ -51,6 +52,8 @@ def run(seed, condition, method, k, out, checkpoint=None):
     (out / "selection_before_execution.json").write_text(json.dumps(dict(
         seed=seed, condition=condition, method=method, k=k, order=order,
         observation_sha256=observation_hash, checkpoint=checkpoint,
+        checkpoint_sha256=hashlib.sha256(Path(checkpoint).read_bytes()).hexdigest() if checkpoint else None,
+        candidate_pool_sha256=hashlib.sha256(json.dumps(pool, sort_keys=True).encode()).hexdigest(),
         ranking_wall_seconds=rank_seconds), indent=2))
     attempts = []
     for name in order[:k]:
