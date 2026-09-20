@@ -111,3 +111,19 @@ def test_session_checkpoint_restores_execution_targets():
         session.restore(snapshot)
         assert session.stage_targets == original
         assert not hasattr(session, "execution_relocalizations")
+
+
+def test_redundant_ik_search_finds_checked_pin_grasp_without_changing_scene():
+    from simbench.value import stage_v7
+    from simbench.assembly.control import down
+    import tempfile
+    from pathlib import Path
+    with tempfile.TemporaryDirectory(dir=Path(stage_v7.__file__).parents[2]) as directory:
+        _, session, _, _ = stage_v7.make_scene(1201, Path(directory), level="L1")
+        pose = np.asarray(session.decision_observation["objects"]["pin_left"]["position_m"])
+        hover = pose + [0, 0, session.grasp_specs["pin_left"][0] + .001 + .10]
+        import pytest
+        with pytest.raises(ValueError, match="IK unreachable"):
+            session.arm.ik(hover, down(0))
+        q = session.arm.ik_with_restarts(hover, down(0))
+        assert session.arm.check_joint_path([q])["valid"]

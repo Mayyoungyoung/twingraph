@@ -39,6 +39,13 @@ def _update_execution_targets(plan, session):
     if not carriage_row.get("valid") or carriage_row.get("position_m") is None:
         raise SkillFailure("execution RGB-D could not re-localize installed carriage")
     end = np.asarray(end_row["position_m"], dtype=float)
+    ideal_fixture = getattr(session, "fixture_pose_mode", "rgbd") == "ideal_diagnostic"
+    if ideal_fixture:
+        end_pos, end_quat = session.ctx.obj_pose("end_stop")
+        end = np.asarray(end_pos, dtype=float)
+        end_row["position_m"] = end.tolist()
+        end_row["quat_wxyz"] = np.asarray(end_quat, dtype=float).tolist()
+        end_row["source_view"] = "ideal_only_simulator_truth"
     expected_end = np.asarray(session.stage_targets["end_stop"], dtype=float)
     if float(np.linalg.norm(end[:2] - expected_end[:2])) > .08:
         raise SkillFailure("execution RGB-D end_stop estimate is inconsistent with the declared fixture workspace")
@@ -49,12 +56,15 @@ def _update_execution_targets(plan, session):
     # installed workspace; a genuinely displaced fixture is left raw rather
     # than silently pulled back to a nominal pose.
     cad_bias = np.array([0.0, -0.0045, 0.0], dtype=float)
-    if float(np.linalg.norm(end[:2] - expected_end[:2])) <= .02:
+    if not ideal_fixture and float(np.linalg.norm(end[:2] - expected_end[:2])) <= .02:
         end = end + cad_bias
         end_row["position_m"] = end.tolist()
         end_row["cad_origin_correction_m"] = cad_bias.tolist()
     quat = np.asarray(end_row.get("quat_wxyz"), dtype=float)
     Rflat = np.zeros(9); mujoco.mju_quat2Mat(Rflat, quat); R = Rflat.reshape(3, 3)
+    if getattr(session, "fixture_yaw_mode", "rgbd") == "nominal_constraint_diagnostic":
+        R = np.eye(3)
+        end_row["target_axis_source"] = "nominal_constraint_diagnostic"
     pin_targets = {
         "pin_left": (end + R @ np.array([0.0, -0.032, 0.0])).tolist(),
         "pin_right": (end + R @ np.array([0.0, 0.032, 0.0])).tolist(),
@@ -62,12 +72,18 @@ def _update_execution_targets(plan, session):
     pin_targets["pin_left"][2] = float(session.stage_targets["pin_left"][2])
     pin_targets["pin_right"][2] = float(session.stage_targets["pin_right"][2])
     carriage = np.asarray(carriage_row["position_m"], dtype=float)
+    if ideal_fixture:
+        carriage_pos, carriage_quat = session.ctx.obj_pose("carriage")
+        carriage = np.asarray(carriage_pos, dtype=float)
+        carriage_row["position_m"] = carriage.tolist()
+        carriage_row["quat_wxyz"] = np.asarray(carriage_quat, dtype=float).tolist()
+        carriage_row["source_view"] = "ideal_only_simulator_truth"
     expected_carriage = np.asarray(session.stage_targets["carriage"], dtype=float)
     # The raised carriage boss and the camera view bias the visible shoe
     # centroid toward -x/-y once it is seated.  Convert that calibrated image
     # reference to the CAD body origin only in the installed workspace.
     carriage_bias = np.array([0.0060, 0.0030, 0.0], dtype=float)
-    if float(np.linalg.norm(carriage[:2] - expected_carriage[:2])) <= .02:
+    if not ideal_fixture and float(np.linalg.norm(carriage[:2] - expected_carriage[:2])) <= .02:
         carriage = carriage + carriage_bias
         carriage_row["position_m"] = carriage.tolist()
         carriage_row["cad_origin_correction_m"] = carriage_bias.tolist()
@@ -86,7 +102,7 @@ def _update_execution_targets(plan, session):
         relocalizations = []
         session.execution_relocalizations = relocalizations
     relocalizations.append({
-        "backend": "rgbd_geometry",
+        "backend": "ideal_only_simulator_truth" if ideal_fixture else "rgbd_geometry",
         "end_stop": copy.deepcopy(end_row),
         "carriage": copy.deepcopy(carriage_row),
         "pin_targets": copy.deepcopy(pin_targets),

@@ -44,7 +44,7 @@ class PoseController:
         self.rotation = down()
         self.trace = []
 
-    def ik(self, xyz, rotation=None, seed=None, max_iter=160):
+    def ik(self, xyz, rotation=None, seed=None, max_iter=320):
         ctx = self.ctx
         d = self.scratch
         m = ctx.model
@@ -77,6 +77,28 @@ class PoseController:
         raise ValueError(
             f"IK unreachable: xyz={goal.tolist()}, residual={np.linalg.norm(ep):.5f}"
         )
+
+    def ik_with_restarts(self, xyz, rotation=None, attempts=12):
+        """Bounded deterministic alternatives for a redundant seven-joint arm.
+
+        A failed single seed is not evidence that a pose is unreachable. Keep
+        every returned arm state subject to the caller's collision check.
+        """
+        try:
+            return self.ik(xyz, rotation)
+        except ValueError as first:
+            rng = np.random.default_rng(17)
+            for _ in range(attempts):
+                seed = np.clip(HOME + rng.normal(0, .3, 7),
+                               self.limits[:, 0] + .02,
+                               self.limits[:, 1] - .02)
+                try:
+                    q = self.ik(xyz, rotation, seed=seed)
+                    if self.check_joint_path([q])["valid"]:
+                        return q
+                except ValueError:
+                    continue
+            raise first
 
     def check_joint_path(self, joints, held=None, step=0.035):
         """Discrete robot/environment and carried-part clearance check in scratch data."""

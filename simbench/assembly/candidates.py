@@ -11,7 +11,7 @@ import hashlib
 import json
 import numpy as np
 import mujoco
-from .control import down
+from .control import HOME, down
 
 
 def fingerprint(session):
@@ -95,14 +95,35 @@ def transfer_routes(
             np.r_[target[:2], max(height, start[2], target[2])],
             target,
         ]
-        q = session.ctx.arm_qpos.copy()
         joints = []
         try:
-            for point in points:
-                q = session.arm.ik(point, down(yaw), seed=q)
-                joints.append(q.copy())
-            verdict = session.arm.check_joint_path(joints, session.held)
-            route["status"] = "necessary_pass" if verdict["valid"] else "conflict"
+            # Explore a fixed budget of arm postures for redundant IK. Every
+            # alternative is checked against the same collision constraints.
+            rng = np.random.default_rng(17)
+            seeds = [session.ctx.arm_qpos.copy()] + [
+                np.clip(HOME + rng.normal(0, .3, 7),
+                        session.arm.limits[:, 0] + .02,
+                        session.arm.limits[:, 1] - .02)
+                for _ in range(12)
+            ]
+            verdict = dict(valid=None, status="unknown")
+            for restart, seed in enumerate(seeds):
+                q = seed.copy()
+                attempt_joints = []
+                try:
+                    for point in points:
+                        q = session.arm.ik(point, down(yaw), seed=q)
+                        attempt_joints.append(q.copy())
+                    candidate_verdict = session.arm.check_joint_path(attempt_joints, session.held)
+                except ValueError as exc:
+                    candidate_verdict = dict(valid=None, reason=str(exc), status="unknown")
+                verdict = candidate_verdict
+                if candidate_verdict.get("valid"):
+                    joints = attempt_joints
+                    verdict = dict(candidate_verdict, ik_restart=restart)
+                    break
+            route["status"] = ("necessary_pass" if verdict["valid"] else
+                               "unknown" if verdict["valid"] is None else "conflict")
             route["cost"] = float(
                 height
                 + 0.001
@@ -110,7 +131,7 @@ def transfer_routes(
                     np.linalg.norm(b - a)
                     for a, b in zip([session.ctx.arm_qpos] + joints[:-1], joints)
                 )
-            )
+            ) if joints else float("inf")
             route["path"] = dict(
                 type="joint_path",
                 part=session.held,
@@ -120,7 +141,7 @@ def transfer_routes(
                 target=target.copy(),
                 rotation=down(yaw),
                 binding=copy.deepcopy(binding),
-            )
+            ) if joints else None
         except ValueError as exc:
             verdict = dict(valid=None, reason=str(exc), status="unknown")
         route["check"] = verdict

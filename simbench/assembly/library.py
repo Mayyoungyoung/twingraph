@@ -532,7 +532,7 @@ class Session:
         for yaw in ((0.0, np.pi / 2) if yaws is None else yaws):
             xyz = pose["xyz"] + np.array([0, 0, dz + height_offset])
             try:
-                q = self.arm.ik(xyz + [0, 0, 0.10], down(yaw))
+                q = self.arm.ik_with_restarts(xyz + [0, 0, 0.10], down(yaw))
                 # Width depends on the box face; round parts keep their diameter.
                 w = (width if part not in ("carriage", "end_stop")
                      or np.isclose(np.sin(float(yaw)), 0.0, atol=1e-6)
@@ -950,7 +950,21 @@ class Session:
     @skill("approach", "接近抓取位姿", "transition", ("empty", "artifact:grasp"))
     def approach(self, part, artifact="grasp"):
         goal = self.artifacts[artifact]
-        ok = self.arm.move(goal["xyz"], down(goal["yaw"]), speed=0.045)
+        try:
+            ok = self.arm.move(goal["xyz"], down(goal["yaw"]), speed=0.045)
+        except ValueError as exc:
+            # A Cartesian IK continuation can stall near a redundant-arm
+            # singularity despite a reachable checked endpoint. Try one
+            # independently checked joint continuation before declaring the
+            # grasp approach unreachable.
+            if not str(exc).startswith("IK unreachable:"):
+                raise
+            q = self.arm.ik_with_restarts(goal["xyz"], down(goal["yaw"]))
+            verdict = self.arm.check_joint_path([q])
+            if not verdict["valid"]:
+                raise
+            ok = self.arm.execute_joint(q)
+            self.arm.rotation = down(goal["yaw"])
         return Result(
             ok,
             {
@@ -980,7 +994,36 @@ class Session:
     @skill("lift", "保持夹持并抬升", "transition", ("held",))
     def lift(self, part, height=0.10):
         start = self.ctx.obj_pos(part).copy()
-        ok = self.arm.move(self.ctx.eef_pos() + [0, 0, height], speed=0.06)
+        goal = self.ctx.eef_pos() + [0, 0, height]
+        try:
+            ok = self.arm.move(goal, speed=0.06)
+        except ValueError as exc:
+            if not str(exc).startswith("IK unreachable:"):
+                raise
+            grasp = self.artifacts.get("grasp", {})
+            seeds = []
+            if grasp.get("part") == part and "q_hover" in grasp:
+                seeds.append(np.asarray(grasp["q_hover"], dtype=float))
+            rng = np.random.default_rng(17)
+            for _ in range(24):
+                seeds.append(np.clip(HOME + rng.normal(0, .3, 7),
+                                     self.arm.limits[:, 0] + .02,
+                                     self.arm.limits[:, 1] - .02))
+            q = None
+            collision = None
+            for seed in seeds:
+                try:
+                    candidate = self.arm.ik(goal, self.arm.rotation, seed=seed)
+                except ValueError:
+                    continue
+                collision = self.arm.check_joint_path([candidate], held=part)
+                if collision["valid"]:
+                    q = candidate
+                    break
+            if q is None:
+                return Result(False, {"collision": collision, "ik_seeds_checked": len(seeds)},
+                              "no checked lift fallback path")
+            ok = self.arm.execute_joint(q)
         delta = float(self.ctx.obj_pos(part)[2] - start[2])
         held = self.ctx.grasp_contacts(part)["held"]
         return Result(
@@ -1021,7 +1064,7 @@ class Session:
     @skill("align_axis", "持物轴线精对准", "contact", ("held",))
     def align_axis(self, part, target, tolerance=0.0007):
         target = np.asarray(target, float)
-        for _ in range(3):
+        for _ in range(6):
             error = target - self.ctx.obj_pos(part)
             if np.linalg.norm(error) < tolerance:
                 break
@@ -1179,6 +1222,21 @@ class Session:
         command = self.ctx.eef_pos().copy()
         peak = self.external_force(part)
         max_steps = 1100 if str(part) == "handle" else 140
+        extra_descent = 0.0
+        def passive_support():
+            bid = self.ctx.body_id(part)
+            total = 0.0
+            for index, contact in enumerate(self.ctx.data.contact):
+                b1, b2 = map(int, self.ctx.model.geom_bodyid[[contact.geom1, contact.geom2]])
+                if bid not in (b1, b2):
+                    continue
+                other = b2 if b1 == bid else b1
+                if "finger" in self.ctx.model.body(other).name or abs(contact.frame[2]) < .5:
+                    continue
+                force = np.zeros(6)
+                mujoco.mj_contactForce(self.ctx.model, self.ctx.data, index, force)
+                total += max(0., float(force[0])) * abs(float(contact.frame[2]))
+            return total
         for _ in range(max_steps):
             # The handle ring seats around the carriage boss.  Once its CAD
             # body origin is already within the seating band, continuing to
@@ -1187,9 +1245,19 @@ class Session:
             # pose/support check remain the acceptance boundary.
             if str(part) == "handle" and abs(float(self.ctx.obj_pos(part)[2]) - float(target_z)) < .001:
                 break
-            if str(part) != "handle" and peak >= force_stop:
+            if str(part) == "wipe_tool":
+                # Guarded descent may stop on the stand just before its
+                # position band. Continue a small bounded contact servo; the
+                # original early break made press_seat a no-op in this case.
+                if (abs(float(self.ctx.obj_pos(part)[2]) - float(target_z)) < .0015
+                        and passive_support() >= .01):
+                    break
+                if peak >= 8.0 or extra_descent >= .001:
+                    break
+            elif str(part) != "handle" and peak >= force_stop:
                 break
             command[2] -= 0.000025
+            extra_descent += 0.000025
             self.arm.servo(command)
             peak = max(peak, self.external_force(part))
             if not self.ctx.grasp_contacts(part)["held"]:
@@ -1198,13 +1266,30 @@ class Session:
         err = abs(z - target_z)
         if str(part).startswith("pin_"):
             ok = peak > 0.35
+        elif str(part) == "wipe_tool":
+            ok = err < .0015 and passive_support() >= .01
         elif str(part) == "handle" and err < .0015:
             ok = True
         else:
             ok = err < 0.0015 and peak > 0.35
+        contacts = []
+        if str(part) == "wipe_tool":
+            bid = self.ctx.body_id(part)
+            for contact in self.ctx.data.contact:
+                b1, b2 = map(int, self.ctx.model.geom_bodyid[[contact.geom1, contact.geom2]])
+                if bid in (b1, b2):
+                    contacts.append(dict(pair=[self.ctx.model.geom(contact.geom1).name,
+                                               self.ctx.model.geom(contact.geom2).name],
+                                         normal_z=float(contact.frame[2]),
+                                         distance_m=float(contact.dist),
+                                         position_m=np.asarray(contact.pos).tolist(),
+                                         frame=np.asarray(contact.frame).tolist()))
         return Result(
             ok,
-            {"height_error_m": err, "contact_force_n": peak},
+            {"height_error_m": err, "contact_force_n": peak,
+             "extra_descent_m": extra_descent,
+             "passive_support_n": passive_support() if str(part) == "wipe_tool" else None,
+             "contacts": contacts},
             "pin seating contact not verified" if str(part).startswith("pin_") else "shoulder contact/height not verified",
         )
 

@@ -23,14 +23,15 @@ from simbench.value.video_v7 import TwinRecorder
 def run(seed: int, out: Path, level: str = "L1", pin_force: float = 8.0,
         pin_speed: float = 0.0045, timeout: float = 1800.0, record: bool = True,
         video_width: int = 480, video_height: int = 360,
-        video_stride: int = 3):
+        video_stride: int = 3, nominal_trial: bool = False,
+        pin_grasp_height: float = .001):
     out.mkdir(parents=True, exist_ok=True)
     spec, session, _xml, targets = stage_v7.make_scene(seed, out / "scene", level=level)
     order = stage_v5.legal_orders()[0]
     choices = {
         part: dict(
             yaw=0.0,
-            height=0.001,
+            height=float(pin_grasp_height if part.startswith("pin_") else .001),
             clearance=0.98,
             force=float(pin_force if part.startswith("pin_") else 3.0),
             **({} if part == "carriage" else {"speed": float(pin_speed)}),
@@ -50,7 +51,8 @@ def run(seed: int, out: Path, level: str = "L1", pin_force: float = 8.0,
         session.ctx.on_control_step = recorder
     try:
         result = PhysicalRunner(session, timeout=float(timeout)).run(
-            plan, perturbation(seed, 0, "development"), keep_trace=True
+            plan, (dict(domain="regression", repeat=0, friction_scale=1., actuator_gain_scale=1.)
+                   if nominal_trial else perturbation(seed, 0, "development")), keep_trace=True
         )
     finally:
         if recorder is not None:
@@ -61,6 +63,7 @@ def run(seed: int, out: Path, level: str = "L1", pin_force: float = 8.0,
         "level": level,
         "pin_force_N": pin_force,
         "pin_speed_m_s": pin_speed,
+        "pin_grasp_height_m": pin_grasp_height,
         "candidate_id": plan.id,
         "video": str((out / "full_task.mp4").resolve()) if recorder is not None else None,
         "video_config": (dict(width=video_width, height=video_height,
@@ -92,7 +95,9 @@ if __name__ == "__main__":
     parser.add_argument("--video-stride", type=int, default=3,
                         help="record every Nth control step; playback fps is divided by N")
     parser.add_argument("--no-video", action="store_true")
+    parser.add_argument("--nominal-trial", action="store_true")
+    parser.add_argument("--pin-grasp-height", type=float, default=.001)
     args = parser.parse_args()
     run(args.seed, Path(args.out), args.level, args.pin_force, args.pin_speed,
         args.timeout, not args.no_video, args.video_width, args.video_height,
-        args.video_stride)
+        args.video_stride, args.nominal_trial, args.pin_grasp_height)

@@ -82,10 +82,12 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
     # along a straight shaft and the bore bound is constant over this interval.
     along = float(np.dot(paxis, haxis))
     full_depth = abs(along) > 1e-9 and permitted >= 0
+    boundary_offsets = []
     for boundary in (0., config.required_depth_m):
         offset = float(np.dot(entry - origin, haxis) - boundary) / along if abs(along) > 1e-9 else float('inf')
         point = origin + offset * paxis
         transverse = point - entry + boundary * haxis
+        boundary_offsets.append(transverse.tolist())
         full_depth = full_depth and (config.shaft_tip_offset_m <= offset <= config.shaft_head_offset_m) and (np.linalg.norm(transverse) <= permitted + 1e-12)
     inserted = bool(full_depth and config.required_depth_m <= config.guide_length_m)
     return {
@@ -95,6 +97,7 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
         "minimum_required_depth_m": config.required_depth_m,
         "limiting_bore_radius_m": bore_radius,
         "permitted_center_offset_m": permitted,
+        "center_offsets_entry_required_m": boundary_offsets,
         "max_radial_error_m": float(radial[allowed].max()) if allowed.any() else float("inf"),
         "samples": int(samples),
     }
