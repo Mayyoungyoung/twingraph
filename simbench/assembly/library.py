@@ -955,8 +955,24 @@ class Session:
         return Result(ok, {"jaw_span_m": span, "contact_free": contact_free})
 
     @skill("approach", "接近抓取位姿", "transition", ("empty", "artifact:grasp"))
-    def approach(self, part, artifact="grasp"):
+    def approach(self, part, artifact="grasp", strategy="cartesian"):
         goal = self.artifacts[artifact]
+        if strategy == "joint_checked_v10":
+            try:
+                q = self.arm.ik_with_restarts(goal["xyz"], down(goal["yaw"]))
+                verdict = self.arm.check_joint_path([q])
+            except ValueError as exc:
+                return Result(False, {"strategy": strategy}, str(exc))
+            if not verdict["valid"]:
+                return Result(False, {"strategy": strategy, "collision": verdict},
+                              "checked joint approach collision")
+            ok = self.arm.execute_joint(q)
+            self.arm.rotation = down(goal["yaw"])
+            return Result(ok, {"strategy": strategy,
+                               "position_error_m": float(np.linalg.norm(goal["xyz"] - self.ctx.eef_pos()))},
+                          "checked joint approach error" if not ok else "")
+        if strategy != "cartesian":
+            return Result(False, reason="unknown approach strategy")
         try:
             ok = self.arm.move(goal["xyz"], down(goal["yaw"]), speed=0.045)
         except ValueError as exc:

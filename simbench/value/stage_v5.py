@@ -187,7 +187,10 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
     add("plan_path", target=feedback([0, 0, .10], grasp, "grasp_hover"),
         yaw=argument(choice["yaw"], unit="rad"), clearance=argument(choice["clearance"], unit="m"))
     add("move", path="transfer")
-    add("move", grasp="grasp", part=part)
+    approach_params = dict(grasp="grasp", part=part)
+    if "approach_strategy" in choice:
+        approach_params["strategy"] = choice["approach_strategy"]
+    add("move", **approach_params)
     add("grasp", part=part, force=argument(choice["force"], unit="N"))
     add("inspect", what="grasp", part=part)
     held = add("move", part=part, delta=xyz([0, 0, .10]))

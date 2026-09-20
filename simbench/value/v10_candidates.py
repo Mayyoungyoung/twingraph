@@ -30,6 +30,8 @@ def proposals():
         ("handle_yaw45", "handle", {"yaw": pi / 4}),
         ("handle_yaw_neg45", "handle", {"yaw": -pi / 4}),
         ("handle_grasp_low", "handle", {"height": -.004}),
+        ("handle_joint_approach", "handle", {"approach_strategy": "joint_checked_v10"}),
+        ("handle_yaw90_joint", "handle", {"yaw": pi / 2, "approach_strategy": "joint_checked_v10"}),
     ]
     result = [reference]
     for name, part, changes in variants:
