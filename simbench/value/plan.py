@@ -265,6 +265,8 @@ class PlanIR:
                     choices[current]=dict(yaw=args["yaws"][0],height=args["height_offset"])
                 elif current is not None:
                     if call.skill=="grasp": choices[current]["force"]=args["force"]
+                    if call.skill == "move" and "grasp" in args and "strategy" in args:
+                        choices[current]["approach_strategy"] = args["strategy"]
                     if call.skill=="plan_path" and "clearance" in args: choices[current]["clearance"]=args["clearance"]
                     if call.skill=="move" and args.get("mode")=="guarded": choices[current]["speed"]=args["speed"]
                     # v7 pins use the contact insertion atom rather than the
