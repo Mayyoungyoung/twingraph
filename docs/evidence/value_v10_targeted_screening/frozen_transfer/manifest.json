@@ -1,0 +1,129 @@
+{
+  "training_pool": "script_curated_v9_r1",
+  "training_layouts": [
+    1302,
+    1303,
+    1304,
+    1305,
+    1306,
+    1307,
+    1308,
+    1309,
+    1310,
+    1311,
+    1312,
+    1313
+  ],
+  "conditions": [
+    "nominal",
+    "light_low",
+    "light_high"
+  ],
+  "candidate_names": [
+    "reference",
+    "pin_order",
+    "pin_slow",
+    "pin_firm",
+    "pin_gentle",
+    "pin_high_grasp",
+    "pin_low_grasp",
+    "transfer_high",
+    "transfer_low",
+    "stop_slow",
+    "wipe_reverse",
+    "wipe_long"
+  ],
+  "test_layouts": [
+    1320,
+    1321,
+    1322
+  ],
+  "target_candidate_pool": "script_targeted_grasp_v10_r1",
+  "limitation": "new approach_strategy is unseen in old training data and absent from v1 features",
+  "models": {
+    "global_logistic": {
+      "training_seconds": 0.7614456079900265,
+      "training_layouts": [
+        1302,
+        1303,
+        1304,
+        1305,
+        1306,
+        1307,
+        1308,
+        1309,
+        1310,
+        1311,
+        1312,
+        1313
+      ],
+      "pair_count": 0,
+      "training_loss": 0.38141393661499023,
+      "checkpoint": "global_logistic.pt",
+      "sha256": "fa8dfc1bfac5184839ad710d50f8788cc16fe848797c09f0d9e710e9c5afedea"
+    },
+    "interaction_mlp": {
+      "training_seconds": 0.07020111498422921,
+      "training_layouts": [
+        1302,
+        1303,
+        1304,
+        1305,
+        1306,
+        1307,
+        1308,
+        1309,
+        1310,
+        1311,
+        1312,
+        1313
+      ],
+      "pair_count": 0,
+      "training_loss": 0.1548488885164261,
+      "checkpoint": "interaction_mlp.pt",
+      "sha256": "7491a4e5d47f9871a0cea6939fe153f41e19fa1c491e5c20e9ded0758a2f5dec"
+    },
+    "v6_bce": {
+      "training_seconds": 0.16902469797059894,
+      "training_layouts": [
+        1302,
+        1303,
+        1304,
+        1305,
+        1306,
+        1307,
+        1308,
+        1309,
+        1310,
+        1311,
+        1312,
+        1313
+      ],
+      "pair_count": 0,
+      "training_loss": 0.09068726003170013,
+      "checkpoint": "v6_bce.pt",
+      "sha256": "70c1e1e2a259491b9e6f0fc333be0ec37b34ef96d232ce64a6c75d4b42b47159"
+    },
+    "v6_bce_pair": {
+      "training_seconds": 0.19981774408370256,
+      "training_layouts": [
+        1302,
+        1303,
+        1304,
+        1305,
+        1306,
+        1307,
+        1308,
+        1309,
+        1310,
+        1311,
+        1312,
+        1313
+      ],
+      "pair_count": 39,
+      "training_loss": 0.08859805762767792,
+      "checkpoint": "v6_bce_pair.pt",
+      "sha256": "7be9fe9467d618d0604c55ebdbe909c6e139fe5101da6d21271469ca6d4be1ab"
+    }
+  }
+}
