@@ -2,10 +2,13 @@
 
 import argparse
 import csv
+from collections import Counter
+import hashlib
 import json
 from pathlib import Path
 import random
 import time
+import xml.etree.ElementTree as ET
 
 import numpy as np
 from simbench.value.v9_candidates import proposals
@@ -13,6 +16,15 @@ from scripts.collect_v9_candidate_matrix import CONDITIONS
 
 PARTS = ("carriage", "end_stop", "pin_left", "pin_right", "handle", "wipe_tool")
 KS = (1, 2, 4, 8, 12)
+
+
+def spatial_geometry_signature(scene):
+    root = ET.parse(scene).getroot()
+    keys = {"body": ("name", "pos", "quat"),
+            "geom": ("name", "type", "pos", "quat", "size", "fromto", "mesh")}
+    items = [(element.tag, [(key, element.get(key)) for key in keys[element.tag]])
+             for element in root.iter() if element.tag in keys]
+    return hashlib.sha256(json.dumps(items).encode()).hexdigest()
 
 
 def load(root):
@@ -51,7 +63,8 @@ def load(root):
             old_geometry = seen_seed_geometry.setdefault(seed, geometry)
             if old_geometry != geometry:
                 issues.append(f"seed {seed}: geometry changed between candidates or conditions")
-            old_seed = seen_geometry.setdefault(geometry, seed)
+            spatial_geometry = spatial_geometry_signature(result_path.parent / "scene" / "stage_v9_scene.xml")
+            old_seed = seen_geometry.setdefault(spatial_geometry, seed)
             if old_seed != seed:
                 issues.append(f"geometry duplicate seeds {old_seed}, {seed}")
             observation_hash = detail["pre_execution_observation"]["sha256"]
@@ -298,6 +311,10 @@ def main():
                    non_reference_successes=sum(int(cases[(seed, cond)][name]["summary"]["success"])
                        for seed in seeds for cond in ("nominal", "light_low", "light_high")
                        for name in names[1:]))
+    summary["failure_skill_counts"] = dict(Counter(
+        (cases[(seed, cond)][name]["summary"]["error"] or "unknown").split(":", 1)[0]
+        for seed in seeds for cond in CONDITIONS for name in names
+        if not cases[(seed, cond)][name]["summary"]["success"]))
     checkpoints = {}
     if len(set(labels.values())) > 1 and summary["successes"] > 0:
         summary["model_training"] = fit_models(cases, names, train_seeds, val_seeds, out, args.epochs)
