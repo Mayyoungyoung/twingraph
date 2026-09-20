@@ -823,10 +823,11 @@ class Session:
         # This call commits the same declared release effect even if the later
         # settled-pose check fails. Never leave a released object marked held.
         if self.stage_passes and str(part).startswith("pin_"):
-            # Pins need a short physical seating dwell before release.  This
-            # adds contact, not a pose assignment, and exposes an unstable
-            # pin through the post-release inspection below.
-            self.call("press", part=part, target_z=float(target[2]), force_stop=4.0)
+            # Pins need a physical seating dwell before release. V9 already
+            # pressed and verified support immediately before Place; another
+            # higher-force press can wedge the jaws against the wide guide.
+            if not str(getattr(self, "task_version", "")).startswith("functional_assembly_v9"):
+                self.call("press", part=part, target_z=float(target[2]), force_stop=4.0)
             self.hold(.20)
         try:
             self.call("open_gripper")
@@ -839,10 +840,8 @@ class Session:
                 raise
             if (str(part).startswith("pin_")
                     and str(getattr(self, "task_version", "")).startswith("functional_assembly_v9")):
-                # Keep an inserted pin stationary while the already commanded
-                # fingers finish opening. Moving a partly gripping jaw upward
-                # can extract the pin; a second in-place release must still
-                # pass the live contact-free check.
+                # Keep a seated pin stationary if a release needs one retry.
+                # The older 18 mm lifting recovery could extract it.
                 self.hold(.20)
                 self.call("open_gripper")
             else:
