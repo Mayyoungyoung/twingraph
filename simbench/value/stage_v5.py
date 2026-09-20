@@ -193,7 +193,14 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
     add("move", **approach_params)
     add("grasp", part=part, force=argument(choice["force"], unit="N"))
     add("inspect", what="grasp", part=part)
-    held = add("move", part=part, delta=xyz([0, 0, .10]))
+    if "lift_first_m" in choice:
+        first_lift = float(choice["lift_first_m"])
+        if not .015 <= first_lift <= .08:
+            raise ValueError("staged lift first segment outside checked range")
+        add("move", part=part, delta=xyz([0, 0, first_lift]))
+        held = add("move", part=part, delta=xyz([0, 0, .10 - first_lift]))
+    else:
+        held = add("move", part=part, delta=xyz([0, 0, .10]))
     if part == "carriage":
         approach = np.r_[CENTER + [-.155, 0], CAR_Z + .030]
     else:

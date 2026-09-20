@@ -24,6 +24,8 @@ def proposals():
         ("pin_left_yaw45", "pin_left", {"yaw": pi / 4}),
         ("pin_left_yaw_neg45", "pin_left", {"yaw": -pi / 4}),
         ("pin_left_grasp_low", "pin_left", {"height": -.002}),
+        ("pin_left_staged_lift", "pin_left", {"lift_first_m": .025}),
+        ("pin_left_yaw90_staged", "pin_left", {"yaw": pi / 2, "lift_first_m": .025}),
         ("handle_yaw90", "handle", {"yaw": pi / 2}),
         ("handle_grasp_high", "handle", {"height": .004}),
         ("handle_yaw90_high", "handle", {"yaw": pi / 2, "height": .004}),

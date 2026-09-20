@@ -267,6 +267,12 @@ class PlanIR:
                     if call.skill=="grasp": choices[current]["force"]=args["force"]
                     if call.skill == "move" and "grasp" in args and "strategy" in args:
                         choices[current]["approach_strategy"] = args["strategy"]
+                    if (call.skill == "move" and str(current).startswith("pin_")
+                            and "lift_first_m" not in choices[current]
+                            and "delta" in args and isinstance(args["delta"], (list, tuple))
+                            and .015 <= float(args["delta"][2]) <= .08
+                            and float(args["delta"][0]) == 0 and float(args["delta"][1]) == 0):
+                        choices[current]["lift_first_m"] = float(args["delta"][2])
                     if call.skill=="plan_path" and "clearance" in args: choices[current]["clearance"]=args["clearance"]
                     if call.skill=="move" and args.get("mode")=="guarded": choices[current]["speed"]=args["speed"]
                     # v7 pins use the contact insertion atom rather than the
