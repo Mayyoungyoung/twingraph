@@ -373,5 +373,5 @@ def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
         "cleaning": copy.deepcopy(session.artifacts.get("wipe_result", {})),
         "stroke": {"runs": copy.deepcopy(session.stroke_runs),
                     "peak_force_n": max(session.stroke_peak_forces, default=0.0)},
-        "task_scope": "clean_assemble_and_post_handle_bidirectional_stroke",
+        "task_scope": getattr(session, "task_version", "clean_assemble_and_post_handle_bidirectional_stroke"),
     })

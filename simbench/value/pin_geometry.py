@@ -22,6 +22,9 @@ class PinInsertionConfig:
     shaft_head_offset_m: float = 0.006
     radial_clearance_m: float = 0.0002
     source: str = "stage_v7._add_pin_guides and scene.holed_plate CAD"
+    # Optional physical entrance bands, (end depth from entry, bore radius).
+    # An empty tuple preserves the V7/V8 cylindrical aperture.
+    bore_profile: tuple = ()
 
     def manifest(self):
         return {
@@ -34,6 +37,7 @@ class PinInsertionConfig:
             "shaft_head_offset_m": self.shaft_head_offset_m,
             "radial_clearance_m": self.radial_clearance_m,
             "source": self.source,
+            "bore_profile_depth_radius_m": [list(row) for row in self.bore_profile],
         }
 
 
@@ -66,8 +70,19 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
     # constant-depth section, its circular radius projects by 1/|cos(theta)|.
     axial = abs(float(np.dot(paxis, haxis)))
     bore_radius = min(config.guide_inner_radius_m, config.plate_hole_half_width_m)
-    permitted = bore_radius - config.radial_clearance_m - config.shaft_radius_m / max(axial, 1e-12)
-    allowed = (depth >= 0.0) & (depth <= config.guide_length_m) & (radial <= permitted)
+    if config.bore_profile:
+        ends = np.array([float(row[0]) for row in config.bore_profile])
+        radii = np.array([float(row[1]) for row in config.bore_profile])
+        if not (np.all(np.diff(ends) > 0) and ends[-1] >= config.guide_length_m and np.all(radii > config.shaft_radius_m)):
+            raise ValueError("invalid bore profile")
+        indices = np.clip(np.searchsorted(ends, depth, side="right"), 0, len(radii) - 1)
+        local_bore = radii[indices]
+        bore_radius = float(radii.min())
+    else:
+        local_bore = np.full_like(depth, bore_radius)
+    shaft_cross_section = config.shaft_radius_m / max(axial, 1e-12)
+    permitted = bore_radius - config.radial_clearance_m - shaft_cross_section
+    allowed = (depth >= 0.0) & (depth <= config.guide_length_m) & (radial <= local_bore - config.radial_clearance_m - shaft_cross_section)
     valid_depths = depth[allowed]
     max_depth = float(valid_depths.max(initial=0.0))
     if valid_depths.size:
@@ -84,12 +99,24 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
     along = float(np.dot(paxis, haxis))
     full_depth = abs(along) > 1e-9 and permitted >= 0
     boundary_offsets = []
-    for boundary in (0., config.required_depth_m):
+    boundaries = [0.] + [float(row[0]) for row in config.bore_profile
+                         if 0. < float(row[0]) < config.required_depth_m] + [config.required_depth_m]
+    profile_offsets = []
+    for boundary in boundaries:
         offset = float(np.dot(entry - origin, haxis) - boundary) / along if abs(along) > 1e-9 else float('inf')
         point = origin + offset * paxis
         transverse = point - entry + boundary * haxis
-        boundary_offsets.append(transverse.tolist())
-        full_depth = full_depth and (config.shaft_tip_offset_m <= offset <= config.shaft_head_offset_m) and (np.linalg.norm(transverse) <= permitted + 1e-12)
+        if config.bore_profile:
+            index = min(int(np.searchsorted(ends, boundary, side="right")), len(radii) - 1)
+            boundary_bore = float(radii[index])
+        else:
+            boundary_bore = bore_radius
+        boundary_permitted = boundary_bore - config.radial_clearance_m - shaft_cross_section
+        profile_offsets.append(dict(depth_m=boundary, transverse_m=transverse.tolist(),
+                                    bore_radius_m=boundary_bore, permitted_center_offset_m=boundary_permitted))
+        if boundary in (0., config.required_depth_m):
+            boundary_offsets.append(transverse.tolist())
+        full_depth = full_depth and (config.shaft_tip_offset_m <= offset <= config.shaft_head_offset_m) and (np.linalg.norm(transverse) <= boundary_permitted + 1e-12)
     inserted = bool(full_depth and config.required_depth_m <= config.guide_length_m)
     return {
         "inserted": inserted,
@@ -99,6 +126,7 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
         "limiting_bore_radius_m": bore_radius,
         "permitted_center_offset_m": permitted,
         "center_offsets_entry_required_m": boundary_offsets,
+        "center_offsets_by_depth": profile_offsets,
         "max_radial_error_m": float(radial[allowed].max()) if allowed.any() else float("inf"),
         "samples": int(samples),
     }

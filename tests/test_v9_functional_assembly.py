@@ -6,7 +6,7 @@ import tempfile
 import numpy as np
 
 from simbench.value import stage_v7, stage_v9
-from simbench.value.pin_geometry import insertion_geometry
+from simbench.value.pin_geometry import PinInsertionConfig, insertion_geometry
 
 
 def test_v9_physical_bore_holder_and_templates():
@@ -18,16 +18,20 @@ def test_v9_physical_bore_holder_and_templates():
         root = ET.parse(path).getroot()
     stop = root.find(".//body[@name='end_stop']")
     assert not any(g.get("name", "").startswith("v7_bore_") for g in stop.findall("geom"))
-    assert sum(g.get("name", "").startswith("v9_bore_") for g in stop.findall("geom")) == 32
+    assert sum(g.get("name", "").startswith("v9_bore_") for g in stop.findall("geom")) == 128
     assert sum(g.get("name", "").startswith("v9_stop_") for g in stop.findall("geom")) > 0
     for part in ("pin_left", "pin_right"):
+        supply = root.find(f".//body[@name='{part}']")
         holder = root.find(f".//body[@name='{part}_holder']")
+        assert float(supply.get("pos").split()[0]) >= stage_v9.PIN_SUPPLY_MIN_X_M
+        assert float(supply.get("pos").split()[0]) == float(holder.get("pos").split()[0])
         assert len(holder.findall("geom")) == 12
         assert all(float(g.get("size").split()[2]) == stage_v9.HOLDER_HALF_HEIGHT_M
                    for g in holder.findall("geom"))
     templates = stage_v9.visual_templates()
     assert templates["end_stop"]["through_hole_half_width_m"] == stage_v9.PIN_CONFIG.plate_hole_half_width_m
     assert templates["end_stop"]["guide_inner_radius_m"] == stage_v9.PIN_CONFIG.guide_inner_radius_m
+    assert templates["end_stop"]["entrance_bore_profile_depth_radius_m"] == [list(row) for row in stage_v9.BORE_PROFILE]
     assert templates["pin_left"]["shaft_radius_m"] == stage_v9.PIN_CONFIG.shaft_radius_m
 
 
@@ -38,3 +42,16 @@ def test_functional_acceptance_allows_tilt_but_rejects_missed_bore():
     outside = insertion_geometry(np.array([.015, 0., .039]), axis, entry, [0., 0., 1.], stage_v9.PIN_CONFIG)
     assert inside["inserted"]
     assert not outside["inserted"]
+
+
+def test_entrance_profile_accepts_a_tilted_shaft_that_fits_every_physical_band():
+    axis = np.array([.2, 0., 1.]); axis /= np.linalg.norm(axis)
+    origin = np.array([.0124, 0., .039])
+    entry = np.zeros(3)
+    funnel = insertion_geometry(origin, axis, entry, [0., 0., 1.], stage_v9.PIN_CONFIG)
+    straight_bore = insertion_geometry(origin, axis, entry, [0., 0., 1.],
+        PinInsertionConfig(guide_inner_radius_m=stage_v9.BORE_RADIUS_M,
+                           plate_hole_half_width_m=stage_v9.BORE_RADIUS_M,
+                           radial_clearance_m=0.))
+    assert funnel["inserted"]
+    assert not straight_bore["inserted"]

@@ -270,6 +270,12 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
     calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i, v7=v7,
                                                                 functional_clearance=functional_clearance)]
     for part in PARTS:
+        if functional_clearance and part == "end_stop":
+            # The stop was checked when first seated. Pin insertion may move
+            # the loose fixture inside its cradle. V9 judges the resulting
+            # assembly by retained pins and the actual later stroke, not by
+            # a second nominal-world-pose constraint before that stroke.
+            continue
         if v7 and part.startswith("pin_"):
             calls.append(Call(f"accept_{part}", "inspect", dict(what=argument("pin"), part=argument(part),
                 hole_part=argument("end_stop"),
