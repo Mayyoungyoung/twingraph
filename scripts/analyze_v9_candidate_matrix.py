@@ -211,7 +211,7 @@ def outcome(case, order, k, overhead=0.):
                 tried=selected)
 
 
-def replay(cases, names, seeds, checkpoints, draws=1000):
+def replay(cases, names, seeds, checkpoints, draws=256):
     rng = random.Random(5117)
     rows = []
     for (seed, condition), case in sorted(cases.items()):
@@ -281,7 +281,20 @@ def main():
     (out / "split.json").write_text(json.dumps(dict(train=train_seeds, validation=val_seeds,
             independent_target=[], successes_by_seed=labels), indent=2))
     summary = dict(layouts=len(seeds), candidates=len(names), conditions=3,
+                   random_replay_per_case=256, random_seed=5117,
                    successes=sum(labels.values()), successes_by_seed=labels,
+                   successes_by_candidate={name: sum(int(cases[(seed, cond)][name]["summary"]["success"])
+                       for seed in seeds for cond in CONDITIONS) for name in names},
+                   successes_by_condition={cond: sum(int(cases[(seed, cond)][name]["summary"]["success"])
+                       for seed in seeds for name in names) for cond in CONDITIONS},
+                   reference_successes=sum(int(cases[(seed, cond)][names[0]]["summary"]["success"])
+                       for seed in seeds for cond in CONDITIONS),
+                   reference_fails_alternative_succeeds=[dict(seed=seed, condition=cond,
+                       successful_alternatives=[name for name in names[1:]
+                           if cases[(seed, cond)][name]["summary"]["success"]])
+                       for seed in seeds for cond in CONDITIONS
+                       if not cases[(seed, cond)][names[0]]["summary"]["success"]
+                       and any(cases[(seed, cond)][name]["summary"]["success"] for name in names[1:])],
                    non_reference_successes=sum(int(cases[(seed, cond)][name]["summary"]["success"])
                        for seed in seeds for cond in ("nominal", "light_low", "light_high")
                        for name in names[1:]))
