@@ -24,6 +24,11 @@ def check(spec, params, state, contact=None):
     part = params.get("part")
     if part is not None and part not in state.parts:
         conflicts.append(f"unknown part {part}")
+    requested = params.get("required_parts")
+    if requested is not None:
+        for item in requested:
+            if item not in state.parts:
+                conflicts.append(f"unknown required observation part {item}")
     for requirement in spec.requires:
         if requirement == "ownership":
             # Optional part is an explicit promise: None means empty motion.
@@ -104,7 +109,8 @@ def apply_effects(spec, params, state, step=-1, symbolic=True):
                 raise ValueError(f"generator output violates {field_name} binding")
     for effect in spec.effects:
         if effect == "seen:all":
-            state.seen = set(state.parts)
+            requested=params.get("required_parts")
+            state.seen = set(state.parts if requested is None else requested)
         elif effect == "held:part":
             state.held = params["part"]
             if state.grasp_epoch is not None:

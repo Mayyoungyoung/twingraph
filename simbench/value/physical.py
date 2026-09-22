@@ -18,10 +18,14 @@ def perturbation(seed, repeat, domain):
 
 
 class PhysicalRunner:
-    def __init__(self,session,timeout=90.):
+    def __init__(self,session,timeout=90.,*,excluded_wall_seconds=None):
         self.session=session; self.snapshot=session.snapshot(); self.initial=fingerprint(session)
         self.gain=session.ctx.model.actuator_gainprm.copy();self.bias=session.ctx.model.actuator_biasprm.copy()
         self.timeout=timeout
+        # Optional cumulative monitor/planning time, excluded only from this
+        # runner's execution deadline. Actual wall-clock cost stays intact.
+        # Legacy callers omit it and retain their original budget semantics.
+        self.excluded_wall_seconds=excluded_wall_seconds
 
     def run(self,plan,trial,keep_trace=False):
         unsupported = set(trial) - {"domain", "repeat", "friction_scale", "actuator_gain_scale"}
@@ -51,11 +55,18 @@ class PhysicalRunner:
         p=copy.deepcopy(plan); p.prefix["start_state"]=fingerprint(s)
         s.results.clear(); s.arm.trace.clear()
         start_sim=float(s.ctx.data.time);wall=time.perf_counter()
+        excluded_start=float(self.excluded_wall_seconds()) if self.excluded_wall_seconds else 0.
+        def budget_clock():
+            elapsed=time.perf_counter()-wall
+            excluded=(float(self.excluded_wall_seconds())-excluded_start) if self.excluded_wall_seconds else 0.
+            if not np.isfinite(excluded) or excluded<0. or excluded>elapsed+1.e-6:
+                raise ValueError("invalid excluded execution-budget wall time")
+            return elapsed,excluded,max(0.,elapsed-excluded)
         prefix=False;suffix=None;error="";timeout=False;goal_result=None
         # Deadline is checked at control-step boundaries; no background rollouts.
         original_step=s.ctx.step
         def bounded_step(*args,**kw):
-            if time.perf_counter()-wall>self.timeout:
+            if budget_clock()[2]>self.timeout:
                 raise TimeoutError("physical rollout wall-time limit")
             return original_step(*args,**kw)
         s.ctx.step=bounded_step
@@ -90,7 +101,7 @@ class PhysicalRunner:
         finally:
             s.ctx.step=original_step
             s.ctx.model.actuator_gainprm[:]=self.gain;s.ctx.model.actuator_biasprm[:]=self.bias
-        elapsed=time.perf_counter()-wall
+        elapsed,excluded,budget_elapsed=budget_clock()
         steps=copy.deepcopy(s.results)
         sim=float(s.ctx.data.time-start_sim)
         result=dict(candidate_id=plan.id,trial=trial,trial_sha256=digest(trial),valid=True,
@@ -104,6 +115,8 @@ class PhysicalRunner:
                     stage_passes=copy.deepcopy(getattr(s, "stage_passes", {})),
                     prefix_success=prefix,suffix_success=suffix,error=error,timeout=timeout,
                     restore_seconds=restore,wall_seconds=elapsed,sim_seconds=sim,
+                    execution_timeout_seconds=float(self.timeout),excluded_monitor_wall_seconds=excluded,
+                    execution_budget_wall_seconds=budget_elapsed,
                     physics_steps=int(round(sim/s.ctx.model.opt.timestep)),executed_steps=len(steps),
                     deferred_solving_seconds=sum(x["wall_seconds"] for x in steps if x["skill"] in {"plan_transfer","propose_grasps","select_grasp","estimate_pose"}),
                     final_positions={n:s.ctx.obj_pos(n).tolist() for n in s.parts},

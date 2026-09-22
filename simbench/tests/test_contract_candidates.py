@@ -44,12 +44,16 @@ def test_effects_commit_only_after_success_and_home_keeps_empty_guard(monkeypatc
     s = Session(make_context())
     s.held = "carriage"
     monkeypatch.setattr(s.arm, "open", lambda: False)
+    # Failure means contact remains; the default empty scene already has
+    # open jaws and no carriage contacts despite the synthetic held marker.
+    monkeypatch.setattr(s.ctx, "grasp_contacts", lambda part: {"held": True})
     with pytest.raises(SkillFailure):
         s.call("gripper", mode="open")
     assert s.held == "carriage" and s.grasp_epoch == 0
     with pytest.raises(SkillFailure, match="empty"):
         s.call("move", mode="home")
     monkeypatch.setattr(s.arm, "open", lambda: True)
+    monkeypatch.setattr(s.ctx, "grasp_contacts", lambda part: {"held": False})
     s.call("gripper", mode="open")
     assert s.held is None and s.grasp_epoch == 1
 

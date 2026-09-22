@@ -1,0 +1,119 @@
+{
+  "schema": "twingraph.value_v15_evidence_summary.r1",
+  "date": "2026-09-22",
+  "decision": {
+    "architecture": "GO",
+    "historical_controlled_ranking": "LIMITED_GO",
+    "fresh_end_to_end_success": "NO_GO",
+    "reason": "The unified graph input and two-round screening pipeline run end to end, but neither the current-runtime natural pools nor the fresh two-round Top-4 trials produced a complete successful assembly."
+  },
+  "value_input": {
+    "schema": "twingraph.atomic_graph_value.v15.r2",
+    "task_specific_stage_or_part_slots": false,
+    "dynamic_node_limit": 512,
+    "node_feature_count": 303,
+    "relation_count": 7,
+    "parameter_count": 165570
+  },
+  "historical_pretraining": {
+    "scope": "audited frozen V12 complete-functional-task rollouts; not current-runtime evidence",
+    "runtime_sha256": "c6b79761f3555a682f402f4f408b0f94d35b4c50b4fad65f5c2251ac1f8824da",
+    "layouts": 6,
+    "rows": 288,
+    "candidates_per_layout": 48,
+    "train_layouts": [1610, 1611, 1612, 1613],
+    "validation_layouts": [1630, 1631],
+    "checkpoint_sha256": "9720138360c20ffa6b07ea2af0c3d2062d5b54bc482f22675e135dbf1a89020b",
+    "validation": {
+      "layout_count": 2,
+      "feasible_layout_count": 1,
+      "full_n_hit": 0.5,
+      "value_hit_at_4": 0.5,
+      "exact_uniform_random_hit_at_4": 0.2123805118717237,
+      "original_order_hit_at_4": 0.0,
+      "value_mean_calls": 2.5,
+      "exact_uniform_random_mean_calls": 3.6510175763182238,
+      "brier": 0.18618828886144353,
+      "same_layout_pair_accuracy": 0.4603174603174603
+    },
+    "scene_dependent_choice_evidence": {
+      "strict_reversal_layout_pairs": 1,
+      "layout_a": 1610,
+      "layout_b": 1612,
+      "a_only_successes": [
+        "grounded_006",
+        "grounded_010",
+        "grounded_014",
+        "grounded_026",
+        "grounded_031",
+        "grounded_034",
+        "grounded_036"
+      ],
+      "b_only_successes": ["grounded_004", "grounded_024", "grounded_025"]
+    }
+  },
+  "current_runtime_natural_pool_diagnostic": {
+    "runtime_sha256": "c9308af596c589a79981cbe62000d3bb1592bc8c59f052f58dc65afcebe97988",
+    "level": "L1",
+    "layouts": [
+      {"seed": 1950, "attempted": 24, "successes": 0, "collection_wall_seconds": 624.873989425134},
+      {"seed": 1951, "attempted": 24, "successes": 0, "collection_wall_seconds": 408.481108463835}
+    ],
+    "candidate_expansion": {
+      "seed": 1950,
+      "generated_pool_size": 48,
+      "additional_candidate_indices_attempted": [27, 34, 35, 41, 42],
+      "additional_successes": 0,
+      "total_unique_candidates_attempted": 29,
+      "note": "The other 19 expanded candidates were not executed; no 48/48 coverage claim is made."
+    },
+    "stopping_reason": "Two consecutive all-negative 24-candidate layouts provided no within-layout ranking signal; further collection was stopped rather than treating useless all-negative rows as a larger training set."
+  },
+  "fresh_two_round_closed_loop": {
+    "seed": 1631,
+    "scope": "fresh serial complete-task verification in an isolated overlay of the audited frozen physical runtime",
+    "physical_base_runtime_sha256": "c6b79761f3555a682f402f4f408b0f94d35b4c50b4fad65f5c2251ac1f8824da",
+    "augmented_runtime_sha256": "565192911eb69c277b3a1cac0ec2fa51d4c1e00f67743a2c3ce433815ad5471e",
+    "external_llm_api_called": false,
+    "planner": "Codex in the current interactive task authored the two schema-validated strategy responses; grounding and compilation were deterministic.",
+    "interactive_codex_authoring_latency_measured": false,
+    "search_pool_size": 48,
+    "candidates_per_round": 16,
+    "top_k": 4,
+    "rounds": [
+      {
+        "round": 0,
+        "selected": ["grounded_016", "grounded_000", "grounded_025", "grounded_037"],
+        "scores": [0.4224357008934021, 0.4219890534877777, 0.42072799801826477, 0.4194895625114441],
+        "successes": 0,
+        "generation_seconds": 5.18201533192769,
+        "compilation_seconds": 0.845484804129228,
+        "ranking_seconds": 0.993200696073472,
+        "verification_seconds": 587.53631323413,
+        "pipeline_seconds": 594.55701406626
+      },
+      {
+        "round": 1,
+        "selected": ["grounded_032", "grounded_033", "grounded_005", "grounded_017"],
+        "scores": [0.4213624596595764, 0.42135244607925415, 0.418569952249527, 0.41819530725479126],
+        "successes": 0,
+        "generation_seconds": 5.17485867603682,
+        "compilation_seconds": 0.8360487939789891,
+        "ranking_seconds": 0.9173762341961265,
+        "verification_seconds": 508.7005933490582,
+        "pipeline_seconds": 515.62887705327
+      }
+    ],
+    "final_status": "two_round_budget_exhausted",
+    "fresh_success": false,
+    "important_observation": "grounded_016 was positive in the archived matrix but failed in the fresh rerun, so cached labels were not presented as fresh online success."
+  },
+  "verification": {
+    "remote_host": "901",
+    "pytest_command_scope": ["complete repository test suite"],
+    "passed": 560,
+    "skipped": 1,
+    "failed": 0,
+    "elapsed_seconds": 110.56
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema": "twingraph.printed-kit-source.v12",
+  "source_directory": "F:\\RAL\\3D\\TwinGraph_print_kit_v0_1\\TwinGraph_print_kit_v0_1\\stl\\htzp",
+  "source_units": "mm",
+  "sha256": {
+    "01_guide_base_nominal.stl": "568896060990b09085241a6e3bac1c2e45fc9f048e7fa100304aff2b37cf888c",
+    "02_carriage_bridged.stl": "318b3406730ce0c468fbdff9ac3321cd8b6bbde8fb0236705e44058bdaf92de6",
+    "03_end_stop.stl": "0b1e13eb3523214562bc702e47124a5ec012bdd0c5a107d6f6e70be39e7c290e",
+    "04_pin.stl": "664d62c5eefc3c5e8ce5cdb4fccec009458107d3387b76978286188adad6c5e2",
+    "05_handle_ring.stl": "714617dedb72b7968f8abc061730901e853979992cb584f72bc68e1e19e58b47",
+    "06_pin_supply_holder.stl": "bf2b1de72954d45fe8b3885993c553bef82e86b045b401da6cb61f82717f612c",
+    "07_wipe_tool_rigid.stl": "4e11ddab332300bea7ee39048ba883bd43ea1ddb4059b071d9cba15acd7bf5a6"
+  }
+}

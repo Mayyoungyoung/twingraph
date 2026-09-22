@@ -1,0 +1,744 @@
+{
+  "schema": "twingraph.value_training.v15.r1",
+  "value_input_schema": "twingraph.atomic_graph_value.v15.r2",
+  "task_agnostic_input": true,
+  "full_task_labels_only": true,
+  "audited_legacy_roots": [
+    "artifacts/v15_full_system/v12_native/matrices_trainval"
+  ],
+  "current_roots": [],
+  "train_seeds": [
+    1610,
+    1611,
+    1612,
+    1613
+  ],
+  "validation_seeds": [
+    1630,
+    1631
+  ],
+  "candidate_count": [
+    48
+  ],
+  "k": 4,
+  "feature_count": 303,
+  "relation_count": 7,
+  "parameter_count": 165570,
+  "device": "cuda",
+  "elapsed_seconds": 49.7865777015686,
+  "attempts": [
+    {
+      "initialization": 1501,
+      "selected_epoch": 7,
+      "selection_key": [
+        -0.5,
+        0.0625,
+        -0.42857142857142855,
+        0.06750887559228616,
+        7
+      ],
+      "validation": {
+        "layout_count": 2,
+        "k": 4,
+        "full_n_hit": 0.5,
+        "value_hit": 0.5,
+        "value_calls": 3.0,
+        "value_normalized_calls": 0.0625,
+        "random_hit": 0.2123805118717237,
+        "random_calls": 3.6510175763182238,
+        "random_normalized_calls": 0.07606286617329633,
+        "original_hit": 0.0,
+        "original_calls": 4.0,
+        "brier": 0.06750887559228616,
+        "pair_accuracy": 0.42857142857142855,
+        "layouts": [
+          {
+            "seed": 1630,
+            "candidates": 48,
+            "positives": 0,
+            "full_n_hit": false,
+            "value_hit": false,
+            "value_calls": 4,
+            "value_normalized_calls": 0.08333333333333333,
+            "random_hit": 0.0,
+            "random_calls": 4.0,
+            "random_normalized_calls": 0.08333333333333333,
+            "original_hit": false,
+            "original_calls": 4,
+            "top_k": [
+              {
+                "name": "grounded_024",
+                "score": 0.17681929469108582,
+                "success": false
+              },
+              {
+                "name": "grounded_032",
+                "score": 0.1726825088262558,
+                "success": false
+              },
+              {
+                "name": "grounded_016",
+                "score": 0.17243391275405884,
+                "success": false
+              },
+              {
+                "name": "grounded_025",
+                "score": 0.17218998074531555,
+                "success": false
+              }
+            ]
+          },
+          {
+            "seed": 1631,
+            "candidates": 48,
+            "positives": 6,
+            "full_n_hit": true,
+            "value_hit": true,
+            "value_calls": 2,
+            "value_normalized_calls": 0.041666666666666664,
+            "random_hit": 0.4247610237434474,
+            "random_calls": 3.3020351526364475,
+            "random_normalized_calls": 0.06879239901325933,
+            "original_hit": false,
+            "original_calls": 4,
+            "top_k": [
+              {
+                "name": "grounded_024",
+                "score": 0.17303158342838287,
+                "success": false
+              },
+              {
+                "name": "grounded_016",
+                "score": 0.16955968737602234,
+                "success": true
+              },
+              {
+                "name": "grounded_032",
+                "score": 0.16938982903957367,
+                "success": false
+              },
+              {
+                "name": "grounded_025",
+                "score": 0.16801726818084717,
+                "success": false
+              }
+            ]
+          }
+        ]
+      },
+      "checkpoint": "artifacts/v15_full_system/value_training/pretrain_r2/init_1501/checkpoint.pt"
+    },
+    {
+      "initialization": 1502,
+      "selected_epoch": 2,
+      "selection_key": [
+        -0.5,
+        0.05208333333333333,
+        -0.4603174603174603,
+        0.18618828886144353,
+        2
+      ],
+      "validation": {
+        "layout_count": 2,
+        "k": 4,
+        "full_n_hit": 0.5,
+        "value_hit": 0.5,
+        "value_calls": 2.5,
+        "value_normalized_calls": 0.05208333333333333,
+        "random_hit": 0.2123805118717237,
+        "random_calls": 3.6510175763182238,
+        "random_normalized_calls": 0.07606286617329633,
+        "original_hit": 0.0,
+        "original_calls": 4.0,
+        "brier": 0.18618828886144353,
+        "pair_accuracy": 0.4603174603174603,
+        "layouts": [
+          {
+            "seed": 1630,
+            "candidates": 48,
+            "positives": 0,
+            "full_n_hit": false,
+            "value_hit": false,
+            "value_calls": 4,
+            "value_normalized_calls": 0.08333333333333333,
+            "random_hit": 0.0,
+            "random_calls": 4.0,
+            "random_normalized_calls": 0.08333333333333333,
+            "original_hit": false,
+            "original_calls": 4,
+            "top_k": [
+              {
+                "name": "grounded_016",
+                "score": 0.43100717663764954,
+                "success": false
+              },
+              {
+                "name": "grounded_000",
+                "score": 0.43016886711120605,
+                "success": false
+              },
+              {
+                "name": "grounded_001",
+                "score": 0.4300878047943115,
+                "success": false
+              },
+              {
+                "name": "grounded_032",
+                "score": 0.4297507703304291,
+                "success": false
+              }
+            ]
+          },
+          {
+            "seed": 1631,
+            "candidates": 48,
+            "positives": 6,
+            "full_n_hit": true,
+            "value_hit": true,
+            "value_calls": 1,
+            "value_normalized_calls": 0.020833333333333332,
+            "random_hit": 0.4247610237434474,
+            "random_calls": 3.3020351526364475,
+            "random_normalized_calls": 0.06879239901325933,
+            "original_hit": false,
+            "original_calls": 4,
+            "top_k": [
+              {
+                "name": "grounded_016",
+                "score": 0.4224357008934021,
+                "success": true
+              },
+              {
+                "name": "grounded_000",
+                "score": 0.4219890832901001,
+                "success": false
+              },
+              {
+                "name": "grounded_001",
+                "score": 0.4215453267097473,
+                "success": false
+              },
+              {
+                "name": "grounded_032",
+                "score": 0.4213624596595764,
+                "success": false
+              }
+            ]
+          }
+        ]
+      },
+      "checkpoint": "artifacts/v15_full_system/value_training/pretrain_r2/init_1502/checkpoint.pt"
+    },
+    {
+      "initialization": 1503,
+      "selected_epoch": 146,
+      "selection_key": [
+        -0.0,
+        0.08333333333333333,
+        -0.6388888888888888,
+        0.1323448049728715,
+        146
+      ],
+      "validation": {
+        "layout_count": 2,
+        "k": 4,
+        "full_n_hit": 0.5,
+        "value_hit": 0.0,
+        "value_calls": 4.0,
+        "value_normalized_calls": 0.08333333333333333,
+        "random_hit": 0.2123805118717237,
+        "random_calls": 3.6510175763182238,
+        "random_normalized_calls": 0.07606286617329633,
+        "original_hit": 0.0,
+        "original_calls": 4.0,
+        "brier": 0.1323448049728715,
+        "pair_accuracy": 0.6388888888888888,
+        "layouts": [
+          {
+            "seed": 1630,
+            "candidates": 48,
+            "positives": 0,
+            "full_n_hit": false,
+            "value_hit": false,
+            "value_calls": 4,
+            "value_normalized_calls": 0.08333333333333333,
+            "random_hit": 0.0,
+            "random_calls": 4.0,
+            "random_normalized_calls": 0.08333333333333333,
+            "original_hit": false,
+            "original_calls": 4,
+            "top_k": [
+              {
+                "name": "grounded_024",
+                "score": 0.9994311928749084,
+                "success": false
+              },
+              {
+                "name": "grounded_004",
+                "score": 0.998902440071106,
+                "success": false
+              },
+              {
+                "name": "grounded_036",
+                "score": 0.9926224946975708,
+                "success": false
+              },
+              {
+                "name": "grounded_025",
+                "score": 0.9074472188949585,
+                "success": false
+              }
+            ]
+          },
+          {
+            "seed": 1631,
+            "candidates": 48,
+            "positives": 6,
+            "full_n_hit": true,
+            "value_hit": false,
+            "value_calls": 4,
+            "value_normalized_calls": 0.08333333333333333,
+            "random_hit": 0.4247610237434474,
+            "random_calls": 3.3020351526364475,
+            "random_normalized_calls": 0.06879239901325933,
+            "original_hit": false,
+            "original_calls": 4,
+            "top_k": [
+              {
+                "name": "grounded_024",
+                "score": 0.9997804760932922,
+                "success": false
+              },
+              {
+                "name": "grounded_025",
+                "score": 0.9993659853935242,
+                "success": false
+              },
+              {
+                "name": "grounded_004",
+                "score": 0.9981624484062195,
+                "success": false
+              },
+              {
+                "name": "grounded_036",
+                "score": 0.9487193822860718,
+                "success": false
+              }
+            ]
+          }
+        ]
+      },
+      "checkpoint": "artifacts/v15_full_system/value_training/pretrain_r2/init_1503/checkpoint.pt"
+    }
+  ],
+  "selected": {
+    "initialization": 1502,
+    "selected_epoch": 2,
+    "selection_key": [
+      -0.5,
+      0.05208333333333333,
+      -0.4603174603174603,
+      0.18618828886144353,
+      2
+    ],
+    "validation": {
+      "layout_count": 2,
+      "k": 4,
+      "full_n_hit": 0.5,
+      "value_hit": 0.5,
+      "value_calls": 2.5,
+      "value_normalized_calls": 0.05208333333333333,
+      "random_hit": 0.2123805118717237,
+      "random_calls": 3.6510175763182238,
+      "random_normalized_calls": 0.07606286617329633,
+      "original_hit": 0.0,
+      "original_calls": 4.0,
+      "brier": 0.18618828886144353,
+      "pair_accuracy": 0.4603174603174603,
+      "layouts": [
+        {
+          "seed": 1630,
+          "candidates": 48,
+          "positives": 0,
+          "full_n_hit": false,
+          "value_hit": false,
+          "value_calls": 4,
+          "value_normalized_calls": 0.08333333333333333,
+          "random_hit": 0.0,
+          "random_calls": 4.0,
+          "random_normalized_calls": 0.08333333333333333,
+          "original_hit": false,
+          "original_calls": 4,
+          "top_k": [
+            {
+              "name": "grounded_016",
+              "score": 0.43100717663764954,
+              "success": false
+            },
+            {
+              "name": "grounded_000",
+              "score": 0.43016886711120605,
+              "success": false
+            },
+            {
+              "name": "grounded_001",
+              "score": 0.4300878047943115,
+              "success": false
+            },
+            {
+              "name": "grounded_032",
+              "score": 0.4297507703304291,
+              "success": false
+            }
+          ]
+        },
+        {
+          "seed": 1631,
+          "candidates": 48,
+          "positives": 6,
+          "full_n_hit": true,
+          "value_hit": true,
+          "value_calls": 1,
+          "value_normalized_calls": 0.020833333333333332,
+          "random_hit": 0.4247610237434474,
+          "random_calls": 3.3020351526364475,
+          "random_normalized_calls": 0.06879239901325933,
+          "original_hit": false,
+          "original_calls": 4,
+          "top_k": [
+            {
+              "name": "grounded_016",
+              "score": 0.4224357008934021,
+              "success": true
+            },
+            {
+              "name": "grounded_000",
+              "score": 0.4219890832901001,
+              "success": false
+            },
+            {
+              "name": "grounded_001",
+              "score": 0.4215453267097473,
+              "success": false
+            },
+            {
+              "name": "grounded_032",
+              "score": 0.4213624596595764,
+              "success": false
+            }
+          ]
+        }
+      ]
+    },
+    "checkpoint": "artifacts/v15_full_system/value_training/pretrain_r2/init_1502/checkpoint.pt"
+  },
+  "checkpoint": "artifacts/v15_full_system/value_training/pretrain_r2/value_v15_selected.pt",
+  "checkpoint_sha256": "9720138360c20ffa6b07ea2af0c3d2062d5b54bc482f22675e135dbf1a89020b",
+  "train_dataset": {
+    "layouts": 4,
+    "rows": 192,
+    "candidates_per_layout": {
+      "1610": 48,
+      "1611": 48,
+      "1612": 48,
+      "1613": 48
+    },
+    "positives_per_layout": {
+      "1610": 7,
+      "1611": 0,
+      "1612": 3,
+      "1613": 0
+    },
+    "feasible_layouts": 2,
+    "mixed_layouts": 2,
+    "strict_reversal_layout_pairs": 1,
+    "reversal_examples": [
+      {
+        "layout_a": 1610,
+        "layout_b": 1612,
+        "a_better_examples": [
+          "grounded_006",
+          "grounded_010",
+          "grounded_014",
+          "grounded_026",
+          "grounded_031",
+          "grounded_034",
+          "grounded_036"
+        ],
+        "b_better_examples": [
+          "grounded_004",
+          "grounded_024",
+          "grounded_025"
+        ],
+        "a_better_count": 7,
+        "b_better_count": 3
+      }
+    ]
+  },
+  "validation_dataset": {
+    "layouts": 2,
+    "rows": 96,
+    "candidates_per_layout": {
+      "1630": 48,
+      "1631": 48
+    },
+    "positives_per_layout": {
+      "1630": 0,
+      "1631": 6
+    },
+    "feasible_layouts": 1,
+    "mixed_layouts": 1,
+    "strict_reversal_layout_pairs": 0,
+    "reversal_examples": []
+  },
+  "train": {
+    "layout_count": 4,
+    "k": 4,
+    "full_n_hit": 0.5,
+    "value_hit": 0.25,
+    "value_calls": 3.25,
+    "value_normalized_calls": 0.06770833333333333,
+    "random_hit": 0.1784548771713434,
+    "random_calls": 3.7082562442183162,
+    "random_normalized_calls": 0.07725533842121492,
+    "original_hit": 0.0,
+    "original_calls": 4.0,
+    "brier": 0.1902221737763512,
+    "pair_accuracy": 0.8246445497630331,
+    "layouts": [
+      {
+        "seed": 1610,
+        "candidates": 48,
+        "positives": 7,
+        "full_n_hit": true,
+        "value_hit": true,
+        "value_calls": 1,
+        "value_normalized_calls": 0.020833333333333332,
+        "random_hit": 0.47954568814883336,
+        "random_calls": 3.1974444958371873,
+        "random_normalized_calls": 0.06661342699660806,
+        "original_hit": false,
+        "original_calls": 4,
+        "top_k": [
+          {
+            "name": "grounded_034",
+            "score": 0.4432275593280792,
+            "success": true
+          },
+          {
+            "name": "grounded_019",
+            "score": 0.44249454140663147,
+            "success": false
+          },
+          {
+            "name": "grounded_018",
+            "score": 0.4422871470451355,
+            "success": false
+          },
+          {
+            "name": "grounded_002",
+            "score": 0.44149982929229736,
+            "success": false
+          }
+        ]
+      },
+      {
+        "seed": 1611,
+        "candidates": 48,
+        "positives": 0,
+        "full_n_hit": false,
+        "value_hit": false,
+        "value_calls": 4,
+        "value_normalized_calls": 0.08333333333333333,
+        "random_hit": 0.0,
+        "random_calls": 4.0,
+        "random_normalized_calls": 0.08333333333333333,
+        "original_hit": false,
+        "original_calls": 4,
+        "top_k": [
+          {
+            "name": "grounded_016",
+            "score": 0.4402933418750763,
+            "success": false
+          },
+          {
+            "name": "grounded_001",
+            "score": 0.4392958879470825,
+            "success": false
+          },
+          {
+            "name": "grounded_000",
+            "score": 0.4388277232646942,
+            "success": false
+          },
+          {
+            "name": "grounded_032",
+            "score": 0.4385017156600952,
+            "success": false
+          }
+        ]
+      },
+      {
+        "seed": 1612,
+        "candidates": 48,
+        "positives": 3,
+        "full_n_hit": true,
+        "value_hit": false,
+        "value_calls": 4,
+        "value_normalized_calls": 0.08333333333333333,
+        "random_hit": 0.23427382053654022,
+        "random_calls": 3.6355804810360777,
+        "random_normalized_calls": 0.07574126002158495,
+        "original_hit": false,
+        "original_calls": 4,
+        "top_k": [
+          {
+            "name": "grounded_016",
+            "score": 0.4371137022972107,
+            "success": false
+          },
+          {
+            "name": "grounded_001",
+            "score": 0.4362252950668335,
+            "success": false
+          },
+          {
+            "name": "grounded_000",
+            "score": 0.43582800030708313,
+            "success": false
+          },
+          {
+            "name": "grounded_032",
+            "score": 0.4358229637145996,
+            "success": false
+          }
+        ]
+      },
+      {
+        "seed": 1613,
+        "candidates": 48,
+        "positives": 0,
+        "full_n_hit": false,
+        "value_hit": false,
+        "value_calls": 4,
+        "value_normalized_calls": 0.08333333333333333,
+        "random_hit": 0.0,
+        "random_calls": 4.0,
+        "random_normalized_calls": 0.08333333333333333,
+        "original_hit": false,
+        "original_calls": 4,
+        "top_k": [
+          {
+            "name": "grounded_016",
+            "score": 0.4259752929210663,
+            "success": false
+          },
+          {
+            "name": "grounded_001",
+            "score": 0.42582574486732483,
+            "success": false
+          },
+          {
+            "name": "grounded_032",
+            "score": 0.42522159218788147,
+            "success": false
+          },
+          {
+            "name": "grounded_000",
+            "score": 0.4244285523891449,
+            "success": false
+          }
+        ]
+      }
+    ]
+  },
+  "validation": {
+    "layout_count": 2,
+    "k": 4,
+    "full_n_hit": 0.5,
+    "value_hit": 0.5,
+    "value_calls": 2.5,
+    "value_normalized_calls": 0.05208333333333333,
+    "random_hit": 0.2123805118717237,
+    "random_calls": 3.6510175763182238,
+    "random_normalized_calls": 0.07606286617329633,
+    "original_hit": 0.0,
+    "original_calls": 4.0,
+    "brier": 0.18618828886144353,
+    "pair_accuracy": 0.4603174603174603,
+    "layouts": [
+      {
+        "seed": 1630,
+        "candidates": 48,
+        "positives": 0,
+        "full_n_hit": false,
+        "value_hit": false,
+        "value_calls": 4,
+        "value_normalized_calls": 0.08333333333333333,
+        "random_hit": 0.0,
+        "random_calls": 4.0,
+        "random_normalized_calls": 0.08333333333333333,
+        "original_hit": false,
+        "original_calls": 4,
+        "top_k": [
+          {
+            "name": "grounded_016",
+            "score": 0.43100717663764954,
+            "success": false
+          },
+          {
+            "name": "grounded_000",
+            "score": 0.43016886711120605,
+            "success": false
+          },
+          {
+            "name": "grounded_001",
+            "score": 0.4300878047943115,
+            "success": false
+          },
+          {
+            "name": "grounded_032",
+            "score": 0.4297507703304291,
+            "success": false
+          }
+        ]
+      },
+      {
+        "seed": 1631,
+        "candidates": 48,
+        "positives": 6,
+        "full_n_hit": true,
+        "value_hit": true,
+        "value_calls": 1,
+        "value_normalized_calls": 0.020833333333333332,
+        "random_hit": 0.4247610237434474,
+        "random_calls": 3.3020351526364475,
+        "random_normalized_calls": 0.06879239901325933,
+        "original_hit": false,
+        "original_calls": 4,
+        "top_k": [
+          {
+            "name": "grounded_016",
+            "score": 0.4224357008934021,
+            "success": true
+          },
+          {
+            "name": "grounded_000",
+            "score": 0.4219890832901001,
+            "success": false
+          },
+          {
+            "name": "grounded_001",
+            "score": 0.4215453267097473,
+            "success": false
+          },
+          {
+            "name": "grounded_032",
+            "score": 0.4213624596595764,
+            "success": false
+          }
+        ]
+      }
+    ]
+  }
+}

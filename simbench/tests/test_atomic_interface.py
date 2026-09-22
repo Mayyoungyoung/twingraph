@@ -26,9 +26,11 @@ def test_graph_has_ten_distinct_atoms_and_no_direction_or_solver_nodes():
     }
     assert {n["name"] for n in graph["nodes"]} == expected == set(PUBLIC_SKILLS)
     assert graph["atom_count"] == 10
-    assert (
-        len(CATALOG) == 30
-    )  # old demo entry points remain available, not public nodes
+    # Registered implementations can grow without creating new public atoms.
+    # Check retained entry points and their actual registry, not an old count.
+    components = {n["name"] for n in catalog_graph(include_components=True)["nodes"]}
+    assert set(CATALOG) <= components
+    assert {"observe_parts", "lift", "lower", "home", "retreat", "move_constrained"} <= set(CATALOG)
     moves = next(n for n in graph["nodes"] if n["name"] == "move")
     assert {"lift", "lower", "home", "retreat", "move_constrained"} <= {
         c["name"] for c in moves["contracts"]

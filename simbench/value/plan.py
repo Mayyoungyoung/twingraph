@@ -256,6 +256,7 @@ class PlanIR:
         if self.prefix.get("execution") == "program":
             if self.protocol != "assembly.program.feedback.v2":
                 raise ValueError("program payload requires v2 execution protocol")
+            v12 = self.prefix.get("skill_version") == "feedback.v12"
             order=[]; choices={}; current=None
             for call in self.calls:
                 args={k:a.value for k,a in call.arguments.items()}
@@ -263,6 +264,10 @@ class PlanIR:
                     current=call.roles["manipulated"]
                     order.append(current)
                     choices[current]=dict(yaw=args["yaws"][0],height=args["height_offset"])
+                    if args.get("width") is not None:
+                        choices[current]["width"] = args["width"]
+                    if "yaw_frame" in args:
+                        choices[current]["grasp_yaw_frame"] = args["yaw_frame"]
                 elif current is not None:
                     if call.skill=="grasp": choices[current]["force"]=args["force"]
                     if call.skill == "move" and "grasp" in args and "strategy" in args:
@@ -274,14 +279,25 @@ class PlanIR:
                             and float(args["delta"][0]) == 0 and float(args["delta"][1]) == 0):
                         choices[current]["lift_first_m"] = float(args["delta"][2])
                     if call.skill=="plan_path" and "clearance" in args: choices[current]["clearance"]=args["clearance"]
+                    if (v12 and call.skill=="plan_path" and "yaw" in args and args["yaw"] is not None
+                            and call.arguments.get("target") is not None
+                            and call.arguments["target"].source_output=="object_to_eef"):
+                        choices[current]["placement_yaw"]=args["yaw"]
                     if call.skill=="move" and args.get("mode")=="guarded": choices[current]["speed"]=args["speed"]
                     # v7 pins use the contact insertion atom rather than the
                     # legacy guarded descent.  Preserve its speed in the
                     # executable semantic reconstruction so a slow/fast pin
                     # candidate cannot be silently collapsed to metadata.
                     if (call.skill == "plan_path" and args.get("method") == "contact"
-                            and "speed" in args and str(current).startswith("pin_")):
+                            and "speed" in args and (str(current).startswith("pin_") or v12)):
                         choices[current]["speed"] = args["speed"]
+                        if v12:
+                            choices[current]["force_limit"] = args["force_limit"]
+                            for field in ("pin_command_depth_m", "pin_press_extra_m"):
+                                if args.get(field) is not None:
+                                    choices[current][field] = args[field]
+                    if v12 and call.skill == "press":
+                        choices[current]["press_force"] = args["force_stop"]
             if plain(order)!=self.prefix["order"] or plain(choices)!=self.prefix["choices"]:
                 raise ValueError("program scoring/execution choices disagree")
             return self

@@ -19,7 +19,10 @@ def fake_session():
     model = SimpleNamespace(geom_size=np.zeros((1, 3)), geom_pos=np.zeros((1, 3)),
                             geom_friction=np.ones((1, 3)))
     return SimpleNamespace(parts=stage.PARTS, grasp_specs=GRASP, held=None, grasp_epoch=0,
-        stage_completed=(), ctx=SimpleNamespace(data=data, model=model, arm_qpos=data.qpos,
+        # Match the legacy Session constructor explicitly. V12 sensor-only
+        # behavior is tested separately; do not weaken production perception
+        # access to compensate for an incomplete SimpleNamespace fixture.
+        decision_observation=None, stage_completed=(), ctx=SimpleNamespace(data=data, model=model, arm_qpos=data.qpos,
         obj_pos=lambda part: np.array([-.2, -.2, .85])))
 
 
@@ -135,7 +138,7 @@ def test_only_initial_supplies_and_holders_move_in_scene_xml(tmp_path):
         assert ET.tostring(before) == ET.tostring(after)
 
 
-def test_real_initial_scenes_and_catalogue_do_not_mutate_live_physics(tmp_path):
+def test_real_initial_scenes_and_rejected_legacy_catalogue_do_not_mutate_live_physics(tmp_path):
     spec, twin, _, targets = stage.make_scene(61000, tmp_path / "twin", "twin")
     other, target, _, _ = stage.make_scene(61000, tmp_path / "target", "target")
     assert spec.config_id == other.config_id
@@ -145,12 +148,14 @@ def test_real_initial_scenes_and_catalogue_do_not_mutate_live_physics(tmp_path):
         assert np.linalg.norm(twin.ctx.obj_pos(part) - targets[part]) > .02
     initial, initial_time = fingerprint(twin), twin.ctx.data.time
     artifacts = copy.deepcopy(twin.artifacts)
-    grasps, evidence = stage.grasp_catalogue(twin, targets)
+    # Full Panda hand collision is now enabled. The legacy +/-1 mm catalogue
+    # correctly rejects its low carriage grasps; rejection must stay read-only.
+    with pytest.raises(stage.CandidateGenerationError, match="no geometrically admissible grasp proposals for carriage") as error:
+        stage.grasp_catalogue(twin, targets)
+    assert "handle_post" in str(error.value) and "hand_collision" in str(error.value)
+    assert "supply_approach_collision" in str(error.value)
     assert fingerprint(twin) == initial and twin.ctx.data.time == initial_time
     assert twin.artifacts == artifacts and twin.results == []
-    assert set(grasps) == set(stage.PARTS) and all(grasps.values())
-    assert any(row["status"] == "nominal_release_collision" for row in evidence)
-    assert all("success" not in row for row in evidence)
     observation = stage.observed(twin, targets)
     assert {g["manipulated"] for g in observation["goals"]} == set(stage.PARTS)
     assert all(g["minimum_eef_clearance_m"] == .02 for g in observation["goals"])

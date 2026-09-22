@@ -31,8 +31,13 @@ METRIC = {
     "halfspan": ("vector", "m", "surface"),
     "hole_offset_m": ("vector", "m", "fixture"),
     "minimum_insertion_depth_m": ("scalar", "m", "fixture"),
+    "pin_command_depth_m": ("scalar", "m", "receiver_axis"),
+    "pin_press_extra_m": ("scalar", "m", "receiver_axis"),
+    "hole_entry_m": ("position", "m", "world"),
     "acceptance": ("category", "", ""), "hole_part": ("object_ref", "", ""),
     "phase": ("category", "", ""), "strategy": ("category", "", ""),
+    "yaw_frame": ("category", "", ""),
+    "required_parts": ("object_refs", "", ""),
 }
 
 
@@ -63,7 +68,7 @@ Scene writes preserve cross-object dependencies after release and motion.
         writes = ["robot", "scene", "object:{part}"]
     if name == "observe_parts":
         writes = ["observations"]
-    if name == "estimate_pose":
+    if name in {"estimate_pose", "inspect_receiver_relation"}:
         reads.append("observations")
     if name in {"close_gripper", "open_gripper", "place_object"}:
         writes.append("holding")
@@ -77,7 +82,14 @@ def validate_ports(spec, params):
         raise ValueError("parameters outside declared execution interface")
     for name, value in params.items():
         p = declared[name]
+        if p.kind == "object_refs" and value is not None:
+            if (not isinstance(value, (tuple, list)) or not value
+                    or any(not isinstance(item, str) for item in value)):
+                raise ValueError(f"expected nonempty object list for {name}")
         if p.kind == "scalar" and value is not None:
             # NumPy numeric scalars are accepted; strings cannot become controls.
             if isinstance(value, str) or not math.isfinite(float(value)):
                 raise ValueError(f"nonfinite/non-numeric scalar port {name}")
+        if name == "max_steps" and value is not None:
+            if isinstance(value, bool) or int(value) != value or not 1 <= int(value) <= 1000:
+                raise ValueError("max_steps must be an integer in [1,1000]")

@@ -1,0 +1,32 @@
+{
+  "schema": "twingraph.codex_planner_response.v15.r1",
+  "round": 0,
+  "authorship": {
+    "module": "Codex assistant in the current interactive task",
+    "user_authorized_codex_as_llm": true,
+    "external_api_call": false,
+    "provider_model_identifier_available_to_repository": false,
+    "created_date": "2026-09-22",
+    "outcome_access": "authored before V15 current-runtime validation or test outcomes were inspected"
+  },
+  "intent_zh": "在完整计划层面覆盖左右插销顺序、四种绕轴抓持方向、关节空间/笛卡尔接近以及温和/高力限接触策略。数值参数必须由当前 RGB-D、CAD、技能端口和控制约束落地，不能由语言模块臆造。",
+  "candidate_count": 16,
+  "selection_slots": [
+    {"id": "left_q0_cartesian", "pin_order": "left_first", "pin_yaw_quadrant": 0, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "left_q0_joint", "pin_order": "left_first", "pin_yaw_quadrant": 0, "approach": "joint_checked", "contact_profile": "gentle"},
+    {"id": "left_q1_cartesian", "pin_order": "left_first", "pin_yaw_quadrant": 1, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "left_q1_joint", "pin_order": "left_first", "pin_yaw_quadrant": 1, "approach": "joint_checked", "contact_profile": "gentle"},
+    {"id": "left_q2_cartesian", "pin_order": "left_first", "pin_yaw_quadrant": 2, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "left_q2_joint", "pin_order": "left_first", "pin_yaw_quadrant": 2, "approach": "joint_checked", "contact_profile": "gentle"},
+    {"id": "left_q3_cartesian", "pin_order": "left_first", "pin_yaw_quadrant": 3, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "left_q3_joint", "pin_order": "left_first", "pin_yaw_quadrant": 3, "approach": "joint_checked", "contact_profile": "gentle"},
+    {"id": "right_q0_cartesian", "pin_order": "right_first", "pin_yaw_quadrant": 0, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "right_q0_joint", "pin_order": "right_first", "pin_yaw_quadrant": 0, "approach": "joint_checked", "contact_profile": "gentle"},
+    {"id": "right_q1_cartesian", "pin_order": "right_first", "pin_yaw_quadrant": 1, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "right_q1_joint", "pin_order": "right_first", "pin_yaw_quadrant": 1, "approach": "joint_checked", "contact_profile": "gentle"},
+    {"id": "right_q2_cartesian", "pin_order": "right_first", "pin_yaw_quadrant": 2, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "right_q2_joint", "pin_order": "right_first", "pin_yaw_quadrant": 2, "approach": "joint_checked", "contact_profile": "gentle"},
+    {"id": "right_q3_cartesian", "pin_order": "right_first", "pin_yaw_quadrant": 3, "approach": "cartesian", "contact_profile": "high_force"},
+    {"id": "right_q3_joint", "pin_order": "right_first", "pin_yaw_quadrant": 3, "approach": "joint_checked", "contact_profile": "gentle"}
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "schema": "twingraph.full_system_protocol.v15.r1",
+  "registered_date": "2026-09-22",
+  "status": "execution closed: architecture GO, historical controlled ranking LIMITED_GO, fresh end-to-end success NO_GO",
+  "task_spec": {
+    "id": "printed_slide_functional_assembly_v15",
+    "instruction_zh": "清洁装配面，依次完成滑台、端挡、双插销和手柄装配；释放并退回后完成双向行程，确认插销保持、挡块捕获以及滑台和手柄最终就位。",
+    "required_parts": [
+      "wipe_tool",
+      "carriage",
+      "end_stop",
+      "pin_left",
+      "pin_right",
+      "handle"
+    ],
+    "goal_predicates": [
+      "cleaning_pass",
+      "assembly_pass",
+      "functional_test_pass",
+      "fixture_capture_pass",
+      "final_seat_pass",
+      "final_release_and_retraction_pass"
+    ],
+    "success_rule": "all goal_predicates true in one fresh complete_functional_task rollout",
+    "input_contract": "registered executable atomic skill graph plus declared observations/CAD; no task-specific value slots"
+  },
+  "candidate_generation": {
+    "planner": "Codex current task selects complete symbolic strategies; planner_v12 grounds them from RGB-D, CAD and registered skills",
+    "codex_as_llm_authorized_by_user": true,
+    "external_llm_api_called": false,
+    "search_pool_n": 48,
+    "round_candidate_n": 16,
+    "top_k": 4,
+    "max_rounds": 2,
+    "round_1_may_use_only_archived_failure_summaries": true
+  },
+  "value_model": {
+    "input_schema": "twingraph.atomic_graph_value.v15.r2",
+    "task_specific_stage_or_part_slots": false,
+    "node_count": "dynamic, no silent truncation, maximum 512",
+    "selection": "maximum validation Hit@4; minimum normalized first-success calls; maximum pair accuracy; minimum Brier; earliest epoch",
+    "training_initializations": [1501, 1502, 1503]
+  },
+  "data": {
+    "audited_historical_pretraining": {
+      "train": [1610, 1611, 1612, 1613],
+      "validation": [1630, 1631],
+      "n": 48,
+      "runtime": "archived V12 native full-task runtime; never mixed as current-runtime evidence"
+    },
+    "current_runtime": {
+      "train": [1950, 1951, 1952, 1953],
+      "validation": [1960, 1961],
+      "test": [1970, 1971],
+      "n": 24,
+      "k": 4,
+      "level": "L1",
+      "domain_train_validation": "train",
+      "domain_test": "online",
+      "layout_split_disjoint": true,
+      "test_outcome_access": "after checkpoint and Codex round-0 response freeze"
+    }
+  },
+  "development_amendment_r2": {
+    "date": "2026-09-22",
+    "trigger": "The first L2 development layout (1950) produced 16/16 failures; several were caused by a compiled max_steps=1800 value that violated the registered explicit-depth insertion limit of 1000.",
+    "actions_before_any_current_validation_or_test_outcome_access": [
+      "cap the compiled explicit-depth insertion budget at 1000 and add a contract regression",
+      "exclude all r1 labels from training because software-contract errors are not physical feasibility labels",
+      "increase the current-runtime pool from 16 to 24",
+      "use L1 for the ranking dataset and retain L2 only as a separately labelled stress diagnostic"
+    ],
+    "train_layout_1950_is_development_seen": true,
+    "validation_and_test_layouts_remained_unopened": true,
+    "new_runtime_and_output_directory_required": true
+  },
+  "execution_amendment_r3": {
+    "date": "2026-09-22",
+    "trigger": "Current-runtime L1 layouts 1950 and 1951 each produced 0/24 successes after the max_steps contract fix.",
+    "actions": [
+      "stop current-runtime matrix collection because two all-negative pools contain no within-layout ranking supervision",
+      "generate a 48-candidate expansion for development layout 1950 and physically try five previously untested candidates; all five failed",
+      "do not open the declared current-runtime validation/test layouts and do not report them as completed",
+      "run the two-round Codex-to-Value-Top4-to-twin integration on an isolated overlay of the audited frozen physical runtime so historical and current-runtime evidence remain separated"
+    ],
+    "actual_current_runtime_attempts": {
+      "1950": {"base_pool_attempted": 24, "expanded_candidates_attempted": 5, "unique_attempted": 29, "successes": 0},
+      "1951": {"base_pool_attempted": 24, "expanded_candidates_attempted": 0, "unique_attempted": 24, "successes": 0}
+    },
+    "declared_validation_and_test_outcomes_accessed": false,
+    "fresh_two_round_seed": 1631,
+    "fresh_two_round_successes": 0,
+    "final_status": "two_round_budget_exhausted"
+  },
+  "baselines": [
+    "full_n_twin",
+    "original_order_top_k",
+    "exact_uniform_random_top_k",
+    "value_top_k"
+  ],
+  "reporting": {
+    "unit": "layout, not candidate row",
+    "cached_rollout_time_is_online_latency": false,
+    "parallel_collection_time_is_online_latency": false,
+    "required": [
+      "full-pool coverage",
+      "Hit@4",
+      "first-success twin calls",
+      "Brier",
+      "same-layout pair accuracy",
+      "measured online generation/ranking/verification time",
+      "failure-stage distribution"
+    ]
+  }
+}

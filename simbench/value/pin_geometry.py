@@ -25,6 +25,13 @@ class PinInsertionConfig:
     # Optional physical entrance bands, (end depth from entry, bore radius).
     # An empty tuple preserves the V7/V8 cylindrical aperture.
     bore_profile: tuple = ()
+    aperture_shape: str = "circular"
+    acceptance_mode: str = "mouth_continuity"
+    # Explicit V12 numerical-contact policy. These do not resize collision
+    # geometry. Legacy scenes keep ideal zero-interpenetration acceptance.
+    contact_robustness: bool = False
+    retention_window_s: float = 0.2
+    retention_samples: int = 5
 
     def manifest(self):
         return {
@@ -38,6 +45,13 @@ class PinInsertionConfig:
             "radial_clearance_m": self.radial_clearance_m,
             "source": self.source,
             "bore_profile_depth_radius_m": [list(row) for row in self.bore_profile],
+            "aperture_shape": self.aperture_shape,
+            "acceptance_mode": self.acceptance_mode,
+            "contact_robustness": self.contact_robustness,
+            "contact_guard_formula": "min(0.05 * shaft_radius, 0.25 * nominal_radial_clearance)" if self.contact_robustness else None,
+            "contact_guard_m": min(.05*self.shaft_radius_m,.25*(self.plate_hole_half_width_m-self.shaft_radius_m)) if self.contact_robustness else 0.,
+            "retention_window_s": self.retention_window_s if self.contact_robustness else 0.,
+            "retention_samples": self.retention_samples if self.contact_robustness else 0,
         }
 
 
@@ -50,12 +64,30 @@ def _unit(vec):
 
 
 def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
-                       config: PinInsertionConfig = PinInsertionConfig(), samples=257):
+                       config: PinInsertionConfig = PinInsertionConfig(), samples=257, hole_axes=None):
     """Evaluate shaft/guide overlap using only supplied geometric quantities."""
     origin = np.asarray(pin_origin, dtype=float)
     paxis = _unit(pin_axis)
     entry = np.asarray(hole_entry, dtype=float)
     haxis = _unit(hole_axis)
+    if config.aperture_shape not in ("circular", "square"):
+        raise ValueError("unsupported aperture shape")
+    if config.acceptance_mode not in ("mouth_continuity", "functional_contiguous"):
+        raise ValueError("unsupported pin acceptance mode")
+    transverse_axes = None
+    if config.aperture_shape == "square":
+        if config.bore_profile:
+            raise ValueError("square aperture cannot use a circular bore profile")
+        if hole_axes is None:
+            if not np.allclose(np.abs(haxis), [0., 0., 1.]):
+                raise ValueError("square hole requires its transverse CAD axes")
+            transverse_axes = np.eye(3)[:2]
+        else:
+            transverse_axes = np.asarray(hole_axes, float)
+        if (transverse_axes.shape != (2, 3)
+                or not np.allclose(transverse_axes @ transverse_axes.T, np.eye(2), atol=1e-6)
+                or not np.allclose(transverse_axes @ haxis, 0., atol=1e-6)):
+            raise ValueError("invalid square-hole CAD axes")
     if samples < 8:
         raise ValueError("samples must be >= 8")
     offsets = np.linspace(config.shaft_tip_offset_m, config.shaft_head_offset_m, int(samples))
@@ -82,17 +114,25 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
         local_bore = np.full_like(depth, bore_radius)
     shaft_cross_section = config.shaft_radius_m / max(axial, 1e-12)
     permitted = bore_radius - config.radial_clearance_m - shaft_cross_section
-    allowed = (depth >= 0.0) & (depth <= config.guide_length_m) & (radial <= local_bore - config.radial_clearance_m - shaft_cross_section)
+    permitted_xy = None
+    if transverse_axes is not None:
+        # The plane section of a tilted cylinder is an ellipse. Its support
+        # radius along each square-hole axis is r*sqrt(1+(axis_i/axis_z)^2).
+        support = config.shaft_radius_m * np.sqrt(1. + ((transverse_axes @ paxis) / max(axial, 1e-12)) ** 2)
+        permitted_xy = config.plate_hole_half_width_m - config.radial_clearance_m - support
+        cross_section_ok = np.all(np.abs(radial_vec @ transverse_axes.T) <= permitted_xy, axis=1)
+        permitted = float(permitted_xy.min())
+    else:
+        cross_section_ok = radial <= local_bore - config.radial_clearance_m - shaft_cross_section
+    allowed = (depth >= 0.0) & (depth <= config.guide_length_m) & cross_section_ok
     valid_depths = depth[allowed]
     max_depth = float(valid_depths.max(initial=0.0))
-    if valid_depths.size:
-        ordered = np.sort(valid_depths)
-        # Largest contiguous span in the sampled axial interval.  This avoids
-        # counting a single tip contact as a deep insertion.
-        gaps = np.diff(ordered)
-        span = float(ordered[-1] - ordered[0]) if not gaps.size else float(ordered[-1] - ordered[0])
-    else:
-        span = 0.0
+    valid_indices = np.flatnonzero(allowed)
+    runs = np.split(valid_indices, np.flatnonzero(np.diff(valid_indices) > 1) + 1) if valid_indices.size else []
+    segments = [[float(depth[run].min()), float(depth[run].max())] for run in runs if run.size]
+    # Never bridge invalid gaps: each counted interval contains consecutive
+    # samples whose full cylinder cross-sections fit the real aperture.
+    span = max((hi-lo for lo, hi in segments), default=0.)
     # Require an uninterrupted solid shaft from the entry plane through the
     # required depth. Endpoint checks suffice because radial offset is convex
     # along a straight shaft and the bore bound is constant over this interval.
@@ -116,15 +156,26 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
                                     bore_radius_m=boundary_bore, permitted_center_offset_m=boundary_permitted))
         if boundary in (0., config.required_depth_m):
             boundary_offsets.append(transverse.tolist())
-        full_depth = full_depth and (config.shaft_tip_offset_m <= offset <= config.shaft_head_offset_m) and (np.linalg.norm(transverse) <= boundary_permitted + 1e-12)
-    inserted = bool(full_depth and config.required_depth_m <= config.guide_length_m)
+        inside = (np.all(np.abs(transverse_axes @ transverse) <= permitted_xy + 1e-12)
+                  if transverse_axes is not None else np.linalg.norm(transverse) <= boundary_permitted + 1e-12)
+        full_depth = full_depth and (config.shaft_tip_offset_m <= offset <= config.shaft_head_offset_m) and inside
+    mouth_continuity = bool(full_depth and config.required_depth_m <= config.guide_length_m)
+    contiguous = bool(span >= config.required_depth_m)
+    inserted = contiguous if config.acceptance_mode == "functional_contiguous" else mouth_continuity
     return {
         "inserted": inserted,
         "max_insertion_depth_m": max_depth,
         "valid_depth_span_m": span,
+        "longest_contiguous_depth_span_m": span,
+        "valid_contiguous_depth_intervals_m": segments,
+        "mouth_continuity_pass": mouth_continuity,
+        "functional_contiguous_pass": contiguous,
+        "acceptance_mode": config.acceptance_mode,
         "minimum_required_depth_m": config.required_depth_m,
         "limiting_bore_radius_m": bore_radius,
         "permitted_center_offset_m": permitted,
+        "aperture_shape": config.aperture_shape,
+        "permitted_center_offset_xy_m": permitted_xy.tolist() if permitted_xy is not None else None,
         "center_offsets_entry_required_m": boundary_offsets,
         "center_offsets_by_depth": profile_offsets,
         "max_radial_error_m": float(radial[allowed].max()) if allowed.any() else float("inf"),
@@ -134,8 +185,8 @@ def insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis,
 
 def evaluate_pin_state(pin_origin, pin_axis, hole_entry, hole_axis,
                        released: bool, touching_finger: bool,
-                       phase="inserted_after_release", config=PinInsertionConfig()):
-    geom = insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis, config)
+                       phase="inserted_after_release", config=PinInsertionConfig(), hole_axes=None):
+    geom = insertion_geometry(pin_origin, pin_axis, hole_entry, hole_axis, config, hole_axes=hole_axes)
     held_ok = bool(geom["inserted"])
     released_ok = bool(released and not touching_finger)
     if phase == "inserted_while_held":
@@ -163,4 +214,9 @@ def evaluate_pin_context(ctx, pin_part, fixture_part="end_stop", hole_offset_m=(
     entry = np.asarray(fpos) + R @ np.asarray(hole_offset_m, dtype=float) + R[:, 2] * .018
     origin = np.asarray(ctx.obj_pos(pin_part), dtype=float)
     axis = np.asarray(ctx.obj_axis(pin_part), dtype=float)
-    return evaluate_pin_state(origin, axis, entry, R[:, 2], released, touching_finger, phase, config)
+    if config.contact_robustness:
+        from .pin_contact_v12 import evaluate_context_contact
+        return evaluate_context_contact(ctx, pin_part, fixture_part, origin, axis, entry, R,
+            released=released, touching_finger=touching_finger, phase=phase, config=config)
+    return evaluate_pin_state(origin, axis, entry, R[:, 2], released, touching_finger, phase, config,
+                              hole_axes=R[:, :2].T)

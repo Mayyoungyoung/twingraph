@@ -110,12 +110,24 @@ def _candidate_mask(rgb: np.ndarray, depth: np.ndarray, template: Mapping) -> np
     # tabletop and the orange accents on the fixed rail.
     tolerance = float(template.get("rgb_tolerance", 72.0))
     mask = dist < tolerance
+    if "hue_tolerance" in template:
+        hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV)
+        prototype_hsv = cv2.cvtColor(proto.astype(np.uint8).reshape(1, 1, 3), cv2.COLOR_RGB2HSV)[0, 0]
+        hue_delta = np.abs(hsv[..., 0].astype(float) - float(prototype_hsv[0]))
+        hue_delta = np.minimum(hue_delta, 180. - hue_delta)
+        mask &= hue_delta <= float(template["hue_tolerance"])
     if template.get("neutral", False):
         hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV)
         mask &= hsv[..., 1] < 120
     mask &= np.isfinite(depth) & (depth > 0.08) & (depth < 5.0)
-    kernel = np.ones((3, 3), np.uint8)
-    return cv2.morphologyEx(mask.astype(np.uint8), cv2.MORPH_OPEN, kernel).astype(bool)
+    mask = mask.astype(np.uint8)
+    close_size = int(template.get("mask_close_kernel", 0))
+    if close_size > 1:
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((close_size, close_size), np.uint8))
+    open_size = int(template.get("mask_open_kernel", 3))
+    if open_size > 1:
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((open_size, open_size), np.uint8))
+    return mask.astype(bool)
 
 
 def _components(mask: np.ndarray):
@@ -158,12 +170,21 @@ def _estimate_component(component, rgb, depth, calibration, template, source_vie
     # lower depth layer (the broad plate top) and keep the boss for quality/
     # orientation diagnostics.  This is image geometry, not simulator state.
     fit_points = points
+    if template.get("reference_mode") == "upper_plane" and len(points) >= 12:
+        top = float(np.quantile(points[:, 2], .98))
+        plane = points[points[:, 2] >= top - float(template.get("plane_band_m", .002))]
+        if len(plane) >= 8:
+            fit_points = plane
+        else:
+            return None
     if template.get("reference_mode") == "lower_plane" and len(points) >= 12:
         cutoff = float(np.quantile(points[:, 2], 0.60))
         plane = points[points[:, 2] <= cutoff]
         if len(plane) >= 8:
             fit_points = plane
     position = np.median(fit_points, axis=0)
+    if template.get("center_mode") == "xy_bounds_midpoint":
+        position[:2] = .5 * (fit_points[:, :2].min(axis=0) + fit_points[:, :2].max(axis=0))
     if template.get("center_mode") == "obb_midpoint" and len(fit_points) >= 12:
         # A boss can add many pixels on one side of a plate.  The midpoint of
         # the oriented point-cloud extents is a better CAD-origin estimate
@@ -228,6 +249,8 @@ def estimate_scene(rgbd_frames: Mapping, camera_calibration: Mapping,
             raise ValueError("RGB and depth shape mismatch")
         cal = _as_calibration(camera_calibration[view])
         for part, template in object_templates.items():
+            if template.get("allowed_views") and view not in template["allowed_views"]:
+                continue
             comps = _components(_candidate_mask(rgb, depth, template))
             eligible = []
             bounds = template.get("world_bounds")
@@ -294,6 +317,7 @@ def to_sensor_observation(result: Mapping, parts) -> dict:
             "valid": bool(row.get("valid", False)), "quality": float(row.get("quality", 0.0)),
             "source_view": row.get("source_view"), "track_id": row.get("track_id"),
             "bbox_xyxy": row.get("bbox_xyxy"), "fit_residual_m": row.get("fit_residual_m"),
+            **({k: row[k] for k in ("geometry_agreement", "diagnostic_hypotheses") if k in row}),
         }
     payload = dict(result)
     payload["objects"] = objects

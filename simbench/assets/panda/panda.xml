@@ -253,21 +253,13 @@
                                 rgba="1 0 0 0" type="sphere" group="1"/>
                           <inertial pos="0 0 0.17" quat="0.707107 0.707107 0 0"
                                     mass="0.3" diaginertia="0.09 0.07 0.05"/>
-                          <!-- hand collision mesh collides with NOTHING
-                               (0/0): the robosuite palm has a finger-rail
-                               slot down the middle, but MuJoCo convex-
-                               hulls mesh collisions, closing the slot.  A
-                               held ring threading down the shaft upper
-                               rides inside that slot; with a solid hull
-                               the contact wedges the shaft sideways and
-                               levers it out of the housing hole
-                               (measured: shoved 10mm, one step +3.1mm).
-                               robosuite's OSC torque controller pushed
-                               through; the bounded position servo here
-                               honestly stalls.  The pads carry all
-                               functional contact. -->
+                          <!-- r7: retain the full, unscaled palm collision
+                               shell. MuJoCo uses a conservative convex hull
+                               (including the mesh slot); motion planning must
+                               avoid it. Historical r6 disabled this shell and
+                               is not evidence of full-gripper clearance. -->
                           <geom pos="0 0 0" quat="0.707107 0 0 0.707107" type="mesh"
-                                contype="0" conaffinity="0"
+                                contype="1" conaffinity="1"
                                 mesh="hand" group="3" name="hand_collision"/>
                           <body name="eef" pos="0 0 0.097" quat="1 0 0 0">
                             <site name="grip_site" pos="0 0 0" size="0.01 0.01 0.01"
@@ -282,17 +274,11 @@
                                   mesh="m_finger_0" material="panda_off_white" name="finger1_v0"/>
                             <geom type="mesh" contype="0" conaffinity="0" group="1"
                                   mesh="m_finger_1" material="panda_black" name="finger1_v1"/>
-                            <!-- finger collision meshes collide with NOTHING
-                                 (0/0): they extend 4.8mm below and are wider
-                                 than the pads, so on low descents they hit
-                                 assembly structure first (measured: shaft
-                                 collar r13mm vs gear outer r10mm, -1.9mm
-                                 penetration blocking the gear seat).  The
-                                 pads (1/1) carry all functional contact.
-                                 robosuite's OSC torque controller pushed
-                                 through these contacts; the bounded
-                                 position servo here honestly stalls. -->
-                            <geom type="mesh" group="3" conaffinity="0" contype="0"
+                            <!-- Full finger hulls remain active alongside
+                                 pads. No fixture/object contact is exempted;
+                                 safe grasp height and orientation must leave
+                                 room for descent, opening and retraction. -->
+                            <geom type="mesh" group="3" conaffinity="1" contype="1"
                                   solref="0.02 1" friction="1 0.005 0.0001" condim="4"
                                   mesh="finger" name="finger1_collision"/>
                             <body name="finger_joint1_tip" pos="0 0.0085 0.056">
@@ -320,8 +306,8 @@
                             <geom quat="0 0 0 1" type="mesh" contype="0" conaffinity="0"
                                   group="1" mesh="m_finger_1" material="panda_black"
                                   name="finger2_v1"/>
-                            <geom quat="0 0 0 1" type="mesh" group="3" conaffinity="0"
-                                  contype="0" solref="0.02 1" friction="1 0.005 0.0001"
+                            <geom quat="0 0 0 1" type="mesh" group="3" conaffinity="1"
+                                  contype="1" solref="0.02 1" friction="1 0.005 0.0001"
                                   condim="4" mesh="finger" name="finger2_collision"/>
                             <body name="finger_joint2_tip" pos="0 -0.0085 0.056">
                               <inertial pos="0 0 0" mass="0.01" diaginertia="0.01 0.01 0.01"/>

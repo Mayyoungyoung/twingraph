@@ -1,0 +1,291 @@
+{
+  "source_commit": "e2cfe0934ead9bf9431f82e5b6a986b26589f472",
+  "cadquery_version": "2.8.0",
+  "trimesh_version": "4.11.1",
+  "scope": "Nominal geometry only; no slicing, printing, strength, friction, vision or robot validation.",
+  "parts": [
+    {
+      "id": "01_guide_base_nominal",
+      "name_zh": "导轨底座（未设计安装孔）",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        236.0,
+        100.46,
+        34.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 3540,
+      "solid_volume_mm3": 405140.888,
+      "pass_geometry": true
+    },
+    {
+      "id": "02_carriage_bridged",
+      "name_zh": "滑块（已补结构连接）",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        54.0,
+        46.0,
+        68.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 868,
+      "solid_volume_mm3": 73786.73,
+      "pass_geometry": true
+    },
+    {
+      "id": "03_end_stop",
+      "name_zh": "端挡（双8 mm方孔）",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        24.0,
+        86.0,
+        49.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 68,
+      "solid_volume_mm3": 77132.0,
+      "pass_geometry": true
+    },
+    {
+      "id": "04_pin",
+      "name_zh": "插销（STL为头朝下）",
+      "quantity": 2,
+      "units": "mm",
+      "print_bbox_mm": [
+        18.0,
+        17.998,
+        61.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 2516,
+      "solid_volume_mm3": 5159.218,
+      "pass_geometry": true
+    },
+    {
+      "id": "05_handle_ring",
+      "name_zh": "手柄环",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        42.0,
+        41.9953,
+        16.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 1680,
+      "solid_volume_mm3": 20296.699,
+      "pass_geometry": true
+    },
+    {
+      "id": "06_pin_supply_holder",
+      "name_zh": "插销供料筒（须固定）",
+      "quantity": 2,
+      "units": "mm",
+      "print_bbox_mm": [
+        20.0,
+        19.9978,
+        38.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 1680,
+      "solid_volume_mm3": 9626.845,
+      "pass_geometry": true
+    },
+    {
+      "id": "07_wipe_tool_rigid",
+      "name_zh": "擦拭工具硬质部分（另加软垫）",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        36.0,
+        28.0,
+        65.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 84,
+      "solid_volume_mm3": 37200.0,
+      "pass_geometry": true
+    },
+    {
+      "id": "08_single_pin_receiver",
+      "name_zh": "独立插销试验孔座（可选）",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        70.0,
+        70.0,
+        54.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 32,
+      "solid_volume_mm3": 261144.0,
+      "pass_geometry": true
+    },
+    {
+      "id": "09_cube_40",
+      "name_zh": "基础抓取方块（可选）",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        40.0,
+        40.0,
+        40.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 12,
+      "solid_volume_mm3": 64000.0,
+      "pass_geometry": true
+    },
+    {
+      "id": "10_pin_fit_coupon",
+      "name_zh": "插销配合试片",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        100.0,
+        44.0,
+        10.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 4336,
+      "solid_volume_mm3": 38876.936,
+      "pass_geometry": true
+    },
+    {
+      "id": "11_handle_fit_coupon",
+      "name_zh": "手柄孔配合试片",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        80.0,
+        24.0,
+        8.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 3392,
+      "solid_volume_mm3": 11671.859,
+      "pass_geometry": true
+    },
+    {
+      "id": "12_post_gauge",
+      "name_zh": "手柄柱测试件",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        26.0,
+        24.0,
+        24.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 852,
+      "solid_volume_mm3": 4396.664,
+      "pass_geometry": true
+    },
+    {
+      "id": "13_rail_fit_segment",
+      "name_zh": "60 mm短导轨试片",
+      "quantity": 1,
+      "units": "mm",
+      "print_bbox_mm": [
+        60.0,
+        98.0,
+        32.0
+      ],
+      "cad_valid": true,
+      "cad_solids": 1,
+      "stl_watertight": true,
+      "stl_winding_consistent": true,
+      "stl_body_count": 1,
+      "step_roundtrip_valid": true,
+      "positive_mesh_volume": true,
+      "triangles": 76,
+      "solid_volume_mm3": 106560.0,
+      "pass_geometry": true
+    }
+  ],
+  "assembly_nominal_overlaps": [],
+  "carriage_stroke_static_checks": {
+    "x_range_mm": [
+      -40,
+      60
+    ],
+    "samples": 21,
+    "overlaps": []
+  },
+  "all_export_checks_passed": true
+}

@@ -78,6 +78,19 @@ class PoseController:
             f"IK unreachable: xyz={goal.tolist()}, residual={np.linalg.norm(ep):.5f}"
         )
 
+    def restart_seeds(self, attempts=24):
+        """Deterministic coverage of local and distant redundant-arm branches."""
+        rng = np.random.default_rng(917)
+        low, high = self.limits[:, 0] + .02, self.limits[:, 1] - .02
+        seeds = [self.ctx.arm_qpos.copy(), np.clip(HOME, low, high)]
+        for index in range(attempts):
+            if index < attempts * 2 // 3:
+                seed = HOME + rng.normal(0., .7, 7)
+            else:
+                seed = rng.uniform(low, high)
+            seeds.append(np.clip(seed, low, high))
+        return seeds
+
     def ik_with_restarts(self, xyz, rotation=None, attempts=12):
         """Bounded deterministic alternatives for a redundant seven-joint arm.
 
@@ -88,10 +101,10 @@ class PoseController:
             return self.ik(xyz, rotation)
         except ValueError as first:
             rng = np.random.default_rng(17)
-            for _ in range(attempts):
-                seed = np.clip(HOME + rng.normal(0, .3, 7),
-                               self.limits[:, 0] + .02,
-                               self.limits[:, 1] - .02)
+            seeds = (self.restart_seeds(attempts) if getattr(self, "continuous_grasp_v12", False)
+                     else [np.clip(HOME + rng.normal(0, .3, 7), self.limits[:, 0] + .02,
+                                   self.limits[:, 1] - .02) for _ in range(attempts)])
+            for seed in seeds:
                 try:
                     q = self.ik(xyz, rotation, seed=seed)
                     if self.check_joint_path([q])["valid"]:
@@ -100,13 +113,16 @@ class PoseController:
                     continue
             raise first
 
-    def check_joint_path(self, joints, held=None, step=0.035):
+    def check_joint_path(self, joints, held=None, step=0.035, start_q=None,
+                         held_transform=None, finger_gap=None):
         """Discrete robot/environment and carried-part clearance check in scratch data."""
         ctx = self.ctx
         d = self.scratch
         m = ctx.model
         d.qpos[:] = ctx.data.qpos
-        q0 = ctx.arm_qpos.copy()
+        q0 = ctx.arm_qpos.copy() if start_q is None else np.asarray(start_q, float).copy()
+        if finger_gap is not None:
+            d.qpos[ctx.finger_qadr] = [float(finger_gap), -float(finger_gap)]
         samples = 0
         robot = {
             i
@@ -119,11 +135,15 @@ class PoseController:
         if held:
             jid = int(m.body_jntadr[held_id])
             qa = int(m.jnt_qposadr[jid])
-            R0 = ctx.eef_mat()
-            local = R0.T @ (ctx.obj_pos(held) - ctx.eef_pos())
-            local_R = R0.T @ ctx.data.xmat[held_id].reshape(3, 3)
+            if held_transform is None:
+                R0 = ctx.eef_mat()
+                local = R0.T @ (ctx.obj_pos(held) - ctx.eef_pos())
+                local_R = R0.T @ ctx.data.xmat[held_id].reshape(3, 3)
+            else:
+                local = np.asarray(held_transform["position"], float)
+                local_R = np.asarray(held_transform["rotation"], float)
         for q1 in joints:
-            for t in np.linspace(0, 1, max(2, int(np.max(np.abs(q1 - q0)) / step) + 1)):
+            for t in np.linspace(0, 1, max(2, int(np.ceil(np.max(np.abs(q1 - q0)) / step)) + 1)):
                 d.qpos[ctx.arm_qadr] = q0 + t * (q1 - q0)
                 mujoco.mj_forward(m, d)
                 if held:
@@ -156,6 +176,19 @@ class PoseController:
                     )
             q0 = q1
         return dict(valid=True, samples=samples, resolution_rad=step)
+
+    def execute_joint_waypoints(self, joints):
+        """Execute a checked continuous branch without rerunning pointwise IK."""
+        ctx = self.ctx
+        for qgoal in joints:
+            q0 = ctx.arm_qpos.copy()
+            duration=max(.10, float(np.max(np.abs(qgoal-q0))) * 2.5)
+            for t in np.linspace(0., 1., max(3, int(duration / ctx.control_dt))):
+                blend=t*t*(3.-2.*t)
+                ctx.set_arm_ctrl(q0+blend*(qgoal-q0)); ctx.step()
+        for _ in range(30):
+            ctx.set_arm_ctrl(joints[-1]); ctx.step()
+        return bool(np.max(np.abs(ctx.arm_qpos-joints[-1])) < .012)
 
     def execute_joint(self, qgoal, duration=None):
         ctx = self.ctx
@@ -242,7 +275,8 @@ class PoseController:
         return ctx.grasp_contacts(part)
 
     def part_target(self, part, xyz):
-        return np.asarray(xyz) + self.ctx.eef_pos() - self.ctx.obj_pos(part)
+        position = getattr(self, "object_position", self.ctx.obj_pos)
+        return np.asarray(xyz) + self.ctx.eef_pos() - position(part)
 
     def carry(self, part, xyz, speed=0.055):
         return self.move(self.part_target(part, xyz), speed=speed)

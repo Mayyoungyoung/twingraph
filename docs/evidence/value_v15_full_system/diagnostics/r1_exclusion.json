@@ -1,0 +1,22 @@
+{
+  "schema": "twingraph.v15_excluded_development_diagnostic.r1",
+  "layout": 1950,
+  "level": "L2",
+  "candidate_count": 16,
+  "complete_collection": true,
+  "successful_complete_tasks": 0,
+  "failure_prefix_counts": {
+    "learned_insert": 6,
+    "lift": 4,
+    "approach": 2,
+    "IK unreachable": 2,
+    "press_seat": 2
+  },
+  "software_contract_defect": "stage_v5 compiled max_steps=1800 while explicit-depth sensor_learning_v12 accepts only integer budgets in [1,1000]",
+  "disposition": "excluded from all V15 training, validation and physical-feasibility statistics",
+  "fix": "compile max_steps=1000 and reject out-of-range max_steps during pre-execution port validation",
+  "follow_up_smoke": "The same grounded_010 plan no longer failed at the interface boundary; it entered the measured contact controller and failed on its actual 4.04 N force limit.",
+  "runtime_sha256": "40f435cbe1b089a3a102cc15e02debfbf6f4d1153372dbff7474703713b86a8b",
+  "archived_collection_summary_sha256": "72f2dfe593d23b6284588f9f1972d922e809cab18efc840a0632e6d313b73c66",
+  "archived_request_sha256": "0c0f679f01cf00c02209f583fbe10bc2e082319a037085a08019d320e3000365"
+}

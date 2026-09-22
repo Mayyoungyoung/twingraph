@@ -165,10 +165,27 @@ def legal_orders(orders=None):
     return result
 
 
-def stage_calls(part, target, choice, stage, v7=False, functional_clearance=False):
+def stage_calls(part, target, choice, stage, v7=False, functional_clearance=False, v12=False,
+                receiver_geometry=None, assembly_target=None, cad=None):
     """Original task.py operations, with feedback transforms kept deferred."""
     calls = []
     target = np.asarray(target, float)
+    receiver_geometry = receiver_geometry or {}
+    explicit_pin = v12 and part.startswith("pin_") and "pin_command_depth_m" in choice
+    pin_entry = pin_axis = pin_align = None
+    if explicit_pin:
+        if not assembly_target or not cad:
+            raise ValueError("explicit pin plan requires observed receiver geometry and CAD")
+        pin_entry = np.asarray(assembly_target["hole_entry_m"], float)
+        outward = np.asarray(assembly_target["axis"], float)
+        outward /= np.linalg.norm(outward)
+        pin_axis = -outward
+        depth = float(choice["pin_command_depth_m"])
+        tip_offset = float(cad["pin_shaft_offsets_m"][0])
+        target = pin_entry + pin_axis * (depth + tip_offset)
+        # A deep endpoint plus a fixed 30-mm hover could already put the
+        # tip inside the hole before the contact controller starts.
+        pin_align = pin_entry - outward * tip_offset + outward * .010
     def add(skill, **params):
         cid = f"stage{stage}_{len(calls)}"
         calls.append(Call(cid, skill, {k: v if isinstance(v, Argument) else argument(v)
@@ -181,11 +198,16 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
         return Argument(plain(value), "position", "deferred", "world", "m", producer, output)
     add("detect")
     add("estimate_pose", part=part)
-    add("estimate_grasp", part=part, yaws=argument([choice["yaw"]], unit="rad"),
-        height_offset=argument(choice["height"], unit="m"))
+    yaw_frame = choice.get("grasp_yaw_frame", "world")
+    add("estimate_grasp", part=part, yaws=argument([choice["yaw"]], unit="rad", frame=yaw_frame),
+        height_offset=argument(choice["height"], unit="m"),
+        **(dict(yaw_frame=argument(yaw_frame)) if "grasp_yaw_frame" in choice else {}),
+        **(dict(width=argument(choice["width"], unit="m")) if "width" in choice else {}))
     grasp = add("select_grasp", part=part)
     add("plan_path", target=feedback([0, 0, .10], grasp, "grasp_hover"),
-        yaw=argument(choice["yaw"], unit="rad"), clearance=argument(choice["clearance"], unit="m"))
+        yaw=(Argument(None, "scalar", "deferred", unit="rad", frame="world", source_call=grasp,
+                      source_output="grasp_yaw") if yaw_frame == "object" else argument(choice["yaw"], unit="rad")),
+        clearance=argument(choice["clearance"], unit="m"))
     add("move", path="transfer")
     approach_params = dict(grasp="grasp", part=part)
     if "approach_strategy" in choice:
@@ -202,22 +224,30 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
     else:
         held = add("move", part=part, delta=xyz([0, 0, .10]))
     if part == "carriage":
-        approach = np.r_[CENTER + [-.155, 0], CAR_Z + .030]
+        approach = np.asarray(receiver_geometry.get("rail", {}).get("entry_approach_m",
+            np.r_[CENTER + [-.155, 0], CAR_Z + .030]), float)
+    elif explicit_pin:
+        approach = pin_align - pin_axis * .035
     else:
-        approach = target + [0, 0, .069 if part.startswith("pin_") else .045]
+        approach = target + [0, 0, (.030 if v12 else .069) if part.startswith("pin_") else .045]
+    placement_yaw = (argument(choice["placement_yaw"], unit="rad")
+                     if v12 and "placement_yaw" in choice
+                     else Argument(None, "scalar", "deferred", unit="rad", source_call=held, source_output="grasp_yaw"))
     add("plan_path", target=feedback(approach, held),
-        yaw=Argument(None, "scalar", "deferred", unit="rad", source_call=held, source_output="grasp_yaw"),
+        yaw=placement_yaw,
         clearance=argument(choice["clearance"], unit="m"))
     add("move", path="transfer")
     if part == "carriage":
         add("move", part=part, delta=xyz([0, 0, -.030]))
-        add("move", reference="object", part=part, target=xyz(np.r_[approach[:2], CAR_Z + .0015]))
+        entry = np.asarray(receiver_geometry.get("rail", {}).get("entry_m",
+            np.r_[approach[:2], CAR_Z]), float)
+        add("move", reference="object", part=part, target=xyz(entry + [0, 0, .0015]))
         add("plan_path", method="contact", part=part, target=xyz(target + [0, 0, .0015]),
-            axis=argument([1., 0., 0.], unit="1"), speed=argument(.025, unit="m/s"),
-            force_limit=argument(18., unit="N"))
+            axis=argument(receiver_geometry.get("rail", {}).get("axis", [1., 0., 0.]), unit="1"), speed=argument(choice.get("speed", .025) if v12 else .025, unit="m/s"),
+            force_limit=argument(choice.get("force_limit", 18.) if v12 else 18., unit="N"))
         add("insert", part=part)
     else:
-        align = target + [0, 0, .010 if part == "end_stop" else .023 if part == "handle" else .069]
+        align = pin_align if explicit_pin else target + [0, 0, .010 if part == "end_stop" else .023 if part == "handle" else .030 if v12 else .069]
         if part == "end_stop":
             add("plan_path", method="cartesian", target=feedback(align, held))
             add("move", path="linear", space="cartesian")
@@ -225,17 +255,31 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
         if v7 and part.startswith("pin_"):
             # The full-task branch uses the existing contact insertion atom
             # for pins; the legacy v5/v6 guarded descent remains unchanged.
+            depth_ports = (dict(pin_command_depth_m=argument(choice["pin_command_depth_m"], unit="m"),
+                               pin_press_extra_m=argument(choice["pin_press_extra_m"], unit="m"),
+                               hole_entry_m=xyz(pin_entry)) if explicit_pin else {})
             add("plan_path", method="contact", part=part, target=xyz(target),
-                axis=argument([0., 0., -1.], unit="1"),
-                speed=argument(choice.get("speed", .006), unit="m/s"), force_limit=argument(12., unit="N"))
-            add("insert", part=part)
+                axis=argument(pin_axis.tolist() if explicit_pin else [0., 0., -1.], unit="1"),
+                speed=argument(choice.get("speed", .006), unit="m/s"),
+                force_limit=argument(choice.get("force_limit", 12.) if v12 else 12., unit="N"), **depth_ports)
+            if v12:
+                # sensor_learning_v12 deliberately caps an explicit-depth
+                # insertion at 1000 control steps.  Keep the compiled PlanIR
+                # inside the registered skill contract; 1800 was rejected at
+                # execution time and created false-negative candidate labels.
+                add("insert", part=part, strategy="learned", max_steps=1000)
+            else:
+                add("insert", part=part)
         else:
             add("move", mode="guarded", part=part, target_z=argument(float(target[2]), unit="m"),
-                force_stop=argument(2. if part == "end_stop" else 3., unit="N"),
+                force_stop=argument(choice.get("press_force", 2. if part == "end_stop" else 3.) if v12
+                                    else 2. if part == "end_stop" else 3., unit="N"),
                 speed=argument(choice.get("speed", .006), unit="m/s"))
     press = dict(part=part, target_z=argument(float(target[2]), unit="m"))
     if part == "handle":
         press["force_stop"] = argument(2., unit="N")
+    if v12:
+        press["force_stop"] = argument(choice.get("press_force", 2.5), unit="N")
     add("press", **press)
     place_tol = .0025 if (v7 and part.startswith("pin_")) else .003
     add("place", part=part, target=xyz(target), tol=argument(place_tol, unit="m"), settle=argument(.35, unit="s"),
@@ -248,7 +292,7 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
         # Clear the pin head laterally before lifting.  Raising the fingers
         # while they are still above a narrow, slightly tilted head can drag
         # the released pin out of its hole even though contact has ceased.
-        if functional_clearance:
+        if functional_clearance or v12:
             add("move", delta=xyz([0, 0, .10]))
         else:
             side = -0.030 if part == "pin_left" else 0.030
@@ -257,15 +301,22 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
     else:
         add("move", delta=xyz([0, 0, .10]))
     inspect_tol = .0025 if (v7 and part.startswith("pin_")) else .0015
-    if v7 and part.startswith("pin_"):
+    if explicit_pin:
+        add("inspect", what="pin_joint", part=part, phase="inserted_after_release")
+    elif v7 and part.startswith("pin_"):
         add("inspect", what="pin", part=part, hole_part="end_stop",
             hole_offset_m=argument([0., -.032 if part == "pin_left" else .032, 0.], unit="m"),
             minimum_insertion_depth_m=argument(.006, unit="m"), phase=argument("inserted_after_release"))
     else:
         add("inspect", part=part, target=xyz(target), tol=argument(inspect_tol, unit="m"))
-    if part == "carriage":
+    if part == "carriage" and not v12:
         add("measure", quantity="clearance", part=part)
         add("inspect", what="measurement", minimum=argument(1.e-12, unit="m"))
+    if v12:
+        add("move", target="home")
+        if part == "end_stop" and assembly_target:
+            add("detect", required_parts=["end_stop"])
+            add("inspect", what="receiver_relation", part=part)
     return calls
 
 
@@ -277,16 +328,24 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
     if initial_route_index not in (0, 1, 2):
         raise ValueError("invalid initial route index")
     functional_clearance = bool(getattr(session, "task_version", "").startswith("functional_assembly_v9"))
+    v12 = bool(getattr(session, "functional_acceptance_v12", False))
+    observation = getattr(session, "decision_observation", None) or {}
+    receiver_targets = getattr(session, "receiver_execution_targets", None) or observation.get("assembly_targets", {})
     calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i, v7=v7,
-                                                                functional_clearance=functional_clearance)]
+        functional_clearance=functional_clearance, v12=v12,
+        receiver_geometry=observation.get("receiver_geometry", {}),
+        assembly_target=receiver_targets.get(p), cad=getattr(session, "planning_cad", None))]
     for part in PARTS:
-        if functional_clearance and part == "end_stop":
+        if (functional_clearance or v12) and part == "end_stop":
             # The stop was checked when first seated. Pin insertion may move
             # the loose fixture inside its cradle. V9 judges the resulting
             # assembly by retained pins and the actual later stroke, not by
             # a second nominal-world-pose constraint before that stroke.
             continue
-        if v7 and part.startswith("pin_"):
+        if v12 and part.startswith("pin_") and "pin_command_depth_m" in choices[part]:
+            calls.append(Call(f"accept_{part}", "inspect", dict(what=argument("pin_joint"),
+                part=argument(part), phase=argument("inserted_after_release")), {"manipulated":part}, "checker"))
+        elif v7 and part.startswith("pin_"):
             calls.append(Call(f"accept_{part}", "inspect", dict(what=argument("pin"), part=argument(part),
                 hole_part=argument("end_stop"),
                 hole_offset_m=argument([0., -.032 if part == "pin_left" else .032, 0.], unit="m"),
@@ -306,7 +365,7 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
     payload = dict(id=cid, part=order[0], execution="program", start_state=fingerprint(session),
         steps=[dict(skill=c.skill, params={k: a.value for k, a in c.arguments.items()}) for c in calls[:boundary]],
         **semantics, semantic_program_id=semantic_id, task_precedence=plain(PRECEDENCE),
-        completed_parts=[], cost=0., skill_version="feedback.v2")
+        completed_parts=[], cost=0., skill_version="feedback.v12" if v12 else "feedback.v2")
     return PlanIR(cid, calls, boundary, payload, "unknown", protocol="assembly.program.feedback.v2").validate(session.parts)
 
 

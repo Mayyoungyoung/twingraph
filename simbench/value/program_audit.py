@@ -15,7 +15,9 @@ def audit_program(plan,objects):
     if plan.prefix.get("execution")!="program":
         return dict(status="legacy_bound_prefix",unknown=["physical suffix feasibility"])
     state=State(parts=tuple(objects),grasp_epoch=plan.prefix.get("initial_grasp_epoch",0),
-                artifacts=initial_artifacts(plan));unknown=[]
+                artifacts=initial_artifacts(plan),
+                capabilities={p:tuple(row.get("capabilities", ())) for p,row in objects.items()}
+                    if isinstance(objects, dict) else {});unknown=[]
     producers={c.id:(i,c) for i,c in enumerate(plan.calls)}
     last_grasp=-1
     for i,call in enumerate(plan.calls):

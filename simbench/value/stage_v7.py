@@ -292,6 +292,8 @@ def visual_templates(installed=False):
 
 
 def capture_detector(session, size=DETECTOR_SIZE):
+    if getattr(session, "capture_detector_fn", None):
+        return session.capture_detector_fn(session, size=getattr(session, "detector_size", size))
     arrays = capture_vision(session, size=size)
     calibrations = camera_calibrations(session, size=size)
     frames = {name: {"rgb": arrays[f"{name}_rgb"], "depth_mm": arrays[f"{name}_depth_mm"]} for name in VIEW_NAMES}
@@ -299,15 +301,33 @@ def capture_detector(session, size=DETECTOR_SIZE):
 
 
 def install_visual(session, parts=ALL_PARTS, size=DETECTOR_SIZE):
-    frames, calibrations = capture_detector(session, size=size)
+    size = getattr(session, "detector_size", size)
+    acquire = getattr(session, "capture_detector_fn", capture_detector)
+    frames, calibrations = acquire(session, size=size)
     installed = bool(getattr(session, "stage_passes", {}).get("assembly_pass"))
     templates_fn = getattr(session, "visual_templates_fn", visual_templates)
-    result = estimate_scene(frames, calibrations, templates_fn(installed=installed))
+    detector = getattr(session, "perception_estimator_fn", estimate_scene)
+    if getattr(session, "perception_estimator_fn", None):
+        previous = (session.decision_observation or {}).get("objects")
+        result = detector(frames, calibrations, templates_fn(installed=installed), previous_estimates=previous)
+    else:
+        result = detector(frames, calibrations, templates_fn(installed=installed))
     observation = to_sensor_observation(result, parts)
     observation["calibration"] = {k: v.manifest() for k, v in calibrations.items()}
     observation["detector_resolution"] = [int(size[1]), int(size[0])] if isinstance(size, (tuple, list)) else [int(size), int(size)]
     observation["config"] = {"backend": "rgbd_geometry", "detector_resolution": observation["detector_resolution"],
                                "value_input_resolution": [IMAGE_SIZE, IMAGE_SIZE], "calibration_version": "mujoco-pinhole-v1"}
+    if getattr(session, "last_rgbd_acquisition", None):
+        # Identity binds the measured frame and calibration, not runtime
+        # scheduling. Full scan timings/checks remain in acquisition artifacts.
+        sensor_fields = ("backend", "camera_names", "mount_body", "hand_from_camera",
+                         "fovy_deg", "mounting_status", "calibration_source", "arm_joints_rad",
+                         "simulation_time_s", "external_camera_used", "object_pose_used",
+                         "scan_motion", "scan_status")
+        observation["acquisition"] = {key: copy.deepcopy(session.last_rgbd_acquisition[key])
+                                      for key in sensor_fields if key in session.last_rgbd_acquisition}
+        observation["config"]["acquisition_backend"] = session.last_rgbd_acquisition["backend"]
+        observation["config"]["calibration_version"] = next(iter(calibrations.values())).version
     unsigned = {k: v for k, v in observation.items() if k != "sha256"}
     observation["sha256"] = hashlib.sha256(__import__("json").dumps(unsigned, sort_keys=True, allow_nan=False).encode()).hexdigest()
     session.set_decision_observation(observation)
@@ -335,7 +355,9 @@ def save_vision(path, arrays):
 
 
 def _full_plan(session, targets, order, choices, wipe_variant, wipe_force, wipe_duration, stroke_minimum):
-    if float(stroke_minimum) != TASK_STROKE_MINIMUM_M:
+    required_stroke = (float(getattr(session,"planning_cad",{}).get("functional_stroke_minimum_m", .02))
+                       if getattr(session,"functional_acceptance_v12",False) else TASK_STROKE_MINIMUM_M)
+    if not np.isclose(float(stroke_minimum),required_stroke,rtol=0,atol=1e-12):
         raise ValueError("candidate cannot change task stroke requirement")
     params = dict(order=list(order), choices=plain(choices), wipe_variant=int(wipe_variant), wipe_force=float(wipe_force),
                   wipe_duration=float(wipe_duration), stroke_minimum=float(stroke_minimum))

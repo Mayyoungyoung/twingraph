@@ -1,0 +1,20 @@
+{
+  "source": "Codex authored in response to the RAL system experiment request, 2026-09-21",
+  "task": "Clean the rail, install carriage, end stop, two pins and handle, then verify bidirectional stroke and retained pins.",
+  "graph_constraints": ["clean before assembly", "carriage before end_stop", "end_stop before pins", "both pins before handle", "handle before stroke", "pin retention after stroke"],
+  "grounding": "Use current RGB-D object heights for transport clearance, detector residual for contact speed, and observed source distance for pin order. Cartesian targets are resolved by existing perception/planning skills.",
+  "strategies": [
+    {"name":"adaptive_base","action":"base","rationale":"Use observed clearance and uncertainty with the nearer supply pin first."},
+    {"name":"alternate_order","action":"reverse_pins","rationale":"Change intermediate robot configuration and the order of fixture loading."},
+    {"name":"slow_contact","action":"pin_slow","rationale":"Reduce contact motion speed when pin seating or fixture motion is uncertain."},
+    {"name":"firm_grip","action":"pin_firm","rationale":"Increase pin grasp force to resist slip during transport."},
+    {"name":"gentle_grip","action":"pin_gentle","rationale":"Reduce gripping force to avoid excessive contact loading."},
+    {"name":"high_pin_grasp","action":"pin_high_grasp","rationale":"Change finger clearance near the pin holder and guide."},
+    {"name":"high_transport","action":"clearance_high","rationale":"Increase transfer height above the observed supply layout."},
+    {"name":"low_transport","action":"clearance_low","rationale":"Use a lower route to change arm configuration and path length."},
+    {"name":"slow_stop_seating","action":"stop_slow","rationale":"Seat the fixture slowly to improve the downstream hole state."},
+    {"name":"alternate_wipe","action":"wipe_reverse","rationale":"Traverse the same cleaning region from the opposite direction."},
+    {"name":"cross_handle_grasp","action":"handle_cross_grasp","rationale":"Change the handle approach direction when the fixture restricts finger access."},
+    {"name":"cross_first_pin_grasp","action":"pin_cross_grasp","rationale":"Change the first pin approach direction to alter holder exit motion."}
+  ]
+}

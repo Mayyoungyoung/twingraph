@@ -218,7 +218,7 @@ def test_orchestrator_rejects_changed_target_task_parameters(tmp_path, monkeypat
             FakeScorer(), tmp_path, stage=stage, runner_factory=FakeRunner)
 
 
-def test_real_five_part_graph_rebind_preserves_initial_state_and_selected_order(tmp_path):
+def test_real_five_part_graph_rebind_preserves_initial_state_and_selected_order(tmp_path, monkeypatch):
     from simbench.value import stage_v5 as stage
     from simbench.assembly.candidates import fingerprint
     _, twin, _, goals = stage.make_scene(61000, tmp_path / "twin", role="twin")
@@ -229,6 +229,11 @@ def test_real_five_part_graph_rebind_preserves_initial_state_and_selected_order(
     assert twin.stage_completed == target.stage_completed == ()
     assert all(np.linalg.norm(twin.ctx.obj_pos(part) - goals[part]) > .01 for part in stage.PARTS)
     order = stage.legal_orders()[-1]
+    # Rebinding preserves program identity; it does not certify this legacy
+    # grasp catalogue, whose old low heights collide with the full hand shell.
+    monkeypatch.setattr(stage, "grasp_catalogue", lambda *args: (
+        {part: [dict(yaw=0., height=0.)] for part in stage.PARTS},
+        [dict(status="software_binding_fixture_not_physical_feasibility")]))
     plans, _ = stage.build_pool(twin, goals, 61000, n=1, orders=[order])
     assert plans[0].prefix["order"] == list(order)
     assert fingerprint(twin) == initial

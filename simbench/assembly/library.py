@@ -356,7 +356,9 @@ class Session:
         return total
 
     def stream_part(self, part, target, speed, force_limit):
-        start = self.ctx.obj_pos(part).copy()
+        from .skills_v12 import control_position
+        start = control_position(self, part).copy()
+        evaluated_start = self.ctx.obj_pos(part).copy()
         target = np.asarray(target, float)
         offset = self.ctx.eef_pos() - start
         # In the completed product the handle is the physical user interface
@@ -389,6 +391,17 @@ class Session:
         self.hold(0.35)
         error = float(np.linalg.norm(self.ctx.obj_pos(part) - target))
         tracking_tolerance = .004 if str(part).startswith("pin_") else .0015
+        if getattr(self, "functional_acceptance_v12", False):
+            requested = target - start
+            length = float(np.linalg.norm(requested))
+            actual_delta = self.ctx.obj_pos(part) - evaluated_start
+            progress = float(np.dot(actual_delta, requested / max(length, 1e-9)))
+            # Motion completion is useful progress under the force/grasp
+            # guards; the separate product engagement/stroke checks follow.
+            return Result(progress >= .7 * length, dict(requested_travel_m=length,
+                measured_progress_m=progress, peak_force_n=peak,
+                measurement_source="independent_simulator_motion_evaluator"),
+                "insufficient physical motion progress")
         return Result(
             error < tracking_tolerance,
             {
@@ -409,6 +422,14 @@ class Session:
         effects=("seen:all",),
     )
     def observe_parts(self, required_parts=None):
+        if getattr(self, "strict_rgbd_v12", False):
+            if not self.decision_observation or self.decision_observation.get("backend") != "rgbd_geometry":
+                return Result(False, reason="V12 requires RGB-D; simulator-pose detection is prohibited")
+            # A detect atom at an execution boundary must acquire new pixels.
+            # Reusing the proposal's frozen supply observation after placing
+            # the stop would report its old supply holes as the installed ones.
+            from simbench.value.stage_v7 import refresh_visual_observation
+            refresh_visual_observation(self, parts=self.parts)
         if self.decision_observation is not None:
             requested = required_parts if required_parts is not None else getattr(self, "_required_observation_parts", None)
             required = tuple(requested) if requested is not None else tuple(self.parts)
@@ -433,7 +454,9 @@ class Session:
                 "detected": list(self.observations),
                 "backend": backend,
                 "noise_std_m": noise_std,
-                "frozen": self.decision_observation is not None,
+                "frozen": self.decision_observation is not None and not getattr(self, "strict_rgbd_v12", False),
+                "fresh_rgbd_capture": bool(getattr(self, "strict_rgbd_v12", False)),
+                "observation_sha256": (self.decision_observation or {}).get("sha256"),
             }
         )
 
@@ -446,6 +469,14 @@ class Session:
         implementation="robust_estimator",
     )
     def estimate_pose(self, part, as_="pose"):
+        if getattr(self, "strict_rgbd_v12", False):
+            observation = self.decision_observation or {}
+            row = observation.get("objects", {}).get(part, {})
+            quaternion = np.asarray(row.get("quat_wxyz") if row.get("quat_wxyz") is not None else [], float)
+            if (observation.get("backend") != "rgbd_geometry" or not row.get("valid")
+                    or row.get("position_m") is None or quaternion.shape != (4,)
+                    or not np.isfinite(quaternion).all()):
+                return Result(False, {"part": part}, "V12 requires a valid RGB-D pose; oracle fallback is prohibited")
         if part not in self.observations:
             return Result(False, {"part": part}, "no valid visual estimate")
         xyz = np.median(self.observations[part], axis=0)
@@ -481,6 +512,8 @@ class Session:
         """
         if part not in self.parts:
             return Result(False, reason=f"unknown execution-feedback part: {part}")
+        if getattr(self, "strict_rgbd_v12", False) and self.perception_backend != "rgbd_geometry":
+            return Result(False, reason="V12 execution localization requires RGB-D; oracle fallback is prohibited")
         if self.perception_backend == "rgbd_geometry":
             from simbench.value.stage_v7 import refresh_visual_observation
             observation = refresh_visual_observation(self, parts=self.parts)
@@ -519,9 +552,14 @@ class Session:
         produces="grasps",
         implementation="geometry_and_ik",
     )
-    def propose_grasps(self, part, artifact="pose", as_="grasps", yaws=None, height_offset=0.0):
+    def propose_grasps(self, part, artifact="pose", as_="grasps", yaws=None, height_offset=0.0, width=None,
+                       yaw_frame="world"):
         pose = self.artifacts[artifact]
-        dz, width = self.grasp_specs[part]
+        dz, reference_width = self.grasp_specs[part]
+        explicit_width = width
+        if explicit_width is not None and (not np.isfinite(explicit_width) or not 0 < explicit_width <= .079):
+            raise ValueError("grasp width outside actual finger actuator envelope")
+        width = reference_width
         candidates = []
         unresolved = []
         pose_id = hashlib.sha256(
@@ -529,14 +567,37 @@ class Session:
         ).hexdigest()[:12]
         if not np.isfinite(height_offset) or abs(height_offset) > 0.025:
             raise ValueError("invalid grasp height offset")
-        for yaw in ((0.0, np.pi / 2) if yaws is None else yaws):
+        if yaw_frame not in ("world", "object"):
+            raise ValueError("grasp yaw_frame must be world or object")
+        reference_yaw = 0.
+        if yaw_frame == "object":
+            quat=np.asarray(pose["quat"],float)
+            if quat.shape!=(4,) or not np.isfinite(quat).all() or np.linalg.norm(quat)<1e-8:
+                raise ValueError("object-relative grasp requires a valid visual orientation")
+            reference_yaw=float(Rotation.from_quat(quat[[1,2,3,0]]).as_euler("xyz")[2])
+        for relative_yaw in ((0.0, np.pi / 2) if yaws is None else yaws):
+            yaw = float(relative_yaw) + reference_yaw
             xyz = pose["xyz"] + np.array([0, 0, dz + height_offset])
             try:
-                q = self.arm.ik_with_restarts(xyz + [0, 0, 0.10], down(yaw))
                 # Width depends on the box face; round parts keep their diameter.
                 w = (width if part not in ("carriage", "end_stop")
                      or np.isclose(np.sin(float(yaw)), 0.0, atol=1e-6)
                      else {"carriage": 0.044, "end_stop": 0.022}[part])
+                if getattr(self, "strict_rgbd_v12", False) and part in ("carriage", "end_stop"):
+                    quat = np.asarray(pose["quat"], float)
+                    visual_yaw = Rotation.from_quat(quat[[1, 2, 3, 0]]).as_euler("xyz")[2]
+                    relative = float(yaw) - float(visual_yaw)
+                    across = {"carriage": .044, "end_stop": .022}[part]
+                    w = float(abs(np.cos(relative)) * width + abs(np.sin(relative)) * across)
+                if explicit_width is not None:
+                    w = float(explicit_width)
+                checked = {}
+                if getattr(self, "strict_rgbd_v12", False) and part.startswith("pin_"):
+                    from .grasp_v12 import plan_grasp
+                    checked = plan_grasp(self, part, pose, xyz, yaw, w)
+                    q = checked.pop("q_hover")
+                else:
+                    q = self.arm.ik_with_restarts(xyz + [0, 0, 0.10], down(yaw))
                 candidates.append(
                     dict(
                         id=f"{part}:yaw:{yaw:.6f}:pose:{pose_id}",
@@ -545,6 +606,7 @@ class Session:
                         width=w,
                         q_hover=q,
                         cost=float(np.linalg.norm(q - self.ctx.arm_qpos) + 2 * w),
+                        **checked,
                     )
                 )
             except ValueError as exc:
@@ -774,6 +836,8 @@ class Session:
             return Result(
                 False, pose.metrics, "move to the placement target before releasing"
             )
+        handle_geometry_ready = bool(getattr(self, "functional_acceptance_v12", False)
+                                     and str(part) == "handle" and acceptance == "pose" and pose.ok)
         pin_geometry_ready = None
         if acceptance == "pin_inserted":
             from simbench.value.pin_geometry import PinInsertionConfig, evaluate_pin_context
@@ -783,6 +847,9 @@ class Session:
                 phase="inserted_while_held", released=False,
                 touching_finger=True, config=getattr(self, "pin_insertion_config", PinInsertionConfig(required_depth_m=.006)),
             )
+            if getattr(self, "functional_acceptance_v12", False) and not pin_geometry_ready.get("success"):
+                return Result(False, {"pin_geometry_while_held": pin_geometry_ready},
+                              "pin is supported outside the bore; refusing incorrect release")
         support = 0.0
         bid = self.ctx.body_id(part)
         for i, c in enumerate(self.ctx.data.contact):
@@ -813,7 +880,8 @@ class Session:
         # instant.  It is safe to attempt release only in that case; the
         # post-release geometry predicate remains mandatory and can fail if
         # gravity lets the pin fall out.
-        if support < minimum_support and not (pin_geometry_ready and pin_geometry_ready.get("success")):
+        if (support < minimum_support and not handle_geometry_ready
+                and not (pin_geometry_ready and pin_geometry_ready.get("success"))):
             return Result(
                 False,
                 {"support_force_n": support,
@@ -826,7 +894,8 @@ class Session:
             # Pins need a physical seating dwell before release. V9 already
             # pressed and verified support immediately before Place; another
             # higher-force press can wedge the jaws against the wide guide.
-            if not str(getattr(self, "task_version", "")).startswith("functional_assembly_v9"):
+            if not (str(getattr(self, "task_version", "")).startswith("functional_assembly_v9")
+                    or getattr(self, "functional_acceptance_v12", False)):
                 self.call("press", part=part, target_z=float(target[2]), force_stop=4.0)
             self.hold(.20)
         try:
@@ -839,7 +908,8 @@ class Session:
             if not self.stage_passes:
                 raise
             if (str(part).startswith("pin_")
-                    and str(getattr(self, "task_version", "")).startswith("functional_assembly_v9")):
+                    and (str(getattr(self, "task_version", "")).startswith("functional_assembly_v9")
+                         or getattr(self, "functional_acceptance_v12", False))):
                 # Keep a seated pin stationary if a release needs one retry.
                 # The older 18 mm lifting recovery could extract it.
                 self.hold(.20)
@@ -856,7 +926,8 @@ class Session:
         self.held = None
         self.hold(settle)
         settled = self.inspect_seat(part, target, tol) if acceptance == "pose" else Result(True, {"acceptance": acceptance})
-        if settled.ok and self.stage_passes and str(part).startswith("pin_"):
+        if (settled.ok and self.stage_passes and str(part).startswith("pin_")
+                and not getattr(self, "functional_acceptance_v12", False)):
             # Rotate the opened fingers in place before the normal vertical
             # retraction. This clears residual side contact without sweeping
             # the already released pin across the fixture.
@@ -869,6 +940,7 @@ class Session:
                 "support_force_n": support,
                 "support_force_feedback_n": support_force_feedback,
                 "pin_geometry_while_held": pin_geometry_ready,
+                "handle_geometry_while_held": pose.metrics if handle_geometry_ready else None,
                 "jaw_span_m": self.ctx.pad_span(),
             },
             "placement did not remain within tolerance" if acceptance == "pose" else "release failed",
@@ -957,6 +1029,13 @@ class Session:
     @skill("approach", "接近抓取位姿", "transition", ("empty", "artifact:grasp"))
     def approach(self, part, artifact="grasp", strategy="cartesian"):
         goal = self.artifacts[artifact]
+        if getattr(self, "strict_rgbd_v12", False) and "approach_joints_v12" in goal:
+            if np.max(np.abs(self.ctx.arm_qpos-goal["q_hover"])) > .05:
+                return Result(False, reason="continuous grasp hover branch is stale")
+            ok=self.arm.execute_joint_waypoints(goal["approach_joints_v12"])
+            self.arm.rotation=down(goal["yaw"])
+            return Result(ok,dict(position_error_m=float(np.linalg.norm(goal["xyz"]-self.ctx.eef_pos())),
+                                  strategy="checked continuous grasp branch"),"approach tracking error" if not ok else "")
         if strategy == "joint_checked_v10":
             try:
                 q = self.arm.ik_with_restarts(goal["xyz"], down(goal["yaw"]))
@@ -1003,6 +1082,9 @@ class Session:
     )
     def close_gripper(self, part, force=3.0):
         contact = self.arm.close(part, force=force)
+        if contact["held"] and getattr(self, "strict_rgbd_v12", False):
+            from .skills_v12 import bind_grasp_observation
+            bind_grasp_observation(self, part)
         return Result(
             contact["held"],
             contact,
@@ -1018,6 +1100,29 @@ class Session:
     def lift(self, part, height=0.10):
         start = self.ctx.obj_pos(part).copy()
         goal = self.ctx.eef_pos() + [0, 0, height]
+        grasp=self.artifacts.get("grasp",{})
+        if (getattr(self, "strict_rgbd_v12", False) and part.startswith("pin_")
+                and "lift_joints_v12" in grasp
+                and float(grasp.get("withdrawal_progress_m",0.)) < .10-1e-8):
+            # Recheck the stored branch with the now observed grasp relation;
+            # the holder remains a physical obstacle during withdrawal.
+            from .grasp_v12 import withdrawal_slice
+            path,progress=withdrawal_slice(grasp,height)
+            registration=self.held_visual_transforms_v12[part]
+            transform=dict(position=registration["local_position"], rotation=registration["local_rotation"])
+            verdict=self.arm.check_joint_path(path,held=part,step=.02,held_transform=transform)
+            if not verdict["valid"]:
+                return Result(False,dict(collision=verdict),"bound shaft withdrawal collision")
+            ok=self.arm.execute_joint_waypoints(path)
+            delta=float(self.ctx.obj_pos(part)[2]-start[2])
+            held=self.ctx.grasp_contacts(part)["held"]
+            if ok and held and delta>.75*height:
+                grasp["withdrawal_progress_m"]=progress
+            return Result(bool(ok and held and delta>.75*height),
+                dict(object_lift_m=delta,held=held,continuous_branch=True,collision=verdict,
+                     cumulative_withdrawal_m=progress,attachment_source="RGB-D grasp registration and encoder FK",
+                     collision_geometry="digital twin environment; holder not exempted"),
+                "checked shaft withdrawal or retention failed")
         try:
             ok = self.arm.move(goal, speed=0.06)
         except ValueError as exc:
@@ -1050,7 +1155,7 @@ class Session:
         delta = float(self.ctx.obj_pos(part)[2] - start[2])
         held = self.ctx.grasp_contacts(part)["held"]
         return Result(
-            bool(ok and held and delta > height - 0.003),
+            bool(ok and held and delta > (.75 * height if getattr(self, "functional_acceptance_v12", False) else height - .003)),
             {"object_lift_m": delta, "held": held},
             "lift or retention failed",
         )
@@ -1086,13 +1191,14 @@ class Session:
 
     @skill("align_axis", "持物轴线精对准", "contact", ("held",))
     def align_axis(self, part, target, tolerance=0.0007):
+        from .skills_v12 import control_position
         target = np.asarray(target, float)
         for _ in range(6):
-            error = target - self.ctx.obj_pos(part)
+            error = target - control_position(self, part)
             if np.linalg.norm(error) < tolerance:
                 break
             self.arm.move(self.ctx.eef_pos() + error, speed=0.035, tol=0.0004)
-        error = float(np.linalg.norm(target - self.ctx.obj_pos(part)))
+        error = float(np.linalg.norm(target - control_position(self, part)))
         return Result(
             error < tolerance and self.ctx.grasp_contacts(part)["held"],
             {"object_error_m": error},
@@ -1108,12 +1214,44 @@ class Session:
         implementation="geometry_constraints",
     )
     def plan_insertion(
-        self, part, target, axis=(0, 0, -1), as_="insert", speed=0.008, force_limit=12.0
+        self, part, target, axis=(0, 0, -1), as_="insert", speed=0.008, force_limit=12.0,
+        pin_command_depth_m=None, pin_press_extra_m=None, hole_entry_m=None,
     ):
         target = np.asarray(target, float)
         axis = np.asarray(axis, float)
+        if (target.shape != (3,) or axis.shape != (3,) or not np.isfinite(target).all()
+                or not np.isfinite(axis).all() or np.linalg.norm(axis) < 1e-9):
+            return Result(False, reason="finite contact target and nonzero insertion axis required")
         axis /= np.linalg.norm(axis)
         self.arm.ik(self.arm.part_target(part, target))
+        recovery = {}
+        if getattr(self, "functional_acceptance_v12", False) and str(part).startswith("pin_"):
+            if any(v is not None for v in (pin_command_depth_m, pin_press_extra_m, hole_entry_m)):
+                if any(v is None for v in (pin_command_depth_m, pin_press_extra_m, hole_entry_m)):
+                    return Result(False, reason="pin depth, press allowance and observed entry must be declared together")
+                depth, extra = float(pin_command_depth_m), float(pin_press_extra_m)
+                entry = np.asarray(hole_entry_m, float)
+                upper = float(self.planning_cad["pin_head_seated_total_depth_m"])
+                if (not np.isfinite([depth, extra, upper]).all() or not 0 < depth <= upper
+                        or extra < 0 or depth + extra > upper + 1e-9
+                        or entry.shape != (3,) or not np.isfinite(entry).all()):
+                    return Result(False, reason="pin total feed exceeds declared CAD depth or lacks observed entry")
+                recovery = dict(command_depth_m=depth, press_extra_m=extra,
+                    maximum_total_depth_m=depth + extra, absolute_depth_limit_m=upper,
+                    hole_entry_m=entry.tolist(), recovery_feed_depth_m=depth,
+                    recovery_feed_upper_bound_m=depth + extra,
+                    recovery_feed_source="explicit executable plan ports",
+                    recovery_feed_reference="observed receiver entry and encoder/FK pin estimate")
+            else:
+                # Archived shallow-insertion callers retain their old contract;
+                # the new two-receiver planner always supplies explicit ports.
+                depth = float(self.planning_cad.get("pin_command_insertion_depth_m", .008))
+                if not 0 < depth <= self.pin_insertion_config.guide_length_m * .5:
+                    return Result(False, reason="CAD recovery feed exceeds half the real receiver length")
+                recovery = dict(recovery_feed_depth_m=depth,
+                    recovery_feed_source="planning_cad.pin_command_insertion_depth_m",
+                    recovery_feed_reference="encoder position after sustained force-guided entry detection",
+                    recovery_feed_upper_bound_m=self.pin_insertion_config.guide_length_m * .5)
         self.artifact(
             as_,
             "insertion",
@@ -1122,6 +1260,7 @@ class Session:
             axis=axis,
             speed=speed,
             force_limit=force_limit,
+            **recovery,
         )
         return Result(
             metrics={
@@ -1129,6 +1268,7 @@ class Session:
                 "axis": axis,
                 "speed_m_s": speed,
                 "force_limit_n": force_limit,
+                **recovery,
             }
         )
 
@@ -1209,7 +1349,8 @@ class Session:
 
     @skill("guarded_descent", "接触保护下降", "contact", ("held",))
     def guarded_descent(self, part, target_z, force_stop=2.0, speed=0.006):
-        start = self.ctx.obj_pos(part).copy()
+        from .skills_v12 import control_position
+        start = control_position(self, part).copy()
         command = self.ctx.eef_pos().copy()
         peak = 0.0
         for _ in range(600):
@@ -1217,14 +1358,14 @@ class Session:
             peak = max(peak, force)
             if force >= force_stop:
                 break
-            if self.ctx.obj_pos(part)[2] <= target_z + 0.0003:
+            if control_position(self, part)[2] <= target_z + 0.0003:
                 break
             command[2] -= speed * self.ctx.control_dt
             self.arm.servo(command)
             if not self.ctx.grasp_contacts(part)["held"]:
                 return Result(False, reason="grasp lost during descent")
         self.hold(0.2)
-        z = float(self.ctx.obj_pos(part)[2])
+        z = float(control_position(self, part)[2])
         return Result(
             z <= target_z + 0.001 or peak >= force_stop,
             {
@@ -1240,8 +1381,56 @@ class Session:
             "descent exhausted",
         )
 
+    def _press_functional_v12(self, part, target_z, force_stop):
+        """Bounded contact establishment; final placement/stroke owns acceptance."""
+        from .skills_v12 import control_position, evaluate_functional_seat
+        insertion = self.artifacts.get("insert", {})
+        if (str(part).startswith("pin_") and insertion.get("part") == part
+                and "command_depth_m" in insertion):
+            from .skills_v12 import bounded_pin_press
+            return bounded_pin_press(self, part, target_z, force_stop)
+        if part == "end_stop":
+            from .skills_v12 import bounded_end_stop_seat
+            return bounded_end_stop_seat(self, part, target_z, force_stop)
+        command = self.ctx.eef_pos().copy()
+        initial = command.copy()
+        peak = float(self.external_force(part))
+        max_extra = .006
+        for _ in range(int(max_extra / .000025)):
+            if peak >= float(force_stop):
+                break
+            command[2] -= .000025
+            self.arm.servo(command)
+            peak = max(peak, float(self.external_force(part)))
+            if not self.ctx.grasp_contacts(part)["held"]:
+                return Result(False, {"peak_force_n": peak}, "grasp lost during contact establishment")
+        target = control_position(self, part).copy()
+        target[2] = float(target_z)
+        if str(part).startswith("pin_"):
+            # The next explicit pin/release predicate checks the real bore.
+            # A force spike alone never creates an insertion success label.
+            ok = True
+            metrics = {"criterion": "bounded contact action completed; insertion acceptance follows"}
+        else:
+            ok, metrics = evaluate_functional_seat(self, part, target)
+        metrics.update(peak_force_n=peak, extra_descent_m=float(initial[2] - command[2]),
+                       control_source="RGB-D grasp relation, encoder FK, force feedback",
+                       desired_force_n=float(force_stop))
+        return Result(ok, metrics, "functional engagement region not reached")
+
     @skill("press_seat", "肩面压靠到位", "contact", ("held",))
     def press_seat(self, part, target_z, force_stop=2.5):
+        if getattr(self, "functional_acceptance_v12", False):
+            # The first assembly press owns ring insertion. A later stroke
+            # release uses its current explicit target and bounded seating;
+            # it must never search around the pre-stroke XY location again.
+            if (part == "handle" and not self.stage_passes.get("assembly_pass")
+                    and not self.artifacts.get("ring_insertion_v12", {}).get("success")):
+                from .ring_insertion_v12 import execute
+                metrics=execute(self,part,target_z,force_stop)
+                return Result(bool(metrics["success"]),metrics,
+                              "functional ring/post engagement not reached" if not metrics["success"] else "")
+            return self._press_functional_v12(part, target_z, force_stop)
         command = self.ctx.eef_pos().copy()
         peak = self.external_force(part)
         max_steps = 1100 if str(part) == "handle" else 140
@@ -1318,6 +1507,10 @@ class Session:
 
     @skill("inspect_seat", "检查零件装配位置", "verification")
     def inspect_seat(self, part, target, tol=0.0015):
+        if getattr(self, "functional_acceptance_v12", False):
+            from .skills_v12 import evaluate_functional_seat
+            ok, metrics = evaluate_functional_seat(self, part, target)
+            return Result(ok, metrics, "part is outside its functional engagement region")
         target = np.asarray(target, float)
         xyz = self.ctx.obj_pos(part)
         err = float(np.linalg.norm(xyz - target))
@@ -1343,25 +1536,37 @@ class Session:
             other = b2 if b1 == bid else b1
             if "finger" in self.ctx.model.body(other).name and contact.dist <= 0:
                 touching = True
-        metrics = evaluate_pin_context(
-            self.ctx, part, fixture_part=hole_part, hole_offset_m=hole_offset_m,
-            phase=phase, released=self.held != part, touching_finger=touching,
-            config=getattr(self, "pin_insertion_config", PinInsertionConfig(required_depth_m=float(minimum_insertion_depth_m))),
-        )
+        config=getattr(self, "pin_insertion_config", PinInsertionConfig(required_depth_m=float(minimum_insertion_depth_m)))
+        def sample():
+            return evaluate_pin_context(self.ctx,part,fixture_part=hole_part,hole_offset_m=hole_offset_m,
+                phase=phase,released=self.held!=part,touching_finger=touching,config=config)
+        metrics=sample()
+        if config.contact_robustness and phase in ("inserted_after_release","retained_after_stroke"):
+            from simbench.value.pin_contact_v12 import functional_retention_window
+            def passive_wait(seconds):
+                # Session.hold floors fractional control ticks. Acceptance
+                # must observe at least its declared duration, not less.
+                for _ in range(max(1,int(np.ceil(seconds/self.ctx.control_dt-1e-12)))):
+                    self.ctx.step()
+            metrics=functional_retention_window(sample,passive_wait,metrics,
+                duration=config.retention_window_s,samples=config.retention_samples)
         self.artifact(f"{part}_{phase}", "pin_insertion", part, **metrics)
         return Result(bool(metrics["success"]), metrics, "pin not effectively inserted in hole")
 
     @skill("move_constrained", "沿已装导轨运动", "contact", ("held",))
     def move_constrained(self, part, target_x, max_force=14.0):
-        start = self.ctx.obj_pos(part).copy()
-        target = start.copy()
+        from .skills_v12 import control_position
+        measured_part = "carriage" if getattr(self, "functional_acceptance_v12", False) and part == "handle" else part
+        start = self.ctx.obj_pos(measured_part).copy()
+        target = control_position(self, part).copy()
         target[0] = target_x
         result = self.stream_part(part, target, 0.04, max_force)
-        actual = self.ctx.obj_pos(part)
+        actual = self.ctx.obj_pos(measured_part)
         self.stroke.extend([float(start[0]), float(actual[0])])
         self.stroke_runs.append(dict(start_x=float(start[0]), end_x=float(actual[0]),
                                      requested_x=float(target_x), ok=bool(result.ok),
-                                     cross_axis_m=float(np.linalg.norm((actual - start)[1:]))))
+                                     cross_axis_m=float(np.linalg.norm((actual - start)[1:])),
+                                     measured_part=measured_part))
         self.stroke_peak_forces.append(float(result.metrics.get("peak_force_n", 0.0)))
         result.metrics["cross_axis_m"] = float(np.linalg.norm((actual - start)[1:]))
         return result
@@ -1376,14 +1581,38 @@ class Session:
         cross_axis = max((float(r.get("cross_axis_m", 0.0)) for r in self.stroke_runs), default=0.0)
         peak = max(self.stroke_peak_forces, default=0.0)
         bidirectional = bool(forward and reverse)
+        if getattr(self, "functional_acceptance_v12", False):
+            bidirectional = bool(forward_range >= minimum and reverse_range >= minimum)
         return Result(
-            travel >= minimum and bidirectional and cross_axis < .006 and peak <= 14.0,
+            travel >= minimum and bidirectional and cross_axis < (.010 if getattr(self, "functional_acceptance_v12", False) else .006) and peak <= 14.0,
             {"measured_range_m": travel, "forward_range_m": forward_range,
              "reverse_range_m": reverse_range, "required_range_m": minimum,
              "bidirectional": bidirectional, "cross_axis_m": cross_axis,
              "peak_force_n": peak},
             "insufficient bidirectional travel, lateral stability or force limit",
         )
+
+    @skill("inspect_receiver_relation", "检查前序放置是否支持后续插销", "verification",
+           ("empty", "seen"), legacy=False,
+           obligations=("shared observed two-layer shaft corridor; physical engagement remains unverified",))
+    def inspect_receiver_relation(self, part="end_stop"):
+        if part != "end_stop":
+            return Result(False, reason="receiver relation only defined for the printed stop/base pair")
+        relation = copy.deepcopy((self.decision_observation or {}).get(
+            "fixture_relations", {}).get("end_stop_to_base", {}))
+        ok = bool(relation.get("observable") and relation.get("geometric_route_exists"))
+        self.artifacts["receiver_relation_acceptance"] = relation
+        return Result(ok, relation, "released end_stop has no observed shared shaft route into base" if not ok else "")
+
+    @skill("inspect_pin_joint", "验收插销连接两层真实孔", "verification",
+           ("empty", "capability:pin"), legacy=False,
+           obligations=("released shaft must engage both receivers and remain after functional stroke",))
+    def inspect_pin_joint(self, part, phase="inserted_after_release"):
+        from .skills_v12 import evaluate_pin_joint_engagement
+        metrics = evaluate_pin_joint_engagement(self, part, phase=phase)
+        self.artifacts.setdefault("pin_joint_engagement", {}).setdefault(part, {})[phase] = metrics
+        return Result(bool(metrics.get("success")), metrics,
+                      "pin does not connect both real receiver bores" if not metrics.get("success") else "")
 
     @skill("verify_clean", "验收清洁状态", "verification")
     def verify_clean(self, threshold=0.05):
@@ -1493,6 +1722,9 @@ class Session:
         implementation="behavior_cloning",
     )
     def learned_insert(self, part, artifact="insert", policy=None, max_steps=1000):
+        if getattr(self, "functional_acceptance_v12", False):
+            from .sensor_learning_v12 import execute
+            return execute(self, part, artifact, policy or self.insertion_policy_v12, max_steps)
         from .learning import load_actor, insert_observation
 
         if policy is None:

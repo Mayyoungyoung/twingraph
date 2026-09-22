@@ -119,6 +119,8 @@ AUXILIARY_INTERFACES = {
     "inspect": {
         "pose": "inspect_seat",
         "pin": "inspect_pin_inserted",
+        "pin_joint": "inspect_pin_joint",
+        "receiver_relation": "inspect_receiver_relation",
         "grasp": "verify_grasp",
         "stroke": "verify_stroke",
         "clean": "verify_clean",

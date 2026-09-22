@@ -67,6 +67,21 @@ def release_space_proxy(session, part, grasp, terminal):
     )
 
 
+def transfer_route_points(start, target, height):
+    """Route through the requested world-height plane, not the HOME height.
+
+    The Panda HOME pose is deliberately high.  Carrying that Z unchanged
+    during a long lateral move can make an otherwise reachable supply pose
+    fail IK.  Descending or rising at the current XY before translating keeps
+    the declared clearance semantics and is checked like every other segment.
+    """
+    start=np.asarray(start,float);target=np.asarray(target,float);height=float(height)
+    if start.shape!=(3,) or target.shape!=(3,) or not np.isfinite([*start,*target,height]).all():
+        raise ValueError("transfer route requires finite 3D endpoints and height")
+    plane=max(height,float(target[2]))
+    return [np.r_[start[:2],plane],np.r_[target[:2],plane],target.copy()]
+
+
 def transfer_routes(
     session, target, clearance=0.98, yaw=0.0, grasp=None, grasp_artifact="grasp"
 ):
@@ -90,11 +105,7 @@ def transfer_routes(
             yaw=float(yaw),
             status="unknown",
         )
-        points = [
-            np.r_[start[:2], max(height, start[2], target[2])],
-            np.r_[target[:2], max(height, start[2], target[2])],
-            target,
-        ]
+        points = transfer_route_points(start,target,height)
         joints = []
         try:
             # Explore a fixed budget of arm postures for redundant IK. Every
@@ -106,13 +117,20 @@ def transfer_routes(
                         session.arm.limits[:, 1] - .02)
                 for _ in range(12)
             ]
+            if (getattr(session, "strict_rgbd_v12", False) and grasp
+                    and "approach_joints_v12" in grasp):
+                seeds = [np.asarray(grasp["q_hover"]).copy()] + session.arm.restart_seeds(24)
             verdict = dict(valid=None, status="unknown")
             for restart, seed in enumerate(seeds):
                 q = seed.copy()
                 attempt_joints = []
                 try:
-                    for point in points:
-                        q = session.arm.ik(point, down(yaw), seed=q)
+                    for point_index, point in enumerate(points):
+                        bound_hover = (getattr(session, "strict_rgbd_v12", False) and not session.held
+                            and grasp and "approach_joints_v12" in grasp
+                            and np.linalg.norm(target-(np.asarray(grasp["xyz"])+[0,0,.10])) < 1e-6)
+                        q = (np.asarray(grasp["q_hover"]).copy() if bound_hover and point_index==2
+                             else session.arm.ik(point, down(yaw), seed=q))
                         attempt_joints.append(q.copy())
                     candidate_verdict = session.arm.check_joint_path(attempt_joints, session.held)
                 except ValueError as exc:

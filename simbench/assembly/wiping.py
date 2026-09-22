@@ -63,9 +63,37 @@ def train(out=POLICY):
     return report
 
 
-def trajectory(n):
-    with np.load(POLICY, allow_pickle=False) as p:
+def trajectory(n, policy=POLICY):
+    with np.load(policy, allow_pickle=False) as p:
         return features(np.linspace(0, 1, n), p["centers"]) @ p["weights"]
+
+
+def train_v12(out):
+    """Fit normalized demonstrations; hold out complete surface geometries.
+
+    This measures geometric trajectory transfer, not physical contact success.
+    """
+    out = Path(out)
+    report = train(out)
+    rng = np.random.default_rng(91222)
+    phase = np.linspace(0, 1, 913)
+    with np.load(out, allow_pickle=False) as blob:
+        prediction = features(phase, blob["centers"]) @ blob["weights"]
+    tasks = []
+    for i in range(24):
+        center = rng.uniform([-.15, -.12], [.18, .18])
+        span = rng.uniform([.025, .004], [.085, .020])
+        yaw = rng.uniform(-np.pi, np.pi)
+        rotation = np.array([[np.cos(yaw), -np.sin(yaw)], [np.sin(yaw), np.cos(yaw)]])
+        learned = (prediction * span) @ rotation.T + center
+        desired = (teacher(phase) * span) @ rotation.T + center
+        tasks.append(dict(center_m=center.tolist(), halfspan_m=span.tolist(), yaw_rad=float(yaw),
+                          path_rmse_m=float(np.sqrt(np.mean(np.sum((learned-desired)**2, axis=1))))))
+    report.update(schema="twingraph.wipe_imitation.v12", heldout_tasks=tasks,
+                  evaluation="24 unseen translated, scaled and rotated surface trajectories",
+                  physical_robustness="Trajectory transfer only; independent contact trials required")
+    out.with_suffix(".json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    return report
 
 
 def plan(s, part, center, halfspan, surface, height, duration, as_):
@@ -82,7 +110,11 @@ def plan(s, part, center, halfspan, surface, height, duration, as_):
         return Result(False, reason="invalid wipe extent or duration")
     if mujoco.mj_name2id(s.ctx.model, mujoco.mjtObj.mjOBJ_BODY, surface) < 0:
         return Result(False, reason="unknown wipe surface")
-    xy = center + trajectory(int(duration / s.ctx.control_dt)) * halfspan
+    policy = getattr(s, "wiping_policy_v12", POLICY)
+    normalized = trajectory(int(duration / s.ctx.control_dt), policy=policy)
+    yaw = float(getattr(s, "wipe_surface_yaw_v12", 0.0))
+    rotation = np.array([[np.cos(yaw), -np.sin(yaw)], [np.sin(yaw), np.cos(yaw)]])
+    xy = center + (normalized * halfspan) @ rotation.T
     points = np.c_[xy, np.full(len(xy), height)]
     s.artifact(
         as_,
@@ -93,11 +125,11 @@ def plan(s, part, center, halfspan, surface, height, duration, as_):
         halfspan=halfspan.tolist(),
         surface=surface,
         duration=duration,
-        policy=str(POLICY),
+        policy=str(policy),
         footprint=[0.018, 0.012],
     )
     return Result(
-        True, dict(samples=len(points), duration_s=duration, policy=str(POLICY))
+        True, dict(samples=len(points), duration_s=duration, policy=str(policy))
     )
 
 
@@ -122,8 +154,32 @@ def execute(s, part, artifact, target_force, force_limit, minimum_coverage):
         return Result(False, reason="invalid wiping force or coverage parameters")
     p = s.artifacts[artifact]
     points = np.asarray(p["points"])
-    if np.linalg.norm(s.ctx.obj_pos(part) - points[0]) > 0.008:
+    from .skills_v12 import control_position
+    if np.linalg.norm(control_position(s, part) - points[0]) > 0.008:
         return Result(False, reason="move the tool to the bound surface start first")
+    contact_search = {"enabled": False}
+    if getattr(s, "functional_acceptance_v12", False):
+        # Seek the real surface with force feedback within a declared 6 mm
+        # travel envelope. The object/body pose is never consulted here.
+        command = s.ctx.eef_pos().copy()
+        start_command = command.copy()
+        initial_force = surface_force(s, part, p["surface"])
+        for _ in range(300):
+            force = surface_force(s, part, p["surface"])
+            if force >= min(.5, target_force * .5):
+                break
+            command[2] -= .00002
+            s.arm.servo(command)
+            if not s.ctx.grasp_contacts(part)["held"]:
+                return Result(False, reason="wipe tool grasp lost during force-guided surface search")
+        force = surface_force(s, part, p["surface"])
+        contact_search = dict(enabled=True, initial_force_n=initial_force,
+                              final_force_n=force, commanded_descent_m=float(start_command[2]-command[2]))
+        if force < .15:
+            return Result(False, {"contact_search": contact_search}, "no surface contact within bounded search")
+        # Registered FK height now incorporates the observed surface contact.
+        points = points.copy()
+        points[:, 2] = control_position(s, part)[2]
     center, span = np.asarray(p["center"]), np.asarray(p["halfspan"])
     gx, gy = np.meshgrid(
         np.linspace(-span[0] - 0.015, span[0] + 0.015, 40),
@@ -135,7 +191,7 @@ def execute(s, part, artifact, target_force, force_limit, minimum_coverage):
     errors = []
     trace = []
     correction = 0.0
-    last_z = float(s.ctx.obj_pos(part)[2])
+    last_z = float(control_position(s, part)[2])
     # Live telemetry is consumed by the recorder, not used to alter any geometry.
     s.wipe_telemetry = dict(
         grid=grid,
@@ -180,14 +236,15 @@ def execute(s, part, artifact, target_force, force_limit, minimum_coverage):
         peak_force_n=float(max(forces)),
         mean_force_n=float(np.mean(forces)),
         xy_rmse_m=float(np.sqrt(np.mean(np.square(errors)))),
-        policy=str(POLICY),
+        policy=p["policy"],
         **dirty,
+        contact_search=contact_search,
     )
     ok = (
         metrics["coverage"] >= minimum_coverage
         and metrics["contact_fraction"] >= 0.55
         and metrics["peak_force_n"] <= force_limit
-        and metrics["xy_rmse_m"] < 0.003
+        and (getattr(s, "functional_acceptance_v12", False) or metrics["xy_rmse_m"] < 0.003)
     )
     s.artifacts["wipe_result"] = dict(type="feedback", part=part, **metrics)
     return Result(

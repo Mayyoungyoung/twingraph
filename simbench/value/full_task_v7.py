@@ -39,7 +39,8 @@ def _update_execution_targets(plan, session):
     if not carriage_row.get("valid") or carriage_row.get("position_m") is None:
         raise SkillFailure("execution RGB-D could not re-localize installed carriage")
     end = np.asarray(end_row["position_m"], dtype=float)
-    ideal_fixture = getattr(session, "fixture_pose_mode", "rgbd") == "ideal_diagnostic"
+    v12 = bool(getattr(session, "strict_rgbd_v12", False))
+    ideal_fixture = not v12 and getattr(session, "fixture_pose_mode", "rgbd") == "ideal_diagnostic"
     if ideal_fixture:
         end_pos, end_quat = session.ctx.obj_pose("end_stop")
         end = np.asarray(end_pos, dtype=float)
@@ -56,13 +57,13 @@ def _update_execution_targets(plan, session):
     # installed workspace; a genuinely displaced fixture is left raw rather
     # than silently pulled back to a nominal pose.
     cad_bias = np.array([0.0, -0.0045, 0.0], dtype=float)
-    if not ideal_fixture and float(np.linalg.norm(end[:2] - expected_end[:2])) <= .02:
+    if not v12 and not ideal_fixture and float(np.linalg.norm(end[:2] - expected_end[:2])) <= .02:
         end = end + cad_bias
         end_row["position_m"] = end.tolist()
         end_row["cad_origin_correction_m"] = cad_bias.tolist()
     quat = np.asarray(end_row.get("quat_wxyz"), dtype=float)
     Rflat = np.zeros(9); mujoco.mju_quat2Mat(Rflat, quat); R = Rflat.reshape(3, 3)
-    if getattr(session, "fixture_yaw_mode", "rgbd") == "nominal_constraint_diagnostic":
+    if not v12 and getattr(session, "fixture_yaw_mode", "rgbd") == "nominal_constraint_diagnostic":
         R = np.eye(3)
         end_row["target_axis_source"] = "nominal_constraint_diagnostic"
     pin_targets = {
@@ -71,6 +72,18 @@ def _update_execution_targets(plan, session):
     }
     pin_targets["pin_left"][2] = float(session.stage_targets["pin_left"][2])
     pin_targets["pin_right"][2] = float(session.stage_targets["pin_right"][2])
+    if v12:
+        # Goal requires 6 mm entry; command 8 mm for the declared depth
+        # quantization margin. This target is explicit in the graph and
+        # trace: the policy does not silently chase a different endpoint.
+        config = session.pin_insertion_config
+        command_depth = float(session.planning_cad.get("pin_command_insertion_depth_m",
+            min(config.required_depth_m + .002, config.guide_length_m * .5)))
+        hole_offsets = session.planning_cad.get("pin_hole_offsets_m", [[0., -.032, .018], [0., .032, .018]])
+        for part, offset in zip(("pin_left", "pin_right"), hole_offsets):
+            local = np.asarray(offset, float)
+            local[2] -= config.shaft_tip_offset_m + command_depth
+            pin_targets[part] = (end + R @ local).tolist()
     carriage = np.asarray(carriage_row["position_m"], dtype=float)
     if ideal_fixture:
         carriage_pos, carriage_quat = session.ctx.obj_pose("carriage")
@@ -83,14 +96,14 @@ def _update_execution_targets(plan, session):
     # centroid toward -x/-y once it is seated.  Convert that calibrated image
     # reference to the CAD body origin only in the installed workspace.
     carriage_bias = np.array([0.0060, 0.0030, 0.0], dtype=float)
-    if not ideal_fixture and float(np.linalg.norm(carriage[:2] - expected_carriage[:2])) <= .02:
+    if not v12 and not ideal_fixture and float(np.linalg.norm(carriage[:2] - expected_carriage[:2])) <= .02:
         carriage = carriage + carriage_bias
         carriage_row["position_m"] = carriage.tolist()
         carriage_row["cad_origin_correction_m"] = carriage_bias.tolist()
     # The handle CAD body origin is 48 mm above the carriage origin; the
     # guarded/press descent below moves the ring down onto the carriage post.
     prior_relocalizations = getattr(session, "execution_relocalizations", [])
-    if not prior_relocalizations:
+    if v12 or not prior_relocalizations:
         pin_targets["handle"] = (carriage + np.array([0.0, 0.0, 0.048])).tolist()
     for part, target in pin_targets.items():
         session.stage_targets[part] = list(target)
@@ -129,7 +142,11 @@ def _update_execution_targets(plan, session):
             # rebound after the measured end-stop placement.
             if (isinstance(value, (list, tuple)) and len(value) == 3
                     and name == "target" and getattr(arg, "source_call", None) is None):
-                z_value = float(target[2]) if part == "handle" else float(value[2])
+                # V12 preserves each declared approach height relative to
+                # the previous target instead of flattening every waypoint.
+                old_target = np.asarray(plan.prefix.get("targets", {}).get(part, target), float)
+                z_value = (float(value[2] + target[2] - old_target[2]) if v12
+                           else float(target[2]) if part == "handle" else float(value[2]))
                 arg.value = [float(target[0]), float(target[1]), z_value]
             elif part == "handle" and name == "target_z":
                 # The handle's CAD body origin is part of the visual
@@ -146,13 +163,21 @@ def _clean(session, variant, force, duration):
     tool_home = np.asarray(row["position_m"], dtype=float)
     session.tool_home_visual = tool_home.tolist()
     pick(session, tool, lift=False, grasp_force=8.0,
-         terminal_targets=[dict(id="wipe", part=tool, xyz=tool_home.copy())])
+         terminal_targets=[dict(id="wipe", part=tool, xyz=tool_home.copy())],
+         required_parts=(tool,) if getattr(session, "strict_rgbd_v12", False) else None,
+         grasp_options=(dict(yaw_frame="object", yaws=[0., float(np.pi)],
+             width=float(session.planning_cad["parts"][tool]["grasp_reference"]["width_m"]))
+             if getattr(session, "strict_rgbd_v12", False) else None))
     halfspan = np.array([.055, .006], dtype=float)
+    surface_height = .828
+    if getattr(session, "functional_acceptance_v12", False):
+        cad = session.planning_cad
+        surface_height = float(cad.get("wipe_surface_height_m", .818)) + float(cad.get("wipe_pad_half_thickness_m", .004))
     # The enlarged visible pad settles with its body centre around .828 m;
     # this target is measured from the CAD pad lower face and leaves contact
     # force to the wiping controller rather than using a nominal object z.
     session.call("plan_path", method="surface", part=tool, center=CENTER.tolist(),
-                 halfspan=halfspan.tolist(), surface="guide_base", height=.828,
+                 halfspan=halfspan.tolist(), surface="guide_base", height=surface_height,
                  duration=float(duration))
     points = np.asarray(session.artifacts["wipe"]["points"], dtype=float)
     if int(variant) % 2:
@@ -173,6 +198,8 @@ def _clean(session, variant, force, duration):
                  acceptance="support_only")
     session.call("move", delta=[0, 0, .12])
     session.call("inspect", what="clean", threshold=.05)
+    if getattr(session, "strict_rgbd_v12", False):
+        session.call("move", target="home")
     session.stage_passes["cleaning_pass"] = True
 
 
@@ -193,6 +220,11 @@ def _stroke(session, minimum):
         """
         row = observation["objects"].get(handle, {})
         base = observation["objects"].get(carriage, {})
+        if getattr(session, "strict_rgbd_v12", False):
+            # A visible carriage does not prove that a handle exists on it.
+            # Preserve the detector's unknown result instead of promoting a
+            # nominal CAD relation to a fictitious visual observation.
+            return row
         # The carriage's visible shoe can be partially occluded by the
         # installed handle/guide.  Reject a component that jumps in y/z from
         # the last trusted RGB-D carriage estimate, and retain only its
@@ -205,13 +237,15 @@ def _stroke(session, minimum):
             candidate = item.get("carriage") if isinstance(item, dict) else None
             if candidate and candidate.get("valid") and candidate.get("position_m") is not None:
                 trusted.append(candidate)
-        if (not base.get("valid") or base.get("position_m") is None) and trusted and expected_carriage_x is not None:
+        strict = bool(getattr(session, "strict_rgbd_v12", False))
+        if (not strict and (not base.get("valid") or base.get("position_m") is None)
+                and trusted and expected_carriage_x is not None):
             reference = np.asarray(trusted[0]["position_m"], dtype=float)
             base = copy.deepcopy(trusted[0])
             base["position_m"] = [float(expected_carriage_x),
                                    float(reference[1]), float(reference[2])]
             base["x_source"] = "verified_stroke_endpoint_command"
-        if base.get("valid") and base.get("position_m") is not None and trusted:
+        if not strict and base.get("valid") and base.get("position_m") is not None and trusted:
             reference = np.asarray(trusted[0]["position_m"], dtype=float)
             current_base = np.asarray(base["position_m"], dtype=float)
             if ((expected_carriage_x is not None
@@ -290,20 +324,36 @@ def _stroke(session, minimum):
     # The gripper is holding the installed handle, not the carriage body.
     # Stream the constrained motion through that real operating interface;
     # the handle/post contact then has to carry the carriage along.
-    session.call("move", mode="constrained", part=handle,
-                 target_x=float(CENTER[0] - .04))
-    session.call("move", mode="constrained", part=handle,
-                 target_x=float(CENTER[0] + .060))
+    stroke_targets = [float(CENTER[0] - .04), float(CENTER[0] + .060)]
+    if getattr(session, "functional_acceptance_v12", False):
+        from simbench.assembly.skills_v12 import functional_stroke_targets
+        # The usable interval is a calibrated fixed-fixture/CAD constraint;
+        # the starting point comes from the current RGB-D assembly state.
+        bounds = session.planning_cad.get("guide_stroke_x_bounds_m", stroke_targets)
+        stroke_targets = functional_stroke_targets(current[0], minimum, bounds)
+        session.artifacts["functional_stroke_plan"] = dict(
+            visual_start_x_m=float(current[0]), targets_x_m=stroke_targets,
+            calibrated_bounds_x_m=list(bounds), required_each_direction_m=float(minimum))
+    for target_x in stroke_targets:
+        session.call("move", mode="constrained", part=handle, target_x=target_x)
     session.call("inspect", what="stroke", minimum=float(minimum))
     # Re-localize after the stroke as well.  The handle has moved with the
     # carriage, so releasing at its pre-stroke image coordinate would be a
     # stale target.  If the ring is occluded, visual_handle_or_derived()
     # computes the new target from the current RGB-D carriage estimate.
     after = refresh_visual_observation(session, parts=session.parts)
-    after_row = visual_handle_or_derived(after, expected_carriage_x=float(CENTER[0] + .060))
+    after_row = visual_handle_or_derived(after, expected_carriage_x=stroke_targets[-1])
     if not after_row.get("valid") or after_row.get("position_m") is None:
-        raise SkillFailure("execution RGB-D could not re-localize handle after stroke")
-    release_target = np.asarray(after_row["position_m"], dtype=float)
+        if getattr(session, "strict_rgbd_v12", False) and session.held == handle:
+            from simbench.assembly.skills_v12 import control_position
+            release_target = control_position(session, handle)
+            session.artifacts["functional_release_position"] = dict(
+                position_m=release_target.tolist(), source="encoder_FK_with_RGBD_grasp_registration",
+                visual_row_remains_unknown=True)
+        else:
+            raise SkillFailure("execution RGB-D could not re-localize handle after stroke")
+    else:
+        release_target = np.asarray(after_row["position_m"], dtype=float)
     # Re-establish the physical seating contact at the new carriage endpoint
     # before opening the gripper.  A constrained stroke can leave the ring a
     # fraction of a millimetre above the post even though the visual pose is
@@ -324,6 +374,10 @@ def _stroke(session, minimum):
 
 def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
                       wipe_duration=14.0, stroke_minimum=.08):
+    controller = getattr(session, "full_task_controller", None)
+    if controller is not None:
+        return controller(session, order=order, choices=choices, wipe_variant=wipe_variant,
+                          wipe_force=wipe_force, wipe_duration=wipe_duration, stroke_minimum=stroke_minimum)
     from .stage_v7 import TASK_STROKE_MINIMUM_M
     if float(stroke_minimum) != TASK_STROKE_MINIMUM_M:
         raise SkillFailure("candidate cannot change task stroke requirement")
