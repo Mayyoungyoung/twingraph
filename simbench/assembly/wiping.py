@@ -246,6 +246,33 @@ def execute(s, part, artifact, target_force, force_limit, minimum_coverage):
         and metrics["peak_force_n"] <= force_limit
         and (getattr(s, "functional_acceptance_v12", False) or metrics["xy_rmse_m"] < 0.003)
     )
+    if ok and getattr(s, "functional_acceptance_v12", False):
+        # Unload the compliant pad with the same contact servo before handing
+        # control back to free-space motion.  A single Cartesian lift can move
+        # the wrist while the foam remains compressed against the fixture,
+        # overstretching an otherwise bilateral grasp.  This bounded physical
+        # retraction neither teleports nor reattaches the tool.
+        command = s.ctx.eef_pos().copy()
+        start_z = float(s.ctx.obj_pos(part)[2])
+        released = False
+        for step in range(300):
+            command[2] += .00002
+            s.arm.servo(command)
+            held = bool(s.ctx.grasp_contacts(part)["held"])
+            force = surface_force(s, part, p["surface"])
+            object_lift = float(s.ctx.obj_pos(part)[2] - start_z)
+            if not held:
+                metrics["contact_release"] = dict(released=False, held=False,
+                    steps=step+1, object_lift_m=object_lift, final_force_n=force)
+                s.artifacts["wipe_result"] = dict(type="feedback", part=part, **metrics)
+                return Result(False, metrics, "wipe tool grasp lost during compliant contact release")
+            if force < .05 and object_lift > .001:
+                released = True
+                break
+        metrics["contact_release"] = dict(released=released, held=True,
+            steps=step+1, object_lift_m=object_lift, final_force_n=force,
+            commanded_retraction_m=float((step+1)*.00002))
+        ok = bool(ok and released)
     s.artifacts["wipe_result"] = dict(type="feedback", part=part, **metrics)
     return Result(
         ok, metrics, "insufficient physical surface contact, coverage or tracking"

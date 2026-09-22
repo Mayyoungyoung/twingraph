@@ -156,6 +156,14 @@ def validate_geometry_conditions(graph, plan=None):
             if value is not None and (not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value)):
                 raise ValueError(f"invalid geometry_conditions metric {key}")
         choice = plan.prefix["choices"][part]
+        if "grasp_center_offset_body_m" in row:
+            offset = row["grasp_center_offset_body_m"]
+            command = choice.get("center_offset")
+            if (not isinstance(offset, list) or len(offset) != 3
+                    or any(not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v)
+                           for v in offset)
+                    or command != offset):
+                raise ValueError(f"geometry_conditions {part}.grasp_center_offset_body_m differs from executable choice")
         if row.get("grasp_width_m") is not None and choice.get("width") is not None:
             if row["grasp_width_m"] != choice["width"]:
                 raise ValueError(f"geometry_conditions {part}.grasp_width_m differs from executable choice")

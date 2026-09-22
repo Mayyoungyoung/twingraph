@@ -94,14 +94,12 @@ def _geometry_catalogs(observation, cad, completed):
         feasible = [r for r in rows if r["status"] != "rejected"
                     and all(r.get(k) is not None for k in ("yaw", "height", "placement_yaw"))]
         if not feasible and not part.startswith("pin_"):
-            # The unchanged Panda hand convex hull can overlap a protrusion on
-            # the *manipulated target* even when the downstream physics grasp
-            # succeeds (the carriage post is the observed development case).
-            # Do not relabel that geometry as a pass.  Retain it as an explicit
-            # low-priority unknown for the digital twin only when every checked
-            # environment/receiver path is nonpenetrating and pad contacts stay
-            # on declared grasp faces.  Known environment collisions and bad
-            # pad-face contacts remain hard rejections.
+            # Native/conservative gripper hulls can report intended source-part
+            # contacts as penetrations.  Such rows are never relabelled as a
+            # pass: retain them as explicit DT-only unknowns only when every
+            # checked environment/receiver path is nonpenetrating and the
+            # declared grasp face is valid.  The expanded centre constructor
+            # can therefore be tested physically without hiding its risk.
             deferred=[]
             for original in rows:
                 env=original.get("environment_min_clearance_m")
@@ -112,7 +110,7 @@ def _geometry_catalogs(observation, cad, completed):
                     row=deepcopy(original)
                     row.update(status="unknown",original_status="rejected",
                         deferred_source_target_contact=True,
-                        reason=("conservative source target/gripper shell contact deferred to physical twin; "
+                        reason=("conservative source target/gripper contact deferred to physical twin; "
                                 "all sampled environment/receiver geometry is nonpenetrating"),
                         necessary_geometry_pass=False)
                     deferred.append(row)
@@ -222,6 +220,8 @@ def propose(observation, *, cad=None, n=48, seed=0, completed=(), priors=None):
                         c[key] = float(selected[key])
                 if selected.get("grasp_width_m") is not None:
                     c["width"] = float(selected["grasp_width_m"])
+                if selected.get("grasp_center_offset_body_m") is not None:
+                    c["center_offset"] = [float(v) for v in selected["grasp_center_offset_body_m"]]
                 if "grasp_yaw_frame" in selected:
                     c["grasp_yaw_frame"] = selected["grasp_yaw_frame"]
             else:

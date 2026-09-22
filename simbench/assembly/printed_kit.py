@@ -133,6 +133,14 @@ def planning_metadata():
                                dict(axis=[0.,1.,0.],width_m=widths[1])],
             rotational_symmetry=part=="handle",
             scope="CAD side surface only; gripper fit, pad overlap, contact and clearance require separate query")
+    # Object-frame grasp centres are task CAD, not value-model features or
+    # outcome-derived answers.  The generic catalogue checks every declared
+    # centre against the same complete gripper/body/receiver geometry.
+    parts["carriage"]["grasp_region"]["center_offsets_body_m"] = [
+        [0.,0.,0.], [.012,0.,0.], [-.012,0.,0.], [0.,.012,0.], [0.,-.012,0.]]
+    parts["end_stop"]["grasp_region"]["center_offsets_body_m"] = [
+        [0.,0.,0.], [.008,0.,0.], [-.008,0.,0.], [0.,.008,0.], [0.,-.008,0.]]
+    parts["handle"]["grasp_region"]["center_offsets_body_m"] = [[0.,0.,0.]]
     return dict(schema="twingraph.printed-kit.v12", source="user htzp STL / accompanying CAD source",
                 units="m", parts=parts, pin_hole_shape="square", pin_hole_width_m=.008,
                 pin_hole_radius_m=.004, pin_shaft_radius_m=.0033,

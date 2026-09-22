@@ -266,6 +266,8 @@ class PlanIR:
                     choices[current]=dict(yaw=args["yaws"][0],height=args["height_offset"])
                     if args.get("width") is not None:
                         choices[current]["width"] = args["width"]
+                    if args.get("center_offset") is not None:
+                        choices[current]["center_offset"] = args["center_offset"]
                     if "yaw_frame" in args:
                         choices[current]["grasp_yaw_frame"] = args["yaw_frame"]
                 elif current is not None:

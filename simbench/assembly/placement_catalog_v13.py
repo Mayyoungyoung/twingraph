@@ -141,7 +141,7 @@ def _pad_corners():
     return tuple((found[name][0]-eef[0], found[name][1]) for name in PADS)
 
 
-def _grasp_geometry(spec, source_R, pickup_R, dz):
+def _grasp_geometry(spec, source_R, pickup_R, body_offset):
     """CAD face overlap and width; no successful grip is inferred."""
     region = spec.get("grasp_region", {})
     if not region or "body_z_interval_m" not in region:
@@ -161,7 +161,7 @@ def _grasp_geometry(spec, source_R, pickup_R, dz):
     overlaps = []
     for corners, slide in _pad_corners():
         corners = corners+slide*(width/2+.0005)
-        body = (source_R.T@(np.array([0., 0., dz])+(pickup_R@corners.T).T).T).T
+        body = np.asarray(body_offset, float) + (source_R.T@(pickup_R@corners.T)).T
         overlaps.append(max(0., min(hi, float(body[:, 2].max()))-max(lo, float(body[:, 2].min()))))
     minimum_overlap = min(overlaps)
     if minimum_overlap <= 0:
@@ -284,7 +284,7 @@ def _verified_source_pad_boxes(result, primitives, eef, pickup_R, jaw, source_po
 
 def placement_clearance_catalog(observation, cad, part, *, completed=(), planned_before=None,
         source_axis_offsets=(0., math.pi/2), height_offsets=(0., .004, .007),
-        required_clearance_m=None, sample_step_m=.002, query_factory=None):
+        center_offsets_body_m=None, required_clearance_m=None, sample_step_m=.002, query_factory=None):
     """Rows compatible with choices[yaw,height,placement_yaw].
 
     Unknown geometry or positive clearance below the uncertainty reserve is
@@ -312,6 +312,18 @@ def placement_clearance_catalog(observation, cad, part, *, completed=(), planned
         return [dict(part=part, yaw=None, height=None, placement_yaw=None, status="unknown",
             reason="declared CAD grasp reference missing", min_clearance_m=None,
             executable_parameters_available=False, source_grasp_ik_checked=False)]
+    if center_offsets_body_m is None:
+        center_offsets_body_m = spec.get("grasp_region", {}).get(
+            "center_offsets_body_m", ([0., 0., 0.],))
+    center_offsets = []
+    for value in center_offsets_body_m:
+        offset = np.asarray(value, dtype=float)
+        if (offset.shape != (3,) or not np.isfinite(offset).all()
+                or np.linalg.norm(offset) > .04 or abs(offset[2]) > 1.e-12):
+            raise ValueError("declared grasp centre must be a finite in-plane body vector inside 40 mm")
+        center_offsets.append(offset)
+    if not center_offsets:
+        raise ValueError("declared grasp centre set cannot be empty")
     source_scene, future_scene, common_unknowns, predecessors = _receiver_scenes(
         observation, cad, part, set(completed), planned_before)
     primitive_map = cad.get("collision_primitives", {})
@@ -342,12 +354,14 @@ def placement_clearance_catalog(observation, cad, part, *, completed=(), planned
         pickup_R, placement_R = _down(yaw), _down(placement_yaw)
         actual_target_R = placement_R@pickup_R.T@source_R
         orientation_residual = float(Rotation.from_matrix(target_R.T@actual_target_R).magnitude())
-        for height in height_offsets:
+        for declared_center in center_offsets:
+          for height in height_offsets:
             height = float(height)
             if not np.isfinite(height) or abs(height) > .025:
                 raise ValueError("grasp height outside skill command envelope")
-            dz = float(reference["height_offset_m"])+height
-            legal, width, pad_overlap, legal_reason = _grasp_geometry(spec, source_R, pickup_R, dz)
+            body_offset = declared_center + np.array([0., 0., float(reference["height_offset_m"])+height])
+            legal, width, pad_overlap, legal_reason = _grasp_geometry(
+                spec, source_R, pickup_R, body_offset)
             gap = float(width if width is not None else reference["width_m"])/2+.0005
             if not 0 < gap <= .04:
                 raise ValueError("CAD grasp width outside actual jaw range")
@@ -356,7 +370,7 @@ def placement_clearance_catalog(observation, cad, part, *, completed=(), planned
                 unknowns.append(legal_reason)
             if orientation_residual > 1.e-6:
                 unknowns.append("yaw-only placement retains source roll/pitch; declared goal orientation not exactly represented")
-            source_offset = np.array([0., 0., dz])
+            source_offset = source_R@body_offset
             # Actual yaw-only EEF change applied to the source holding offset.
             # For upright source/goal this also equals target_R@source_R.T@offset.
             target_offset = placement_R@pickup_R.T@source_offset
@@ -408,6 +422,7 @@ def placement_clearance_catalog(observation, cad, part, *, completed=(), planned
                 status = "unknown" if unknowns else "necessary_pass"
                 reason = "; ".join(sorted(set(unknowns))) if unknowns else "sampled source and future gripper necessary geometry passed"
             rows.append(dict(part=part, yaw=yaw, height=height, placement_yaw=placement_yaw,
+                grasp_center_offset_body_m=declared_center.tolist(),
                 status=status, reason=reason, min_clearance_m=clearance, required_clearance_m=reserve,
                 executable_parameters_available=True, known=status != "unknown", source_grasp_ik_checked=False,
                 source_full_shell_approach_withdrawal_check_required=True,

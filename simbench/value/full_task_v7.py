@@ -162,7 +162,10 @@ def _clean(session, variant, force, duration):
         raise SkillFailure("initial RGB-D could not localize wipe tool")
     tool_home = np.asarray(row["position_m"], dtype=float)
     session.tool_home_visual = tool_home.tolist()
-    pick(session, tool, lift=False, grasp_force=8.0,
+    # The contact tool must retain the foam-backed body through both wiping
+    # and unload; size the bilateral grasp for that contact phase rather than
+    # for gravity-only transport.
+    pick(session, tool, lift=False, grasp_force=15.0,
          terminal_targets=[dict(id="wipe", part=tool, xyz=tool_home.copy())],
          required_parts=(tool,) if getattr(session, "strict_rgbd_v12", False) else None,
          grasp_options=(dict(yaw_frame="object", yaws=[0., float(np.pi)],
@@ -190,7 +193,9 @@ def _clean(session, variant, force, duration):
     session.call("move", reference="object", part=tool, target=start + [0, 0, .000], tolerance=.0015)
     session.call("wipe", part=tool, target_force=float(force), force_limit=20.0,
                  minimum_coverage=.72)
-    session.call("move", part=tool, delta=[0, 0, .10])
+    # The wipe atom finishes with a bounded force-guided contact release; this
+    # is now an ordinary free-space held-object lift.
+    session.call("move", part=tool, delta=[0, 0, .10], speed=.01)
     transfer_part(session, tool, tool_home + [0, 0, .06])
     session.call("move", mode="guarded", part=tool, target_z=float(tool_home[2]), force_stop=3.0)
     session.call("press", part=tool, target_z=float(tool_home[2]), force_stop=2.0)

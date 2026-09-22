@@ -28,6 +28,7 @@ METRIC = {
     **{k: ("scalar", "N", "") for k in ("force", "force_stop", "force_limit", "max_force", "minimum_support", "target_force")},
     "speed": ("scalar", "m/s", ""), "settle": ("scalar", "s", ""),
     "duration": ("scalar", "s", ""), "center": ("position", "m", "world"),
+    "center_offset": ("vector", "m", "object"),
     "halfspan": ("vector", "m", "surface"),
     "hole_offset_m": ("vector", "m", "fixture"),
     "minimum_insertion_depth_m": ("scalar", "m", "fixture"),

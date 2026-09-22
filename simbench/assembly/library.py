@@ -553,7 +553,7 @@ class Session:
         implementation="geometry_and_ik",
     )
     def propose_grasps(self, part, artifact="pose", as_="grasps", yaws=None, height_offset=0.0, width=None,
-                       yaw_frame="world"):
+                       yaw_frame="world", center_offset=None):
         pose = self.artifacts[artifact]
         dz, reference_width = self.grasp_specs[part]
         explicit_width = width
@@ -569,15 +569,22 @@ class Session:
             raise ValueError("invalid grasp height offset")
         if yaw_frame not in ("world", "object"):
             raise ValueError("grasp yaw_frame must be world or object")
+        center_offset = np.zeros(3) if center_offset is None else np.asarray(center_offset, dtype=float)
+        if (center_offset.shape != (3,) or not np.isfinite(center_offset).all()
+                or np.linalg.norm(center_offset) > .04 or abs(center_offset[2]) > 1.e-12):
+            raise ValueError("grasp center_offset must be a finite in-plane vector inside the 40-mm envelope")
         reference_yaw = 0.
+        offset_world = center_offset.copy()
         if yaw_frame == "object":
             quat=np.asarray(pose["quat"],float)
             if quat.shape!=(4,) or not np.isfinite(quat).all() or np.linalg.norm(quat)<1e-8:
                 raise ValueError("object-relative grasp requires a valid visual orientation")
-            reference_yaw=float(Rotation.from_quat(quat[[1,2,3,0]]).as_euler("xyz")[2])
+            object_rotation = Rotation.from_quat(quat[[1,2,3,0]])
+            reference_yaw=float(object_rotation.as_euler("xyz")[2])
+            offset_world = object_rotation.apply(center_offset)
         for relative_yaw in ((0.0, np.pi / 2) if yaws is None else yaws):
             yaw = float(relative_yaw) + reference_yaw
-            xyz = pose["xyz"] + np.array([0, 0, dz + height_offset])
+            xyz = pose["xyz"] + offset_world + np.array([0, 0, dz + height_offset])
             try:
                 # Width depends on the box face; round parts keep their diameter.
                 w = (width if part not in ("carriage", "end_stop")
@@ -603,6 +610,8 @@ class Session:
                         id=f"{part}:yaw:{yaw:.6f}:pose:{pose_id}",
                         xyz=xyz,
                         yaw=yaw,
+                        center_offset=center_offset.tolist(),
+                        center_offset_frame=yaw_frame,
                         width=w,
                         q_hover=q,
                         cost=float(np.linalg.norm(q - self.ctx.arm_qpos) + 2 * w),
@@ -1054,6 +1063,11 @@ class Session:
             return Result(False, reason="unknown approach strategy")
         try:
             ok = self.arm.move(goal["xyz"], down(goal["yaw"]), speed=0.045)
+            if not ok:
+                # The first servo can finish just outside the 1-mm contract
+                # after a long hover descent.  Re-solve from the attained
+                # state and perform a slower bounded correction before failing.
+                ok = self.arm.move(goal["xyz"], down(goal["yaw"]), speed=0.02)
         except ValueError as exc:
             # A Cartesian IK continuation can stall near a redundant-arm
             # singularity despite a reachable checked endpoint. Try one
@@ -1097,7 +1111,9 @@ class Session:
         return Result(contact["held"], contact)
 
     @skill("lift", "保持夹持并抬升", "transition", ("held",))
-    def lift(self, part, height=0.10):
+    def lift(self, part, height=0.10, speed=0.06):
+        if not np.isfinite(speed) or not .005 <= speed <= .10:
+            raise ValueError("lift speed outside declared controller envelope")
         start = self.ctx.obj_pos(part).copy()
         goal = self.ctx.eef_pos() + [0, 0, height]
         grasp=self.artifacts.get("grasp",{})
@@ -1124,7 +1140,13 @@ class Session:
                      collision_geometry="digital twin environment; holder not exempted"),
                 "checked shaft withdrawal or retention failed")
         try:
-            ok = self.arm.move(goal, speed=0.06)
+            ok = self.arm.move(goal, speed=float(speed))
+            if not ok and self.ctx.grasp_contacts(part)["held"]:
+                # Contact breakaway and loaded compliance can leave the first
+                # lift short while the bilateral grasp remains intact.  Retry
+                # the same absolute checked target slowly from the attained
+                # state; the command does not alter or reattach the object.
+                ok = self.arm.move(goal, speed=max(.005, min(.02, float(speed))))
         except ValueError as exc:
             if not str(exc).startswith("IK unreachable:"):
                 raise

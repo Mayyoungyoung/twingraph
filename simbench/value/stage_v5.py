@@ -201,6 +201,8 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
     yaw_frame = choice.get("grasp_yaw_frame", "world")
     add("estimate_grasp", part=part, yaws=argument([choice["yaw"]], unit="rad", frame=yaw_frame),
         height_offset=argument(choice["height"], unit="m"),
+        **(dict(center_offset=argument(choice["center_offset"], unit="m", frame=yaw_frame))
+           if "center_offset" in choice else {}),
         **(dict(yaw_frame=argument(yaw_frame)) if "grasp_yaw_frame" in choice else {}),
         **(dict(width=argument(choice["width"], unit="m")) if "width" in choice else {}))
     grasp = add("select_grasp", part=part)
