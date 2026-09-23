@@ -1,0 +1,25 @@
+{
+  "schema": "twingraph.v20_llm_1951_full_task_evidence.v1",
+  "seed": 1951,
+  "candidate_generation": "authenticated_llm_atomic_graph_role_composition",
+  "model": "gpt-6-sol",
+  "llm_seconds": 162.351108,
+  "prompt_sha256": "b64871ae5641f56303215249b737bce64d5e6e157afb8539329b3c5a779f77fa",
+  "response_sha256": "dbba91a1340521e49f471e528ce850fec4c81a06dd32bdcaa54584d8335bcee8",
+  "request_file_sha256": "539e04a6cc69aa34e4fa05cc3e982519cca641465d900f9f47c2a222e9ba7dce",
+  "pre_outcome_graph_hashes": 24,
+  "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+  "generated": 24,
+  "valid": 24,
+  "full_task_success": 0,
+  "full_task_failure": 24,
+  "pool_type": "all_negative",
+  "first_failure_counts": {
+    "approach": 4,
+    "verify_clean": 11,
+    "place_object": 1,
+    "learned_insert": 1,
+    "press_seat": 7
+  },
+  "training_gate_ready": false
+}
