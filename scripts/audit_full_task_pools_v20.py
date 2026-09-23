@@ -121,7 +121,9 @@ def main():
                   attempted_layouts=len(pools), generated_candidates=sum(r["generated"] for r in pools),
                   pool_types=dict(types), one_frozen_runtime=len(runtimes) == 1,
                   runtime_sha256=sorted(str(x) for x in runtimes),
-                  natural_mixed_coverage=(len(mixed) / len(pools)),
+                  natural_mixed_coverage=(len(mixed) / len(complete) if complete else None),
+                  confirmed_mixed_fraction_of_attempted=(len(mixed) / len(pools)),
+                  incomplete_layouts=len(pools)-len(complete),
                   mixed_layout_seeds_by_fold={name: sorted(r["seed"] for r in mixed if fold(r["seed"]) == name)
                                               for name in ("train", "validation", "test")},
                   ready_for_full_task_value_training=(len(complete) == len(pools)
