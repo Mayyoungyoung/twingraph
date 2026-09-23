@@ -292,6 +292,20 @@ def run_mechanism_prefix(session, *, stop_after, order, choices, wipe_variant=0,
                              resumed_from_checkpoint=bool(prefix)))
 
 
+def run_cleaning_prefix(session, *, wipe_variant=0, wipe_force=1.5,
+                        wipe_duration=14., **_):
+    """Physically execute the ordinary cleaning controller as a local task."""
+    session.stage_passes = {}
+    _clean(session, wipe_variant, wipe_force, wipe_duration)
+    if not session.stage_passes.get("cleaning_pass"):
+        raise SkillFailure("cleaning controller did not meet its local predicate")
+    # PhysicalRunner's aggregate stage check applies only to the complete
+    # task.  The local result has already passed wipe and inspect_clean.
+    session.stage_passes.clear()
+    return Result(True, dict(scope="cleaning_prefix", completed=["cleaning"],
+                             cleaning_pass=True, full_task_success=False))
+
+
 def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
             completed=(), monitor=None, level="L1", record=False, stop_after=None,
             end_stop_acceptance=None):
@@ -320,6 +334,12 @@ def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
         if stop_after is None:
             session.full_task_controller = lambda s, **params: run_staged(s, **params,
                 completed=completed, monitor=timed_monitor if monitor is not None else None, boundaries=boundaries)
+        elif stop_after == "cleaning":
+            if checkpoint is not None or completed:
+                raise ValueError("cleaning prefix must start from its fresh scene")
+            if monitor is not None:
+                raise ValueError("cleaning-prefix rollout has no replanning monitor")
+            session.full_task_controller = run_cleaning_prefix
         else:
             if monitor is not None:
                 raise ValueError("mechanism-prefix rollout has no replanning monitor")
@@ -347,6 +367,7 @@ def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
             resource_censored=bool(result.get("timeout")),
             runtime_sha256=provenance["sha256"],
             evaluation_scope=("complete_functional_task" if stop_after is None else
+                              "cleaning_only" if stop_after == "cleaning" else
                               f"assembly_prefix_through_{stop_after}"),
             full_task_label=bool(stop_after is None))
         if result.get("timeout"):
