@@ -1,0 +1,25 @@
+{
+  "schema": "twingraph.v20_l0_full_task_positive_provenance.v1",
+  "seed": 2068,
+  "fold": "train",
+  "candidate": "grounded_018",
+  "runtime_sha256": "b2da0dfc49e552752d8e38bc17ee62cf94c37b1d467b76bc03e36df431df832e",
+  "full_task_label": true,
+  "evaluation_scope": "complete_functional_task",
+  "valid": true,
+  "full_success": true,
+  "stage_passes": {
+    "cleaning_pass": true,
+    "assembly_pass": true,
+    "functional_test_pass": true,
+    "fixture_capture_pass": true,
+    "final_seat_pass": true,
+    "final_release_and_retraction_pass": true
+  },
+  "frozen_graph_sha256": "1079c685d272e2589d16ee49e0063b2528b3273950cf73609cc4c3483dc0bc3a",
+  "executed_graph_sha256": "1079c685d272e2589d16ee49e0063b2528b3273950cf73609cc4c3483dc0bc3a",
+  "result_graph_sha256": "1079c685d272e2589d16ee49e0063b2528b3273950cf73609cc4c3483dc0bc3a",
+  "request_initial_observation_sha256": "d10d512109e716037e211d2f68ea1345a6be7625864d73296bf3ddae4db70490",
+  "total_wall_seconds": 316.47069196100347,
+  "generation": "natural planner_v12.propose; no result-dependent selection"
+}

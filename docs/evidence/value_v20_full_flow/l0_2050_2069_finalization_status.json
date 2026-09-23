@@ -1,0 +1,166 @@
+{
+  "schema": "twingraph.natural_full_task_matrix_finalization.v20.r1",
+  "task_scope": "complete_functional_task",
+  "graph_input_schema": "twingraph.full_flow_graph_value.v20.r2",
+  "runtime_sha256": "b2da0dfc49e552752d8e38bc17ee62cf94c37b1d467b76bc03e36df431df832e",
+  "attempted_layouts": 20,
+  "evaluable_layouts": 20,
+  "confirmed_mixed_layouts": 1,
+  "natural_mixed_fraction_of_evaluable": 0.05,
+  "confirmed_mixed_fraction_of_attempted": 0.05,
+  "pool_types": {
+    "all_negative": 19,
+    "mixed": 1
+  },
+  "mixed_seeds_by_fold": {
+    "train": [
+      2068
+    ],
+    "validation": [],
+    "test": []
+  },
+  "layouts": [
+    {
+      "seed": 2050,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2051,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2052,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2053,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2054,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2055,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2056,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2057,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2058,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2059,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2060,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2061,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2062,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2063,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2064,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2065,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2066,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2067,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 2068,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 1,
+      "pool_type": "mixed"
+    },
+    {
+      "seed": 2069,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "pool_type": "all_negative"
+    }
+  ],
+  "timing_note": "parallel collection trial wall times support serial-sum counterfactual proxies only",
+  "state": "coverage_insufficient_for_training"
+}

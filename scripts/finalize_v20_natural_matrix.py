@@ -27,15 +27,24 @@ def save(path, value):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--root", type=Path, action="append", required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
-    manifest = json.loads((args.root / "freeze_manifest.json").read_text(encoding="utf-8"))
-    if fingerprint()["sha256"] != manifest["runtime_sha256"]:
-        raise RuntimeError("finalization runtime differs from frozen physical runtime")
-    if [row["seed"] for row in manifest["layouts"]] != manifest["seeds"]:
-        raise ValueError("freeze manifest layout order/seed mismatch")
-    audits = [audit_seed(args.root / f"seed_{seed}" / "collect") for seed in manifest["seeds"]]
+    manifests = [json.loads((root / "freeze_manifest.json").read_text(encoding="utf-8"))
+                 for root in args.root]
+    runtime = fingerprint()["sha256"]
+    if any(manifest["runtime_sha256"] != runtime for manifest in manifests):
+        raise RuntimeError("finalization runtime differs from a frozen physical runtime")
+    if len({(manifest["candidate_count"], manifest["level"], manifest["domain"])
+            for manifest in manifests}) != 1:
+        raise ValueError("frozen matrix protocol differs across roots")
+    audits = []
+    for root, manifest in zip(args.root, manifests):
+        if [row["seed"] for row in manifest["layouts"]] != manifest["seeds"]:
+            raise ValueError("freeze manifest layout order/seed mismatch")
+        audits.extend(audit_seed(root / f"seed_{seed}" / "collect") for seed in manifest["seeds"])
+    if len({row["seed"] for row in audits}) != len(audits):
+        raise ValueError("duplicate layout seed across frozen roots")
     counts = Counter(row["pool_type"] for row in audits)
     complete = [row for row in audits if row["pool_type"] != "incomplete"]
     mixed = [row for row in complete if row["pool_type"] == "mixed"]
@@ -44,7 +53,8 @@ def main():
              for name in ("train", "validation", "test")}
     status = dict(schema="twingraph.natural_full_task_matrix_finalization.v20.r1",
                   task_scope="complete_functional_task", graph_input_schema=SCHEMA,
-                  runtime_sha256=manifest["runtime_sha256"], attempted_layouts=len(audits),
+                  runtime_sha256=runtime, frozen_roots=[str(root) for root in args.root],
+                  attempted_layouts=len(audits),
                   evaluable_layouts=len(complete), confirmed_mixed_layouts=len(mixed),
                   natural_mixed_fraction_of_evaluable=len(mixed)/len(complete) if complete else None,
                   confirmed_mixed_fraction_of_attempted=len(mixed)/len(audits),
@@ -61,10 +71,12 @@ def main():
         print(json.dumps({key: status[key] for key in
             ("state", "pool_types", "mixed_seeds_by_fold")}), flush=True)
         return
-    command = [sys.executable, "scripts/train_value_v20_full_flow.py",
-               "--root", str(args.root), "--out", str(args.out / "value_training"),
+    command = [sys.executable, "scripts/train_value_v20_full_flow.py"]
+    for root in args.root:
+        command.extend(("--root", str(root)))
+    command.extend(("--out", str(args.out / "value_training"),
                "--k", "4", "--epochs", "80", "--width", "64",
-               "--lr", "0.001", "--initializations", "7", "17", "29", "--device", "cpu"]
+               "--lr", "0.001", "--initializations", "7", "17", "29", "--device", "cpu"))
     with (args.out / "training.log").open("w", encoding="utf-8") as log:
         result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=False)
     if result.returncode:
