@@ -112,15 +112,20 @@ def main():
         raise ValueError("duplicate layout seed across roots")
     types = Counter(r["pool_type"] for r in pools)
     runtimes = {r["runtime_sha256"] for r in pools}
-    report = dict(schema="twingraph.full_task_pool_audit.v20.r1",
+    complete = [r for r in pools if r["pool_type"] != "incomplete"]
+    mixed = [r for r in complete if r["pool_type"] == "mixed"]
+    fold = lambda seed: "test" if seed % 5 == 0 else "validation" if seed % 5 == 1 else "train"
+    mixed_folds = {fold(r["seed"]) for r in mixed}
+    report = dict(schema="twingraph.full_task_pool_audit.v20.r2",
                   label="all six final functional acceptance flags",
                   attempted_layouts=len(pools), generated_candidates=sum(r["generated"] for r in pools),
                   pool_types=dict(types), one_frozen_runtime=len(runtimes) == 1,
                   runtime_sha256=sorted(str(x) for x in runtimes),
-                  ready_for_full_task_value_training=(types.get("mixed", 0) == len(pools)
-                      and any(r["seed"] % 5 == 0 for r in pools)
-                      and any(r["seed"] % 5 == 1 for r in pools)
-                      and any(r["seed"] % 5 in (2, 3, 4) for r in pools)
+                  natural_mixed_coverage=(len(mixed) / len(pools)),
+                  mixed_layout_seeds_by_fold={name: sorted(r["seed"] for r in mixed if fold(r["seed"]) == name)
+                                              for name in ("train", "validation", "test")},
+                  ready_for_full_task_value_training=(len(complete) == len(pools)
+                      and mixed_folds == {"train", "validation", "test"}
                       and len(runtimes) == 1
                       and len({r["generated"] for r in pools}) == 1),
                   layouts=pools)

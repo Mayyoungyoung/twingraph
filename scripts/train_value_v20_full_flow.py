@@ -23,12 +23,29 @@ from simbench.value.plan import digest
 def load_pools(roots):
     pools, audit = {}, []
     for root in map(Path, roots):
-        for directory in sorted(root.glob("seed_*/collect")):
+        manifest_path = root / "freeze_manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else None
+        frozen = {int(row["seed"]): row for row in manifest["layouts"]} if manifest else None
+        discovered = sorted(root.glob("seed_*/collect"))
+        if frozen is not None and {int(directory.parent.name.removeprefix("seed_")) for directory in discovered} != set(frozen):
+            raise ValueError(f"frozen matrix layout set differs from collection: {root}")
+        for directory in discovered:
             item = audit_seed(directory)
             audit.append(item)
             seed = item["seed"]
             if seed in pools:
                 raise ValueError(f"duplicate layout seed {seed}")
+            if frozen is not None:
+                request = json.loads((directory / "request.json").read_text(encoding="utf-8"))
+                entry = frozen[seed]
+                if (request["runtime_sha256"] != manifest["runtime_sha256"]
+                        or request["domain"] != manifest["domain"]
+                        or request["level"] != manifest["level"]
+                        or len(request["pool"]) != manifest["candidate_count"]
+                        or request.get("graph_sha256") != entry["graph_sha256"]
+                        or [row["name"] for row in request["pool"]] != entry["candidate_names"]
+                        or request["initial_observation"]["sha256"] != entry["initial_observation_sha256"]):
+                    raise ValueError(f"collection changed the pre-outcome pool/graph freeze: {directory}")
             if item["pool_type"] == "incomplete":
                 continue
             rows = []
@@ -66,22 +83,27 @@ def main():
     args = p.parse_args()
     pools, audit = load_pools(args.root)
     fold = lambda seed: "test" if seed % 5 == 0 else "validation" if seed % 5 == 1 else "train"
-    splits = {key: sorted(seed for seed in pools if fold(seed) == key)
+    mixed = {seed: rows for seed, rows in pools.items()
+             if 0 < sum(bool(row["y"]) for row in rows) < len(rows)}
+    splits = {key: sorted(seed for seed in mixed if fold(seed) == key)
               for key in ("train", "validation", "test")}
+    all_splits = {key: sorted(seed for seed in pools if fold(seed) == key)
+                  for key in ("train", "validation", "test")}
     audit_report = dict(schema="twingraph.full_flow_training_gate.v20.r1",
         all_attempted_layouts=[dict(seed=r["seed"], pool_type=r["pool_type"],
                                     generated=r["generated"], valid=r["valid"],
                                     success=r["success"], failure=r["failure"])
                                for r in audit],
         fold_rule="seed modulo 5 fixed before labels: 0 test, 1 validation, 2/3/4 train",
-        splits=splits,
+        splits=splits, all_complete_layout_splits=all_splits,
+        selection_policy="train and validate on naturally mixed full-task layouts only; retain all-negative layouts for coverage and unconditional test",
         full_task_mixed_layouts=sum(r["pool_type"] == "mixed" for r in audit),
         all_negative_layouts=sum(r["pool_type"] == "all_negative" for r in audit),
         all_positive_layouts=sum(r["pool_type"] == "all_positive" for r in audit),
         incomplete_layouts=sum(r["pool_type"] == "incomplete" for r in audit))
     dump(args.out / "coverage_audit.json", audit_report)
-    if any(r["pool_type"] != "mixed" for r in audit):
-        raise ValueError("formal value training requires naturally mixed complete-task pools in every attempted layout; see coverage_audit.json")
+    if any(r["pool_type"] == "incomplete" for r in audit):
+        raise ValueError("complete every frozen layout or explicitly report an incomplete experiment; see coverage_audit.json")
     runtimes = {row["runtime_sha256"] for rows in pools.values() for row in rows}
     if len(runtimes) != 1:
         raise ValueError("all train/validation/test layouts must share one frozen physical runtime")
@@ -90,7 +112,7 @@ def main():
         raise ValueError("candidate pool sizes differ")
     if any(not seeds for seeds in splits.values()):
         raise ValueError("need naturally mixed complete-task layouts in all predeclared folds")
-    flatten = lambda seeds: [row for seed in seeds for row in sorted(pools[seed], key=lambda r:r["name"])]
+    flatten = lambda seeds: [row for seed in seeds for row in sorted(mixed[seed], key=lambda r:r["name"])]
     train, validation, test = map(flatten, (splits["train"], splits["validation"], splits["test"]))
     attempts = []
     for initialization in args.initializations:
@@ -121,7 +143,16 @@ def main():
         selected_initialization=chosen["initialization"],
         selected_epoch=chosen["selected_epoch"],
         validation=evaluate(validation, score(chosen["model"], validation, args.device), args.k),
-        test=compare({seed:pools[seed] for seed in splits["test"]}, ranker, k=args.k))
+        natural_coverage=dict(attempted_layouts=len(audit),
+            complete_layouts=len(pools), mixed_layouts=len(mixed),
+            mixed_fraction=len(mixed)/len(audit),
+            all_negative_layouts=sum(r["pool_type"] == "all_negative" for r in audit),
+            all_positive_layouts=sum(r["pool_type"] == "all_positive" for r in audit),
+            per_fold={key:dict(complete=len(all_splits[key]), mixed=len(splits[key]),
+                               mixed_fraction=len(splits[key])/len(all_splits[key]) if all_splits[key] else None)
+                      for key in all_splits}),
+        conditional_test=compare({seed:mixed[seed] for seed in splits["test"]}, ranker, k=args.k),
+        all_layout_test=compare({seed:pools[seed] for seed in all_splits["test"]}, ranker, k=args.k))
     dump(args.out / "comparison.json", report)
     for attempt in attempts:
         dump(args.out / f"trace_{attempt['initialization']}.json", attempt["trace"])
