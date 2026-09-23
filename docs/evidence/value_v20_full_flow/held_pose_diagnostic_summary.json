@@ -1,0 +1,65 @@
+{
+  "schema": "twingraph.v20_held_pose_posthoc_diagnostic.v1",
+  "training_eligible": false,
+  "control_input_eligible": false,
+  "oracle_only_for_posthoc_error_measurement": true,
+  "initial_grasp_probe": {
+    "seed": 1951,
+    "candidate": "grounded_004",
+    "runtime_sha256": "b2da0dfc49e552752d8e38bc17ee62cf94c37b1d467b76bc03e36df431df832e",
+    "fresh_rgbd_valid": 0,
+    "fresh_rgbd_attempts": 3,
+    "preclose_fk_error_m": [
+      0.00045913953887262367,
+      0.0004104416836421195,
+      0.0003777539008931025
+    ]
+  },
+  "terminal_contact_diagnostic": {
+    "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+    "measurement": "true simulator part pose versus last logged RGB-D/FK registered pose after failed bounded press; sampled trace may precede final physics step",
+    "layouts": [
+      {
+        "seed": 1951,
+        "terminal_press_failures_with_trace": 16,
+        "median_true_vs_registered_error_m": 0.00764540221973542,
+        "median_abs_error_xyz_m": [
+          0.00029003664286397866,
+          0.003121941403521511,
+          0.005175192333772616
+        ]
+      },
+      {
+        "seed": 1952,
+        "terminal_press_failures_with_trace": 12,
+        "median_true_vs_registered_error_m": 0.006517879900154773,
+        "median_abs_error_xyz_m": [
+          0.0008296993218162843,
+          0.0029886132549196698,
+          0.0044542278064593765
+        ]
+      },
+      {
+        "seed": 1953,
+        "terminal_press_failures_with_trace": 14,
+        "median_true_vs_registered_error_m": 0.008161695262024706,
+        "median_abs_error_xyz_m": [
+          0.00031117825267040766,
+          0.002437841492193407,
+          0.005033245092582572
+        ]
+      },
+      {
+        "seed": 1954,
+        "terminal_press_failures_with_trace": 6,
+        "median_true_vs_registered_error_m": 0.008513185060438144,
+        "median_abs_error_xyz_m": [
+          0.0006817950686845518,
+          0.005643061130017654,
+          0.0030743137094491613
+        ]
+      }
+    ]
+  },
+  "interpretation": "Held-part registration diverges by several millimetres during repeated press attempts; fresh wrist RGB-D detection at grasp close was invalid in this probe. This is post-hoc evidence, not a corrective sensor or proof of causality."
+}
