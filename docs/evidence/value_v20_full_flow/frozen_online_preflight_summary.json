@@ -1,0 +1,25 @@
+{
+  "schema": "twingraph.v20_frozen_comparison_preflight.v1",
+  "seed": 1950,
+  "pool_source": "LLM-selected grounded atomic role ports",
+  "pool_size": 24,
+  "methods": [
+    {
+      "method": "all_twin",
+      "k": 24,
+      "request_sha256": "d17e3a18afb73acb8f85f3839c9c7a00685d19fbacf4d10812caf02d058d6ea1",
+      "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb"
+    },
+    {
+      "method": "random_top_k",
+      "k": 4,
+      "request_sha256": "d17e3a18afb73acb8f85f3839c9c7a00685d19fbacf4d10812caf02d058d6ea1",
+      "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb"
+    }
+  ],
+  "same_frozen_request": true,
+  "same_physical_runtime": true,
+  "full_task_outcomes_read": false,
+  "online_rollouts_executed": false,
+  "value_method_executed": false
+}
