@@ -1,0 +1,155 @@
+{
+  "schema": "twingraph.v20_five_layout_natural_48_evidence.v1",
+  "label": "all_six_final_functional_acceptance_flags",
+  "n_per_layout": 48,
+  "attempted_layouts": 5,
+  "complete_layouts": 5,
+  "mixed_layouts": 1,
+  "all_negative_layouts": 4,
+  "total_valid": 240,
+  "total_full_success": 1,
+  "one_runtime": true,
+  "training_gate_ready": false,
+  "layouts": [
+    {
+      "seed": 1950,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 1,
+      "full_failure": 47,
+      "pool_type": "mixed",
+      "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+      "request_sha256": "985bfc5022c96790725b47ea4ed61c6c1abd4bee37ce7478e90f584e297a5bf0",
+      "final_pass_counts": {
+        "cleaning_pass": 36,
+        "assembly_pass": 2,
+        "functional_test_pass": 1,
+        "fixture_capture_pass": 1,
+        "final_seat_pass": 1,
+        "final_release_and_retraction_pass": 1
+      },
+      "first_failure_counts": {
+        "approach": 9,
+        "move_constrained": 1,
+        "press_seat": 15,
+        "verify_clean": 12,
+        "slide_insert": 6,
+        "learned_insert": 2,
+        "execute_cartesian_path": 2,
+        "success": 1
+      }
+    },
+    {
+      "seed": 1951,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "full_failure": 48,
+      "pool_type": "all_negative",
+      "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+      "request_sha256": "6b6d5b4607fc90302513df3d1d57b696c50475c66d27b69d3bffc7b27a6d2f50",
+      "final_pass_counts": {
+        "cleaning_pass": 35,
+        "assembly_pass": 0,
+        "functional_test_pass": 0,
+        "fixture_capture_pass": 0,
+        "final_seat_pass": 0,
+        "final_release_and_retraction_pass": 0
+      },
+      "first_failure_counts": {
+        "press_seat": 17,
+        "slide_insert": 6,
+        "verify_clean": 13,
+        "approach": 9,
+        "learned_insert": 1,
+        "execute_cartesian_path": 1,
+        "inspect_seat": 1
+      }
+    },
+    {
+      "seed": 1952,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "full_failure": 48,
+      "pool_type": "all_negative",
+      "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+      "request_sha256": "b3fb9d415335cfeb77a00874e23d6538366735a2d03a95bc4474f1f3d0279cbb",
+      "final_pass_counts": {
+        "cleaning_pass": 34,
+        "assembly_pass": 0,
+        "functional_test_pass": 0,
+        "fixture_capture_pass": 0,
+        "final_seat_pass": 0,
+        "final_release_and_retraction_pass": 0
+      },
+      "first_failure_counts": {
+        "verify_clean": 11,
+        "execute_cartesian_path": 3,
+        "press_seat": 12,
+        "slide_insert": 6,
+        "approach": 9,
+        "guarded_descent": 1,
+        "learned_insert": 2,
+        "wipe_surface": 3,
+        "place_object": 1
+      }
+    },
+    {
+      "seed": 1953,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "full_failure": 48,
+      "pool_type": "all_negative",
+      "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+      "request_sha256": "294a41dd5d4a9d4035057bcab3ff41671904a777757899ecb234e5a8ecf0fab0",
+      "final_pass_counts": {
+        "cleaning_pass": 36,
+        "assembly_pass": 0,
+        "functional_test_pass": 0,
+        "fixture_capture_pass": 0,
+        "final_seat_pass": 0,
+        "final_release_and_retraction_pass": 0
+      },
+      "first_failure_counts": {
+        "slide_insert": 7,
+        "verify_clean": 12,
+        "press_seat": 16,
+        "approach": 9,
+        "execute_cartesian_path": 1,
+        "place_object": 2,
+        "learned_insert": 1
+      }
+    },
+    {
+      "seed": 1954,
+      "generated": 48,
+      "valid": 48,
+      "full_success": 0,
+      "full_failure": 48,
+      "pool_type": "all_negative",
+      "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+      "request_sha256": "92903b1c1e36954084ccd2396f1323a1fe50c202836350af4acbc0836eb923a3",
+      "final_pass_counts": {
+        "cleaning_pass": 26,
+        "assembly_pass": 0,
+        "functional_test_pass": 0,
+        "fixture_capture_pass": 0,
+        "final_seat_pass": 0,
+        "final_release_and_retraction_pass": 0
+      },
+      "first_failure_counts": {
+        "approach": 7,
+        "wipe_surface": 12,
+        "execute_cartesian_path": 2,
+        "press_seat": 6,
+        "verify_clean": 10,
+        "slide_insert": 7,
+        "learned_insert": 1,
+        "select_grasp": 2,
+        "place_object": 1
+      }
+    }
+  ]
+}
