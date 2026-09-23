@@ -121,6 +121,7 @@ AUXILIARY_INTERFACES = {
         "pin": "inspect_pin_inserted",
         "pin_joint": "inspect_pin_joint",
         "receiver_relation": "inspect_receiver_relation",
+        "stable_supported": "inspect_stable_support",
         "grasp": "verify_grasp",
         "stroke": "verify_stroke",
         "clean": "verify_clean",

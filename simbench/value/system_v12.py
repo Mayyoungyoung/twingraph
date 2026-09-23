@@ -261,12 +261,15 @@ def run_mechanism_prefix(session, *, stop_after, order, choices, wipe_variant=0,
         raise ValueError("candidate cannot change functional task requirement")
     if stop_after not in order:
         raise ValueError("mechanism stop stage must occur in the executable order")
-    if completed:
-        raise ValueError("fresh-scene mechanism evidence cannot claim a completed prefix")
+    prefix=[p for p in order if p in set(completed)]
+    if set(prefix)!=set(completed):
+        raise ValueError("resumed prefix stages must be an order prefix")
+    if stop_after in prefix:
+        raise ValueError("mechanism stop stage already completed by the resumed prefix")
     proposal=dict(order=list(order), choices=deepcopy(choices), wipe_variant=0,
                   wipe_force=1.5, wipe_duration=14., stroke_minimum=stroke_minimum)
-    done=[]
-    for part in proposal["order"]:
+    done=list(prefix)
+    for part in (p for p in proposal["order"] if p not in done):
         _prepare_receiver_targets(session, part, proposal)
         plan=assembly_program(session, proposal)
         save(Path(session.out)/"mechanism_stage_programs"/f"{len(done):02d}_{part}.json",
@@ -275,7 +278,9 @@ def run_mechanism_prefix(session, *, stop_after, order, choices, wipe_variant=0,
         calls=[c for c in plan.calls if c.roles.get("manipulated")==part
                and not c.id.startswith("accept_")]
         execute_calls(session, plan, calls)
-        if part=="end_stop":
+        if part=="end_stop" and getattr(session,"end_stop_place_acceptance_v12",None)!="stable_supported":
+            # The corridor stays mandatory for the complete task; the V17-A
+            # stable-supported local mode ends at its own retention check.
             _require_stop_corridor(session.decision_observation)
         done.append(part)
         if part==stop_after:
@@ -283,11 +288,13 @@ def run_mechanism_prefix(session, *, stop_after, order, choices, wipe_variant=0,
     if done[-1] != stop_after:
         raise RuntimeError("mechanism prefix did not reach its declared stop stage")
     return Result(True, dict(scope="assembly_prefix", stop_after=stop_after,
-                             completed=done, full_task_success=False))
+                             completed=done, full_task_success=False,
+                             resumed_from_checkpoint=bool(prefix)))
 
 
 def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
-            completed=(), monitor=None, level="L1", record=False, stop_after=None):
+            completed=(), monitor=None, level="L1", record=False, stop_after=None,
+            end_stop_acceptance=None):
     directory = Path(directory); directory.mkdir(parents=True, exist_ok=True)
     provenance=require_frozen_source()
     started = time.perf_counter(); boundaries = []
@@ -304,6 +311,9 @@ def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
     with (directory / "console.log").open("w", encoding="utf-8") as log, contextlib.redirect_stdout(log):
         _, session, _, _ = make_scene(seed, directory / "scene", domain=domain, level=level)
         if checkpoint is not None: restore_twin_checkpoint(session, checkpoint)
+        if end_stop_acceptance is not None:
+            # Explicit opt-in for the V17-A end-stop local acceptance mode.
+            session.end_stop_place_acceptance_v12 = str(end_stop_acceptance)
         initial = deepcopy(session.decision_observation)
         graph = normalized_graph(session, proposal, completed=completed)
         save(directory / "input_graph.json", graph)
@@ -311,10 +321,12 @@ def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
             session.full_task_controller = lambda s, **params: run_staged(s, **params,
                 completed=completed, monitor=timed_monitor if monitor is not None else None, boundaries=boundaries)
         else:
-            if monitor is not None or checkpoint is not None or completed:
-                raise ValueError("mechanism-prefix rollout requires a fresh scene without replanning")
+            if monitor is not None:
+                raise ValueError("mechanism-prefix rollout has no replanning monitor")
+            if completed and checkpoint is None:
+                raise ValueError("resumed mechanism-prefix rollout requires its exact legal checkpoint")
             session.full_task_controller = lambda s, **params: run_mechanism_prefix(
-                s, stop_after=stop_after, completed=(), **params)
+                s, stop_after=stop_after, completed=completed, **params)
         recorder = None
         if record:
             from scripts.record_v12_execution import RecorderV12

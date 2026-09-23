@@ -34,6 +34,107 @@ class EndStopSeatConfig:
         return asdict(self)
 
 
+@dataclass(frozen=True)
+class EndStopStablePlacementConfig:
+    """Declared development-stage acceptance envelope for stable-supported placement.
+
+    The observation window is an experiment configuration for this local mode,
+    not a hardware safety guarantee.  Contact tolerances keep ordinary
+    numerical contact jitter from becoming a new strict gate.
+    """
+    schema: str = "twingraph.end_stop_stable_supported.v17a"
+    observation_window_s: float = .5
+    window_samples: int = 10
+    minimum_support_force_n: float = .01
+    press_contact_force_n: float = .05
+    finger_support_force_n: float = .01
+    penetration_tolerance_m: float = .001
+
+    def manifest(self):
+        return asdict(self)
+
+
+def end_stop_stable_placement_config(session):
+    return getattr(session, "end_stop_stable_placement_config_v17a", None) or EndStopStablePlacementConfig()
+
+
+def evaluate_end_stop_stable_support(session, part, target, *, after_retreat=False):
+    """Independent stable-support acceptance; never a motion-correction input.
+
+    V17-A end-stop local mode: the released stop must occupy the declared CAD
+    mounting region, be genuinely supported by non-gripper fixtures, and stay
+    that way over the declared short observation window.  Ideal-pose residual,
+    seating-band depth and printed-locator capture are recorded diagnostics in
+    this mode, not gates.
+    """
+    import mujoco
+    if part != "end_stop":
+        raise ValueError("stable-supported acceptance is only defined for end_stop")
+    config = end_stop_stable_placement_config(session)
+    ctx = session.ctx
+    target = np.asarray(target, float)
+    stop_id = ctx.body_id(part)
+
+    def sample():
+        position = ctx.obj_pos(part)
+        region_ok, region_row = functional_geometry(part, position, target)
+        support_force, finger_force, deepest = 0., 0., 0.
+        supporting = []
+        for index, contact in enumerate(ctx.data.contact):
+            bodies = set(map(int, ctx.model.geom_bodyid[[contact.geom1, contact.geom2]]))
+            if stop_id not in bodies or len(bodies) < 2:
+                continue
+            other = next(int(b) for b in bodies if b != stop_id)
+            partner = ctx.model.body(other).name
+            deepest = min(deepest, float(contact.dist))
+            force = np.zeros(6); mujoco.mj_contactForce(ctx.model, ctx.data, index, force)
+            if "finger" in partner:
+                finger_force += max(0., float(force[0]))
+                continue
+            upward = abs(float(np.dot(contact.frame[:3], (0., 0., 1.))))
+            if upward < .5 or float(contact.pos[2]) >= float(position[2]):
+                continue
+            if force[0] > 0:
+                support_force += float(force[0]) * upward
+                supporting.append(partner)
+        row = dict(region_ok=bool(region_ok), stop_offset_m=region_row.get("stop_envelope_offset_m"),
+                   support_force_n=support_force, supporting_bodies=sorted(set(supporting)),
+                   finger_support_force_n=finger_force, deepest_penetration_m=deepest,
+                   stop_position_m=position.tolist())
+        row["supported"] = bool(support_force >= config.minimum_support_force_n)
+        row["gross_penetration"] = bool(deepest < -config.penetration_tolerance_m)
+        row["gripper_supported"] = bool(finger_force >= config.finger_support_force_n)
+        row["ok"] = bool(row["region_ok"] and row["supported"] and not row["gross_penetration"]
+                         and not (after_retreat and row["gripper_supported"]))
+        return row
+
+    rows = [sample()]
+    retained = rows[0]["ok"]
+    if after_retreat and config.observation_window_s > 0 and config.window_samples > 1:
+        interval = config.observation_window_s / (config.window_samples - 1) / float(ctx.control_dt)
+        for _ in range(config.window_samples - 1):
+            for _ in range(max(1, int(np.ceil(interval - 1e-12)))):
+                ctx.step()
+            rows.append(sample())
+            retained = retained and rows[-1]["ok"]
+    metrics = dict(schema=config.schema,
+        success=bool(retained), region_ok=rows[0]["region_ok"],
+        supported=rows[0]["supported"], support_force_n=rows[0]["support_force_n"],
+        supporting_bodies=rows[0]["supporting_bodies"],
+        gripper_released=bool(getattr(session, "held", None) is None),
+        finger_support_force_n=rows[0]["finger_support_force_n"],
+        gripper_still_supporting=rows[0]["gripper_supported"],
+        deepest_penetration_m=rows[0]["deepest_penetration_m"],
+        gross_penetration=rows[0]["gross_penetration"],
+        observation_window_s=float(config.observation_window_s) if after_retreat else 0.,
+        window_samples=len(rows), retained_entire_window=bool(retained),
+        window_rows=rows, region_criterion="declared CAD mounting envelope via functional_geometry",
+        criterion=("released stop supported inside declared region over the declared "
+                   "observation window; locator capture and hole alignment are diagnostics"),
+        measurement_source="independent_simulator_contact_and_CAD_evaluator")
+    return bool(retained), metrics
+
+
 def functional_stroke_targets(current_x, minimum, bounds):
     """Choose two opposing movements inside calibrated usable rail limits."""
     low, high = map(float, bounds)

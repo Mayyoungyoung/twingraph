@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "observation_sha256": {"type": "string"},
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "calls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skill": {"type": "string", "enum": ["detect", "estimate_pose", "estimate_grasp", "plan_path", "move", "grasp", "place", "insert", "press", "wipe", "select_grasp", "inspect", "measure"]},
+                "manipulated": {"type": ["string", "null"]},
+                "params_json": {"type": "string"}
+              },
+              "required": ["skill", "manipulated", "params_json"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["name", "calls"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["observation_sha256", "plans"],
+  "additionalProperties": false
+}

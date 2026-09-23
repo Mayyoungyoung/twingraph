@@ -231,7 +231,8 @@ class PlanIR:
         if len(self.prefix.get("steps", [])) != self.boundary:
             raise ValueError("prefix execution boundary disagrees with calls")
         for call, step in zip(self.calls, self.prefix["steps"]):
-            if call.roles.get("manipulated") != self.prefix["part"]:
+            if (self.protocol != "atomic.program.v1"
+                    and call.roles.get("manipulated") != self.prefix["part"]):
                 raise ValueError("prefix object role disagrees with execution")
             params = {
                 k: a.value
@@ -242,6 +243,10 @@ class PlanIR:
                 step.get("params", {})
             ):
                 raise ValueError("scoring calls disagree with executable prefix")
+        if self.protocol == "atomic.program.v1":
+            if self.prefix.get("execution") != "program" or self.boundary != len(self.calls):
+                raise ValueError("atomic program requires an exact complete execution boundary")
+            return self
         if self.prefix.get("execution") == "full_task_v7":
             if self.protocol != "full_task.v7" or self.boundary != 1 or len(self.calls) != 1:
                 raise ValueError("invalid full-task v7 program envelope")

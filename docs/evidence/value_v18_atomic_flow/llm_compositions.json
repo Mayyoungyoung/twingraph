@@ -1,0 +1,40 @@
+[
+  {
+    "name": "baseline",
+    "edits": []
+  },
+  {
+    "name": "centered_grasp",
+    "edits": [
+      {
+        "call_id": "stage1_2",
+        "argument": "center_offset",
+        "value": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  {
+    "name": "higher_grasp",
+    "edits": [
+      {
+        "call_id": "stage1_2",
+        "argument": "height_offset",
+        "value": 0.007
+      }
+    ]
+  },
+  {
+    "name": "lower_clearance",
+    "edits": [
+      {
+        "call_id": "stage1_4",
+        "argument": "clearance",
+        "value": 0.9672999098998607
+      }
+    ]
+  }
+]

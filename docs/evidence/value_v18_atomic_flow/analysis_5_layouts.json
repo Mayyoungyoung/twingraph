@@ -1,0 +1,421 @@
+{
+  "schema": "twingraph.end_stop_natural_pool_analysis.v1",
+  "scope": "end_stop_stable_placement_only",
+  "full_task_success": null,
+  "checkpoint_sha256": "9720138360c20ffa6b07ea2af0c3d2062d5b54bc482f22675e135dbf1a89020b",
+  "k": 4,
+  "layouts": [
+    {
+      "layout_id": "seed_1950",
+      "status": "complete",
+      "scope": "end_stop_stable_placement_only",
+      "candidate_n": 12,
+      "successes": 5,
+      "pool_type": "mixed",
+      "scores": [
+        {
+          "name": "grounded_000",
+          "score": 0.4628773033618927,
+          "local_success": false
+        },
+        {
+          "name": "grounded_001",
+          "score": 0.4639955461025238,
+          "local_success": true
+        },
+        {
+          "name": "grounded_002",
+          "score": 0.46195074915885925,
+          "local_success": false
+        },
+        {
+          "name": "grounded_003",
+          "score": 0.4591673016548157,
+          "local_success": true
+        },
+        {
+          "name": "grounded_004",
+          "score": 0.4630706310272217,
+          "local_success": true
+        },
+        {
+          "name": "grounded_005",
+          "score": 0.4616078734397888,
+          "local_success": false
+        },
+        {
+          "name": "grounded_006",
+          "score": 0.4601793885231018,
+          "local_success": true
+        },
+        {
+          "name": "grounded_007",
+          "score": 0.46318304538726807,
+          "local_success": false
+        },
+        {
+          "name": "grounded_008",
+          "score": 0.46185892820358276,
+          "local_success": false
+        },
+        {
+          "name": "grounded_009",
+          "score": 0.4639228284358978,
+          "local_success": false
+        },
+        {
+          "name": "grounded_010",
+          "score": 0.4609523415565491,
+          "local_success": true
+        },
+        {
+          "name": "grounded_011",
+          "score": 0.45974114537239075,
+          "local_success": false
+        }
+      ],
+      "top_k": [
+        "grounded_001",
+        "grounded_009",
+        "grounded_007",
+        "grounded_004"
+      ],
+      "value_top_k_retains_success": true,
+      "original_top_k_retains_success": true,
+      "first_verified_rank": 1,
+      "exact_uniform_random_top_k_hit_probability": 0.9292929292929293,
+      "exact_uniform_random_first_success_calls": 2.1666666666666665
+    },
+    {
+      "layout_id": "seed_1951",
+      "status": "complete",
+      "scope": "end_stop_stable_placement_only",
+      "candidate_n": 12,
+      "successes": 3,
+      "pool_type": "mixed",
+      "scores": [
+        {
+          "name": "grounded_000",
+          "score": 0.46071770787239075,
+          "local_success": false
+        },
+        {
+          "name": "grounded_001",
+          "score": 0.46172913908958435,
+          "local_success": false
+        },
+        {
+          "name": "grounded_002",
+          "score": 0.4627412259578705,
+          "local_success": false
+        },
+        {
+          "name": "grounded_003",
+          "score": 0.45940616726875305,
+          "local_success": false
+        },
+        {
+          "name": "grounded_004",
+          "score": 0.4616854190826416,
+          "local_success": true
+        },
+        {
+          "name": "grounded_005",
+          "score": 0.46005186438560486,
+          "local_success": false
+        },
+        {
+          "name": "grounded_006",
+          "score": 0.4608202576637268,
+          "local_success": true
+        },
+        {
+          "name": "grounded_007",
+          "score": 0.46302467584609985,
+          "local_success": false
+        },
+        {
+          "name": "grounded_008",
+          "score": 0.45948851108551025,
+          "local_success": false
+        },
+        {
+          "name": "grounded_009",
+          "score": 0.4614841639995575,
+          "local_success": false
+        },
+        {
+          "name": "grounded_010",
+          "score": 0.46139538288116455,
+          "local_success": true
+        },
+        {
+          "name": "grounded_011",
+          "score": 0.46038737893104553,
+          "local_success": false
+        }
+      ],
+      "top_k": [
+        "grounded_007",
+        "grounded_002",
+        "grounded_001",
+        "grounded_004"
+      ],
+      "value_top_k_retains_success": true,
+      "original_top_k_retains_success": false,
+      "first_verified_rank": 4,
+      "exact_uniform_random_top_k_hit_probability": 0.7454545454545455,
+      "exact_uniform_random_first_success_calls": 3.25
+    },
+    {
+      "layout_id": "seed_1952",
+      "status": "complete",
+      "scope": "end_stop_stable_placement_only",
+      "candidate_n": 12,
+      "successes": 4,
+      "pool_type": "mixed",
+      "scores": [
+        {
+          "name": "grounded_000",
+          "score": 0.460683137178421,
+          "local_success": false
+        },
+        {
+          "name": "grounded_001",
+          "score": 0.4618169665336609,
+          "local_success": false
+        },
+        {
+          "name": "grounded_002",
+          "score": 0.4623558819293976,
+          "local_success": false
+        },
+        {
+          "name": "grounded_003",
+          "score": 0.4588949382305145,
+          "local_success": true
+        },
+        {
+          "name": "grounded_004",
+          "score": 0.4617105722427368,
+          "local_success": true
+        },
+        {
+          "name": "grounded_005",
+          "score": 0.45996853709220886,
+          "local_success": false
+        },
+        {
+          "name": "grounded_006",
+          "score": 0.46083736419677734,
+          "local_success": true
+        },
+        {
+          "name": "grounded_007",
+          "score": 0.4626148045063019,
+          "local_success": false
+        },
+        {
+          "name": "grounded_008",
+          "score": 0.459260493516922,
+          "local_success": false
+        },
+        {
+          "name": "grounded_009",
+          "score": 0.4616597592830658,
+          "local_success": true
+        },
+        {
+          "name": "grounded_010",
+          "score": 0.4614013135433197,
+          "local_success": false
+        },
+        {
+          "name": "grounded_011",
+          "score": 0.46005943417549133,
+          "local_success": false
+        }
+      ],
+      "top_k": [
+        "grounded_007",
+        "grounded_002",
+        "grounded_001",
+        "grounded_004"
+      ],
+      "value_top_k_retains_success": true,
+      "original_top_k_retains_success": true,
+      "first_verified_rank": 4,
+      "exact_uniform_random_top_k_hit_probability": 0.8585858585858586,
+      "exact_uniform_random_first_success_calls": 2.6
+    },
+    {
+      "layout_id": "seed_1953",
+      "status": "complete",
+      "scope": "end_stop_stable_placement_only",
+      "candidate_n": 12,
+      "successes": 8,
+      "pool_type": "mixed",
+      "scores": [
+        {
+          "name": "grounded_000",
+          "score": 0.4615199565887451,
+          "local_success": true
+        },
+        {
+          "name": "grounded_001",
+          "score": 0.4624503552913666,
+          "local_success": true
+        },
+        {
+          "name": "grounded_002",
+          "score": 0.4633805751800537,
+          "local_success": true
+        },
+        {
+          "name": "grounded_003",
+          "score": 0.4598381221294403,
+          "local_success": false
+        },
+        {
+          "name": "grounded_004",
+          "score": 0.4617898166179657,
+          "local_success": true
+        },
+        {
+          "name": "grounded_005",
+          "score": 0.4601503908634186,
+          "local_success": true
+        },
+        {
+          "name": "grounded_006",
+          "score": 0.46085885167121887,
+          "local_success": true
+        },
+        {
+          "name": "grounded_007",
+          "score": 0.4640025794506073,
+          "local_success": false
+        },
+        {
+          "name": "grounded_008",
+          "score": 0.46005940437316895,
+          "local_success": false
+        },
+        {
+          "name": "grounded_009",
+          "score": 0.46146994829177856,
+          "local_success": true
+        },
+        {
+          "name": "grounded_010",
+          "score": 0.46270936727523804,
+          "local_success": false
+        },
+        {
+          "name": "grounded_011",
+          "score": 0.46149101853370667,
+          "local_success": true
+        }
+      ],
+      "top_k": [
+        "grounded_007",
+        "grounded_002",
+        "grounded_010",
+        "grounded_001"
+      ],
+      "value_top_k_retains_success": true,
+      "original_top_k_retains_success": true,
+      "first_verified_rank": 2,
+      "exact_uniform_random_top_k_hit_probability": 0.997979797979798,
+      "exact_uniform_random_first_success_calls": 1.4444444444444444
+    },
+    {
+      "layout_id": "seed_1954",
+      "status": "complete",
+      "scope": "end_stop_stable_placement_only",
+      "candidate_n": 12,
+      "successes": 4,
+      "pool_type": "mixed",
+      "scores": [
+        {
+          "name": "grounded_000",
+          "score": 0.4622443914413452,
+          "local_success": false
+        },
+        {
+          "name": "grounded_001",
+          "score": 0.4636997580528259,
+          "local_success": true
+        },
+        {
+          "name": "grounded_002",
+          "score": 0.46124133467674255,
+          "local_success": true
+        },
+        {
+          "name": "grounded_003",
+          "score": 0.4586350619792938,
+          "local_success": false
+        },
+        {
+          "name": "grounded_004",
+          "score": 0.4632954001426697,
+          "local_success": true
+        },
+        {
+          "name": "grounded_005",
+          "score": 0.46137359738349915,
+          "local_success": false
+        },
+        {
+          "name": "grounded_006",
+          "score": 0.45984649658203125,
+          "local_success": true
+        },
+        {
+          "name": "grounded_007",
+          "score": 0.4627884030342102,
+          "local_success": false
+        },
+        {
+          "name": "grounded_008",
+          "score": 0.4611542522907257,
+          "local_success": false
+        },
+        {
+          "name": "grounded_009",
+          "score": 0.46321526169776917,
+          "local_success": false
+        },
+        {
+          "name": "grounded_010",
+          "score": 0.460702121257782,
+          "local_success": false
+        },
+        {
+          "name": "grounded_011",
+          "score": 0.4597693681716919,
+          "local_success": false
+        }
+      ],
+      "top_k": [
+        "grounded_001",
+        "grounded_004",
+        "grounded_009",
+        "grounded_007"
+      ],
+      "value_top_k_retains_success": true,
+      "original_top_k_retains_success": true,
+      "first_verified_rank": 1,
+      "exact_uniform_random_top_k_hit_probability": 0.8585858585858586,
+      "exact_uniform_random_first_success_calls": 2.6
+    }
+  ],
+  "completed_layouts": 5,
+  "mixed_layouts": 5,
+  "value_retained": 5,
+  "exact_random_expected_hits": 4.38989898989899,
+  "value_mean_first_success_calls": 2.4,
+  "exact_random_mean_first_success_calls": 2.412222222222222,
+  "interpretation": "Value scores are pre-execution; physical labels are read only for analysis. The V15 checkpoint was trained for the full task, so local ranking quality is exploratory."
+}

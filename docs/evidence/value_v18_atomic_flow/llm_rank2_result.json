@@ -1,0 +1,16 @@
+{
+  "valid": true,
+  "success": true,
+  "error": null,
+  "evaluation_scope": "end_stop_stable_placement_only",
+  "input_graph_sha256": "f534e4cb56978492e718cc857acebd2baced3184a6cc0bb732f0b45fcf544fcd",
+  "plan_sha256": "1fbaad064284dc56d0584417c8f12f84c3b53f4115d7bedb6e2b96b818537e7f",
+  "runtime_sha256": "c3cb78d6646f07383341bb359b6b7ac416009a2727c1447cb2651f4e487165d0",
+  "checkpoint_sha256": "43b3807466801217be84841c1733bf5713b02220474a0858047468946c69358b",
+  "physical_checkpoint_sha256": "b3404222dfaa7421d6c93ac595e67b7f508fd013058707ee74917be686d20a17",
+  "candidate": "grounded_001",
+  "seed": 1950,
+  "wall_seconds": 15.62889084010385,
+  "source": "direct atomic PlanIR execution from exact physical predecessor checkpoint",
+  "full_task_success": null
+}

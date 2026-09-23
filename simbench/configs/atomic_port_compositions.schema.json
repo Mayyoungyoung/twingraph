@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "observation_sha256": {"type": "string"},
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "edits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "call_id": {"type": "string"},
+                "argument": {"type": "string"},
+                "value_json": {"type": "string"}
+              },
+              "required": ["call_id", "argument", "value_json"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["name", "edits"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["observation_sha256", "plans"],
+  "additionalProperties": false
+}

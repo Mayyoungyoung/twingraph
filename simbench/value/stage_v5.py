@@ -166,7 +166,7 @@ def legal_orders(orders=None):
 
 
 def stage_calls(part, target, choice, stage, v7=False, functional_clearance=False, v12=False,
-                receiver_geometry=None, assembly_target=None, cad=None):
+                receiver_geometry=None, assembly_target=None, cad=None, end_stop_stable=False):
     """Original task.py operations, with feedback transforms kept deferred."""
     calls = []
     target = np.asarray(target, float)
@@ -284,8 +284,11 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
         press["force_stop"] = argument(choice.get("press_force", 2.5), unit="N")
     add("press", **press)
     place_tol = .0025 if (v7 and part.startswith("pin_")) else .003
+    place_acceptance = ("pin_inserted" if (v7 and part.startswith("pin_"))
+                        else "stable_supported" if (end_stop_stable and part == "end_stop")
+                        else "pose")
     add("place", part=part, target=xyz(target), tol=argument(place_tol, unit="m"), settle=argument(.35, unit="s"),
-        acceptance=argument("pin_inserted" if (v7 and part.startswith("pin_")) else "pose"))
+        acceptance=argument(place_acceptance))
     # A released narrow pin must not be swept sideways by the old 100 mm
     # vertical retreat.  In the v7 branch the release routine has already
     # verified support and clears the fingers; a short 20 mm lift is the
@@ -309,12 +312,19 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
         add("inspect", what="pin", part=part, hole_part="end_stop",
             hole_offset_m=argument([0., -.032 if part == "pin_left" else .032, 0.], unit="m"),
             minimum_insertion_depth_m=argument(.006, unit="m"), phase=argument("inserted_after_release"))
+    elif end_stop_stable and part == "end_stop":
+        # End of the V17-A local flow: release, retreat and support retention.
+        # Locator capture and hole alignment stay diagnostics in this mode.
+        add("inspect", what="stable_supported", part=part, target=xyz(target))
     else:
         add("inspect", part=part, target=xyz(target), tol=argument(inspect_tol, unit="m"))
     if part == "carriage" and not v12:
         add("measure", quantity="clearance", part=part)
         add("inspect", what="measurement", minimum=argument(1.e-12, unit="m"))
-    if v12:
+    if v12 and not (end_stop_stable and part == "end_stop"):
+        # The stable-supported local flow ends after release, retreat and the
+        # support-retention check; it neither returns HOME nor runs the shared
+        # shaft-route precheck that belongs to the later pin stage.
         add("move", target="home")
         if part == "end_stop" and assembly_target:
             add("detect", required_parts=["end_stop"])
@@ -336,7 +346,8 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
     calls = [c for i, p in enumerate(order) for c in stage_calls(p, targets[p], choices[p], i, v7=v7,
         functional_clearance=functional_clearance, v12=v12,
         receiver_geometry=observation.get("receiver_geometry", {}),
-        assembly_target=receiver_targets.get(p), cad=getattr(session, "planning_cad", None))]
+        assembly_target=receiver_targets.get(p), cad=getattr(session, "planning_cad", None),
+        end_stop_stable=getattr(session, "end_stop_place_acceptance_v12", None) == "stable_supported")]
     for part in PARTS:
         if (functional_clearance or v12) and part == "end_stop":
             # The stop was checked when first seated. Pin insertion may move

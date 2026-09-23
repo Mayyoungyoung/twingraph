@@ -1,0 +1,25 @@
+{
+  "checkpoint_sha256": "9720138360c20ffa6b07ea2af0c3d2062d5b54bc482f22675e135dbf1a89020b",
+  "scores": [
+    0.5498679876327515,
+    0.5495303273200989,
+    0.5498586297035217,
+    0.5498878955841064
+  ],
+  "order": [
+    3,
+    0,
+    2,
+    1
+  ],
+  "top_k": [
+    3,
+    0
+  ],
+  "graphs": [
+    "artifacts/llm_composed_1950/candidate_00_graph.json",
+    "artifacts/llm_composed_1950/candidate_01_graph.json",
+    "artifacts/llm_composed_1950/candidate_02_graph.json",
+    "artifacts/llm_composed_1950/candidate_03_graph.json"
+  ]
+}

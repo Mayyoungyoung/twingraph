@@ -182,7 +182,12 @@ def validate_geometry_conditions(graph, plan=None):
                 w, x, y, z = (float(v)/norm for v in quaternion)
                 observed_yaw = math.atan2(2*(w*z+x*y), 1-2*(y*y+z*z))
                 delta = world - observed_yaw - row["yaw"]
-                if abs(math.atan2(math.sin(delta), math.cos(delta))) > 1.e-9:
+                # The row yaw was evaluated from an earlier rendered RGB-D
+                # observation; re-observing the same layout is not bit-identical
+                # (observed repeat error ~5e-6 rad).  This is a frame-convention
+                # check, so a convention error is O(pi/2) while this tolerance
+                # only absorbs sensor repeatability.
+                if abs(math.atan2(math.sin(delta), math.cos(delta))) > 1.e-4:
                     raise ValueError("geometry_conditions evaluated world yaw disagrees with observed object frame")
         required = row.get("required_clearance_m")
         minimum = row.get("min_clearance_m")

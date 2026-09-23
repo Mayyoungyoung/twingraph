@@ -838,9 +838,23 @@ class Session:
     def place_object(self, part, target, tol=0.0015, settle=0.30, minimum_support=0.01,
                      acceptance="pose"):
         """Release an already supported part; moving there is the Move atom's job."""
-        if tol <= 0 or settle < 0 or minimum_support <= 0 or acceptance not in ("pose", "pin_inserted", "support_only"):
+        if (tol <= 0 or settle < 0 or minimum_support <= 0
+                or acceptance not in ("pose", "pin_inserted", "support_only", "stable_supported")):
             return Result(False, reason="invalid placement tolerances")
-        pose = self.inspect_seat(part, target, tol) if acceptance == "pose" else Result(True, {"acceptance": acceptance})
+        stable = acceptance == "stable_supported"
+        if stable and str(part) != "end_stop":
+            return Result(False, reason="stable_supported acceptance is only defined for end_stop")
+        if stable:
+            if getattr(self, "end_stop_place_acceptance_v12", None) != "stable_supported":
+                return Result(False, reason="stable_supported requires the explicit V17-A local-mode flag")
+            from .skills_v12 import control_position, functional_geometry
+            control = control_position(self, part)
+            region_ok, region_row = functional_geometry(str(part), control, np.asarray(target, float))
+            pose = Result(bool(region_ok), {"acceptance": acceptance, **region_row,
+                "control_position_m": np.asarray(control, float).tolist()},
+                "" if region_ok else "end_stop outside declared mounting region before release")
+        else:
+            pose = self.inspect_seat(part, target, tol) if acceptance == "pose" else Result(True, {"acceptance": acceptance})
         if not pose.ok:
             return Result(
                 False, pose.metrics, "move to the placement target before releasing"
@@ -934,7 +948,13 @@ class Session:
         # real post-release drift.
         self.held = None
         self.hold(settle)
-        settled = self.inspect_seat(part, target, tol) if acceptance == "pose" else Result(True, {"acceptance": acceptance})
+        if stable:
+            from .skills_v12 import evaluate_end_stop_stable_support
+            stable_ok, stable_row = evaluate_end_stop_stable_support(self, str(part), target, after_retreat=False)
+            settled = Result(bool(stable_ok), stable_row,
+                             "" if stable_ok else "released end_stop is not stably supported")
+        else:
+            settled = self.inspect_seat(part, target, tol) if acceptance == "pose" else Result(True, {"acceptance": acceptance})
         if (settled.ok and self.stage_passes and str(part).startswith("pin_")
                 and not getattr(self, "functional_acceptance_v12", False)):
             # Rotate the opened fingers in place before the normal vertical
@@ -952,7 +972,9 @@ class Session:
                 "handle_geometry_while_held": pose.metrics if handle_geometry_ready else None,
                 "jaw_span_m": self.ctx.pad_span(),
             },
-            "placement did not remain within tolerance" if acceptance == "pose" else "release failed",
+            "placement did not remain within tolerance" if acceptance == "pose"
+            else "released end_stop is not stably supported" if stable
+            else "release failed",
         )
 
     @skill("measure_value", "测量", "perception", produces="measurement", legacy=False)
@@ -1406,6 +1428,30 @@ class Session:
     def _press_functional_v12(self, part, target_z, force_stop):
         """Bounded contact establishment; final placement/stroke owns acceptance."""
         from .skills_v12 import control_position, evaluate_functional_seat
+        if (part == "end_stop"
+                and getattr(self, "end_stop_place_acceptance_v12", None) == "stable_supported"):
+            from .skills_v12 import end_stop_stable_placement_config
+            config = end_stop_stable_placement_config(self)
+            command = self.ctx.eef_pos().copy()
+            initial = command.copy()
+            peak = float(self.external_force(part))
+            for _ in range(int(.006 / .000025)):
+                if peak >= float(force_stop):
+                    break
+                command[2] -= .000025
+                self.arm.servo(command)
+                peak = max(peak, float(self.external_force(part)))
+                if not self.ctx.grasp_contacts(part)["held"]:
+                    return Result(False, {"peak_force_n": peak}, "grasp lost during contact establishment")
+            self.hold(.2)
+            dwell = float(self.external_force(part))
+            ok = peak >= config.press_contact_force_n
+            return Result(ok, dict(peak_force_n=peak, dwell_force_n=dwell,
+                extra_descent_m=float(initial[2] - command[2]),
+                control_source="RGB-D grasp relation, encoder FK, force feedback",
+                desired_force_n=float(force_stop),
+                criterion="stable_supported bounded contact settle; no seating-band search"),
+                "" if ok else "no measurable support contact before release")
         insertion = self.artifacts.get("insert", {})
         if (str(part).startswith("pin_") and insertion.get("part") == part
                 and "command_depth_m" in insertion):
@@ -1625,6 +1671,24 @@ class Session:
         ok = bool(relation.get("observable") and relation.get("geometric_route_exists"))
         self.artifacts["receiver_relation_acceptance"] = relation
         return Result(ok, relation, "released end_stop has no observed shared shaft route into base" if not ok else "")
+
+    @skill("inspect_stable_support", "验收端挡稳定支撑放置", "verification",
+           ("empty",), legacy=False,
+           obligations=("released stop supported in declared region after gripper retreat",))
+    def inspect_stable_support(self, part="end_stop", target=None):
+        if part != "end_stop":
+            return Result(False, reason="stable-support acceptance is only defined for end_stop")
+        if target is None:
+            target = ((getattr(self, "receiver_execution_targets", {}).get("end_stop") or {}).get("position_m")
+                      or getattr(self, "stage_targets", {}).get("end_stop"))
+        if target is None:
+            return Result(False, reason="stable-support acceptance requires the declared assembly target")
+        from .skills_v12 import evaluate_end_stop_stable_support
+        ok, metrics = evaluate_end_stop_stable_support(self, part, np.asarray(target, float),
+                                                       after_retreat=True)
+        self.artifacts["end_stop_stable_support"] = metrics
+        return Result(bool(ok), metrics,
+                      "" if ok else "end_stop is not stably supported after release and retreat")
 
     @skill("inspect_pin_joint", "验收插销连接两层真实孔", "verification",
            ("empty", "capability:pin"), legacy=False,
