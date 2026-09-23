@@ -23,8 +23,8 @@ def main():
         import torch
         saved=torch.load(args.checkpoint,map_location="cpu",weights_only=False)
         schema=saved.get("schema") if isinstance(saved,dict) else None
-        if schema=="twingraph.full_flow_graph_value.v20.r1":
-            from simbench.value.full_flow_graph_value_v20 import ValueRankerV20
+        from simbench.value.full_flow_graph_value_v20 import SCHEMA as FULL_FLOW_SCHEMA, ValueRankerV20
+        if schema==FULL_FLOW_SCHEMA:
             value=ValueRankerV20(args.checkpoint)
         elif schema=="twingraph.atomic_graph_value.v15.r2":
             from simbench.value.generic_graph_value_v15 import ValueRankerV15

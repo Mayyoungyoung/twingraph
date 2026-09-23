@@ -1,0 +1,40 @@
+{
+  "schema": "twingraph.full_task_coverage_summary.v20.r1",
+  "source": "/home/jia/twingraph-v20-pin-spiral/artifacts/v20_pin_spiral_natural_1950/audit.json",
+  "seed": 1950,
+  "domain": "online",
+  "generated": 48,
+  "valid": 48,
+  "full_success": 1,
+  "full_failure": 47,
+  "pool_type": "mixed",
+  "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+  "successful_candidate": "grounded_037",
+  "successful_final_acceptance_flags": [
+    "cleaning_pass",
+    "assembly_pass",
+    "functional_test_pass",
+    "fixture_capture_pass",
+    "final_seat_pass",
+    "final_release_and_retraction_pass"
+  ],
+  "first_failure_skill_counts": {
+    "approach": 9,
+    "move_constrained": 1,
+    "press_seat": 15,
+    "verify_clean": 12,
+    "slide_insert": 6,
+    "learned_insert": 2,
+    "execute_cartesian_path": 2
+  },
+  "candidate_source": "observation_grounded_natural_v12",
+  "timing_mode": "concurrent_label_collection_not_online_decision_latency",
+  "single_layout_descriptive_baselines": {
+    "full_twin_calls": 48,
+    "full_twin_serial_sum_seconds": 5799.867368459469,
+    "random_top4_exact_success_probability": 0.08333333333333333,
+    "random_top4_expected_calls": 3.875,
+    "random_top4_expected_serial_seconds": 468.76645622709856,
+    "time_interpretation": "sum/expectation of parallel-collected individual rollout wall times; not measured online decision latency"
+  }
+}

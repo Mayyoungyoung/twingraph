@@ -108,8 +108,8 @@ def test_final_home_rechecks_seats_instead_of_reusing_pre_stroke_success(monkeyp
     for part in targets:
         assert skills_v12.evaluate_functional_seat(session, part, targets[part])[0]
 
-    def finish_stroke_and_home(current, minimum):
-        assert current is session and minimum == .02
+    def finish_stroke_and_home(current, minimum, *, grasp_force=3.0):
+        assert current is session and minimum == .02 and grasp_force == 3.0
         for xyz in positions.values(): xyz[0] += .025
         current.stage_passes["functional_test_pass"] = True
         current.ctx.arm_qpos = HOME.copy()

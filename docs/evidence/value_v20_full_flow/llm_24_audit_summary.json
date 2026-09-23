@@ -1,0 +1,22 @@
+{
+  "schema": "twingraph.full_task_coverage_summary.v20.r1",
+  "source": "/home/jia/twingraph-v20-pin-spiral/artifacts/v20_pin_spiral_llm_1950/audit.json",
+  "seed": 1950,
+  "generated": 24,
+  "valid": 24,
+  "full_success": 0,
+  "full_failure": 24,
+  "pool_type": "all_negative",
+  "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+  "first_failure_skill_counts": {
+    "verify_clean": 9,
+    "slide_insert": 4,
+    "learned_insert": 3,
+    "press_seat": 6,
+    "approach": 1,
+    "guarded_descent": 1
+  },
+  "candidate_source": "llm_composed_grounded_atomic_ports_v20",
+  "pre_outcome_graph_hash_checked": true,
+  "timing_mode": "concurrent_label_collection_not_online_decision_latency"
+}

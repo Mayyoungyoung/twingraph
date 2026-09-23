@@ -1,0 +1,17 @@
+{
+  "schema": "twingraph.llm_atomic_generation_summary.v20.r1",
+  "seed": 1950,
+  "runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+  "generator": "Codex CLI 0.155.0-alpha.16",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "high",
+  "model_call_seconds": 166.202533,
+  "candidate_count": 24,
+  "complete_graphs_validated_and_frozen": 24,
+  "prompt_sha256": "7fa6d73846d551ecfba5ac1bb9cee40f8d1d2d4dcb794c0a21b39ff0df930de8",
+  "response_sha256": "f74e60ff74ed7b1ae8bdb5a82fb9329e7e61fd21edc16fd39da2bc8927c494ce",
+  "input_contract": "task and observed scene, generic atomic skill catalog, legal order and pre-execution solver ports",
+  "output_contract": "one legal order donor, one cleaning donor and one donor per manipulated role",
+  "rollout_labels_visible_to_model": false,
+  "remote_frozen_request": "/home/jia/twingraph-v20-pin-spiral/artifacts/v20_pin_spiral_llm_1950/seed_1950/collect/request.json"
+}

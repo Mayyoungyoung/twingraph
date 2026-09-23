@@ -19,7 +19,7 @@ from .generic_graph_value_v15 import (
 from .plan import PlanIR
 
 
-SCHEMA = "twingraph.full_flow_graph_value.v20.r1"
+SCHEMA = "twingraph.full_flow_graph_value.v20.r2"
 
 
 def _controller_row(*, skill, manipulated, ports, observation):
@@ -81,7 +81,8 @@ def encode_graph(graph, *, check=True):
                ("minimum_coverage", cleaning["minimum_coverage"], "")),
         observation=observation)
     functional = _controller_row(skill="functional_stroke_feedback", manipulated="handle",
-        ports=(("stroke_minimum", params["stroke_minimum"], "m"),),
+        ports=(("stroke_minimum", params["stroke_minimum"], "m"),
+               ("grasp_force", params["choices"]["handle"]["force"], "N")),
         observation=observation)
     n = len(encoded["x"])
     if n + 2 > 512:

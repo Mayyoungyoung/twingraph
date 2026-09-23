@@ -220,7 +220,8 @@ def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
     plan = assembly_program(session, proposal)
     execute_calls(session, plan, [c for c in plan.calls if c.id.startswith("accept_") or c.id == "final_home"])
     session.stage_passes["assembly_pass"] = True
-    _stroke(session, stroke_minimum)
+    _stroke(session, stroke_minimum,
+            grasp_force=proposal["choices"].get("handle", {}).get("force", 3.0))
     for part in ("pin_left", "pin_right"):
         session.call("inspect", what="pin_joint", part=part, phase="retained_after_stroke")
     from simbench.assembly.skills_v12 import evaluate_end_stop_fixture, evaluate_functional_seat

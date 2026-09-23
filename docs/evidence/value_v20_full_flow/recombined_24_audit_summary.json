@@ -1,0 +1,20 @@
+{
+  "schema": "twingraph.full_task_coverage_summary.v20.r1",
+  "source": "/home/jia/twingraph-v20-full-flow/artifacts/v20_recombined_online_1950/audit.json",
+  "seed": 1950,
+  "generated": 24,
+  "valid": 24,
+  "full_success": 0,
+  "full_failure": 24,
+  "pool_type": "all_negative",
+  "runtime_sha256": "276553a11dae3a03e26cb2b47f8f04e8580b629cc0b6d5597b2117bd66b159a3",
+  "first_failure_skill_counts": {
+    "approach": 8,
+    "execute_cartesian_path": 1,
+    "learned_insert": 4,
+    "press_seat": 9,
+    "slide_insert": 2
+  },
+  "candidate_source": "label_blind_atomic_skill_port_recombination_v20",
+  "pre_outcome_graph_hash_checked": true
+}

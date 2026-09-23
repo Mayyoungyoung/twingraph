@@ -170,7 +170,10 @@ def execute(session, part, target_z, force_stop):
         elif force >= desired_contact:
             delta[2] = min(.002*dt, max(.00025*dt, (force-desired_contact)*.004*dt))
         else:
-            delta[2] = np.clip(delta[2], -.001*dt, .001*dt)
+            # The narrow insertion clearance and stiff simulated contact
+            # require micrometre-scale probing. A 20 um single-step descent
+            # can jump past the declared force stop before feedback returns.
+            delta[2] = np.clip(delta[2], -.0002*dt, .001*dt)
         command += delta
         command = bounded_target(command, position, center, config["radius_m"], target_z)
         if (entry or contact_z is None) and position[2] <= target_z+.0002 and force < force_stop_n:

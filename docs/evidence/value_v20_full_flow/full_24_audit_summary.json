@@ -1,0 +1,18 @@
+{
+  "schema": "twingraph.full_task_pool_compact.v20.r1",
+  "seed": 1950,
+  "runtime_sha256": "276553a11dae3a03e26cb2b47f8f04e8580b629cc0b6d5597b2117bd66b159a3",
+  "generated": 24,
+  "valid": 24,
+  "success": 0,
+  "failure": 24,
+  "pool_type": "all_negative",
+  "first_failure_counts": {
+    "approach": 7,
+    "press_seat": 13,
+    "slide_insert": 3,
+    "learned_insert": 1
+  },
+  "timing_mode": "concurrent_label_collection_not_online_decision_latency",
+  "source_audit": "/home/jia/twingraph-v20-full-flow/artifacts/v20_full_1950/audit.json"
+}

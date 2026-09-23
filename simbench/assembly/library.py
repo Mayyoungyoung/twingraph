@@ -921,6 +921,10 @@ class Session:
                     or getattr(self, "functional_acceptance_v12", False)):
                 self.call("press", part=part, target_z=float(target[2]), force_stop=4.0)
             self.hold(.20)
+        elif acceptance == "pose":
+            # Let a supported placement stop drifting before the jaws open.
+            # The post-release pose check remains the only acceptance test.
+            self.hold(.20)
         try:
             self.call("open_gripper")
         except SkillFailure:
@@ -1090,6 +1094,15 @@ class Session:
                 # after a long hover descent.  Re-solve from the attained
                 # state and perform a slower bounded correction before failing.
                 ok = self.arm.move(goal["xyz"], down(goal["yaw"]), speed=0.02)
+            if not ok:
+                # A second Cartesian tracking miss is still a reachable
+                # endpoint candidate. Use the same whole-robot collision
+                # check required by the explicit joint approach strategy.
+                q = self.arm.ik_with_restarts(goal["xyz"], down(goal["yaw"]))
+                verdict = self.arm.check_joint_path([q])
+                if verdict["valid"]:
+                    ok = self.arm.execute_joint(q)
+                    self.arm.rotation = down(goal["yaw"])
         except ValueError as exc:
             # A Cartesian IK continuation can stall near a redundant-arm
             # singularity despite a reachable checked endpoint. Try one
@@ -1410,19 +1423,42 @@ class Session:
                 return Result(False, reason="grasp lost during descent")
         self.hold(0.2)
         z = float(control_position(self, part)[2])
+        # A guarded approach can finish against a stiff contact with a
+        # residual load above the next press skill's stopping threshold.
+        # Retract in the already checked vertical direction until the load
+        # relaxes; the press then starts from an unloaded, held state. This
+        # uses the same force/encoder feedback for every held object.
+        unloaded = True
+        unload_travel = 0.0
+        if peak >= force_stop and self.external_force(part) >= .15 * force_stop:
+            unloaded = False
+            release_z = float(control_position(self, part)[2])
+            for _ in range(100):
+                if self.external_force(part) < .15 * force_stop:
+                    unloaded = True
+                    break
+                command[2] += .00002
+                self.arm.servo(command)
+                unload_travel = float(control_position(self, part)[2] - release_z)
+                if not self.ctx.grasp_contacts(part)["held"]:
+                    return Result(False, reason="grasp lost during contact unload")
+            if not unloaded and self.external_force(part) < .15 * force_stop:
+                unloaded = True
         return Result(
-            z <= target_z + 0.001 or peak >= force_stop,
+            (z <= target_z + 0.001 or peak >= force_stop) and unloaded,
             {
                 "z_m": z,
                 "peak_contact_n": peak,
                 "travel_m": float(start[2] - z),
+                "contact_unloaded": unloaded,
+                "unload_travel_m": unload_travel,
                 "stopped_by": (
                     "contact"
                     if peak >= force_stop
                     else "height" if z <= target_z + 0.001 else "budget"
                 ),
             },
-            "descent exhausted",
+            "guarded contact could not unload" if not unloaded else "descent exhausted",
         )
 
     def _press_functional_v12(self, part, target_z, force_stop):

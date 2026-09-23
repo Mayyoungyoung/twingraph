@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 from simbench.assembly.skills_v12 import configure_v12_skills
-from simbench.value.full_flow_graph_value_v20 import encode_graph
+from simbench.value.full_flow_graph_value_v20 import FEATURES, encode_graph
 from simbench.value.generic_graph_value_v15 import encode_graph as encode_assembly
 from simbench.value.planner_v12 import normalized_graph, propose
 from simbench.value.stage_v12 import make_scene
@@ -30,6 +30,7 @@ def test_full_flow_controllers_are_in_one_graph(graphs):
     assert first["relations"].shape[-1] == first["x"].shape[0]
     assert first["relations"].sum() > encode_assembly(graphs[0])["relations"].sum()
     assert not np.array_equal(first["x"][0], second["x"][0])
+    assert first["x"][-1, FEATURES.index("port_count")] == 2 / 32
 
 
 def test_controller_ports_are_bound_to_executable_plan(graphs):

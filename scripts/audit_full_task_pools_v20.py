@@ -27,6 +27,14 @@ def read(path):
 
 
 def audit_seed(root):
+    if not (root / "request.json").is_file():
+        try:
+            seed = int(root.parent.name.removeprefix("seed_"))
+        except ValueError as exc:
+            raise ValueError(f"cannot identify incomplete layout directory: {root}") from exc
+        return dict(seed=seed, root=str(root), generated=0, valid=0,
+                    success=0, failure=0, pool_type="incomplete",
+                    runtime_sha256=None, rows=[], reason="missing_frozen_request")
     request = read(root / "request.json")
     seed = int(request["seed"])
     pool = request["pool"]
@@ -35,6 +43,7 @@ def audit_seed(root):
         raise ValueError(f"duplicate/empty candidate pool: {root}")
     rows = []
     for name in names:
+        frozen_proposal = next(item for item in pool if item["name"] == name)
         result_path = root / "candidates" / name / "result.json"
         if not result_path.is_file():
             rows.append(dict(name=name, status="missing"))
@@ -48,12 +57,15 @@ def audit_seed(root):
             graph = read(graph_path)
             if digest(graph) != result.get("input_graph_sha256"):
                 errors.append("graph_result_hash_mismatch")
-            if graph.get("proposal") != next(item for item in pool if item["name"] == name):
+            frozen_graphs = request.get("graph_sha256")
+            if frozen_graphs is not None and digest(graph) != frozen_graphs.get(name):
+                errors.append("pre_outcome_graph_hash_mismatch")
+            if graph.get("proposal") != frozen_proposal:
                 errors.append("graph_request_proposal_mismatch")
         if result.get("seed") != seed:
             errors.append("seed_mismatch")
-        if result.get("proposal", {}).get("name") != name:
-            errors.append("proposal_name_mismatch")
+        if result.get("proposal") != frozen_proposal:
+            errors.append("result_request_proposal_mismatch")
         if result.get("evaluation_scope") != "complete_functional_task" or result.get("full_task_label") is not True:
             errors.append("not_complete_functional_task_scope")
         if not result.get("valid") or result.get("resource_censored"):

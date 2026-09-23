@@ -272,8 +272,9 @@ def propose(observation, *, cad=None, n=48, seed=0, completed=(), priors=None):
             rationale=("observed-geometry conservative grasp with uncertainty clearance and pad overlap" if i == 0
                        else "observed-scene geometry alternatives and uncertainty-conditioned contact parameters"),
             order=order, choices=choices, wipe_variant=i % 4,
-            wipe_force=float(np.clip(1.5 * (.85 + .3 * h[5]), .8, 2.2)),
-            wipe_duration=float(np.clip(wipe_duration * (.9 + .2 * h[6]), *LIMITS["wipe_duration_s"])),
+            wipe_force=(1.5 if i == 0 else _bounded_quantile((.8, 2.2), 1.5, h[5])),
+            wipe_duration=(wipe_duration if i == 0 else
+                           _bounded_quantile(LIMITS["wipe_duration_s"], wipe_duration, h[6])),
             stroke_minimum=float(cad.get("functional_stroke_minimum_m", .02)),
             necessary_geometry=selected_geometry)
         signature = digest({k:v for k,v in proposal.items() if k not in ("name", "source", "rationale")})

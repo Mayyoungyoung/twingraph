@@ -208,7 +208,7 @@ def _clean(session, variant, force, duration):
     session.stage_passes["cleaning_pass"] = True
 
 
-def _stroke(session, minimum):
+def _stroke(session, minimum, *, grasp_force=3.0):
     carriage = "carriage"
     handle = "handle"
     from .stage_v7 import refresh_visual_observation
@@ -324,6 +324,7 @@ def _stroke(session, minimum):
     # couples the end-effector to the carriage through the assembled post;
     # the carriage body remains the independently measured sliding body.
     pick(session, handle, lift=False, execution_feedback=False,
+         grasp_force=float(grasp_force),
          terminal_targets=[dict(id="stroke", part=handle, xyz=current.copy())],
          required_parts=(handle,))
     # The gripper is holding the installed handle, not the carriage body.
@@ -435,7 +436,7 @@ def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
     if cursor < len(plan.calls):
         execute_calls(session, plan, plan.calls[cursor:])
     session.stage_passes["assembly_pass"] = True
-    _stroke(session, stroke_minimum)
+    _stroke(session, stroke_minimum, grasp_force=choices["handle"]["force"])
     for pin, off in (("pin_left", [0., -.032, 0.]), ("pin_right", [0., .032, 0.])):
         session.call("inspect", what="pin", part=pin, hole_part="end_stop",
                      hole_offset_m=off, minimum_insertion_depth_m=.006,

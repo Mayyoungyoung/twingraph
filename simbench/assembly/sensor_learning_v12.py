@@ -385,10 +385,18 @@ def _execute_checked(session,part,artifact,policy,max_steps):
     if not np.isfinite(residual) or residual<0:raise ValueError("invalid pin visual fit residual")
     sigma=max(.0005,residual)
     radius=min(.75*session.pin_insertion_config.plate_hole_half_width_m,3*(sigma+.0005))
+    nominal_clearance=(min(session.pin_insertion_config.guide_inner_radius_m,
+                           session.pin_insertion_config.plate_hole_half_width_m)
+                       -session.pin_insertion_config.shaft_radius_m
+                       -session.pin_insertion_config.radial_clearance_m)
+    if nominal_clearance <= 0:
+        raise ValueError("declared pin aperture has no radial insertion clearance")
+    spiral_pitch=min(.0005,.5*nominal_clearance)
     trigger=min(.35,.04*force_limit);touch_stop=float(plan.get("gripper_contact_stop_n",.15))
     if not np.isfinite([sigma,touch_stop]).all() or touch_stop<=0:
         raise ValueError("invalid pin visual uncertainty or gripper force threshold")
-    search_metrics=dict(maximum_radius_m=radius,iterations=0,entry_detected=False,
+    search_metrics=dict(maximum_radius_m=radius,spiral_pitch_m=spiral_pitch,
+        iterations=0,entry_detected=False,
         reference="observed hole entry and encoder/FK registered shaft tip",depth_never_reset_at_trigger=True)
     reason="step_budget_exhausted";last_contact=None
     for steps in range(int(max_steps)):
@@ -427,9 +435,12 @@ def _execute_checked(session,part,artifact,policy,max_steps):
                 search_metrics.update(entry_detected=True,recovery_control_target_m=target.tolist(),
                     depth_at_entry_detection_m=depth,remaining_declared_feed_m=max(0.,contract["command_depth"]-depth))
                 search=None;recovered=True;command=session.ctx.eef_pos().copy()
-            elif n>650:reason="bounded_search_exhausted";break
+            elif n>900:reason="bounded_search_exhausted";break
             else:
-                circle=radius*min(n/600.,1.)*(np.cos(.03*n)*contract["tangents"][0]+np.sin(.03*n)*contract["tangents"][1])
+                sweep_radius=radius*min(n/900.,1.)
+                sweep_angle=2*np.pi*sweep_radius/spiral_pitch
+                circle=sweep_radius*(np.cos(sweep_angle)*contract["tangents"][0]
+                    +np.sin(sweep_angle)*contract["tangents"][1])
                 goal=search["center"]+circle if search["probe"] is None else search["probe"]
                 if search["probe"] is not None:mode="provisional_entry_hold_transverse"
                 command=advance_pin_search_command(command,session.ctx.eef_pos(),position,goal,contract["axis"],
