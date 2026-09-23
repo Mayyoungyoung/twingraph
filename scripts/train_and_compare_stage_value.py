@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train generic atomic-graph value on natural local-stage labels and compare screening.
+"""Optional local-stage diagnostic; never a complete-task value module.
 
 No candidate is selected or relabelled to make a mixed pool.  Layout folds are
 assigned by seed before reading outcomes.  Rejected layouts remain in the
@@ -87,9 +87,12 @@ def load_pools(roots, *, stage="end_stop", expected_n=12):
                 rows.append(dict(seed=seed, name=candidate["name"],
                     y=float(bool(result["success"])), seconds=seconds,
                     encoded=encode_graph(graph), graph=graph,
-                    graph_sha256=graph_hash, result_path=str(result_path)))
+                    graph_sha256=graph_hash, result_path=str(result_path),
+                    runtime_sha256=result.get("runtime_sha256")))
             if len({row["graph_sha256"] for row in rows}) != len(rows):
                 raise ValueError(f"duplicate normalized graph in pool {seed}")
+            if len({row["runtime_sha256"] for row in rows}) != 1 or not rows[0]["runtime_sha256"]:
+                raise ValueError(f"mixed or missing physical runtime hash in pool {seed}")
             pools[seed] = rows
     if not audit:
         raise ValueError("no layout summaries found")
@@ -188,8 +191,19 @@ def main():
     p.add_argument("--lr", type=float, default=.001)
     p.add_argument("--initializations", type=int, nargs="+", default=[7, 17, 29])
     p.add_argument("--device", default="cpu")
+    p.add_argument("--diagnostic-local-only", action="store_true",
+                   help="Explicitly acknowledge that these labels cannot train the complete-task value module")
     args = p.parse_args()
+    if not args.diagnostic_local_only:
+        p.error("local-stage labels are ineligible for the complete-task value module; "
+                "pass --diagnostic-local-only only for a stage diagnostic")
+    if args.stage == "cleaning":
+        raise ValueError("V15 assembly graph omits executable cleaning atom ports; "
+                         "audit cleaning coverage but do not train a misleading ranker")
     pools, audit = load_pools(args.root, stage=args.stage, expected_n=args.pool_n)
+    runtime_hashes = {row["runtime_sha256"] for rows in pools.values() for row in rows}
+    if len(runtime_hashes) != 1:
+        raise ValueError(f"training/evaluation pools must share one frozen physical runtime: {runtime_hashes}")
     mixed = {seed: rows for seed, rows in pools.items()
              if 0 < sum(bool(row["y"]) for row in rows) < len(rows)}
     fold = lambda seed: "test" if seed % 5 == 0 else "validation" if seed % 5 == 1 else "train"
@@ -225,6 +239,8 @@ def main():
     ranker = ValueRankerV15(checkpoint_path, device=args.device)
     report = dict(schema="twingraph.natural_stage_value_comparison.v1",
         stage=args.stage, value_input_schema=SCHEMA,
+        full_task_value_eligible=False, full_task_success_claim=False,
+        physical_runtime_sha256=next(iter(runtime_hashes)),
         task_specific_model_features=False, model_parameters=parameter_count(ranker.model),
         checkpoint=str(checkpoint_path),
         checkpoint_sha256=hashlib.sha256(checkpoint_path.read_bytes()).hexdigest(),

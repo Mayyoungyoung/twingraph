@@ -6,6 +6,8 @@ import argparse
 import json
 from pathlib import Path
 
+import numpy as np
+
 from simbench.value.plan import digest
 from simbench.value.planner_v12 import propose
 from simbench.value.system_v12 import make_scene, rollout, save
@@ -18,6 +20,8 @@ def main():
     p.add_argument("--pool-n", type=int, default=48)
     p.add_argument("--submit-n", type=int, default=12)
     p.add_argument("--level", choices=("L0", "L1", "L2"), default="L1")
+    p.add_argument("--wide-ports", action="store_true",
+                   help="sample the declared cleaning force/duration envelope before any rollout")
     args = p.parse_args()
     if not 1 <= args.submit_n <= args.pool_n:
         p.error("submit-n must be in [1,pool-n]")
@@ -28,10 +32,20 @@ def main():
         pool, source = propose(session.decision_observation, cad=session.planning_cad,
                                n=args.pool_n, seed=seed)
         pool.sort(key=lambda row: int(row["name"].rsplit("_", 1)[-1]))
+        if args.wide_ports:
+            # Keep the ordinary reference solution; draw the remaining plans
+            # across the previously declared controller envelope.  No label
+            # or twin call enters this candidate generation step.
+            rng = np.random.default_rng(np.random.SeedSequence([seed, 2905]))
+            for proposal in pool[1:]:
+                proposal["wipe_force"] = float(rng.uniform(.8, 2.2))
+                proposal["wipe_duration"] = float(rng.uniform(10., 24.))
         submitted = pool[:args.submit_n]
         save(root / "request.json", dict(scope="cleaning_only", seed=seed,
             observation_sha256=digest(session.decision_observation), source=source,
             pool_n=len(pool), submitted_n=len(submitted), submitted=submitted,
+            wipe_port_sampling=("reference plus seeded uniform force [0.8,2.2] N and duration [10,24] s"
+                                if args.wide_ports else "ordinary V12 constructor"),
             selection_rule="first N in pre-outcome construction order"))
         rows = []
         for proposal in submitted:
