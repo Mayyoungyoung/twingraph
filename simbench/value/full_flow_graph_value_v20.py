@@ -62,6 +62,10 @@ def encode_graph(graph, *, check=True):
     prefix = assembly["plan"]["prefix"]
     if params["order"] != prefix["order"] or params["choices"] != prefix["choices"]:
         raise ValueError("full-task and atomic assembly plans disagree")
+    proposal = graph.get("proposal", {})
+    if any(proposal.get(key) != params[key] for key in
+           ("order", "choices", "wipe_variant", "wipe_force", "wipe_duration", "stroke_minimum")):
+        raise ValueError("proposal and executable full-task plan disagree")
     cleaning = graph["cleaning"]
     if any(params[key] != cleaning[key] for key in ("wipe_variant", "wipe_force", "wipe_duration")):
         raise ValueError("cleaning controller ports disagree with full-task plan")
@@ -80,6 +84,8 @@ def encode_graph(graph, *, check=True):
         ports=(("stroke_minimum", params["stroke_minimum"], "m"),),
         observation=observation)
     n = len(encoded["x"])
+    if n + 2 > 512:
+        raise ValueError("whole-flow graph exceeds the declared 512-node limit")
     x = np.concatenate((clean[None, :], encoded["x"], functional[None, :]), axis=0)
     x[0, FEATURES.index("call_position")] = 0.
     x[0, FEATURES.index("before_boundary")] = 1.

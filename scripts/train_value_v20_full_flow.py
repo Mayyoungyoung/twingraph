@@ -41,6 +41,7 @@ def load_pools(roots):
                     raise ValueError(f"invalid measured twin time: {result_path}")
                 rows.append(dict(seed=seed, name=candidate["name"],
                     y=float(result["full_success"]), seconds=seconds,
+                    timing_mode=result.get("timing_mode", "sequential_single_rollout"),
                     graph=graph, encoded=encode_graph(graph),
                     graph_sha256=digest(graph), result_path=str(result_path),
                     runtime_sha256=result["runtime_sha256"]))
@@ -108,10 +109,14 @@ def main():
         train_seeds=splits["train"], validation_seeds=splits["validation"],
         selected_epoch=chosen["selected_epoch"]), checkpoint)
     ranker = ValueRankerV20(checkpoint, device=args.device)
+    timing_modes = sorted({row["timing_mode"] for rows in pools.values() for row in rows})
     report = dict(schema="twingraph.full_flow_value_comparison.v20.r1",
         label_scope="complete_functional_task", graph_input_schema=SCHEMA,
         graph_limit="cleaning and functional stroke remain feedback-controller interface nodes",
         runtime_sha256=next(iter(runtimes)), splits=splits,
+        timing_modes=timing_modes,
+        serial_trial_wall_time_basis=(timing_modes == ["sequential_single_rollout"]),
+        actual_online_run_measured=False,
         checkpoint=str(checkpoint), checkpoint_sha256=ranker.sha256,
         selected_initialization=chosen["initialization"],
         selected_epoch=chosen["selected_epoch"],

@@ -66,6 +66,8 @@ def audit_seed(root):
             errors.append("full_success_result_disagree")
         if outcome is True and not all(passes.get(flag) is True for flag in FLAGS):
             errors.append("success_without_all_final_acceptance")
+        if outcome is False and all(passes.get(flag) is True for flag in FLAGS):
+            errors.append("failure_despite_all_final_acceptance")
         if request.get("runtime_sha256") != result.get("runtime_sha256"):
             errors.append("runtime_mismatch")
         rows.append(dict(name=name, status="invalid" if errors else "valid",
@@ -103,8 +105,12 @@ def main():
                   attempted_layouts=len(pools), generated_candidates=sum(r["generated"] for r in pools),
                   pool_types=dict(types), one_frozen_runtime=len(runtimes) == 1,
                   runtime_sha256=sorted(str(x) for x in runtimes),
-                  ready_for_full_task_value_training=(types.get("mixed", 0) >= 3
-                      and types.get("incomplete", 0) == 0 and len(runtimes) == 1),
+                  ready_for_full_task_value_training=(types.get("mixed", 0) == len(pools)
+                      and any(r["seed"] % 5 == 0 for r in pools)
+                      and any(r["seed"] % 5 == 1 for r in pools)
+                      and any(r["seed"] % 5 in (2, 3, 4) for r in pools)
+                      and len(runtimes) == 1
+                      and len({r["generated"] for r in pools}) == 1),
                   layouts=pools)
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
