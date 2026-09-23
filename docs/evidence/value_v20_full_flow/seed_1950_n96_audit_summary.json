@@ -1,0 +1,41 @@
+{
+  "schema": "twingraph.v20_natural_96_seed1950_full_task_evidence.v1",
+  "seed": 1950,
+  "physical_runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+  "request_file_sha256": "84b2463f157d86242805e4478541b8e3a677b715e499bd7c0d1e0b7825c477e3",
+  "pre_outcome_graph_hashes": 96,
+  "generated": 96,
+  "valid": 96,
+  "full_task_success": 1,
+  "full_task_failure": 95,
+  "pool_type": "mixed",
+  "positive_candidates": [
+    "grounded_037"
+  ],
+  "reused_all_base_48": true,
+  "archived_resource_censored_attempts": 3,
+  "all_censored_candidates_retried_to_valid": true,
+  "first_failure_counts": {
+    "verify_clean": 24,
+    "press_seat": 33,
+    "slide_insert": 9,
+    "approach": 18,
+    "move_constrained": 1,
+    "execute_cartesian_path": 4,
+    "learned_insert": 4,
+    "place_object": 1,
+    "guarded_descent": 1,
+    "success": 1
+  },
+  "descriptive_baselines": {
+    "k": 4,
+    "full_twin_success": true,
+    "full_twin_calls": 96,
+    "full_twin_serial_sum_trial_wall_seconds": 18573.166698555462,
+    "random_top_k_exact_success_probability": 0.04166666666666663,
+    "random_top_k_expected_calls": 3.9375,
+    "random_top_k_expected_serial_sum_trial_wall_seconds": 761.8778080535585,
+    "timing_caveat": "trial wall times were measured under concurrent collection; serial sums are proxies, not actual online decision latency"
+  },
+  "value_checkpoint_available": false
+}
