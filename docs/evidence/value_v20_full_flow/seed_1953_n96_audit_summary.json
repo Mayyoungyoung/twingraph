@@ -1,0 +1,23 @@
+{
+  "schema": "twingraph.v20_natural_96_development_audit.v1",
+  "seed": 1953,
+  "physical_runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+  "request_file_sha256": "a9a629789555fa21ef87422fcf6d202078b836a3f3b94d8e67c957e0ccdca35a",
+  "pre_outcome_graph_hashes": 96,
+  "generated": 96,
+  "valid": 96,
+  "full_task_success": 0,
+  "full_task_failure": 96,
+  "pool_type": "all_negative",
+  "invalid_or_missing": [],
+  "first_failure_counts": {
+    "press_seat": 35,
+    "execute_cartesian_path": 2,
+    "verify_clean": 24,
+    "learned_insert": 4,
+    "place_object": 2,
+    "slide_insert": 10,
+    "approach": 19
+  },
+  "value_training_eligible": false
+}
