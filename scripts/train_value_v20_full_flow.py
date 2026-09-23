@@ -102,10 +102,9 @@ def main():
         all_positive_layouts=sum(r["pool_type"] == "all_positive" for r in audit),
         incomplete_layouts=sum(r["pool_type"] == "incomplete" for r in audit))
     dump(args.out / "coverage_audit.json", audit_report)
-    if any(r["pool_type"] == "incomplete" for r in audit):
-        raise ValueError("complete every frozen layout or explicitly report an incomplete experiment; see coverage_audit.json")
     runtimes = {row["runtime_sha256"] for rows in pools.values() for row in rows}
-    if len(runtimes) != 1:
+    audited_runtimes = {row["runtime_sha256"] for row in audit}
+    if len(runtimes) != 1 or runtimes != audited_runtimes:
         raise ValueError("all train/validation/test layouts must share one frozen physical runtime")
     sizes = {len(rows) for rows in pools.values()}
     if len(sizes) != 1:
@@ -144,8 +143,10 @@ def main():
         selected_epoch=chosen["selected_epoch"],
         validation=evaluate(validation, score(chosen["model"], validation, args.device), args.k),
         natural_coverage=dict(attempted_layouts=len(audit),
-            complete_layouts=len(pools), mixed_layouts=len(mixed),
-            mixed_fraction=len(mixed)/len(audit),
+            complete_layouts=len(pools), incomplete_layouts=len(audit)-len(pools),
+            mixed_layouts=len(mixed),
+            mixed_fraction_of_evaluable=len(mixed)/len(pools),
+            confirmed_mixed_fraction_of_attempted=len(mixed)/len(audit),
             all_negative_layouts=sum(r["pool_type"] == "all_negative" for r in audit),
             all_positive_layouts=sum(r["pool_type"] == "all_positive" for r in audit),
             per_fold={key:dict(complete=len(all_splits[key]), mixed=len(splits[key]),
