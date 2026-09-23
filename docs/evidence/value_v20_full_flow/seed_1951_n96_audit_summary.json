@@ -1,0 +1,29 @@
+{
+  "schema": "twingraph.v20_natural_96_seed1951_full_task_evidence.v1",
+  "seed": 1951,
+  "physical_runtime_sha256": "aa375b3da6eae631ae463db706217eeb6d53ebc7f9ed89d45acea1a9938f56bb",
+  "request_file_sha256": "2c6df9279804bd679649eed78db128f4c1eb7eca5fd9af286c1cad1b1efa5f68",
+  "pre_outcome_graph_hashes": 96,
+  "generated": 96,
+  "valid": 96,
+  "full_task_success": 0,
+  "full_task_failure": 96,
+  "pool_type": "all_negative",
+  "reused_all_base_48": true,
+  "archived_resource_censored_attempts": 1,
+  "all_censored_candidates_retried_to_valid": true,
+  "first_failure_counts": {
+    "approach": 18,
+    "verify_clean": 25,
+    "press_seat": 37,
+    "guarded_descent": 1,
+    "slide_insert": 9,
+    "learned_insert": 2,
+    "execute_cartesian_path": 2,
+    "place_object": 1,
+    "inspect_seat": 1
+  },
+  "full_twin_can_find_success": false,
+  "random_top_4_success_probability": 0.0,
+  "value_training_eligible": false
+}
