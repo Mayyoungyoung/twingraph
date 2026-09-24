@@ -1,7 +1,0 @@
-{
-  "pretrained_file_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
-  "encoder": "torchvision.resnet18.IMAGENET1K_V1",
-  "conv1_exact_pretrained_match": true,
-  "frozen": true,
-  "smoke_scope": "two development configurations only; these checkpoints are not research results"
-}

@@ -1,6 +1,0 @@
-{
-  "schema": "twingraph.value_v7.system_cases.1",
-  "status": "pending_formal_system_runs",
-  "cases": [],
-  "required_fields": ["scene_id", "candidate_ids", "view", "strategy", "twin_results", "chosen_candidate", "target_results", "decision_seconds", "deploy_seconds", "abstain", "source_sha256"]
-}

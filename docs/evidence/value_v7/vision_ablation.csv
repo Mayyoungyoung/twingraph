@@ -1,5 +1,0 @@
-view,accuracy,balanced_accuracy,roc_auc,brier,top1_quality,top4_hit,conditional_hit,scene_pairwise,source,status
-none,,,,,,,,v7_formal,pending
-task,,,,,,,,v7_formal,pending
-top,,,,,,,,v7_formal,pending
-both,,,,,,,,v7_formal,pending

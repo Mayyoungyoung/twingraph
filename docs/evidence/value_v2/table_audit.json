@@ -1,1 +1,0 @@
-{"status": "passed", "decisions": 150, "physical_rollouts": 1256, "domains": ["deployment", "online"], "shared_input_pools": 12, "paired_perturbations": 32, "audit": "read-only CSV-to-raw consistency, shared inputs, paired perturbations, budget/identity/domain checks; no file modified"}

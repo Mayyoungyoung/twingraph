@@ -1,5 +1,0 @@
-view,parameters,peak_memory_mb,score_one_candidate_ms,score_12_candidates_ms,preprocess_ms,vision_ms,program_encode_ms,sort_ms,T_decision_s,T_deploy_s,status
-none,,,,,,,,,,,pending
-task,,,,,,,,,,,pending
-top,,,,,,,,,,,pending
-both,,,,,,,,,,,pending

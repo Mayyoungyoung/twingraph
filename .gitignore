@@ -19,13 +19,13 @@ MUJOCO_LOG.TXT
 
 # ---- generated run data + videos (large; not source) ----
 results/
+artifacts/
+datasets/
+models/
 *.mp4
 *.avi
 *.mov
 
-# Curated, current demonstrations only. Intermediate recordings stay ignored.
-!docs/demos/*.mp4
-!docs/demos/skills/*.mp4
 
 # ---- OS / editor ----
 .DS_Store
@@ -33,7 +33,3 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
-
-!docs/demos/atoms/*.mp4
-
-!docs/demos/feedback/*.mp4

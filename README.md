@@ -1,38 +1,12 @@
 # TwinGraph
 
-基于 MuJoCo 与 Franka Panda 的桌面装配研究项目，以共享原子技能契约连接**可执行候选计划、学习价值粗筛与数字孪生验证**。
+基于 MuJoCo 和 Franka Panda 的装配研究代码。当前版本用通用原子技能图表示完整候选计划，面向完整任务最终成功训练价值排序器，并用数字孪生执行验证。代码包含候选冻结、物理采集审计、价值训练和同池对照流程。
 
-## 当前演示
+## 当前状态
 
-Panda 在大方桌上先抓取擦拭工具、清洁导轨底座、归还工具，再装配滑块、端挡、双销和手柄，并完成行程与终态验收。只有 Panda 的 9 个执行器，零件与擦拭工具都是被动物体。
+按用户要求，2026-09-24 已停止 V20 独立布局采集。L0 首批 seed 2050–2069 的 960/960 次完整任务试验有效，只有 seed 2068 的 1 条计划通过全部六项最终验收，其余 19 个布局均为全负池。第二批 seed 2070–2089 已预冻结 960 条候选；停止时已取得 561 条有效结果、0 条完整成功，尚有 10 个布局不完整。验证与测试折缺少自然混合池，**未训练出 V20 完整任务价值模型，也没有价值 Top-4 对照结果**。详见 [V20 完整任务报告](docs/evidence/value_v20_full_flow/README_ZH.md)。
 
-- [完整成功视频](docs/demos/full_success.mp4)
-- [完整失败视频：右销目标偏移 8 mm](docs/demos/full_failure.mp4)
-- [擦拭近景视频](docs/demos/atoms/wipe.mp4)
-- [10 个原子技能视频索引](docs/demos/INDEX.md)
-- [技能图谱与条件解释](docs/skill-graph/README.md)
-
-完整视频采用固定正面略向下镜头，1920 × 1200、25 fps，明确标注 2× 播放；底部显示当前技能。擦拭近景为 1×。没有网页前端。
-
-## 技能与方法
-
-**V18 原子计划到物理精验**：[实验与复现记录](docs/evidence/value_v18_atomic_flow/README_ZH.md)。模型可读取任务、观测及注册技能端口，提交完整原子计划或组合求解器给出的合法端口备选值；统一 PlanIR/技能图进入价值排序与直接 MuJoCo 执行。首版端挡局部放置的 5 个随机布局、60 条候选均有有效物理标签，每个池自然包含成功和失败；旧 V15 模型 Top-4 在 5/5 池保留成功，但随机期望为 4.39/5，尚不能证明排序优势。一组模型生成的 4 条原子计划经价值 Top-2 精验，第一条失败、第二条成功。此处只验收端挡稳定放置，不是完整滑台装配成功。
-
-**v5 状态与完整技能程序价值模块**：[实际实验结果](VALUE_V5_REPORT.md)、[设计与监督目标](docs/value-v5-design.md)、[运行指南](docs/value-v5-running.md)。输入统一为当前状态与完整候选程序，字段由技能接口自动编码，直接学习完整执行成败。864条正式候选均从五部件未装配状态实际执行；锁定测试准确率71.5%，Top4命中11/12，与原始顺序相同，但成功候选比例提高到66.7%。四组实际系统对照中，决策时间均值由782.0秒降至338.6秒；Top4与全量独立目标执行均3/4成功，失败配置不同。模型、原始数据、失败记录及[执行回放](docs/demos/value_v5_full_pipeline.mp4)均保留；本轮为仿真五部件装配，不含擦拭或行程验证。
-
-**v4 可执行计划输入价值模块**：[实验结果与局限](VALUE_V4_REPORT.md)、[统一输入与监督](docs/value-v4-method.md)、[复现命令](docs/value-v4-running.md)。完整 PlanIR、技能端口、已规划关节路径与执行器共享，直接学习物理成功结果；新增 320 次滑台多零件后续计划执行和 94 次在线验证/独立执行，发布 12 个模型。紧凑端口 MLP 从 360 万降至 4.3 万参数，平均 Top4 质量基本保留。冻结模型测试近优 Hit@4 为 5/5，随机期望为 80.86%；计入前置失败的可行覆盖为 5/8。独立执行尚未超过同预算原始顺序，图关系注意力也没有显示额外收益。所有失败与负面结果保留。
-
-**v3 技能图输入价值模块**：[实验报告](VALUE_GRAPH_REPORT.md)、[输入／输出与图结构](docs/value-v3-design.md)、[复现命令](docs/value-v3-running.md)。技能注册表的类型化参数、契约与状态来源自动构成价值输入，同一图中的 PlanIR 进入物理执行。新增 1,024 次滑台销安装后缀试验；图端口 MLP 的三个种子在 12 个新配置上 Hit@1/2/4 均为 100%，无需可选几何排序代理。尚未证明关系注意力有额外收益；完整滑台、变长物理泛化与概率校准仍需扩展验证。
-
-**v2 两家族研究原型**：[实际实验报告](NEXT_ROUND_REPORT.md)、[逐决策实验表](EXPERIMENT_TABLE.csv)、[运行与扩展指南](docs/value-v2-running.md)。新增刚性连接器多零件装配、真实检查点剩余计划、16/32/64 候选池、两种明确验证协议和独立仿真部署。当前采用约 7.8k 参数的数值特征 MLP；锁定参考测试中三个训练种子的近优 Hit@1 均为 100%，几何规则为 80.6%。参考重复和独立配置数量仍较少，实际预算、耗时和迁移结果以报告为准。
-
-**价值粗筛已完成首轮训练**：[完整报告与局限](docs/evidence/value/README.md)。提供统一 PlanIR、Top-K 输出、3,200 次物理试验数据与 RTX 3090 训练权重。推荐单头模型的保留测试集 Hit@2 为 16/16；现有几何基线同为 16/16，尚不能证明学习方法更优。快速运行见 [价值粗筛指南](docs/value-screening.md)。
-
-当前 **10 个原子技能**：检测、物体位姿估计、抓取位姿估计、路径规划、移动、抓取、放置、插入、压靠、擦拭。搬运、上下移、回位和退出是移动参数；多抓法、多路线和控制策略是候选的不同参数实例。**测量与检查是辅助反馈和验收工具，不再是技能节点**，原有安全、接触与成功检查继续执行。
-
-擦拭采用 24 条程序化专家轨迹训练的 RBF 轨迹模仿策略，配合接触力反馈，复用已有 IK 与伺服控制。当前模拟接触擦拭和几何覆盖，不模拟抛光材料去除。完整展示的插销使用已有接触反馈分支；旧插销行为克隆权重继续保留。
-
-技能图谱由执行器共享的声明式契约生成，连线只表示部分数据或状态供给。完整绑定后的候选链仍需区分冲突、已通过必要检查与未知连续约束，再交给价值模块和数字孪生验证。
+历史迭代结论见 [迭代记录](docs/ITERATION_HISTORY_ZH.md)。旧版原始数据、视频与价值模型权重已从当前仓库文件树清理；旧报告中的原始文件路径仅用于说明当时的实验，不代表文件仍可下载。装配控制器运行所需的少量权重保留在 `simbench/assembly/checkpoints/`。
 
 ## 运行
 
@@ -40,23 +14,6 @@ Panda 在大方桌上先抓取擦拭工具、清洁导轨底座、归还工具�
 python -m pip install -r requirements.txt
 export MUJOCO_GL=egl
 python -m pytest simbench/tests -q
-python -m simbench.assembly.full_demos --record --out results/product_success
-python -m simbench.assembly.full_demos --record --failure --out results/product_failure
-python -m simbench.assembly.atomic_demos --out results/atomic_current
 ```
 
-推荐 Python 3.10。无头录像需要 EGL/OpenGL 及 Noto CJK 字体；详见 [运行指南](docs/setup.md)。训练权重随仓库提供，中间文件放在 Git 忽略的 `results/`。
-
-## 文档
-
-| 文档 | 内容 |
-|---|---|
-| [原子技能](docs/atomic-skills.md) | 当前 10 项接口与输入输出 |
-| [技能图谱](docs/skill-graph/README.md) | 共享契约、条件依赖与绑定 |
-| [擦拭学习](docs/wiping.md) | 专家数据、轨迹拟合与接触执行 |
-| [架构设计](docs/architecture.md) | 多解候选、图谱验证与边界 |
-| [价值粗筛实现](docs/value-screening.md) | 统一计划、完整后缀采集、共享 Transformer、训练与 Top-K 输出 |
-| [价值模块设计存档](docs/value-module.md) | 原始研究方案与后续扩展方向 |
-| [当前验证](docs/evidence/surface-assembly/README.md) | 回归、真实成功/失败与视频核验 |
-
-历史验证保留于 `docs/evidence/`，包括旧 11 项接口与旧近景录像记录。它们不代表当前新增擦拭任务的鲁棒性统计。旧底层组件继续兼容；当前定义以上述 10 项为准。
+当前方法及接口见 [原子技能](docs/atomic-skills.md)、[技能图谱](docs/skill-graph/README.md)、[架构设计](docs/architecture.md) 和 [V20 完整任务报告](docs/evidence/value_v20_full_flow/README_ZH.md)。
