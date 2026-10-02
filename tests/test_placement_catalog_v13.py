@@ -63,7 +63,8 @@ def test_scene_relative_pickup_placement_and_face_widths():
     assert rows[0]["placement_yaw"] == pytest.approx(.9)
     assert rows[1]["grasp_width_m"] == pytest.approx(.044)
     assert rows[0]["grasp_width_m"] == pytest.approx(.028)
-    assert all(r["status"] == "necessary_pass" and not r["source_grasp_ik_checked"] for r in rows)
+    assert [r["status"] for r in rows] == ["necessary_pass", "necessary_pass"]
+    assert all(not r["source_grasp_ik_checked"] for r in rows)
     assert all(r["goal_orientation_residual_rad"] < 1.e-8 for r in rows)
 
 
@@ -81,18 +82,33 @@ def test_source_body_checked_before_rigid_lift_without_inventing_later_stop():
     future_stop = queries[1].calls[0][3]["end_stop"]
     assert future_stop == obs["objects"]["end_stop"]
     assert rows[0]["future_receiver_pose_modes"]["end_stop"] == "observed"
-    assert {"source_approach", "source_close", "source_withdrawal", "descent", "rail_entry", "rail_push", "seat", "opening", "retraction"} <= set(rows[0]["sampled_phases"])
+    assert {"source_approach", "source_close", "source_withdrawal", "rail_entry_hover", "descent", "rail_push", "seat", "opening", "retraction"} <= set(rows[0]["sampled_phases"])
 
 
-def test_prior_carriage_changes_future_stop_scene_but_not_source_scene():
+def test_prior_carriage_moves_before_both_stop_pickup_and_placement():
     obs, cad = fixture()
     queries = []
     def factory(primitives):
         result = Query(primitives); queries.append(result); return result
     row = placement_clearance_catalog(obs, cad, "end_stop", source_axis_offsets=(0.,), height_offsets=(0.,), query_factory=factory)[0]
-    assert queries[0].calls[0][3]["carriage"] == obs["objects"]["carriage"]
+    assert queries[0].calls[0][3]["carriage"]["position_m"] == obs["assembly_targets"]["carriage"]["position_m"]
     assert queries[1].calls[0][3]["carriage"]["position_m"] == obs["assembly_targets"]["carriage"]["position_m"]
+    assert row["source_receiver_pose_modes"]["carriage"] == "predicted_mated"
     assert row["future_receiver_pose_modes"]["carriage"] == "predicted_mated"
+
+
+def test_handle_pickup_uses_conditional_predecessors_without_mutating_observations():
+    obs, cad = fixture(); original = copy.deepcopy(obs); queries = []
+    def factory(primitives):
+        result = Query(primitives); queries.append(result); return result
+    row = placement_clearance_catalog(obs, cad, "handle", source_axis_offsets=(0.,),
+        height_offsets=(0.,), completed=("carriage",), query_factory=factory)[0]
+    source = queries[0].calls[0][3]
+    assert source['carriage'] == obs['objects']['carriage']
+    for part in ('end_stop', 'pin_left', 'pin_right'):
+        assert source[part]['position_m'] == obs['assembly_targets'][part]['position_m']
+        assert row['source_receiver_pose_modes'][part] == 'predicted_mated'
+    assert obs == original
 
 
 @pytest.mark.parametrize("clearance,status", [(-.001, "rejected"), (.001, "unknown"), (.01, "necessary_pass")])

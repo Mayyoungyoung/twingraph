@@ -29,6 +29,24 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "required_parts",
+              "kind": "object_refs",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "observations"
           ]
         }
       ]
@@ -62,7 +80,31 @@
               "part",
               "part"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}",
+            "observations"
+          ],
+          "state_writes": []
         }
       ]
     },
@@ -95,7 +137,72 @@
               "part",
               "part"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "yaws",
+              "kind": "vector",
+              "unit": "rad",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "height_offset",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "width",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "yaw_frame",
+              "kind": "category",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "center_offset",
+              "kind": "vector",
+              "unit": "m",
+              "frame": "object",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
         },
         {
           "name": "select_grasp",
@@ -122,7 +229,51 @@
               "id",
               "candidate_id"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "index",
+              "kind": "binding",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "candidate_id",
+              "kind": "binding",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
         }
       ]
     },
@@ -153,7 +304,65 @@
               "part",
               "part"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "target",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "clearance",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "yaw",
+              "kind": "scalar",
+              "unit": "rad",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "candidate_id",
+              "kind": "binding",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "grasp_artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "route_style",
+              "kind": "category",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
         },
         {
           "name": "plan_linear",
@@ -174,7 +383,37 @@
               "part",
               "part"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "target",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "speed",
+              "kind": "scalar",
+              "unit": "m/s",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
         },
         {
           "name": "plan_insertion",
@@ -197,7 +436,79 @@
               "part",
               "part"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "target",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "axis",
+              "kind": "vector",
+              "unit": "1",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "speed",
+              "kind": "scalar",
+              "unit": "m/s",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "force_limit",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "pin_command_depth_m",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "receiver_axis",
+              "required": false
+            },
+            {
+              "name": "pin_press_extra_m",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "receiver_axis",
+              "required": false
+            },
+            {
+              "name": "hole_entry_m",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
         },
         {
           "name": "plan_wipe",
@@ -221,7 +532,140 @@
               "part",
               "part"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "center",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "halfspan",
+              "kind": "vector",
+              "unit": "m",
+              "frame": "surface",
+              "required": false
+            },
+            {
+              "name": "surface",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "height",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "duration",
+              "kind": "scalar",
+              "unit": "s",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
+        },
+        {
+          "name": "plan_push",
+          "label": "规划接触推动",
+          "category": "planning",
+          "requires": [
+            "empty",
+            "artifact:push_pose"
+          ],
+          "produces": "push_path",
+          "implementation": "bounded_contact_motion",
+          "description": "规划接触推动",
+          "kind": "generator",
+          "family": "plan_path",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "speed",
+              "kind": "scalar",
+              "unit": "m/s",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "force_limit",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "press_force",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
         },
         {
           "name": "plan_recovery",
@@ -244,7 +688,37 @@
               "part",
               "part"
             ]
-          ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "height",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
         }
       ]
     },
@@ -277,6 +751,26 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -300,6 +794,26 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -323,6 +837,54 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "target",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "delta",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world_delta",
+              "required": false
+            },
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "speed",
+              "kind": "scalar",
+              "unit": "m/s",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "tol",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -347,6 +909,40 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "strategy",
+              "kind": "category",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -370,6 +966,40 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "height",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "speed",
+              "kind": "scalar",
+              "unit": "m/s",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -393,6 +1023,33 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "height",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -416,6 +1073,26 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "height",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -439,6 +1116,18 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -460,6 +1149,26 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "yaw",
+              "kind": "scalar",
+              "unit": "rad",
+              "frame": "world",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -483,6 +1192,40 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "target",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "tolerance",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -506,6 +1249,47 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "target_z",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "force_stop",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "speed",
+              "kind": "scalar",
+              "unit": "m/s",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -529,6 +1313,75 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "target_x",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "max_force",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "speed",
+              "kind": "scalar",
+              "unit": "m/s",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "tracked_part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "guide_axis",
+              "kind": "vector",
+              "unit": "1",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "guide_origin",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "motion_policy",
+              "kind": "category",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -553,6 +1406,33 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         }
       ]
@@ -588,6 +1468,34 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "force",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}",
+            "holding"
           ]
         }
       ]
@@ -624,6 +1532,62 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "target",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "tol",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "settle",
+              "kind": "scalar",
+              "unit": "s",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "minimum_support",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "acceptance",
+              "kind": "category",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}",
+            "holding"
           ]
         }
       ]
@@ -658,6 +1622,33 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -683,6 +1674,40 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "radius",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         },
         {
@@ -708,6 +1733,275 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "policy",
+              "kind": "category",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "max_steps",
+              "kind": "scalar",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "estimate_push_pose",
+      "label": "推动位置估计",
+      "kind": "information",
+      "inputs": "物体位姿、CAD、目标及方向",
+      "outputs": "后方接触位置及接近位置",
+      "description": "从观测几何估计接触面，不移动物体",
+      "contracts": [
+        {
+          "name": "estimate_push_pose",
+          "label": "推动位置估计",
+          "category": "planning",
+          "requires": [
+            "empty",
+            "artifact:pose"
+          ],
+          "produces": "push_pose",
+          "implementation": "observed_geometry",
+          "description": "推动位置估计",
+          "kind": "generator",
+          "family": "estimate_push_pose",
+          "effects": [],
+          "obligations": [
+            "measurement or solver outcome"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "target",
+              "kind": "position",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "axis",
+              "kind": "vector",
+              "unit": "1",
+              "frame": "world",
+              "required": false
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "as_",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": []
+        }
+      ]
+    },
+    {
+      "name": "gripper",
+      "label": "夹爪开合",
+      "kind": "execution",
+      "inputs": "空夹爪及开合模式",
+      "outputs": "实际开度及接触状态",
+      "description": "空夹爪闭合不建立抓持关系",
+      "contracts": [
+        {
+          "name": "open_gripper",
+          "label": "张开夹爪 / 释放",
+          "category": "gripper",
+          "requires": [],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "张开夹爪 / 释放",
+          "kind": "executable",
+          "family": "gripper",
+          "effects": [
+            "held:empty"
+          ],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ],
+          "ports": [
+            {
+              "name": "clearance",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "world",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}",
+            "holding"
+          ]
+        },
+        {
+          "name": "close_empty_gripper",
+          "label": "空夹爪闭合",
+          "category": "gripper",
+          "requires": [
+            "empty"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "空夹爪闭合",
+          "kind": "executable",
+          "family": "gripper",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ],
+          "ports": [],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "push",
+      "label": "推送",
+      "kind": "execution",
+      "inputs": "已释放对象、接触运动计划",
+      "outputs": "物体位移、力及后方接触证据",
+      "description": "闭合空夹爪按计划接触推动",
+      "contracts": [
+        {
+          "name": "push_object",
+          "label": "闭合空夹爪接触推动",
+          "category": "contact",
+          "requires": [
+            "empty",
+            "artifact:push_path"
+          ],
+          "produces": "",
+          "implementation": "feedback",
+          "description": "闭合空夹爪接触推动",
+          "kind": "executable",
+          "family": "push",
+          "effects": [],
+          "obligations": [
+            "closed-loop tracking/contact and success checks"
+          ],
+          "output_bindings": [
+            [
+              "part",
+              "part"
+            ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         }
       ]
@@ -741,6 +2035,40 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "target_z",
+              "kind": "scalar",
+              "unit": "m",
+              "frame": "world",
+              "required": true
+            },
+            {
+              "name": "force_stop",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         }
       ]
@@ -776,6 +2104,54 @@
               "part",
               "part"
             ]
+          ],
+          "ports": [
+            {
+              "name": "part",
+              "kind": "object_ref",
+              "unit": "",
+              "frame": "",
+              "required": true
+            },
+            {
+              "name": "artifact",
+              "kind": "artifact_ref",
+              "unit": "",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "target_force",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "force_limit",
+              "kind": "scalar",
+              "unit": "N",
+              "frame": "",
+              "required": false
+            },
+            {
+              "name": "minimum_coverage",
+              "kind": "scalar",
+              "unit": "",
+              "frame": "",
+              "required": false
+            }
+          ],
+          "state_reads": [
+            "scene",
+            "robot",
+            "holding",
+            "object:{part}"
+          ],
+          "state_writes": [
+            "robot",
+            "scene",
+            "object:{part}"
           ]
         }
       ]
@@ -809,6 +2185,23 @@
         {
           "source": "estimate_pose",
           "target": "propose_grasps",
+          "supplies": [
+            "artifact:pose"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "estimate_pose",
+      "target": "estimate_push_pose",
+      "supplies": [
+        "artifact:pose"
+      ],
+      "variants": [
+        {
+          "source": "estimate_pose",
+          "target": "estimate_push_pose",
           "supplies": [
             "artifact:pose"
           ],
@@ -911,6 +2304,175 @@
         {
           "source": "place_object",
           "target": "close_gripper",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "place",
+      "target": "estimate_push_pose",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "place_object",
+          "target": "estimate_push_pose",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "place",
+      "target": "plan_path",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "place_object",
+          "target": "plan_push",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "place",
+      "target": "gripper",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "place_object",
+          "target": "close_empty_gripper",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "place",
+      "target": "push",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "place_object",
+          "target": "push_object",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "gripper",
+      "target": "move",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "open_gripper",
+          "target": "approach",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "open_gripper",
+          "target": "retreat",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        },
+        {
+          "source": "open_gripper",
+          "target": "home",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "gripper",
+      "target": "grasp",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "open_gripper",
+          "target": "close_gripper",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "gripper",
+      "target": "estimate_push_pose",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "open_gripper",
+          "target": "estimate_push_pose",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "gripper",
+      "target": "plan_path",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "open_gripper",
+          "target": "plan_push",
+          "supplies": [
+            "empty"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "gripper",
+      "target": "push",
+      "supplies": [
+        "empty"
+      ],
+      "variants": [
+        {
+          "source": "open_gripper",
+          "target": "push_object",
           "supplies": [
             "empty"
           ],
@@ -1141,9 +2703,43 @@
           "condition": "same object binding; all remaining contracts still required"
         }
       ]
+    },
+    {
+      "source": "estimate_push_pose",
+      "target": "plan_path",
+      "supplies": [
+        "artifact:push_pose"
+      ],
+      "variants": [
+        {
+          "source": "estimate_push_pose",
+          "target": "plan_push",
+          "supplies": [
+            "artifact:push_pose"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
+    },
+    {
+      "source": "plan_path",
+      "target": "push",
+      "supplies": [
+        "artifact:push_path"
+      ],
+      "variants": [
+        {
+          "source": "plan_push",
+          "target": "push_object",
+          "supplies": [
+            "artifact:push_path"
+          ],
+          "condition": "same object binding; all remaining contracts still required"
+        }
+      ]
     }
   ],
-  "atom_count": 10,
+  "atom_count": 13,
   "templates": [
     {
       "name": "pick",

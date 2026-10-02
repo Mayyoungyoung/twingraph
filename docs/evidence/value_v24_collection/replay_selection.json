@@ -1,0 +1,13 @@
+{
+  "schema": "twingraph.v24_positive_replay_selection.r1",
+  "first_pass_statistic": false,
+  "selection_uses_development_outcomes": true,
+  "rule": "one first positive from each of three informative categories: new original-range layout, new parent-neighborhood layout, and same-layout candidate append; each receives one same-trial and one changed-physics replay",
+  "selected_pools": [
+    {"source": "results/v24_first_broad_2062", "category": "new_original_range", "candidate": "grounded_021"},
+    {"source": "results/v24_first_near_3006", "category": "new_neighborhood", "candidate": "grounded_002"},
+    {"source": "results/v24_append_near_3002", "category": "same_layout_append", "candidate": "grounded_011"}
+  ],
+  "replays_per_candidate": 2,
+  "other_new_positives": "retained as single-run labels; this bounded replay budget does not imply they are stable"
+}

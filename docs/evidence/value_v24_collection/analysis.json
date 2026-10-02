@@ -1,0 +1,216 @@
+{
+  "schema": "twingraph.v24_collection_analysis.r1",
+  "task_version": "sliding_assembly_base_holes_v23",
+  "runtime_sha256": "4b7247f5356a1cac5e0cf864bf3c9a0f75c5adede159fb5729886921df4f8468",
+  "new_layout_first_pass": {
+    "layouts": 8,
+    "candidates": 64,
+    "positives": 6,
+    "negatives": 58,
+    "mixed_pools": 5
+  },
+  "append": {
+    "layouts": 2,
+    "candidates": 16,
+    "positives": 1,
+    "negatives": 15,
+    "first_pass_statistic": false
+  },
+  "pools": [
+    {
+      "seed": 2062,
+      "family": "broad",
+      "split_group": "broad_seed_2062",
+      "positives": 1,
+      "negatives": 7,
+      "pool_type": "mixed"
+    },
+    {
+      "seed": 2063,
+      "family": "broad",
+      "split_group": "broad_seed_2063",
+      "positives": 1,
+      "negatives": 7,
+      "pool_type": "mixed"
+    },
+    {
+      "seed": 2064,
+      "family": "broad",
+      "split_group": "broad_seed_2064",
+      "positives": 1,
+      "negatives": 7,
+      "pool_type": "mixed"
+    },
+    {
+      "seed": 2065,
+      "family": "broad",
+      "split_group": "broad_seed_2065",
+      "positives": 0,
+      "negatives": 8,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 3005,
+      "family": "neighborhood",
+      "split_group": "neighborhood_parent_2050",
+      "positives": 0,
+      "negatives": 8,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 3006,
+      "family": "neighborhood",
+      "split_group": "neighborhood_parent_2050",
+      "positives": 1,
+      "negatives": 7,
+      "pool_type": "mixed"
+    },
+    {
+      "seed": 3007,
+      "family": "neighborhood",
+      "split_group": "neighborhood_parent_2050",
+      "positives": 0,
+      "negatives": 8,
+      "pool_type": "all_negative"
+    },
+    {
+      "seed": 3008,
+      "family": "neighborhood",
+      "split_group": "neighborhood_parent_2050",
+      "positives": 2,
+      "negatives": 6,
+      "pool_type": "mixed"
+    },
+    {
+      "seed": 3000,
+      "family": "neighborhood",
+      "split_group": "neighborhood_parent_2050",
+      "batch": "append_9_to_16",
+      "positives": 0,
+      "negatives": 8
+    },
+    {
+      "seed": 3002,
+      "family": "neighborhood",
+      "split_group": "neighborhood_parent_2050",
+      "batch": "append_9_to_16",
+      "positives": 1,
+      "negatives": 7
+    }
+  ],
+  "split_groups": {
+    "broad_seed_2062": {
+      "layouts": 1,
+      "candidates": 8,
+      "positives": 1,
+      "negatives": 7
+    },
+    "broad_seed_2063": {
+      "layouts": 1,
+      "candidates": 8,
+      "positives": 1,
+      "negatives": 7
+    },
+    "broad_seed_2064": {
+      "layouts": 1,
+      "candidates": 8,
+      "positives": 1,
+      "negatives": 7
+    },
+    "broad_seed_2065": {
+      "layouts": 1,
+      "candidates": 8,
+      "positives": 0,
+      "negatives": 8
+    },
+    "neighborhood_parent_2050": {
+      "layouts": 4,
+      "candidates": 32,
+      "positives": 3,
+      "negatives": 29
+    }
+  },
+  "failure_categories": {
+    "new_layout_first_pass": {
+      "grasp_solver_budget_exhausted": 7,
+      "path_check_rejected": 22,
+      "functional_acceptance_failed": 4,
+      "control_or_contact_failed": 25
+    },
+    "append": {
+      "control_or_contact_failed": 11,
+      "path_check_rejected": 4
+    }
+  },
+  "same_layout_success_diversity": {
+    "layout_seed": 3002,
+    "original_candidate": "grounded_033",
+    "appended_candidate": "grounded_011",
+    "original": {
+      "plan_sha256": "c2919720c5fcd3c9b275d7ca6eeb32b51be1ebcb94ffa96798f26bbb380749df",
+      "order": [
+        "carriage",
+        "end_stop",
+        "pin_left",
+        "pin_right",
+        "handle"
+      ],
+      "grasp_yaw_rad": {
+        "carriage": 0.23508375023268793,
+        "end_stop": 1.4784284902373008,
+        "pin_left": 0.0,
+        "pin_right": 3.141592653589793,
+        "handle": -0.17392751003353013
+      },
+      "selected_transfer_ids": [
+        "carriage:yaw:0.235084:pose:fa7593b98c05:route:0",
+        "carriage:yaw:0.235084:pose:fa7593b98c05:route:0",
+        "end_stop:yaw:1.478428:pose:2cf234fa9e0d:route:0",
+        "end_stop:yaw:1.478428:pose:2cf234fa9e0d:route:0",
+        "pin_left:yaw:0.000000:pose:205338de54d0:route:0",
+        "pin_left:yaw:0.000000:pose:205338de54d0:route:0",
+        "pin_right:yaw:3.141593:pose:8a01f36a8d1b:route:0",
+        "pin_right:yaw:3.141593:pose:8a01f36a8d1b:route:0",
+        "handle:yaw:-0.173928:pose:c539d5550373:route:0",
+        "handle:yaw:-0.173928:pose:c539d5550373:route:0"
+      ]
+    },
+    "appended": {
+      "plan_sha256": "de79a180a43bd826e50798b394ca69aef28be05589cc32ff62346371f02f6f53",
+      "order": [
+        "carriage",
+        "end_stop",
+        "pin_right",
+        "pin_left",
+        "handle"
+      ],
+      "grasp_yaw_rad": {
+        "carriage": 1.8058800770275845,
+        "end_stop": -0.09236797395723834,
+        "pin_right": 1.5707963267948966,
+        "pin_left": 3.141592653589793,
+        "handle": -0.17392751003363086
+      },
+      "selected_transfer_ids": [
+        "carriage:yaw:1.805880:pose:fa7593b98c05:route:0",
+        "carriage:yaw:1.805880:pose:fa7593b98c05:route:0",
+        "end_stop:yaw:-0.092368:pose:cf1a212e8608:route:0",
+        "end_stop:yaw:-0.092368:pose:cf1a212e8608:route:0",
+        "pin_right:yaw:1.570796:pose:611180ef5ca9:route:0",
+        "pin_right:yaw:1.570796:pose:611180ef5ca9:route:0",
+        "pin_left:yaw:3.141593:pose:18b51641b409:route:0",
+        "pin_left:yaw:3.141593:pose:18b51641b409:route:0",
+        "handle:yaw:-0.173928:pose:b031e5b03ac9:route:0",
+        "handle:yaw:-0.173928:pose:b031e5b03ac9:route:0"
+      ]
+    },
+    "changed_grasp_yaw_parts": [
+      "carriage",
+      "end_stop",
+      "pin_left",
+      "pin_right"
+    ],
+    "changed_selected_transfer_ids": 10,
+    "trajectory_claim": "different executed grasp choices, pin order and selected path identities; no full joint-trajectory equivalence test"
+  }
+}

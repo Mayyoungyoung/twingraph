@@ -55,7 +55,11 @@ class PoseController:
         jp = np.zeros((3, m.nv))
         jr = np.zeros((3, m.nv))
         for _ in range(max_iter):
-            mujoco.mj_forward(m, d)
+            # IK needs only Cartesian transforms and motion axes. Running
+            # contact dynamics here repeats the expensive multi-contact
+            # solver for every numerical iteration, without using its result.
+            mujoco.mj_kinematics(m, d)
+            mujoco.mj_comPos(m, d)
             ep = goal - d.site_xpos[ctx.eef_site_id]
             er = Rotation.from_matrix(
                 R @ d.site_xmat[ctx.eef_site_id].reshape(3, 3).T

@@ -85,7 +85,7 @@ def collect_one(seed, out, split="development", level="L1", n=12, repeats=1, tim
                         repeats=repeats, successes=sum(bool(t["success"]) for t in trials),
                         cleaning_passes=sum(bool(t.get("stage_passes", {}).get("cleaning_pass")) for t in trials),
                         assembly_passes=sum(bool(t.get("stage_passes", {}).get("assembly_pass")) for t in trials),
-                        functional_passes=sum(bool(t.get("stage_passes", {}).get("functional_test_pass")) for t in trials),
+                        functional_passes=sum(bool(t.get("stage_passes", {}).get("assembly_pass")) for t in trials),
                         wall_seconds=time.perf_counter()-started,
                         physical_wall_seconds=sum(t["wall_seconds"]+t["restore_seconds"] for t in trials),
                         physics_steps=sum(t["physics_steps"] for t in trials))

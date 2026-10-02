@@ -44,7 +44,7 @@ def test_direct_strict_pose_call_cannot_bypass_detector():
     s = SimpleNamespace(strict_rgbd_v12=True, ctx=Trap(), decision_observation=None,
                         observations={"pin_left": [np.zeros(3)]})
     result = Session.estimate_pose(s, "pin_left")
-    assert not result.ok and "RGB-D" in result.reason
+    assert not result.ok and "pose observation" in result.reason
     s.decision_observation = {"backend": "rgbd_geometry", "objects": {
         "pin_left": {"position_m": [0,0,0], "valid": True, "quat_wxyz": None}}}
     assert not Session.estimate_pose(s,"pin_left").ok
@@ -150,7 +150,7 @@ def test_ring_release_requires_real_engagement_and_rechecks_after_settling():
         s=SimpleNamespace(functional_acceptance_v12=v12,inspect_seat=inspect,
             external_force=lambda part:0.,held="handle",stage_passes={},
             ctx=SimpleNamespace(body_id=lambda part:1,data=SimpleNamespace(contact=[]),pad_span=lambda:.08),
-            call=lambda skill:opened.append(skill),hold=hold)
+            call=lambda skill, **params:opened.append(skill),hold=hold)
         result=Session.place_object(s,"handle",[0,0,.048])
         return result,opened
     for bad in ([.002,0,.048],[0,0,.1]):

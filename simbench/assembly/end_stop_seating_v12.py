@@ -20,7 +20,8 @@ def search_offsets(radius):
 
 def seat_contract(session,target_z,config):
     obs=session.decision_observation or {};cad=session.planning_cad
-    if obs.get("backend")!="rgbd_geometry":raise ValueError("end-stop seating needs RGB-D geometry")
+    if obs.get("backend") not in ("rgbd_geometry", "mujoco_state_pose"):
+        raise ValueError("end-stop seating needs a declared receiver pose")
     base=obs.get("fixtures",{}).get("guide_base",{});part=obs.get("objects",{}).get("end_stop",{})
     if not base.get("valid") or not part.get("valid"):raise ValueError("receiver/source visual pose unknown")
     bp=np.asarray(base.get("position_m"),float);bq=np.asarray(base.get("quat_wxyz"),float)

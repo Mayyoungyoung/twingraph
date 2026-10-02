@@ -1,0 +1,37 @@
+{
+  "schema": "twingraph.base_hole_collection_anomalies.v23.r1",
+  "events": [
+    {
+      "layout": 2061,
+      "source_directory": "results/v23_first_broad_2061",
+      "phase": "scene model load before candidate freeze",
+      "software_exception": "MemoryError under six concurrent MuJoCo processes",
+      "physical_candidate_label": null,
+      "resolution": "retry in results/v23_first_broad_2061_retry with lower concurrency; original launch_error.json retained"
+    },
+    {
+      "layout": 3001,
+      "source_directory": "results/v23_first_near_3001",
+      "phase": "frozen pool before first completed candidate",
+      "software_exception": "host memory pressure interruption",
+      "physical_candidate_label": null,
+      "resolution": "identical frozen request retried in results/v23_first_near_3001_retry; original interruption and partial trace retained"
+    },
+    {
+      "layout": 3002,
+      "source_directory": "results/v23_first_near_3002",
+      "phase": "frozen pool before first completed candidate",
+      "software_exception": "host memory pressure interruption",
+      "physical_candidate_label": null,
+      "resolution": "identical frozen request retried in results/v23_first_near_3002_retry; original interruption and partial trace retained"
+    },
+    {
+      "layout": 3002,
+      "source_directory": "results/v23_first_near_3002_retry",
+      "phase": "terminal printing after all eight per-candidate records and summary were saved",
+      "software_exception": "TypeError: Object of type ndarray is not JSON serializable",
+      "physical_candidate_label": "all eight preserved and audited; one success",
+      "resolution": "summary.json and progress.json are valid; collector process exit 1 reflects stdout formatting only"
+    }
+  ]
+}

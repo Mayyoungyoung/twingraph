@@ -1,0 +1,11 @@
+{
+  "accuracy": 0.815,
+  "balanced_accuracy": 0.8585075191525584,
+  "roc_auc": 0.920867618777389,
+  "average_precision": 0.7497293263659747,
+  "brier": 0.12456417687683569,
+  "nll": 0.375798302199723,
+  "pair_accuracy": 0.9421747328724073,
+  "evaluated_candidate_trials": 1200,
+  "scope": "Robust probability versus all Full8 verification outcomes across 3 independent scenarios, distinct from selected-plan deployment success."
+}

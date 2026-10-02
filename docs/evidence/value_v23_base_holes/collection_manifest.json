@@ -1,0 +1,26 @@
+{
+  "schema": "twingraph.base_hole_collection_manifest.v23.r1",
+  "task_version": "sliding_assembly_base_holes_v23",
+  "scope": "no wiping; carriage, end stop, two pins through stop and base holes, handle, bidirectional stroke, final release and retention",
+  "runtime_sha256": "4b7247f5356a1cac5e0cf864bf3c9a0f75c5adede159fb5729886921df4f8468",
+  "collector_sha256": "a1dfb10ca36c6a9318acc539909c335c9efa0f4391555caf362a0c6ae39aa4ad",
+  "observation_backend": "mujoco_state_pose",
+  "primary_noise": {"position_std_m": 0.0, "yaw_std_rad": 0.0},
+  "supplemental_noise": {"position_std_m": 0.0003, "yaw_std_rad": 0.005235987756},
+  "physical_trial_domain": "online",
+  "proposal_budget": 48,
+  "first_pass_executed_candidates_per_layout": 8,
+  "first_pass_layouts": [
+    {"seed": 2050, "level": "L0", "family": "broad", "split_group": "neighborhood_parent_2050"},
+    {"seed": 2060, "level": "L0", "family": "broad", "split_group": "broad_seed_2060"},
+    {"seed": 2061, "level": "L0", "family": "broad", "split_group": "broad_seed_2061"},
+    {"seed": 3000, "level": "L0", "family": "neighborhood", "split_group": "neighborhood_parent_2050"},
+    {"seed": 3001, "level": "L0", "family": "neighborhood", "split_group": "neighborhood_parent_2050"},
+    {"seed": 3002, "level": "L0", "family": "neighborhood", "split_group": "neighborhood_parent_2050"}
+  ],
+  "neighborhood_rule": {"parent_seed": 2050, "parent_level": "L0", "position_radius_m": 0.012, "yaw_radius_rad": 0.13962634015954636, "minimum_source_gap_m": 0.01, "outcome_filtering": false},
+  "first_pass_statistic": "all six predeclared layouts and first eight candidates, including all-negative and all-positive pools",
+  "followup_development_budget": {"mixed_pool_replays": "first success and up to two failures at distinct stages", "same_initial_trial_replays_per_selected_candidate": 1, "changed_declared_trial_replays_per_selected_candidate": 1},
+  "label_rule": "both pins independently engage end_stop and guide_base after release and after functional stroke; all required stages pass",
+  "data_retention": "preserve every frozen request, candidate result, atomic trace, software exception and timeout, including development failures"
+}

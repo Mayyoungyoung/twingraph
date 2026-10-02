@@ -55,6 +55,7 @@ def test_pool_budget_unique_and_prefix_diversity(scripted_catalogs):
     assert len({tuple(p["order"]) for p in large}) == 2
     assert len({p["choices"]["pin_left"]["yaw"] for p in large}) == 4
     assert len({p["choices"]["pin_right"]["yaw"] for p in large}) == 4
+    assert all("route_style" not in p["choices"]["carriage"] for p in large)
     for proposal in large:
         for part, record in proposal["necessary_geometry"].items():
             for key in ("yaw", "height", "placement_yaw"):

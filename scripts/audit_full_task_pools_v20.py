@@ -82,6 +82,21 @@ def audit_seed(root):
             errors.append("failure_despite_all_final_acceptance")
         if request.get("runtime_sha256") != result.get("runtime_sha256"):
             errors.append("runtime_mismatch")
+        frozen_observation = request.get("initial_observation", {})
+        if (result.get("initial_observation", {}).get("sha256") != frozen_observation.get("sha256")
+                or result.get("observation_backend", frozen_observation.get("backend"))
+                   != frozen_observation.get("backend")):
+            errors.append("decision_observation_mismatch")
+        sample_path = result_path.with_name("training_sample.json")
+        if frozen_observation.get("backend") == "mujoco_state_pose" and not sample_path.is_file():
+            errors.append("missing_training_sample")
+        if sample_path.is_file():
+            sample = read(sample_path)
+            if (sample.get("decision_observation", {}).get("sha256") != frozen_observation.get("sha256")
+                    or sample.get("input_graph_sha256") != result.get("input_graph_sha256")
+                    or sample.get("actual_execution_label") != (outcome if result.get("valid") else None)
+                    or sample.get("runtime_sha256") != request.get("runtime_sha256")):
+                errors.append("training_sample_provenance_mismatch")
         rows.append(dict(name=name, status="invalid" if errors else "valid",
                          errors=errors, success=outcome if not errors else None,
                          seconds=result.get("total_wall_seconds"),

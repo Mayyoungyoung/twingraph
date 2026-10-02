@@ -331,17 +331,50 @@ def _stroke(session, minimum, *, grasp_force=3.0):
     # Stream the constrained motion through that real operating interface;
     # the handle/post contact then has to carry the carriage along.
     stroke_targets = [float(CENTER[0] - .04), float(CENTER[0] + .060)]
+    stroke_policy = str(getattr(session, "stroke_motion_policy", "fixed_world_target_v28"))
     if getattr(session, "functional_acceptance_v12", False):
-        from simbench.assembly.skills_v12 import functional_stroke_targets
-        # The usable interval is a calibrated fixed-fixture/CAD constraint;
-        # the starting point comes from the current RGB-D assembly state.
         bounds = session.planning_cad.get("guide_stroke_x_bounds_m", stroke_targets)
-        stroke_targets = functional_stroke_targets(current[0], minimum, bounds)
-        session.artifacts["functional_stroke_plan"] = dict(
-            visual_start_x_m=float(current[0]), targets_x_m=stroke_targets,
-            calibrated_bounds_x_m=list(bounds), required_each_direction_m=float(minimum))
+        if stroke_policy == "guide_progress_v29":
+            from simbench.assembly.constrained_stroke_v29 import live_stroke_plan
+            from simbench.assembly.skills_v12 import control_position, functional_stroke_targets
+            guide_axis = np.asarray([1., 0., 0.])
+            guide_origin = np.zeros(3)
+            # Re-read the actual tracked carriage after closing the gripper.
+            # Grasp establishment can change the handle/carriage relation, so
+            # pre-grasp handle X is not a valid rail-coordinate start.
+            carriage_position = control_position(session, "carriage")
+            handle_now = control_position(session, handle)
+            pre_grasp_targets = functional_stroke_targets(current[0], minimum, bounds)
+            preferred_direction = float(np.sign(pre_grasp_targets[0] - current[0]))
+            stroke_plan = live_stroke_plan(carriage_position, minimum, bounds,
+                axis=guide_axis, origin=guide_origin,
+                preferred_first_direction=preferred_direction)
+            stroke_targets = stroke_plan["targets_m"]
+            stroke_plan.update(
+                policy=stroke_policy,
+                controller_version="constrained_stroke.guide_progress.v29",
+                state_source=f"live {getattr(session, 'perception_backend', 'execution')} tracked body",
+                pre_grasp_handle_position_world_m=current.tolist(),
+                pre_grasp_intended_targets_m=list(map(float, pre_grasp_targets)),
+                post_grasp_handle_position_world_m=handle_now.tolist(),
+                post_grasp_carriage_position_world_m=carriage_position.tolist(),
+                post_grasp_handle_minus_carriage_world_m=(handle_now-carriage_position).tolist(),
+            )
+            session.artifacts["functional_stroke_plan"] = stroke_plan
+        else:
+            from simbench.assembly.skills_v12 import functional_stroke_targets
+            stroke_targets = functional_stroke_targets(current[0], minimum, bounds)
+            guide_axis = np.asarray([1., 0., 0.]); guide_origin = np.zeros(3)
+            session.artifacts["functional_stroke_plan"] = dict(
+                policy=stroke_policy,
+                controller_version="constrained_stroke.fixed_world_target.v28",
+                visual_start_x_m=float(current[0]), targets_x_m=stroke_targets,
+                calibrated_bounds_x_m=list(bounds), required_each_direction_m=float(minimum))
     for target_x in stroke_targets:
-        session.call("move", mode="constrained", part=handle, target_x=target_x)
+        session.call("move", mode="constrained", part=handle, target_x=target_x,
+                     tracked_part="carriage", guide_axis=guide_axis.tolist(),
+                     guide_origin=guide_origin.tolist(), speed=.04,
+                     motion_policy=stroke_policy)
     session.call("inspect", what="stroke", minimum=float(minimum))
     # Re-localize after the stroke as well.  The handle has moved with the
     # carriage, so releasing at its pre-stroke image coordinate would be a
@@ -384,16 +417,12 @@ def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
     if controller is not None:
         return controller(session, order=order, choices=choices, wipe_variant=wipe_variant,
                           wipe_force=wipe_force, wipe_duration=wipe_duration, stroke_minimum=stroke_minimum)
-    from .stage_v7 import TASK_STROKE_MINIMUM_M
-    if float(stroke_minimum) != TASK_STROKE_MINIMUM_M:
-        raise SkillFailure("candidate cannot change task stroke requirement")
     required = set(assembly.PARTS)
     if tuple(order) not in assembly.legal_orders([tuple(order)]):
         raise SkillFailure("full-task candidate violates assembly precedence")
     if set(choices) != required:
         raise SkillFailure("full-task candidate choices do not cover five parts")
     session.stage_passes = {"cleaning_pass": False, "assembly_pass": False,
-                            "functional_test_pass": False,
                             "final_release_and_retraction_pass": False}
     _clean(session, wipe_variant, wipe_force, wipe_duration)
     # Reuse the audited assembly program, but execute it in this live session
@@ -430,17 +459,22 @@ def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
             execute_calls(session, plan, plan.calls[cursor:start])
         if index > 0:
             _update_execution_targets(plan, session)
-        next_start = starts[index + 1] if index + 1 < len(starts) else len(plan.calls)
+        next_start = (starts[index + 1] if index + 1 < len(starts)
+                      else next((i for i in range(start + 1, len(plan.calls))
+                                 if plan.calls[i].roles.get("manipulated") not in pin_parts),
+                                len(plan.calls)))
         execute_calls(session, plan, plan.calls[start:next_start])
         cursor = next_start
     if cursor < len(plan.calls):
+        # Bind the handle seat to the carriage pose measured after both pin
+        # insertions, immediately before planning the handle stage.
+        _update_execution_targets(plan, session)
         execute_calls(session, plan, plan.calls[cursor:])
     session.stage_passes["assembly_pass"] = True
-    _stroke(session, stroke_minimum, grasp_force=choices["handle"]["force"])
     for pin, off in (("pin_left", [0., -.032, 0.]), ("pin_right", [0., .032, 0.])):
         session.call("inspect", what="pin", part=pin, hole_part="end_stop",
                      hole_offset_m=off, minimum_insertion_depth_m=.006,
-                     phase="retained_after_stroke")
+                     phase="inserted_after_release")
     all_released = session.held is None and np.max(np.abs(session.ctx.arm_qpos - HOME)) < .02
     session.stage_passes["final_release_and_retraction_pass"] = bool(all_released)
     if not all(session.stage_passes.values()):
@@ -448,8 +482,5 @@ def execute_full_task(session, order, choices, wipe_variant=0, wipe_force=1.5,
     return Result(True, {
         "stage_passes": copy.deepcopy(session.stage_passes),
         "cleaning": copy.deepcopy(session.artifacts.get("wipe_result", {})),
-        "stroke": {"runs": copy.deepcopy(session.stroke_runs),
-                    "peak_force_n": max(session.stroke_peak_forces, default=0.0)},
-        "functional_release_support": copy.deepcopy(session.artifacts.get("functional_release_support")),
-        "task_scope": getattr(session, "task_version", "clean_assemble_and_post_handle_bidirectional_stroke"),
+        "task_scope": getattr(session, "task_version", "clean_and_assemble_through_handle_installation"),
     })

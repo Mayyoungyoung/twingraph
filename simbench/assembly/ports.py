@@ -25,7 +25,7 @@ METRIC = {
     "yaws": ("vector", "rad", "world"),
     **{k: ("scalar", "m", "world" if k in {"target_z", "target_x", "clearance"} else "")
        for k in ("height", "height_offset", "width", "radius", "tol", "tolerance", "target_z", "target_x", "clearance")},
-    **{k: ("scalar", "N", "") for k in ("force", "force_stop", "force_limit", "max_force", "minimum_support", "target_force")},
+    **{k: ("scalar", "N", "") for k in ("force", "force_stop", "force_limit", "press_force", "max_force", "minimum_support", "target_force")},
     "speed": ("scalar", "m/s", ""), "settle": ("scalar", "s", ""),
     "duration": ("scalar", "s", ""), "center": ("position", "m", "world"),
     "center_offset": ("vector", "m", "object"),
@@ -38,6 +38,13 @@ METRIC = {
     "acceptance": ("category", "", ""), "hole_part": ("object_ref", "", ""),
     "phase": ("category", "", ""), "strategy": ("category", "", ""),
     "yaw_frame": ("category", "", ""),
+    "route_style": ("category", "", ""),
+    "pin_press_budget_policy": ("category", "", ""),
+    "stroke_motion_policy": ("category", "", ""),
+    "motion_policy": ("category", "", ""),
+    "tracked_part": ("object_ref", "", ""),
+    "guide_axis": ("vector", "1", "world"),
+    "guide_origin": ("position", "m", "world"),
     "required_parts": ("object_refs", "", ""),
 }
 

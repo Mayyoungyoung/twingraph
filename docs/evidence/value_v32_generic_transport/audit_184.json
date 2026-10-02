@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "samples": 184,
+  "raw_results": 184,
+  "positives": 45,
+  "negatives": 139,
+  "layouts": 23,
+  "by_split": {
+    "train": {
+      "samples": 136,
+      "positives": 35,
+      "negatives": 101,
+      "layouts": 17
+    },
+    "test": {
+      "samples": 24,
+      "positives": 3,
+      "negatives": 21,
+      "layouts": 3
+    },
+    "validation": {
+      "samples": 24,
+      "positives": 7,
+      "negatives": 17,
+      "layouts": 3
+    }
+  },
+  "failure_types": {
+    "control_or_contact_failed": 111,
+    "grasp_solver_budget_exhausted": 28
+  },
+  "tensor_shapes": {
+    "(107, 303)": 94,
+    "(116, 303)": 90
+  },
+  "feature_dimension": 303,
+  "unique_feature_tensors": 184,
+  "duplicate_tensor_groups": [],
+  "conflicting_label_groups": [],
+  "errors": [],
+  "warnings": [],
+  "scope": "simulation binary full-plan success value, state-pose observation, zero added pose noise",
+  "limitation": "No claim of real-robot, RGB-D-noise, or new-task generalization; few validation/test layouts."
+}

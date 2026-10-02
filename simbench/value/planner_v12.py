@@ -93,7 +93,7 @@ def _geometry_catalogs(observation, cad, completed):
         all_rows[part] = rows
         feasible = [r for r in rows if r["status"] != "rejected"
                     and all(r.get(k) is not None for k in ("yaw", "height", "placement_yaw"))]
-        if not feasible and not part.startswith("pin_"):
+        if not part.startswith("pin_"):
             # Native/conservative gripper hulls can report intended source-part
             # contacts as penetrations.  Such rows are never relabelled as a
             # pass: retain them as explicit DT-only unknowns only when every
@@ -114,7 +114,7 @@ def _geometry_catalogs(observation, cad, completed):
                                 "all sampled environment/receiver geometry is nonpenetrating"),
                         necessary_geometry_pass=False)
                     deferred.append(row)
-            feasible=deferred
+            feasible.extend(deferred)
         if not feasible:
             from .stage_v5 import CandidateGenerationError
             raise CandidateGenerationError(f"no executable necessary-geometry choices for {part}; "
@@ -128,7 +128,8 @@ def _geometry_catalogs(observation, cad, completed):
             overlap = row.get("pad_face_axial_overlap_m", row.get("head_pad_axial_overlap_m", 0.)) or 0.
             rotation = abs(math.atan2(math.sin(row["placement_yaw"]-row["yaw"]),
                                       math.cos(row["placement_yaw"]-row["yaw"])))
-            return (row["status"] != "necessary_pass", -reserve_fraction, -float(overlap),
+            return (not part.startswith("pin_") and row.get("grasp_face_status") != "inside",
+                    row["status"] != "necessary_pass", -reserve_fraction, -float(overlap),
                     abs(row["height"]), rotation, abs(row["yaw"]), row["placement_yaw"])
         usable[part] = sorted(feasible, key=conservative_key)
     return usable, all_rows
@@ -267,6 +268,10 @@ def propose(observation, *, cad=None, n=48, seed=0, completed=(), priors=None):
                 envelope = LIMITS["slide_speed_m_s"] if part == "carriage" else LIMITS["insertion_speed_m_s"]
                 c["speed"] = float(np.clip(.8 * baselines[part]["speed"], *envelope))
         order = list(base_order)
+        # Both are legal skill compositions, not task-success recipes.
+        # Donors expose both choices before outcomes; the LLM may select
+        # either through its role donor. No success-ranked mode switching.
+        choices["carriage"]["transport_mode"] = ("held_insert" if i % 2 == 0 else "released_push")
         if (i // 2) % 2: order[2:4] = reversed(order[2:4])
         proposal = dict(name=f"grounded_{i:03d}", source=SOURCE,
             rationale=("observed-geometry conservative grasp with uncertainty clearance and pad overlap" if i == 0
@@ -307,7 +312,6 @@ def normalized_graph(session, proposal, *, completed=()):
     graph["planning_cad"] = deepcopy(getattr(session, "planning_cad", {}))
     graph["task_geometry_version"] = getattr(session, "task_version", "unknown")
     graph["acceptance_mode"] = "functional_v12" if getattr(session, "functional_acceptance_v12", False) else "legacy"
-    graph["assembly"]["observation"]["goals"][0]["stroke_minimum_m"] = float(proposal["stroke_minimum"])
     graph["assembly"]["observation"]["goals"][0].update(
         fixture_capture_required=True, pin_base_bridge_required=True)
     if getattr(session, "pin_insertion_config", None):

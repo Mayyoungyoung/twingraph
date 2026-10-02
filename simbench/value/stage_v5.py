@@ -166,7 +166,8 @@ def legal_orders(orders=None):
 
 
 def stage_calls(part, target, choice, stage, v7=False, functional_clearance=False, v12=False,
-                receiver_geometry=None, assembly_target=None, cad=None, end_stop_stable=False):
+                receiver_geometry=None, assembly_target=None, cad=None, end_stop_stable=False,
+                stop_only_pins=False):
     """Original task.py operations, with feedback transforms kept deferred."""
     calls = []
     target = np.asarray(target, float)
@@ -209,7 +210,8 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
     add("plan_path", target=feedback([0, 0, .10], grasp, "grasp_hover"),
         yaw=(Argument(None, "scalar", "deferred", unit="rad", frame="world", source_call=grasp,
                       source_output="grasp_yaw") if yaw_frame == "object" else argument(choice["yaw"], unit="rad")),
-        clearance=argument(choice["clearance"], unit="m"))
+        clearance=argument(choice["clearance"], unit="m"),
+        **(dict(route_style=choice["route_style"]) if "route_style" in choice else {}))
     add("move", path="transfer")
     approach_params = dict(grasp="grasp", part=part)
     if "approach_strategy" in choice:
@@ -237,17 +239,70 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
                      else Argument(None, "scalar", "deferred", unit="rad", source_call=held, source_output="grasp_yaw"))
     add("plan_path", target=feedback(approach, held),
         yaw=placement_yaw,
-        clearance=argument(choice["clearance"], unit="m"))
+        clearance=argument(choice["clearance"], unit="m"),
+        **(dict(route_style=choice["route_style"]) if "route_style" in choice else {}))
     add("move", path="transfer")
     if part == "carriage":
-        add("move", part=part, delta=xyz([0, 0, -.030]))
         entry = np.asarray(receiver_geometry.get("rail", {}).get("entry_m",
             np.r_[approach[:2], CAR_Z]), float)
-        add("move", reference="object", part=part, target=xyz(entry + [0, 0, .0015]))
-        add("plan_path", method="contact", part=part, target=xyz(target + [0, 0, .0015]),
-            axis=argument(receiver_geometry.get("rail", {}).get("axis", [1., 0., 0.]), unit="1"), speed=argument(choice.get("speed", .025) if v12 else .025, unit="m/s"),
-            force_limit=argument(choice.get("force_limit", 18.) if v12 else 18., unit="N"))
-        add("insert", part=part)
+        rail_axis = np.asarray(receiver_geometry.get("rail", {}).get("axis", [1., 0., 0.]), float)
+        rail_axis /= np.linalg.norm(rail_axis)
+        transport_mode = choice.get("transport_mode", "released_push")
+        if transport_mode not in ("held_insert", "released_push"):
+            raise ValueError("unknown object transport composition")
+        if transport_mode == "held_insert":
+            add("move", part=part, delta=xyz([0, 0, -.030]))
+            add("move", reference="object", part=part, target=xyz(entry + [0, 0, .0015]))
+            add("plan_path", method="contact", part=part, target=xyz(target + [0, 0, .0015]),
+                axis=argument(rail_axis.tolist(), unit="1"),
+                speed=argument(choice.get("speed", .025), unit="m/s"),
+                force_limit=argument(choice.get("force_limit", 18.), unit="N"))
+            add("insert", part=part)
+            add("press", part=part, target_z=argument(float(target[2]), unit="m"),
+                force_stop=argument(choice.get("press_force", 1.), unit="N"))
+            add("place", part=part, target=xyz(target), tol=argument(.003, unit="m"),
+                settle=argument(.35, unit="s"))
+            add("move", delta=xyz([0, 0, .10]))
+            add("inspect", part=part, target=xyz(target), tol=argument(.006, unit="m"))
+            add("move", target="home")
+            return calls
+        # The nominal approach centre is outside the supported guide. Place
+        # the shoe centre 13 mm past the rail face so its support is stable.
+        entry = entry + .050 * rail_axis
+        add("move", reference="object", part=part, target=xyz(entry + [0, 0, .030]))
+        add("move", part=part, delta=xyz([0, 0, -.030]))
+        add("move", reference="object", part=part, target=xyz(entry))
+        # Release at the mouth, then use the closed but empty jaws as a pusher
+        # behind the boss. Never re-grasp or carry the carriage along the rail.
+        add("place", part=part, target=xyz(entry), tol=argument(.003, unit="m"),
+            settle=argument(.25, unit="s"), acceptance="support_only")
+        add("move", delta=xyz([0, 0, .10]))
+        add("detect")
+        add("estimate_pose", part=part)
+        push_pose = add("estimate_push_pose", part=part, target=xyz(target),
+                        axis=argument(rail_axis.tolist(), unit="1"))
+        add("plan_path", target=feedback(None, push_pose, "push_hover"),
+            yaw=Argument(None, "scalar", "deferred", unit="rad", frame="world",
+                         source_call=push_pose, source_output="push_yaw"),
+            clearance=argument(choice["clearance"], unit="m"))
+        add("move", path="transfer")
+        add("gripper", mode="close_empty")
+        add("plan_path", method="cartesian", target=feedback(None, push_pose, "push_contact"),
+            speed=argument(.025, unit="m/s"))
+        add("move", path="linear", space="cartesian")
+        add("plan_path", method="push", part=part,
+            speed=argument(choice.get("speed", .025) if v12 else .025, unit="m/s"),
+            force_limit=argument(choice.get("force_limit", 18.) if v12 else 18., unit="N"),
+            press_force=argument(choice.get("press_force", 1.) if v12 else 1., unit="N"))
+        add("push", part=part)
+        add("move", delta=xyz([0, 0, .10]))
+        add("inspect", part=part, target=xyz(target), tol=argument(.006, unit="m"))
+        if not v12:
+            add("measure", quantity="clearance", part=part)
+            add("inspect", what="measurement", minimum=argument(1.e-12, unit="m"))
+        else:
+            add("move", target="home")
+        return calls
     else:
         align = pin_align if explicit_pin else target + [0, 0, .010 if part == "end_stop" else .023 if part == "handle" else .030 if v12 else .069]
         if part == "end_stop":
@@ -306,7 +361,7 @@ def stage_calls(part, target, choice, stage, v7=False, functional_clearance=Fals
     else:
         add("move", delta=xyz([0, 0, .10]))
     inspect_tol = .0025 if (v7 and part.startswith("pin_")) else .0015
-    if explicit_pin:
+    if explicit_pin and not stop_only_pins:
         add("inspect", what="pin_joint", part=part, phase="inserted_after_release")
     elif v7 and part.startswith("pin_"):
         add("inspect", what="pin", part=part, hole_part="end_stop",
@@ -347,7 +402,8 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
         functional_clearance=functional_clearance, v12=v12,
         receiver_geometry=observation.get("receiver_geometry", {}),
         assembly_target=receiver_targets.get(p), cad=getattr(session, "planning_cad", None),
-        end_stop_stable=getattr(session, "end_stop_place_acceptance_v12", None) == "stable_supported")]
+        end_stop_stable=getattr(session, "end_stop_place_acceptance_v12", None) == "stable_supported",
+        stop_only_pins=getattr(session, "sliding_assembly_v22", False))]
     for part in PARTS:
         if (functional_clearance or v12) and part == "end_stop":
             # The stop was checked when first seated. Pin insertion may move
@@ -355,7 +411,8 @@ def program(session, targets, order, choices, initial_route_index=0, v7=False):
             # assembly by retained pins and the actual later stroke, not by
             # a second nominal-world-pose constraint before that stroke.
             continue
-        if v12 and part.startswith("pin_") and "pin_command_depth_m" in choices[part]:
+        if (v12 and part.startswith("pin_") and "pin_command_depth_m" in choices[part]
+                and not getattr(session, "sliding_assembly_v22", False)):
             calls.append(Call(f"accept_{part}", "inspect", dict(what=argument("pin_joint"),
                 part=argument(part), phase=argument("inserted_after_release")), {"manipulated":part}, "checker"))
         elif v7 and part.startswith("pin_"):

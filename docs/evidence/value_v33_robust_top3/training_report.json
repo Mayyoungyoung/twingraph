@@ -1,0 +1,1773 @@
+{
+  "selected": {
+    "paths": [
+      "enhanced_robust_17.pt"
+    ],
+    "alpha": 0.0,
+    "beta": 0.0,
+    "validation": {
+      "workflow_success": 1.0,
+      "calls": 1.0,
+      "steps": 134143.33333333334,
+      "robust_brier": 0.08732578211587849,
+      "layout_success": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  },
+  "ablations": {
+    "base_nominal": {
+      "workflow_success": 0.9444444444444443,
+      "calls": 1.25,
+      "steps": 143657.5,
+      "robust_brier": 0.1458445135194632,
+      "layout_success": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        0.3333333333333333,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "enhanced_nominal": {
+      "workflow_success": 1.0,
+      "calls": 1.0833333333333333,
+      "steps": 138293.33333333334,
+      "robust_brier": 0.06198133425317889,
+      "layout_success": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "enhanced_robust": {
+      "workflow_success": 1.0,
+      "calls": 1.0833333333333333,
+      "steps": 138341.66666666666,
+      "robust_brier": 0.07713676812775531,
+      "layout_success": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  },
+  "train_cv": [
+    {
+      "fold": 0,
+      "held_layouts": [
+        3300,
+        3305,
+        3314,
+        3319,
+        3326,
+        3340,
+        3350,
+        3351,
+        3353,
+        3355,
+        3357,
+        3361,
+        3364,
+        3365,
+        3367,
+        3368,
+        3370,
+        3374,
+        3379,
+        3381,
+        3382,
+        3384,
+        3396,
+        3397,
+        3398,
+        3400,
+        3401,
+        3405,
+        3413,
+        3414,
+        3415,
+        3418,
+        3419,
+        3420
+      ],
+      "metrics": {
+        "workflow_success": 0.8137254901960783,
+        "calls": 1.411764705882353,
+        "steps": 140817.64705882352,
+        "robust_brier": 0.09496609156236348,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.6666666666666666,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          0.0,
+          0.3333333333333333,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "fold": 1,
+      "held_layouts": [
+        3301,
+        3303,
+        3308,
+        3309,
+        3315,
+        3318,
+        3320,
+        3322,
+        3325,
+        3331,
+        3332,
+        3335,
+        3338,
+        3342,
+        3345,
+        3346,
+        3347,
+        3352,
+        3369,
+        3371,
+        3380,
+        3383,
+        3385,
+        3387,
+        3388,
+        3394,
+        3406,
+        3408,
+        3410,
+        3411,
+        3412,
+        3416,
+        3422
+      ],
+      "metrics": {
+        "workflow_success": 0.7878787878787878,
+        "calls": 1.4848484848484849,
+        "steps": 146988.48484848486,
+        "robust_brier": 0.12222911345142931,
+        "layout_success": [
+          1.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.3333333333333333,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0,
+          1.0,
+          0.0,
+          0.6666666666666666
+        ]
+      }
+    },
+    {
+      "fold": 2,
+      "held_layouts": [
+        3304,
+        3307,
+        3310,
+        3311,
+        3323,
+        3324,
+        3327,
+        3330,
+        3337,
+        3339,
+        3343,
+        3349,
+        3356,
+        3358,
+        3359,
+        3360,
+        3362,
+        3366,
+        3373,
+        3376,
+        3377,
+        3386,
+        3389,
+        3391,
+        3393,
+        3395,
+        3403,
+        3404,
+        3407,
+        3409,
+        3421,
+        3423,
+        3424
+      ],
+      "metrics": {
+        "workflow_success": 0.8585858585858587,
+        "calls": 1.5454545454545454,
+        "steps": 154541.51515151514,
+        "robust_brier": 0.10639364517386393,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.3333333333333333,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.6666666666666666,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.3333333333333333,
+          1.0
+        ]
+      }
+    }
+  ],
+  "selection_candidates": [
+    {
+      "paths": [
+        "enhanced_nominal_7.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 136805.83333333334,
+        "robust_brier": 0.08276908958236831,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 136805.83333333334,
+        "robust_brier": 0.08276908958236831,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 136854.16666666666,
+        "robust_brier": 0.08276908958236831,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 136854.16666666666,
+        "robust_brier": 0.08276908958236831,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 136854.16666666666,
+        "robust_brier": 0.08276908958236831,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 136854.16666666666,
+        "robust_brier": 0.08276908958236831,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_17.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138503.33333333334,
+        "robust_brier": 0.06480010262758008,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_17.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138503.33333333334,
+        "robust_brier": 0.06480010262758008,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_17.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 0.9444444444444443,
+        "calls": 1.0833333333333333,
+        "steps": 137930.0,
+        "robust_brier": 0.06480010262758008,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.3333333333333333,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_17.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 0.9444444444444443,
+        "calls": 1.0833333333333333,
+        "steps": 137930.0,
+        "robust_brier": 0.06480010262758008,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.3333333333333333,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_17.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 0.9444444444444443,
+        "calls": 1.0833333333333333,
+        "steps": 137613.33333333334,
+        "robust_brier": 0.06480010262758008,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.3333333333333333,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_17.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 0.9444444444444443,
+        "calls": 1.0833333333333333,
+        "steps": 137613.33333333334,
+        "robust_brier": 0.06480010262758008,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.3333333333333333,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 135187.5,
+        "robust_brier": 0.06183829504874872,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 135187.5,
+        "robust_brier": 0.06183829504874872,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 135397.5,
+        "robust_brier": 0.06183829504874872,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 135397.5,
+        "robust_brier": 0.06183829504874872,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 139547.5,
+        "robust_brier": 0.06183829504874872,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 139547.5,
+        "robust_brier": 0.06183829504874872,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt",
+        "enhanced_nominal_17.pt",
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138293.33333333334,
+        "robust_brier": 0.06198133425317889,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt",
+        "enhanced_nominal_17.pt",
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138293.33333333334,
+        "robust_brier": 0.06198133425317889,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt",
+        "enhanced_nominal_17.pt",
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138293.33333333334,
+        "robust_brier": 0.06198133425317889,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt",
+        "enhanced_nominal_17.pt",
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138293.33333333334,
+        "robust_brier": 0.06198133425317889,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt",
+        "enhanced_nominal_17.pt",
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138503.33333333334,
+        "robust_brier": 0.06198133425317889,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_nominal_7.pt",
+        "enhanced_nominal_17.pt",
+        "enhanced_nominal_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138503.33333333334,
+        "robust_brier": 0.06198133425317889,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138551.66666666666,
+        "robust_brier": 0.06882112378187509,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138551.66666666666,
+        "robust_brier": 0.06882112378187509,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138551.66666666666,
+        "robust_brier": 0.06882112378187509,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138551.66666666666,
+        "robust_brier": 0.06882112378187509,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.1666666666666667,
+        "steps": 141226.66666666666,
+        "robust_brier": 0.06882112378187509,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.1666666666666667,
+        "steps": 141226.66666666666,
+        "robust_brier": 0.06882112378187509,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_17.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 134143.33333333334,
+        "robust_brier": 0.08732578211587849,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_17.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 134143.33333333334,
+        "robust_brier": 0.08732578211587849,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_17.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.1666666666666667,
+        "steps": 141785.0,
+        "robust_brier": 0.08732578211587849,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_17.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.1666666666666667,
+        "steps": 141785.0,
+        "robust_brier": 0.08732578211587849,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_17.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.4166666666666667,
+        "steps": 155675.0,
+        "robust_brier": 0.08732578211587849,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_17.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.4166666666666667,
+        "steps": 155675.0,
+        "robust_brier": 0.08732578211587849,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 134459.16666666666,
+        "robust_brier": 0.09238958874747612,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 134459.16666666666,
+        "robust_brier": 0.09238958874747612,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 134401.66666666666,
+        "robust_brier": 0.09238958874747612,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0,
+        "steps": 134401.66666666666,
+        "robust_brier": 0.09238958874747612,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.25,
+        "steps": 145093.33333333334,
+        "robust_brier": 0.09238958874747612,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.25,
+        "steps": 145093.33333333334,
+        "robust_brier": 0.09238958874747612,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt",
+        "enhanced_robust_17.pt",
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138341.66666666666,
+        "robust_brier": 0.07713676812775531,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt",
+        "enhanced_robust_17.pt",
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.0,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138293.33333333334,
+        "robust_brier": 0.07713676812775531,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt",
+        "enhanced_robust_17.pt",
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138551.66666666666,
+        "robust_brier": 0.07713676812775531,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt",
+        "enhanced_robust_17.pt",
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.1,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.0833333333333333,
+        "steps": 138341.66666666666,
+        "robust_brier": 0.07713676812775531,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt",
+        "enhanced_robust_17.pt",
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.0,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.1666666666666667,
+        "steps": 141226.66666666666,
+        "robust_brier": 0.07713676812775531,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "paths": [
+        "enhanced_robust_7.pt",
+        "enhanced_robust_17.pt",
+        "enhanced_robust_29.pt"
+      ],
+      "alpha": 0.25,
+      "beta": 0.5,
+      "validation": {
+        "workflow_success": 1.0,
+        "calls": 1.1666666666666667,
+        "steps": 141226.66666666666,
+        "robust_brier": 0.07713676812775531,
+        "layout_success": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    }
+  ],
+  "train_layouts": [
+    3300,
+    3301,
+    3303,
+    3304,
+    3305,
+    3307,
+    3308,
+    3309,
+    3310,
+    3311,
+    3314,
+    3315,
+    3318,
+    3319,
+    3320,
+    3322,
+    3323,
+    3324,
+    3325,
+    3326,
+    3327,
+    3330,
+    3331,
+    3332,
+    3335,
+    3337,
+    3338,
+    3339,
+    3340,
+    3342,
+    3343,
+    3345,
+    3346,
+    3347,
+    3349,
+    3350,
+    3351,
+    3352,
+    3353,
+    3355,
+    3356,
+    3357,
+    3358,
+    3359,
+    3360,
+    3361,
+    3362,
+    3364,
+    3365,
+    3366,
+    3367,
+    3368,
+    3369,
+    3370,
+    3371,
+    3373,
+    3374,
+    3376,
+    3377,
+    3379,
+    3380,
+    3381,
+    3382,
+    3383,
+    3384,
+    3385,
+    3386,
+    3387,
+    3388,
+    3389,
+    3391,
+    3393,
+    3394,
+    3395,
+    3396,
+    3397,
+    3398,
+    3400,
+    3401,
+    3403,
+    3404,
+    3405,
+    3406,
+    3407,
+    3408,
+    3409,
+    3410,
+    3411,
+    3412,
+    3413,
+    3414,
+    3415,
+    3416,
+    3418,
+    3419,
+    3420,
+    3421,
+    3422,
+    3423,
+    3424
+  ],
+  "validation_layouts": [
+    3306,
+    3312,
+    3321,
+    3328,
+    3333,
+    3336,
+    3344,
+    3354,
+    3378,
+    3392,
+    3399,
+    3402
+  ],
+  "test_used": false,
+  "data_audit_sha256": "dd724ea268441606f15c12c840f4ab7a2ebf8c5e6c8010d035269cdf22439deb",
+  "training_script_sha256": "edd0399ff0315ea4a17b9d75934dd4bbfe4fbb0bac07b8e178ae19d4325e4807"
+}

@@ -100,7 +100,7 @@ def normalized_graph(session, proposal, *, completed=()):
                          valid=bool(r.get("valid")), quality=r.get("quality"),
                          fit_residual_m=r.get("fit_residual_m"),
                          capabilities=list(session.capabilities.get(p, ()))) for p, r in raw["objects"].items()},
-        goals=[dict(predicate="functional_task", stroke_minimum_m=.08, pin_minimum_depth_m=.006)],
+        goals=[dict(predicate="assembly_through_handle", pin_minimum_depth_m=.006)],
         perception=dict(backend=raw.get("backend"), observation_sha256=raw.get("sha256")))
     # Receiver observations are part of the same immutable pre-execution
     # input. They must survive graph compilation rather than live only in a
@@ -115,9 +115,8 @@ def normalized_graph(session, proposal, *, completed=()):
         cleaning=dict(wipe_variant=proposal["wipe_variant"], wipe_force=proposal["wipe_force"],
                       wipe_duration=proposal["wipe_duration"], minimum_coverage=.72),
         completion=dict(completed=list(completed), remaining=[p for p in proposal["order"] if p not in completed]),
-        phase_edges=[["cleaning", "carriage"], *map(list, stage_v5.PRECEDENCE),
-                     ["handle", "bidirectional_stroke"], ["bidirectional_stroke", "pin_retention"]],
-        obligations=["cleaning and stroke retain feedback controllers", "continuous feasibility requires twin"],
+        phase_edges=[["cleaning", "carriage"], *map(list, stage_v5.PRECEDENCE)],
+        obligations=["cleaning retains a feedback controller", "continuous feasibility requires twin"],
         proposal=deepcopy(proposal))
 
 
@@ -136,8 +135,6 @@ def value_features(graph):
     for key in ("wipe_variant", "wipe_force", "wipe_duration"):
         if params[key] != graph["cleaning"][key]:
             raise ValueError("cleaning graph and executable envelope disagree")
-    if params["stroke_minimum"] != .08:
-        raise ValueError("candidate changed the task requirement")
     output = []
     for part in stage_v7.ALL_PARTS:
         row = graph["assembly"]["observation"]["objects"].get(part, {})

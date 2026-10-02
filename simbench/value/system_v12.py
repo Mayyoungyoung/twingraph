@@ -6,7 +6,7 @@ import time
 import numpy as np
 
 from simbench.assembly.control import HOME
-from simbench.assembly.library import Result, SkillFailure
+from simbench.assembly.library import HANDLERS, Result, SkillFailure
 from .full_task_v7 import _clean, _stroke
 from .physical import PhysicalRunner, perturbation
 from .plan import execute_calls, digest
@@ -86,12 +86,15 @@ def require_frozen_source():
     return current
 
 
-def make_scene(seed, directory, *, domain="online", level="L1"):
+def make_scene(seed, directory, *, domain="online", level="L1",
+               observation_backend="rgbd_geometry", position_noise_std_m=0., yaw_noise_std_rad=0.,
+               scene_layout_hook=None):
     from . import stage_v12
     from simbench.assembly.skills_v12 import configure_v12_skills
     from .supply_layout_v13 import apply as supply_layout
     result = stage_v12.make_scene(seed, directory, role=domain, level=level,
-        scene_layout_hook=supply_layout)
+        scene_layout_hook=scene_layout_hook or supply_layout, observation_backend=observation_backend,
+        position_noise_std_m=position_noise_std_m, yaw_noise_std_rad=yaw_noise_std_rad)
     configure_v12_skills(result[1])
     from .stage_v7 import refresh_visual_observation
     refresh_visual_observation(result[1], parts=result[1].parts)
@@ -102,7 +105,7 @@ def _receiver_observation(session):
     from .stage_v7 import refresh_visual_observation
     observation = refresh_visual_observation(session, parts=session.parts)
     if not observation.get("fixtures", {}).get("guide_base", {}).get("valid"):
-        raise SkillFailure("receiver RGB-D unknown; cannot bind assembly targets")
+        raise SkillFailure("receiver pose unknown; cannot bind assembly targets")
     return observation
 
 
@@ -127,52 +130,71 @@ def _prepare_receiver_targets(session, part, proposal):
     if set(targets) != set(proposal["choices"]):
         raise SkillFailure("incomplete observed receiver/CAD target bindings")
     if part.startswith("pin_"):
-        relation = _require_stop_corridor(observation)
-        for pin, row in relation["holes"].items():
-            outward = np.asarray(row["axis"], float)
-            outward /= np.linalg.norm(outward)
-            point = np.asarray(row["common_axis_point_m"], float)
-            stop_entry = np.asarray(row["stop_entry_m"], float)
-            entry = np.asarray(row.get("stop_entry_on_common_axis_m",
-                point + outward * float(np.dot(stop_entry - point, outward))), float)
-            depth = float(row["minimum_total_depth_m"])
+        if getattr(session, "sliding_assembly_v22", False):
+            from .cad_rgbd_v12 import _observed_transform
+            measured = _observed_transform(observation["objects"].get("end_stop", {}))
+            if measured is None:
+                raise SkillFailure("installed end_stop pose unknown before pin insertion")
+            stop_position, stop_rotation = measured
+            outward = stop_rotation[:, 2]
             tip = float(session.planning_cad["pin_shaft_offsets_m"][0])
-            targets[pin].update(hole_entry_m=entry.tolist(), axis=outward.tolist(),
-                position_m=(entry - outward * (depth + tip)).tolist(),
-                minimum_total_depth_m=depth,
-                source="fresh RGB-D shared two-layer shaft corridor")
+            for pin, offset in zip(("pin_left", "pin_right"), session.planning_cad["pin_hole_offsets_m"]):
+                depth = float(proposal["choices"][pin].get("pin_command_depth_m", .008))
+                entry = stop_position + stop_rotation @ np.asarray(offset, float)
+                targets[pin].update(hole_entry_m=entry.tolist(), axis=outward.tolist(),
+                    position_m=(entry - outward * (depth + tip)).tolist(),
+                    minimum_total_depth_m=depth,
+                    receiver="end_stop", source=f"fresh {observation['backend']} stop bore + static CAD")
+        else:
+            relation = _require_stop_corridor(observation)
+            for pin, row in relation["holes"].items():
+                outward = np.asarray(row["axis"], float)
+                outward /= np.linalg.norm(outward)
+                point = np.asarray(row["common_axis_point_m"], float)
+                stop_entry = np.asarray(row["stop_entry_m"], float)
+                entry = np.asarray(row.get("stop_entry_on_common_axis_m",
+                    point + outward * float(np.dot(stop_entry - point, outward))), float)
+                depth = float(row["minimum_total_depth_m"])
+                tip = float(session.planning_cad["pin_shaft_offsets_m"][0])
+                targets[pin].update(hole_entry_m=entry.tolist(), axis=outward.tolist(),
+                    position_m=(entry - outward * (depth + tip)).tolist(),
+                    minimum_total_depth_m=depth,
+                    source=f"fresh {observation['backend']} shared two-layer shaft corridor")
     if part == "handle":
         from .cad_rgbd_v12 import _observed_transform
         measured = _observed_transform(observation["objects"].get("carriage", {}))
         if measured is None:
-            raise SkillFailure("installed carriage RGB-D unknown before handle placement")
+            raise SkillFailure("installed carriage pose unknown before handle placement")
         position, rotation = measured
         targets["handle"]["position_m"] = (position + rotation[:, 2] * float(
             session.planning_cad["handle_seat_center_offset_from_carriage_m"])).tolist()
-        targets["handle"]["source"] = "fresh RGB-D carriage post + static CAD mating"
+        targets["handle"]["source"] = f"fresh {observation['backend']} carriage post + static CAD mating"
     session.receiver_execution_targets = targets
     session.stage_targets = {name:list(row["position_m"]) for name,row in targets.items()}
     bindings = getattr(session, "receiver_binding_history", [])
     bindings.append(dict(stage=part, observation_sha256=observation["sha256"], targets=deepcopy(targets),
-        source="wrist_RGBD_and_static_CAD", object_pose_oracle=False))
+        source=f"{observation['backend']}_and_static_CAD",
+        object_pose_oracle=observation["backend"] == "mujoco_state_pose"))
     session.receiver_binding_history = bindings
     save(Path(session.out)/"receiver_binding_history.json", bindings)
     return observation
 
 
 def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
-               wipe_duration=14., stroke_minimum=.02, completed=(), monitor=None, boundaries=None):
-    required_stroke=float(session.planning_cad.get("functional_stroke_minimum_m", .02))
-    if not np.isclose(stroke_minimum, required_stroke,rtol=0,atol=1e-12):
-        raise ValueError("candidate cannot change functional task requirement")
+               wipe_duration=14., stroke_minimum=.02, completed=(), monitor=None, boundaries=None,
+               include_cleaning=True):
     proposal = dict(order=list(order), choices=deepcopy(choices), wipe_variant=wipe_variant,
                     wipe_force=wipe_force, wipe_duration=wipe_duration, stroke_minimum=stroke_minimum)
     done = list(completed)
     boundaries = boundaries if boundaries is not None else []
     if not done:
-        session.stage_passes = dict(cleaning_pass=False, assembly_pass=False,
-            functional_test_pass=False, fixture_capture_pass=False,
+        session.stage_passes = dict(assembly_pass=False,
+            fixture_capture_pass=False,
             final_seat_pass=False, final_release_and_retraction_pass=False)
+        if getattr(session, "sliding_assembly_v23", False):
+            session.stage_passes["base_hole_engagement_pass"] = False
+        if include_cleaning:
+            session.stage_passes["cleaning_pass"] = False
 
     def boundary(stage, failure=None):
         nonlocal proposal
@@ -189,7 +211,7 @@ def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
                 proposal = deepcopy(replacement)
                 return True
         return False
-    if "cleaning" not in done:
+    if include_cleaning and "cleaning" not in done:
         _clean(session, wipe_variant, wipe_force, wipe_duration)
         done.append("cleaning"); boundary("cleaning")
     while any(part not in done for part in proposal["order"]):
@@ -202,11 +224,14 @@ def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
                      binding=session.receiver_binding_history[-1]))
             calls = [c for c in plan.calls if c.roles.get("manipulated") == part and not c.id.startswith("accept_")]
             execute_calls(session, plan, calls)
-            if part == "end_stop":
+            if part == "end_stop" and not getattr(session, "sliding_assembly_v22", False):
                 # Released is not synonymous with ready for the next skill.
                 # Do not mark this predecessor complete if both holes cannot
                 # accept a shared straight shaft through the base.
-                _require_stop_corridor(session.decision_observation)
+                relation_observation = (_receiver_observation(session)
+                                        if getattr(session, "sliding_assembly_v23", False)
+                                        else session.decision_observation)
+                _require_stop_corridor(relation_observation)
         except SkillFailure as exc:
             if monitor is None: raise
             # Recoverable failure is also a decision boundary. Do not mark
@@ -220,15 +245,30 @@ def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
     plan = assembly_program(session, proposal)
     execute_calls(session, plan, [c for c in plan.calls if c.id.startswith("accept_") or c.id == "final_home"])
     session.stage_passes["assembly_pass"] = True
-    _stroke(session, stroke_minimum,
-            grasp_force=proposal["choices"].get("handle", {}).get("force", 3.0))
+    # The installed handle is the terminal operation. Check that installing
+    # it has not disturbed the already released pins; no handle stroke runs.
     for part in ("pin_left", "pin_right"):
-        session.call("inspect", what="pin_joint", part=part, phase="retained_after_stroke")
+        if getattr(session, "sliding_assembly_v22", False):
+            session.call("inspect", what="pin", part=part, hole_part="end_stop",
+                         hole_offset_m=[0., -.032 if part == "pin_left" else .032, 0.],
+                         minimum_insertion_depth_m=.006, phase="inserted_after_release")
+        else:
+            session.call("inspect", what="pin_joint", part=part, phase="inserted_after_release")
+    if getattr(session, "sliding_assembly_v23", False):
+        session.stage_passes["base_hole_engagement_pass"] = True
     from simbench.assembly.skills_v12 import evaluate_end_stop_fixture, evaluate_functional_seat
-    fixture_ok, fixture_metrics = evaluate_end_stop_fixture(session)
+    if (getattr(session, "sliding_assembly_v22", False)
+            or getattr(session, "sliding_assembly_v23", False)):
+        from simbench.assembly.skills_v12 import evaluate_end_stop_stable_support
+        fixture_ok, fixture_metrics = evaluate_end_stop_stable_support(
+            session, "end_stop", session.stage_targets["end_stop"], after_retreat=False)
+        _, strict_fixture = evaluate_end_stop_fixture(session)
+        fixture_metrics["strict_locator_and_base_bridge_diagnostic"] = strict_fixture
+    else:
+        fixture_ok, fixture_metrics = evaluate_end_stop_fixture(session)
     session.artifacts["final_fixture_acceptance"] = fixture_metrics
     session.stage_passes["fixture_capture_pass"] = bool(fixture_ok)
-    # Stroke release, retraction and home all advance physics. Earlier seat
+    # Handle release, retraction and home advance physics. Earlier seat
     # checks cannot establish that the completed assembly remains engaged.
     final_seats = {}
     for part in ("carriage", "handle"):
@@ -240,7 +280,7 @@ def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
         session.held is None and np.max(np.abs(session.ctx.arm_qpos - HOME)) < .02)
     if not all(session.stage_passes.values()):
         raise SkillFailure("complete functional task predicate failed")
-    done.extend(("stroke", "retention")); boundary("finished")
+    boundary("finished")
     return Result(True, dict(stage_passes=deepcopy(session.stage_passes), completed=done))
 
 
@@ -309,7 +349,8 @@ def run_cleaning_prefix(session, *, wipe_variant=0, wipe_force=1.5,
 
 def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
             completed=(), monitor=None, level="L1", record=False, stop_after=None,
-            end_stop_acceptance=None):
+            end_stop_acceptance=None, observation_backend="rgbd_geometry",
+            position_noise_std_m=0., yaw_noise_std_rad=0.):
     directory = Path(directory); directory.mkdir(parents=True, exist_ok=True)
     provenance=require_frozen_source()
     started = time.perf_counter(); boundaries = []
@@ -324,12 +365,15 @@ def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
             monitor_seconds+=elapsed
             monitor_timings.append(dict(stage=actual.get("stage"),wall_seconds=elapsed))
     with (directory / "console.log").open("w", encoding="utf-8") as log, contextlib.redirect_stdout(log):
-        _, session, _, _ = make_scene(seed, directory / "scene", domain=domain, level=level)
+        _, session, _, _ = make_scene(seed, directory / "scene", domain=domain, level=level,
+            observation_backend=observation_backend, position_noise_std_m=position_noise_std_m,
+            yaw_noise_std_rad=yaw_noise_std_rad)
         if checkpoint is not None: restore_twin_checkpoint(session, checkpoint)
         if end_stop_acceptance is not None:
             # Explicit opt-in for the V17-A end-stop local acceptance mode.
             session.end_stop_place_acceptance_v12 = str(end_stop_acceptance)
         initial = deepcopy(session.decision_observation)
+        initial_random_state = deepcopy(getattr(session, "state_observation_random_state", None))
         graph = normalized_graph(session, proposal, completed=completed)
         save(directory / "input_graph.json", graph)
         if stop_after is None:
@@ -371,11 +415,53 @@ def rollout(seed, proposal, directory, *, domain="online", checkpoint=None,
                               "cleaning_only" if stop_after == "cleaning" else
                               f"assembly_prefix_through_{stop_after}"),
             full_task_label=bool(stop_after is None))
+        result["observation_backend"] = initial["backend"]
+        result["observation_config"] = deepcopy(initial.get("config", {}))
+        result["observation_random_state"] = initial_random_state
+        result["first_failed_atom"] = next((dict(index=row["index"], skill=row["skill"],
+            interface=row.get("interface"), implementation=HANDLERS[row["skill"]].implementation,
+            reason=row.get("reason"), metrics=deepcopy(row.get("metrics")))
+            for row in session.results if not row["ok"]), None)
+        if result["first_failed_atom"] is None and not result["success"]:
+            result["failure_type"] = "timeout" if result.get("timeout") else (
+                "final_functional_predicate" if result.get("error") == "complete functional task predicate failed"
+                else "unhandled_skill_or_controller_failure")
+        else:
+            result["failure_type"] = ("atomic_call" if result["first_failed_atom"] else None)
+        completed_stages = {row["stage"] for row in boundaries}
+        stages = ["cleaning", *proposal["order"], "final_acceptance"]
+        if result.get("stage_passes", {}).get("assembly_pass"):
+            completed_stages.update(proposal["order"])
+        if result.get("success"):
+            completed_stages.add("final_acceptance")
+        pending = next((stage for stage in stages if stage not in completed_stages), None)
+        result["stage_audit"] = {stage: dict(
+            reached=stage in completed_stages or (stage == pending and not result.get("timeout")),
+            completed=stage in completed_stages) for stage in stages}
+        result["final_functional_predicates"] = deepcopy(result.get("stage_passes", {}))
         if result.get("timeout"):
             result.update(valid=False,invalid_reason="execution wall-time budget exhausted; resource-censored, not a physical feasibility label")
         if source_fingerprint()["sha256"]!=provenance["sha256"]:
             result.update(valid=False, invalid_reason="source/CAD/policy changed during physical rollout")
         save(directory / "result.json", result)
+        save(directory / "training_sample.json", dict(
+            schema="twingraph.candidate_execution_sample.v20.r1", seed=seed,
+            layout_level=level, task_version=session.task_version,
+            runtime_sha256=provenance["sha256"],
+            decision_observation=initial, input_graph_path="input_graph.json",
+            input_graph_sha256=digest(graph), full_plan_ir=graph["full_plan"],
+            assembly_plan_ir=graph["assembly"]["plan"],
+            actual_execution_label=result.get("full_success") if result.get("valid") else None,
+            valid=result.get("valid"), first_failed_atom=result["first_failed_atom"],
+            failure_type=result["failure_type"], stage_audit=result["stage_audit"],
+            final_functional_predicates=result["final_functional_predicates"],
+            fixture_acceptance=result["fixture_acceptance"],
+            final_seat_acceptance=result["final_seat_acceptance"],
+            observation_backend=result["observation_backend"],
+            observation_config=result["observation_config"],
+            observation_random_state=initial_random_state,
+            trial=result["trial"], total_wall_seconds=result["total_wall_seconds"],
+            timeout=result.get("timeout"), software_exception=None))
         if recorder: recorder.close(result)
     return result
 
@@ -446,7 +532,8 @@ class ClosedLoop:
         return None
 
 
-def collect(seed, directory, *, n=48, level="L1", names=None, record=False, domain="train"):
+def collect(seed, directory, *, n=48, level="L1", names=None, record=False, domain="train",
+            observation_backend="rgbd_geometry", position_noise_std_m=0., yaw_noise_std_rad=0.):
     """Collect complete matrix labels; do not rank using any of these labels."""
     directory=Path(directory); directory.mkdir(parents=True,exist_ok=True)
     request_path=directory/"request.json"
@@ -455,18 +542,25 @@ def collect(seed, directory, *, n=48, level="L1", names=None, record=False, doma
         import json
         request=json.loads(request_path.read_text());pool=request["pool"]
         if request["seed"]!=seed or len(pool)!=n: raise ValueError("incompatible resume request")
+        if request.get("observation_backend", "rgbd_geometry") != observation_backend or \
+           float(request.get("position_noise_std_m", 0.)) != position_noise_std_m or \
+           float(request.get("yaw_noise_std_rad", 0.)) != yaw_noise_std_rad:
+            raise ValueError("resume observation configuration mismatch")
         if request.get("runtime_sha256")!=provenance["sha256"]:
             raise ValueError("resume source/CAD/policy mismatch; use a new experiment directory")
     else:
         with (directory/"generation.log").open("w") as log,contextlib.redirect_stdout(log):
-            _,session,_,_=make_scene(seed,directory/"decision",domain=domain,level=level)
+            _,session,_,_=make_scene(seed,directory/"decision",domain=domain,level=level,
+                observation_backend=observation_backend, position_noise_std_m=position_noise_std_m,
+                yaw_noise_std_rad=yaw_noise_std_rad)
             save(directory/"generation_input.json",dict(seed=seed,level=level,
                 observation=session.decision_observation,cad=session.planning_cad,
                 runtime_sha256=provenance["sha256"]))
             pool,source=propose(session.decision_observation,cad=session.planning_cad,n=n,seed=seed)
         save(request_path,dict(seed=seed,level=level,domain=domain,pool=pool,source=source,
             geometry_version=session.task_version,initial_observation=session.decision_observation,
-            runtime_sha256=provenance["sha256"]))
+            runtime_sha256=provenance["sha256"], observation_backend=observation_backend,
+            position_noise_std_m=position_noise_std_m, yaw_noise_std_rad=yaw_noise_std_rad))
         save(directory/"runtime_sources.json",provenance)
     results=[]
     for proposal in pool:
@@ -476,7 +570,9 @@ def collect(seed, directory, *, n=48, level="L1", names=None, record=False, doma
             import json
             result=json.loads((root/"result.json").read_text())
         else:
-            result=rollout(seed,proposal,root,domain=domain,level=level,record=record)
+            result=rollout(seed,proposal,root,domain=domain,level=level,record=record,
+                observation_backend=observation_backend, position_noise_std_m=position_noise_std_m,
+                yaw_noise_std_rad=yaw_noise_std_rad)
         if not result.get("valid"):
             raise RuntimeError(f"invalid trial {proposal['name']}: {result.get('invalid_reason', result.get('error'))}")
         results.append(dict(name=proposal["name"],success=result["success"],error=result["error"],wall_seconds=result["total_wall_seconds"]))

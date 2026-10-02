@@ -42,6 +42,9 @@ def main():
                 or request["level"] != manifest["level"]
                 or request["domain"] != manifest["domain"]
                 or len(request["pool"]) != manifest["candidate_count"]
+                or request.get("observation_backend", "rgbd_geometry") != manifest.get("observation_backend", "rgbd_geometry")
+                or float(request.get("position_noise_std_m", 0.)) != float(manifest.get("position_noise_std_m", 0.))
+                or float(request.get("yaw_noise_std_rad", 0.)) != float(manifest.get("yaw_noise_std_rad", 0.))
                 or request.get("graph_sha256") != frozen[seed]["graph_sha256"]
                 or [row["name"] for row in request["pool"]] != frozen[seed]["candidate_names"]):
             raise RuntimeError(f"frozen request changed before execution: {seed}")
@@ -54,7 +57,10 @@ def main():
             command = [sys.executable, "scripts/collect_v12_parallel.py",
                        "--out", str(args.root), "--seeds", str(seed),
                        "--workers", str(workers), "--n", str(manifest["candidate_count"]),
-                       "--level", manifest["level"], "--domain", manifest["domain"]]
+                       "--level", manifest["level"], "--domain", manifest["domain"],
+                       "--observation-backend", manifest.get("observation_backend", "rgbd_geometry"),
+                       "--position-noise-std-m", str(manifest.get("position_noise_std_m", 0.)),
+                       "--yaw-noise-std-rad", str(manifest.get("yaw_noise_std_rad", 0.))]
             execution = subprocess.run(command, env=os.environ.copy(), check=False)
             audit = audit_seed(root)
             print(json.dumps(dict(seed=seed, attempt=attempts + 1,

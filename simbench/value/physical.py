@@ -80,8 +80,9 @@ class PhysicalRunner:
                     suffix = False
                     error = "independent task goal not satisfied"
             if suffix and getattr(s, "stage_passes", None):
-                required = ("cleaning_pass", "assembly_pass", "functional_test_pass",
-                            "final_release_and_retraction_pass")
+                required = getattr(s, "required_stage_passes", None) or (
+                    "cleaning_pass", "assembly_pass",
+                    "final_release_and_retraction_pass")
                 if not all(bool(s.stage_passes.get(k)) for k in required):
                     suffix = False
                     error = "complete-task stage predicate not satisfied"

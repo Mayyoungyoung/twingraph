@@ -58,15 +58,15 @@ def _receiver_scenes(observation, cad, part, completed, planned_before):
             continue  # Held-part contact is intentional, not receiver collision.
         observed = (observation.get("fixtures", {}).get(name, {}) if name == "guide_base"
                     else objects.get(name, {}))
-        try:
-            pose_matrix(observed)
-            source[name] = deepcopy(observed)
-        except ValueError:
-            pass
         candidate = (_goal_pose(goals.get(name, {})) if name in predecessors and name not in completed
                      else observed)
         try:
             pose_matrix(candidate)
+            # Pickup occurs after the preceding assembly stages too. Keeping
+            # their original supply poses here invents obstacles that have
+            # already moved (notably carriage/end_stop beside the handle).
+            # These are conditional planned poses, never sensor observations.
+            source[name] = deepcopy(candidate)
             future[name] = deepcopy(candidate)
         except ValueError:
             if name in predecessors or name == "guide_base":
@@ -90,10 +90,11 @@ def _future_body_path(observation, part, target, step):
             raise ValueError("invalid declared rail path")
         # Same object-referenced segments as stage_v5.stage_calls. Do not
         # silently substitute a fixed world-x entry or a straight target drop.
-        lifted_entry, slide_target = entry+[0., 0., .0015], target+[0., 0., .0015]
-        waypoints = [("descent", approach, approach-[0., 0., .030]),
-                     ("rail_entry", approach-[0., 0., .030], lifted_entry),
-                     ("rail_push", lifted_entry, slide_target),
+        rail_axis = axis / np.linalg.norm(axis)
+        supported_entry, slide_target = entry+.050*rail_axis, target+[0., 0., .0015]
+        waypoints = [("rail_entry_hover", approach, supported_entry+[0., 0., .030]),
+                     ("descent", supported_entry+[0., 0., .030], supported_entry),
+                     ("rail_push", supported_entry, slide_target),
                      ("seat", slide_target, target)]
     else:
         approach = target+[0., 0., .045]
@@ -443,6 +444,8 @@ def placement_clearance_catalog(observation, cad, part, *, completed=(), planned
                 source_body_intentional_pad_pair_count=sum(len(r.get("intentional_pad_pairs",[])) for r in records),
                 source_body_withdrawal_policy="rigid grasp preserves checked gripper/object transform; no stale-source self query during withdrawal; attachment and retention unverified",
                 planned_predecessors=predecessors, source_receivers=sorted(source_scene), future_receivers=sorted(future_scene),
+                source_receiver_pose_modes={p: "predicted_mated" if p in predecessors and p not in completed else "observed"
+                    for p in source_scene},
                 future_receiver_pose_modes={p: "predicted_mated" if p in predecessors and p not in completed else "observed"
                     for p in future_scene},
                 sampled_worst_phase=worst["phase"] if worst else None,

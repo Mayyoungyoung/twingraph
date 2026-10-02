@@ -1,9 +1,8 @@
-"""Whole-flow value input: atomic assembly graph plus both feedback phases.
+"""Whole-flow value input: cleaning controller plus atomic assembly graph.
 
-Cleaning and functional stroke are currently feedback controllers in the
-executor. Their nodes here are controller interfaces with graph-bound ports,
-not a claim that every internal adaptive action has been compiled to PlanIR.
-The physical label is always the complete functional task outcome.
+Cleaning is a feedback controller in the executor. Its node is a controller
+interface with graph-bound ports. The physical label is assembly success
+after the handle is installed and the robot has released it.
 """
 from __future__ import annotations
 
@@ -19,7 +18,7 @@ from .generic_graph_value_v15 import (
 from .plan import PlanIR
 
 
-SCHEMA = "twingraph.full_flow_graph_value.v20.r2"
+SCHEMA = "twingraph.full_flow_graph_value.v30.handle_terminal"
 
 
 def _controller_row(*, skill, manipulated, ports, observation):
@@ -64,14 +63,11 @@ def encode_graph(graph, *, check=True):
         raise ValueError("full-task and atomic assembly plans disagree")
     proposal = graph.get("proposal", {})
     if any(proposal.get(key) != params[key] for key in
-           ("order", "choices", "wipe_variant", "wipe_force", "wipe_duration", "stroke_minimum")):
+           ("order", "choices", "wipe_variant", "wipe_force", "wipe_duration")):
         raise ValueError("proposal and executable full-task plan disagree")
     cleaning = graph["cleaning"]
     if any(params[key] != cleaning[key] for key in ("wipe_variant", "wipe_force", "wipe_duration")):
         raise ValueError("cleaning controller ports disagree with full-task plan")
-    goal = assembly["observation"]["goals"][0]
-    if float(params["stroke_minimum"]) != float(goal["stroke_minimum_m"]):
-        raise ValueError("functional controller port disagrees with immutable task goal")
     encoded = encode_assembly_graph(graph, check=check)
     observation = assembly["observation"]
     clean = _controller_row(skill="cleaning_feedback", manipulated="wipe_tool",
@@ -80,25 +76,18 @@ def encode_graph(graph, *, check=True):
                ("duration", params["wipe_duration"], "s"),
                ("minimum_coverage", cleaning["minimum_coverage"], "")),
         observation=observation)
-    functional = _controller_row(skill="functional_stroke_feedback", manipulated="handle",
-        ports=(("stroke_minimum", params["stroke_minimum"], "m"),
-               ("grasp_force", params["choices"]["handle"]["force"], "N")),
-        observation=observation)
     n = len(encoded["x"])
-    if n + 2 > 512:
+    if n + 1 > 512:
         raise ValueError("whole-flow graph exceeds the declared 512-node limit")
-    x = np.concatenate((clean[None, :], encoded["x"], functional[None, :]), axis=0)
+    x = np.concatenate((clean[None, :], encoded["x"]), axis=0)
     x[0, FEATURES.index("call_position")] = 0.
     x[0, FEATURES.index("before_boundary")] = 1.
-    x[-1, FEATURES.index("call_position")] = 1.
-    relations = np.zeros((len(RELATIONS), n + 2, n + 2), np.float32)
+    relations = np.zeros((len(RELATIONS), n + 1, n + 1), np.float32)
     relations[:, 1:n+1, 1:n+1] = encoded["relations"]
     relation = RELATIONS.index("execution")
     relations[relation, 0, 1] = 1.
-    relations[relation, n, n+1] = 1.
     x[0, FEATURES.index("edge_out_count")] = 1./16.
-    x[-1, FEATURES.index("edge_in_count")] = 1./16.
-    return dict(x=x, relations=relations, active=np.ones(n+2, np.float32))
+    return dict(x=x, relations=relations, active=np.ones(n+1, np.float32))
 
 
 class ValueRankerV20(ValueRankerV15):

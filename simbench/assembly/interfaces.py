@@ -1,4 +1,4 @@
-"""Ten task-facing atoms. Direction, carrying and solver choices are parameters.
+"""Shared task-facing atoms. Direction, carrying and solver choices are parameters.
 
 Legacy names remain callable but are not additional skill-graph nodes.
 """
@@ -60,6 +60,18 @@ PUBLIC_SKILLS = {
         outputs="插入深度/误差/接触状态",
         description="沿配合约束插入，可选反馈或学习策略",
     ),
+    "estimate_push_pose": dict(
+        label="推动位置估计", kind="information", inputs="物体位姿、CAD、目标及方向",
+        outputs="后方接触位置及接近位置", description="从观测几何估计接触面，不移动物体",
+    ),
+    "gripper": dict(
+        label="夹爪开合", kind="execution", inputs="空夹爪及开合模式",
+        outputs="实际开度及接触状态", description="空夹爪闭合不建立抓持关系",
+    ),
+    "push": dict(
+        label="推送", kind="execution", inputs="已释放对象、接触运动计划",
+        outputs="物体位移、力及后方接触证据", description="闭合空夹爪按计划接触推动",
+    ),
     "press": dict(
         label="压靠",
         kind="execution",
@@ -86,6 +98,7 @@ INTERFACES = {
         "contact": "plan_insertion",
         "recovery": "plan_recovery",
         "surface": "plan_wipe",
+        "push": "plan_push",
     },
     "move": {
         "joint_path": "execute_joint_path",
@@ -109,6 +122,8 @@ INTERFACES = {
         "spiral": "spiral_search",
         "learned": "learned_insert",
     },
+    "push": {"rear": "push_object"},
+    "gripper": {"close_empty": "close_empty_gripper", "open": "open_gripper", "close": "close_gripper"},
     "press": {"seat": "press_seat"},
     "wipe": {"learned": "wipe_surface"},
 }

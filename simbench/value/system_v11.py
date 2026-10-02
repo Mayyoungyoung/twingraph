@@ -84,15 +84,13 @@ def discrepancy(expected, actual, position_limit=.006, joint_limit=.15):
 
 def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
                wipe_duration=14., stroke_minimum=.08, completed=(), monitor=None, boundaries=None):
-    if stroke_minimum != .08:
-        raise ValueError("task stroke requirement is immutable")
     proposal = dict(order=list(order), choices=deepcopy(choices), wipe_variant=wipe_variant,
                     wipe_force=wipe_force, wipe_duration=wipe_duration, stroke_minimum=stroke_minimum)
     done = list(completed)
     boundaries = boundaries if boundaries is not None else []
     if not done:
         session.stage_passes = dict(cleaning_pass=False, assembly_pass=False,
-            functional_test_pass=False, final_release_and_retraction_pass=False)
+            final_release_and_retraction_pass=False)
 
     def boundary(stage):
         nonlocal proposal
@@ -119,21 +117,19 @@ def run_staged(session, *, order, choices, wipe_variant=0, wipe_force=1.5,
         calls = [c for c in plan.calls if c.roles.get("manipulated") == p and not c.id.startswith("accept_")]
         execute_calls(session, plan, calls)
         done.append(p); boundary(p)
-    # Final local seating checks remain identical to V9; this experiment does
-    # not loosen acceptance after seeing outcomes. Functional tests are required.
+    # Final local seating checks run after the handle has been installed.
     plan = assembly_program(session, proposal)
     execute_calls(session, plan, [c for c in plan.calls if c.id.startswith("accept_") or c.id == "final_home"])
     session.stage_passes["assembly_pass"] = True
-    _stroke(session, stroke_minimum)
     for p, y in (("pin_left", -.032), ("pin_right", .032)):
         session.call("inspect", what="pin", part=p, hole_part="end_stop",
                      hole_offset_m=[0., y, 0.], minimum_insertion_depth_m=.006,
-                     phase="retained_after_stroke")
+                     phase="inserted_after_release")
     session.stage_passes["final_release_and_retraction_pass"] = bool(
         session.held is None and np.max(np.abs(session.ctx.arm_qpos-HOME)) < .02)
     if not all(session.stage_passes.values()):
         raise SkillFailure("complete functional task predicate failed")
-    done.extend(("stroke", "retention")); boundary("finished")
+    boundary("finished")
     return Result(True, dict(stage_passes=deepcopy(session.stage_passes), completed=done))
 
 

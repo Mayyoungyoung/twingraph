@@ -82,10 +82,22 @@ def transfer_route_points(start, target, height):
     return [np.r_[start[:2],plane],np.r_[target[:2],plane],target.copy()]
 
 
+def cartesian_transfer_points(start, target, spacing=.04):
+    """Sample a direct EEF line so every segment receives the joint collision check."""
+    start, target = np.asarray(start, float), np.asarray(target, float)
+    if start.shape != (3,) or target.shape != (3,) or not np.isfinite(np.r_[start, target]).all():
+        raise ValueError("cartesian transfer requires finite 3D endpoints")
+    count = max(1, int(np.ceil(np.linalg.norm(target - start) / spacing)))
+    return [start + (target - start) * (i / count) for i in range(1, count + 1)]
+
+
 def transfer_routes(
-    session, target, clearance=0.98, yaw=0.0, grasp=None, grasp_artifact="grasp"
+    session, target, clearance=0.98, yaw=0.0, grasp=None, grasp_artifact="grasp",
+    route_style="height",
 ):
     """Enumerate every configured route; collision witnesses reject only that route."""
+    if route_style not in ("height", "cartesian", "joint_min"):
+        raise ValueError("unknown transfer route style")
     start = session.ctx.eef_pos().copy()
     target = np.asarray(target, float)
     binding = dict(
@@ -96,17 +108,23 @@ def transfer_routes(
         prefix_id=session.active_candidate_id,
     )
     routes, checks = [], []
-    for index, height in enumerate((clearance, clearance + 0.07, clearance + 0.13)):
+    heights = ((clearance,) if route_style == "cartesian" else
+               (clearance, clearance + 0.07, clearance + 0.13))
+    for index, height in enumerate(heights):
         route = dict(
-            id=f"{binding['grasp_id'] or 'free'}:route:{index}",
+            id=(f"{binding['grasp_id'] or 'free'}:route:{index}" if route_style == "height" else
+                f"{binding['grasp_id'] or 'free'}:{route_style}:{index}"),
+            route_style=route_style,
             clearance=float(height),
             binding=copy.deepcopy(binding),
             target=target.copy(),
             yaw=float(yaw),
             status="unknown",
         )
-        points = transfer_route_points(start,target,height)
+        points = (cartesian_transfer_points(start, target) if route_style == "cartesian" else
+                  transfer_route_points(start, target, height))
         joints = []
+        best_travel = float("inf")
         try:
             # Explore a fixed budget of arm postures for redundant IK. Every
             # alternative is checked against the same collision constraints.
@@ -129,31 +147,32 @@ def transfer_routes(
                         bound_hover = (getattr(session, "strict_rgbd_v12", False) and not session.held
                             and grasp and "approach_joints_v12" in grasp
                             and np.linalg.norm(target-(np.asarray(grasp["xyz"])+[0,0,.10])) < 1e-6)
-                        q = (np.asarray(grasp["q_hover"]).copy() if bound_hover and point_index==2
+                        q = (np.asarray(grasp["q_hover"]).copy() if bound_hover and point_index==len(points)-1
                              else session.arm.ik(point, down(yaw), seed=q))
                         attempt_joints.append(q.copy())
                     candidate_verdict = session.arm.check_joint_path(attempt_joints, session.held)
                 except ValueError as exc:
                     candidate_verdict = dict(valid=None, reason=str(exc), status="unknown")
-                verdict = candidate_verdict
+                if not joints:
+                    verdict = candidate_verdict
                 if candidate_verdict.get("valid"):
-                    joints = attempt_joints
-                    verdict = dict(candidate_verdict, ik_restart=restart)
-                    break
+                    travel = float(sum(np.linalg.norm(b - a) for a, b in
+                        zip([session.ctx.arm_qpos] + attempt_joints[:-1], attempt_joints)))
+                    if travel < best_travel:
+                        best_travel = travel
+                        joints = attempt_joints
+                        verdict = dict(candidate_verdict, ik_restart=restart,
+                                       joint_travel_rad=travel)
+                    if route_style != "joint_min":
+                        break
             route["status"] = ("necessary_pass" if verdict["valid"] else
                                "unknown" if verdict["valid"] is None else "conflict")
-            route["cost"] = float(
-                height
-                + 0.001
-                * sum(
-                    np.linalg.norm(b - a)
-                    for a, b in zip([session.ctx.arm_qpos] + joints[:-1], joints)
-                )
-            ) if joints else float("inf")
+            route["cost"] = float(height + .001 * best_travel) if joints else float("inf")
             route["path"] = dict(
                 type="joint_path",
                 part=session.held,
                 id=route["id"],
+                route_style=route_style,
                 start_q=session.ctx.arm_qpos.copy(),
                 joints=joints,
                 target=target.copy(),

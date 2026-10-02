@@ -7,11 +7,34 @@ MuJoCo success trials. Physical deployment uses the actual arm/contact model.
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import numpy as np
 
 SCHEMA = "twingraph.sensor_insertion_bc.v12"
 CENTERS = np.linspace(-1., 1., 25)
+
+# The press that follows learned insertion has its own controller contract.
+# Keep the V27 rule callable for paired development replays, while making the
+# remaining-distance rule the explicit V28 default in the complete program.
+PIN_PRESS_FIXED_V27 = "fixed_241_v27"
+PIN_PRESS_REMAINING_V28 = "remaining_distance_v28"
+PIN_PRESS_BUDGET_POLICIES = {
+    PIN_PRESS_FIXED_V27: dict(
+        controller_version="pin_press.fixed_241.v27",
+        fixed_steps=241,
+        command_step_m=.000025,
+    ),
+    PIN_PRESS_REMAINING_V28: dict(
+        controller_version="pin_press.remaining_distance.v28",
+        command_speed_cap_m_s=.00125,
+        minimum_tracking_fraction=.14,
+        total_time_limit_s=60.,
+        completion_tolerance_m=.00005,
+        no_progress_window_s=2.,
+        no_progress_minimum_m=.000025,
+    ),
+}
 
 
 def features(observation):
@@ -310,6 +333,56 @@ def _checked_pin_feedback(session,part):
     return force,contact,grasp
 
 
+def pin_press_budget(entry_depth_m, total_depth_m, allowed_speed_m_s, control_dt_s,
+                     policy=PIN_PRESS_REMAINING_V28):
+    """Derive an auditable bounded press budget from the remaining axis depth.
+
+    Depth is the registered shaft-tip projection from the frozen receiver entry
+    plane along the frozen legal insertion axis.  The preceding learned insert
+    therefore contributes its already achieved depth; this stage never resets
+    its origin at the press trigger.
+    """
+    values = np.asarray([entry_depth_m,total_depth_m,allowed_speed_m_s,control_dt_s],float)
+    if not np.isfinite(values).all() or allowed_speed_m_s <= 0 or control_dt_s <= 0:
+        raise ValueError("invalid pin press budget inputs")
+    if policy not in PIN_PRESS_BUDGET_POLICIES:
+        raise ValueError("unknown pin press budget policy")
+    remaining=max(0.,float(total_depth_m)-float(entry_depth_m))
+    config=PIN_PRESS_BUDGET_POLICIES[policy]
+    if policy == PIN_PRESS_FIXED_V27:
+        step=float(config["command_step_m"]);steps=int(config["fixed_steps"])
+        return dict(policy=policy,controller_version=config["controller_version"],
+            entry_depth_m=float(entry_depth_m),remaining_distance_m=remaining,
+            allowed_speed_m_s=float(allowed_speed_m_s),effective_command_speed_m_s=step/control_dt_s,
+            control_dt_s=float(control_dt_s),command_step_m=step,step_budget=steps,
+            time_budget_s=steps*control_dt_s,command_capacity_m=steps*step,
+            expected_executable_travel_m=min(remaining,steps*step),
+            derived_step_budget=steps,total_time_limit_s=steps*control_dt_s,
+            hard_step_limit=steps,budget_limited_by_total_time=False,
+            adaptive_progress_extension=False,minimum_tracking_fraction=None)
+    effective_speed=min(float(allowed_speed_m_s),float(config["command_speed_cap_m_s"]))
+    step=effective_speed*float(control_dt_s)
+    tolerance=float(config["completion_tolerance_m"])
+    fraction=float(config["minimum_tracking_fraction"])
+    derived=max(1,int(math.ceil(max(0.,remaining-tolerance)/max(step*fraction,1.e-12))))
+    time_limit=float(config["total_time_limit_s"])
+    time_steps=max(1,int(math.floor(time_limit/float(control_dt_s)+1.e-12)))
+    steps=min(derived,time_steps)
+    return dict(policy=policy,controller_version=config["controller_version"],
+        entry_depth_m=float(entry_depth_m),remaining_distance_m=remaining,
+        allowed_speed_m_s=float(allowed_speed_m_s),effective_command_speed_m_s=effective_speed,
+        control_dt_s=float(control_dt_s),command_step_m=step,step_budget=steps,
+        derived_step_budget=derived,hard_step_limit=time_steps,time_budget_s=steps*control_dt_s,
+        total_time_limit_s=time_limit,command_capacity_m=steps*step,
+        expected_executable_travel_m=min(remaining,steps*step),
+        expected_minimum_actual_progress_m=min(remaining,steps*step*fraction),
+        budget_limited_by_total_time=derived>time_steps,minimum_tracking_fraction=fraction,
+        completion_tolerance_m=tolerance,
+        adaptive_progress_extension=True,adaptive_remaining_time_safety_factor=1.10,
+        no_progress_window_steps=max(2,int(math.ceil(float(config["no_progress_window_s"])/control_dt_s))),
+        no_progress_minimum_m=float(config["no_progress_minimum_m"]))
+
+
 def bounded_pin_press(session,part,target_z,force_stop):
     from .library import Result
     try:
@@ -328,28 +401,101 @@ def _bounded_pin_press(session,part,target_z,force_stop):
     if contract is None: raise ValueError("bounded pin press requires explicit insertion-depth artifact")
     if not np.isfinite([target_z,force_stop]).all() or force_stop<=0:
         raise ValueError("invalid bounded pin press target/force threshold")
+    policy=getattr(session,"pin_press_budget_policy",PIN_PRESS_REMAINING_V28)
+    if policy not in PIN_PRESS_BUDGET_POLICIES:
+        raise ValueError("unknown pin press budget policy")
     peak=0.;steps=0;reason="press_step_budget_exhausted";trace=[];stopped=False
     stop=float(plan.get("gripper_contact_stop_n",.15))
     if not np.isfinite(stop) or stop<=0:raise ValueError("invalid pin gripper contact threshold")
-    # Substep command cap remains tied to observed entry, not current trigger.
-    for steps in range(241):
+    speed=float(plan.get("speed",0.))
+    dt=float(session.ctx.control_dt)
+    if not (.001<=speed<=.02) or not np.isfinite(dt) or dt<=0:
+        raise ValueError("pin press speed/control period outside declared envelope")
+    entry_position=control_position(session,part);entry_depth=sensor_depth(session,part,entry_position,contract)
+    _check_measured_depth_envelope(entry_depth,contract)
+    budget=pin_press_budget(entry_depth,contract["total_depth"],speed,dt,policy)
+    if budget.get("budget_limited_by_total_time"):
+        reason="press_total_time_limit_insufficient_for_derived_remaining_distance"
+    commanded=0.;actual=0.;depth=entry_depth;contact=None
+    history=[];window=int(budget.get("no_progress_window_steps",0) or 0)
+    completion=float(budget.get("completion_tolerance_m",.00005))
+    # Every command is clipped against the same absolute CAD depth envelope.
+    # The tracked command sum and measured shaft-tip progress remain separate.
+    active_step_budget=int(budget["step_budget"]);hard_step_limit=int(budget["hard_step_limit"])
+    extensions=[];steps=0;iterations=0
+    while steps<active_step_budget:
+        iterations+=1
         position=control_position(session,part);depth=sensor_depth(session,part,position,contract)
         _check_measured_depth_envelope(depth,contract)
+        actual=max(0.,depth-entry_depth)
         force,contact,grasp=_checked_pin_feedback(session,part);peak=max(peak,force)
         if contact["normal_force_n"]>stop:
-            return Result(False,dict(gripper_fixture_contact=contact,depth_m=depth),"gripper contacted receiver during pin press")
+            reason="gripper_fixture_contact_stop";break
         if not grasp["held"]:
-            return Result(False,reason="pin grasp lost during bounded press")
+            reason="pin_grasp_lost";break
         if force>=force_stop:reason="pin_force_stop";stopped=True;break
-        if depth>=contract["total_depth"]-.00005:reason="declared_total_depth_reached";stopped=True;break
-        command=session.ctx.eef_pos()+contract["axis"]*.000025
+        if depth>=contract["total_depth"]-completion:reason="declared_total_depth_reached";stopped=True;break
+        command=session.ctx.eef_pos()+contract["axis"]*float(budget["command_step_m"])
         command,clipped=limit_pin_eef_command(session,part,command,contract,contract["total_depth"])
+        commanded+=max(0.,float(budget["command_step_m"])-float(clipped))
         session.arm.servo(command)
-        if steps%20==0:trace.append(dict(depth_m=depth,force_n=force,clipped_m=clipped))
-    return Result(stopped,dict(criterion="bounded contact action; released two-layer acceptance still required",
-        maximum_total_depth_m=contract["total_depth"],peak_force_n=peak,steps=steps+1,stop_reason=reason,
-        target_z_argument_diagnostic=float(target_z),trace=trace,sensor_contract=_pin_sensor_contract()),
-        "" if stopped else "bounded pin press exhausted without observing depth or force stop")
+        history.append((steps,depth,commanded))
+        if steps%20==0:trace.append(dict(step=steps,depth_m=depth,actual_progress_m=actual,
+            commanded_cumulative_m=commanded,force_n=force,clipped_m=clipped))
+        if window and len(history)>window:
+            _,old_depth,old_command=history[-window-1]
+            command_window=commanded-old_command;progress_window=depth-old_depth
+            if (command_window>=.5*float(budget["command_step_m"])*window
+                    and progress_window<float(budget["no_progress_minimum_m"])):
+                reason="no_measured_pin_progress";break
+        steps+=1
+        if (steps>=active_step_budget and not stopped
+                and budget.get("adaptive_progress_extension") and steps<hard_step_limit):
+            sample_count=min(window,len(history)-1)
+            old_depth=history[-sample_count-1][1] if sample_count>0 else entry_depth
+            measured=max(0.,depth-old_depth);elapsed=max(dt,sample_count*dt)
+            measured_rate=measured/elapsed
+            remaining_now=max(0.,contract["total_depth"]-depth)
+            if measured_rate>0 and measured>=float(budget["no_progress_minimum_m"]):
+                extra=int(math.ceil(float(budget["adaptive_remaining_time_safety_factor"])
+                    *remaining_now/max(measured_rate*dt,1.e-12)))
+                proposed=min(hard_step_limit,steps+max(1,extra))
+                extensions.append(dict(at_step=steps,measured_rate_m_s=measured_rate,
+                    remaining_distance_m=remaining_now,proposed_step_budget=proposed,
+                    limited_by_total_time=proposed==hard_step_limit))
+                active_step_budget=proposed
+            else:
+                reason="no_measured_pin_progress";break
+    if (not stopped and reason=="press_step_budget_exhausted"
+            and steps>=hard_step_limit and hard_step_limit>int(budget["step_budget"])):
+        reason="press_total_time_limit_reached"
+    final_position=control_position(session,part);final_depth=sensor_depth(session,part,final_position,contract)
+    actual=max(0.,final_depth-entry_depth)
+    if not stopped and final_depth>=contract["total_depth"]-completion:
+        stopped=True;reason="declared_total_depth_reached"
+    metrics=dict(criterion="bounded contact action; released two-layer acceptance still required",
+        budget=budget,controller_version=budget["controller_version"],
+        depth_reference=dict(frame="receiver_common_axis",origin="frozen_stop_entry_plane",
+            measured_point="registered_pin_shaft_tip",axis=contract["axis"].tolist(),
+            prior_stage_depth_m=float(entry_depth)),
+        entry_depth_m=float(entry_depth),entry_remaining_distance_m=float(budget["remaining_distance_m"]),
+        expected_executable_travel_m=float(budget["expected_executable_travel_m"]),
+        commanded_cumulative_m=float(commanded),actual_pin_progress_m=float(actual),
+        final_depth_m=float(final_depth),maximum_total_depth_m=contract["total_depth"],
+        absolute_depth_limit_m=contract["absolute_depth"],peak_force_n=peak,steps=iterations,
+        initial_step_budget=int(budget["step_budget"]),final_step_budget=active_step_budget,
+        hard_step_limit=hard_step_limit,budget_extensions=extensions,
+        stop_reason=reason,gripper_fixture_contact=contact,
+        target_z_argument_diagnostic=float(target_z),trace=trace,sensor_contract=_pin_sensor_contract())
+    if stopped:return Result(True,metrics)
+    failures={"gripper_fixture_contact_stop":"gripper contacted receiver during pin press",
+              "pin_grasp_lost":"pin grasp lost during bounded press",
+              "no_measured_pin_progress":"bounded pin press stopped after no measured pin progress",
+              "press_total_time_limit_reached":"bounded pin press reached its declared total time limit",
+              "press_total_time_limit_insufficient_for_derived_remaining_distance":
+                  "bounded pin press total time limit is shorter than the derived remaining-distance budget"}
+    return Result(False,metrics,failures.get(reason,
+        "bounded pin press exhausted without observing depth or force stop"))
 
 
 def execute(session,part,artifact,policy,max_steps):

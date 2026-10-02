@@ -45,6 +45,16 @@ def write_scene(source_spec, directory, preinstalled_end_stop=False, scene_layou
     root = ET.parse(source).getroot()
     root.set("model", TASK_VERSION)
     apply_printed_kit(root)
+    # The CAD uses convex cuboid meshes for open-hole plates. Single-point
+    # mesh/box manifolds made a passive shoe drift by 5 mm in 10 seconds.
+    # Multiple contacts stabilize planar support without changing solids,
+    # friction, actuator gains, or assembly acceptance.
+    option = root.find("option")
+    option.set("jacobian", "sparse")
+    flag = option.find("flag")
+    if flag is None:
+        flag = ET.SubElement(option, "flag")
+    flag.set("multiccd", "enable")
     layout_provenance = scene_layout_hook(root, source_spec) if scene_layout_hook is not None else None
     from .wrist_rgbd_v12 import install_camera
     install_camera(root, directory)
@@ -74,6 +84,8 @@ def write_scene(source_spec, directory, preinstalled_end_stop=False, scene_layou
     ET.ElementTree(root).write(path, encoding="unicode")
     manifest = source_manifest()
     manifest.update(task_version=TASK_VERSION, setup="preinstalled_end_stop" if preinstalled_end_stop else "complete_task",
+                    contact_solver=dict(multiccd=True, jacobian="sparse", timestep_s=.002,
+                        reason="stable flat convex-mesh support; passive audit v32"),
                     pin_acceptance=PIN_CONFIG.manifest(),
                     initialization=dict(method="uniform finite free-body gap followed by gravity settling",
                         gap_m=INITIAL_DROP_GAP_M, free_bodies=dropped, control_steps=80,
@@ -98,7 +110,13 @@ def bind_visual_receiver_targets(session):
     return session.stage_targets
 
 
-def make_scene(seed, directory, role="development", level="L1", preinstalled_end_stop=False, scene_layout_hook=None):
+def make_scene(seed, directory, role="development", level="L1", preinstalled_end_stop=False,
+               scene_layout_hook=None, observation_backend="rgbd_geometry",
+               position_noise_std_m=0., yaw_noise_std_rad=0.):
+    if observation_backend not in ("rgbd_geometry", "mujoco_state_pose"):
+        raise ValueError(f"unsupported observation backend: {observation_backend}")
+    if observation_backend == "rgbd_geometry" and (position_noise_std_m or yaw_noise_std_rad):
+        raise ValueError("state-pose noise arguments require mujoco_state_pose")
     source_spec = stage_v7.StageV7Spec.sample(seed, level)
     spec = StageV12Spec(asdict(source_spec), setup="preinstalled_end_stop" if preinstalled_end_stop else "complete_task")
     path = write_scene(source_spec, directory, preinstalled_end_stop, scene_layout_hook)
@@ -122,6 +140,11 @@ def make_scene(seed, directory, role="development", level="L1", preinstalled_end
     session.capture_detector_fn = capture_detector
     session.detector_size = DETECTOR_SIZE
     session.planning_cad = cad
+    if observation_backend == "mujoco_state_pose":
+        session.state_observation_config = dict(seed=int(seed),
+            position_noise_std_m=float(position_noise_std_m),
+            yaw_noise_std_rad=float(yaw_noise_std_rad))
+        session.state_observation_index = 0
     from . import cleaning
     names = [f"dirty_{i}" for i in range(32)]
     points = [ctx.model.site_pos[mujoco.mj_name2id(ctx.model, mujoco.mjtObj.mjOBJ_SITE, name)].copy() for name in names]

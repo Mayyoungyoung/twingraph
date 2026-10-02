@@ -16,7 +16,7 @@ def render(out):
     )
     lines = [
         "digraph skills {",
-        'graph [rankdir=LR, bgcolor="#f5f7fa", pad="0.45", nodesep="0.48", ranksep="0.85", fontname="Noto Sans CJK SC", fontsize=20, labelloc=t, label="TwinGraph · 10 个原子技能\n条件依赖图：连线表示提供部分输入或状态，不等于整段动作已可行"];',
+        f'graph [rankdir=LR, bgcolor="#f5f7fa", pad="0.45", nodesep="0.48", ranksep="0.85", fontname="Noto Sans CJK SC", fontsize=20, labelloc=t, label="TwinGraph · {graph["atom_count"]} 个原子技能\\n条件依赖图：连线表示提供部分输入或状态，不等于整段动作已可行"];',
         'node [shape=box, style="rounded,filled", color="#c1cad5", penwidth=1.5, fontname="Noto Sans CJK SC", fontsize=18, margin="0.20,0.15"];',
         'edge [fontname="Noto Sans CJK SC", fontsize=12, penwidth=1.6, arrowsize=.75, color="#54708c"];',
     ]
@@ -34,6 +34,8 @@ def render(out):
         "artifact:recovery": "恢复参数",
         "artifact:insertion": "插入参数",
         "artifact:wipe_path": "表面路径",
+        "artifact:push_pose": "推动位置",
+        "artifact:push_path": "接触推动计划",
         "held": "同一对象已抓持",
         "empty": "夹爪已释放",
     }

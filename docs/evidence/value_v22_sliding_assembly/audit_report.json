@@ -1,0 +1,235 @@
+[
+  {
+    "schema": "twingraph.sliding_assembly_audit.v22.r1",
+    "root": "results\\v22_pool_2050_zero",
+    "task_version": "sliding_assembly_no_wipe_v22",
+    "seed": 2050,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 3,
+    "audited_valid": 3,
+    "positives": 3,
+    "negatives": 0,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_001",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v22.r1",
+    "root": "results\\v22_pool_2051_zero",
+    "task_version": "sliding_assembly_no_wipe_v22",
+    "seed": 2051,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 4,
+    "audited_valid": 4,
+    "positives": 0,
+    "negatives": 4,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_002",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_009",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v22.r1",
+    "root": "results\\v22_pool_2050_mild_noise",
+    "task_version": "sliding_assembly_no_wipe_v22",
+    "seed": 2050,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0003,
+      "yaw_std_rad": 0.005235987756
+    },
+    "frozen_candidates": 4,
+    "audited_valid": 4,
+    "positives": 1,
+    "negatives": 3,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_001",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_008",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v22.r1",
+    "root": "results\\v22_pool_2050_noisy",
+    "task_version": "sliding_assembly_no_wipe_v22",
+    "seed": 2050,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.001,
+      "yaw_std_rad": 0.01745329252
+    },
+    "frozen_candidates": 4,
+    "audited_valid": 4,
+    "positives": 0,
+    "negatives": 4,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_001",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_008",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v22.r1",
+    "root": "results\\v22_layout_2052",
+    "task_version": "sliding_assembly_no_wipe_v22",
+    "seed": 2052,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 1,
+    "audited_valid": 1,
+    "positives": 0,
+    "negatives": 1,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v22.r1",
+    "root": "results\\v22_layout_2053",
+    "task_version": "sliding_assembly_no_wipe_v22",
+    "seed": 2053,
+    "level": "L1",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 1,
+    "audited_valid": 1,
+    "positives": 0,
+    "negatives": 1,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_003",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  }
+]

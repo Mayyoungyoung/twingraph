@@ -1,0 +1,35 @@
+{
+  "paths": [
+    "enhanced_robust_17.pt"
+  ],
+  "alpha": 0.0,
+  "beta": 0.0,
+  "validation": {
+    "workflow_success": 1.0,
+    "calls": 1.0,
+    "steps": 134143.33333333334,
+    "robust_brier": 0.08732578211587849,
+    "layout_success": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "checkpoint_sha256": {
+    "enhanced_robust_17.pt": "30c952837f556d68178c215bf2a333717618a842317bc7e462ae988ae0a19da0"
+  },
+  "frozen_at": 1790604010.5298557,
+  "test_used": false,
+  "budget": 3,
+  "feature_schema": "twingraph.value.v33.typed_geometry.r1",
+  "training_report_sha256": "c9426c753d00d7b4f64d34d703dcbc06bc8898665f1db8d7ace055df3906affa"
+}

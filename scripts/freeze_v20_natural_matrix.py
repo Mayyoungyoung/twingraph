@@ -29,12 +29,18 @@ def main() -> None:
     parser.add_argument("--n", type=int, default=48)
     parser.add_argument("--level", choices=("L0", "L1", "L2"), default="L0")
     parser.add_argument("--domain", choices=("train", "development", "online"), default="online")
+    parser.add_argument("--observation-backend", choices=("rgbd_geometry", "mujoco_state_pose"),
+                        default="rgbd_geometry")
+    parser.add_argument("--position-noise-std-m", type=float, default=0.)
+    parser.add_argument("--yaw-noise-std-rad", type=float, default=0.)
     args = parser.parse_args()
     seeds = list(args.seeds)
     if len(seeds) != len(set(seeds)) or seeds != sorted(seeds):
         parser.error("seeds must be unique and in ascending predeclared order")
     if not 1 <= args.n <= 512:
         parser.error("candidate count outside generator contract")
+    if args.observation_backend == "rgbd_geometry" and (args.position_noise_std_m or args.yaw_noise_std_rad):
+        parser.error("state noise requires --observation-backend mujoco_state_pose")
     if args.out.exists() and any(args.out.iterdir()):
         parser.error("output directory must be empty; frozen requests are immutable")
     source = require_frozen_source()
@@ -42,6 +48,9 @@ def main() -> None:
                     task_scope="complete_functional_task",
                     generator="simbench.value.planner_v12.propose",
                     candidate_count=args.n, level=args.level, domain=args.domain,
+                    observation_backend=args.observation_backend,
+                    position_noise_std_m=args.position_noise_std_m,
+                    yaw_noise_std_rad=args.yaw_noise_std_rad,
                     seeds=seeds, fold_rule="seed modulo 5: 0 test, 1 validation, 2/3/4 train",
                     runtime_sha256=source["sha256"],
                     selection_policy="retain every attempted layout; train only on natural mixed pools; report unconditional coverage",
@@ -49,13 +58,19 @@ def main() -> None:
     for seed in seeds:
         root = args.out / f"seed_{seed}" / "collect"
         collect(seed, root, n=args.n, level=args.level, domain=args.domain,
-                names=["__freeze_without_rollout__"])
+                names=["__freeze_without_rollout__"],
+                observation_backend=args.observation_backend,
+                position_noise_std_m=args.position_noise_std_m,
+                yaw_noise_std_rad=args.yaw_noise_std_rad)
         request_path = root / "request.json"
         request = json.loads(request_path.read_text(encoding="utf-8"))
         if any((root / "candidates").glob("*/result.json")):
             raise RuntimeError("a candidate executed before matrix freeze")
         _, session, _, _ = make_scene(seed, root / "graph_binding",
-                                      domain=args.domain, level=args.level)
+                                      domain=args.domain, level=args.level,
+                                      observation_backend=args.observation_backend,
+                                      position_noise_std_m=args.position_noise_std_m,
+                                      yaw_noise_std_rad=args.yaw_noise_std_rad)
         if session.decision_observation["sha256"] != request["initial_observation"]["sha256"]:
             raise RuntimeError("independent scene regeneration changed the observation")
         hashes = {}

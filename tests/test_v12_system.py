@@ -31,6 +31,10 @@ def test_actual_printed_scene_generates_48_valid_distinct_executable_graphs(pref
     for graph in graphs:
         plan = validate_graph(graph["assembly"])
         assert plan.prefix["skill_version"] == "feedback.v12"
+        carriage = [c.skill for c in plan.calls if c.roles.get("manipulated") == "carriage"]
+        assert carriage.count("grasp") == 1
+        assert carriage.index("place") < carriage.index("push")
+        assert "insert" not in carriage
         learned_pins = [c for c in plan.calls if c.skill == "insert"
                         and c.arguments.get("strategy") and c.arguments["strategy"].value == "learned"]
         assert {c.roles["manipulated"] for c in learned_pins} == {"pin_left", "pin_right"}
@@ -102,18 +106,16 @@ def test_final_home_rechecks_seats_instead_of_reusing_pre_stroke_success(monkeyp
         planning_cad={"functional_stroke_minimum_m": .02},
         pin_insertion_config=SimpleNamespace(required_depth_m=.006),
         stage_passes={"cleaning_pass": True, "assembly_pass": True,
-            "functional_test_pass": False, "fixture_capture_pass": False,
+            "fixture_capture_pass": False,
             "final_release_and_retraction_pass": False},
         call=lambda *args, **kwargs: Result(True))
     for part in targets:
         assert skills_v12.evaluate_functional_seat(session, part, targets[part])[0]
 
-    def finish_stroke_and_home(current, minimum, *, grasp_force=3.0):
-        assert current is session and minimum == .02 and grasp_force == 3.0
-        for xyz in positions.values(): xyz[0] += .025
-        current.stage_passes["functional_test_pass"] = True
+    def finish_handle_and_home(current, plan, calls):
+        assert current is session
         current.ctx.arm_qpos = HOME.copy()
-        # The prior stroke passed, but its final retreat can disturb a part.
+        # The final handle release and retraction can disturb a part.
         if detached_part == "handle":
             positions["handle"][2] += .040
         elif detached_part == "carriage":
@@ -121,9 +123,8 @@ def test_final_home_rechecks_seats_instead_of_reusing_pre_stroke_success(monkeyp
             positions["carriage"][1] += .030
             positions["handle"][1] += .030
 
-    monkeypatch.setattr(system_v12, "_stroke", finish_stroke_and_home)
     monkeypatch.setattr(system_v12, "assembly_program", lambda *args: SimpleNamespace(calls=[]))
-    monkeypatch.setattr(system_v12, "execute_calls", lambda *args: None)
+    monkeypatch.setattr(system_v12, "execute_calls", finish_handle_and_home)
     monkeypatch.setattr(system_v12, "observe_boundary",
         lambda current, stage, completed: {"stage": stage, "completed": list(completed)})
     monkeypatch.setattr(skills_v12, "evaluate_end_stop_fixture", lambda current: (True, {"success": True}))

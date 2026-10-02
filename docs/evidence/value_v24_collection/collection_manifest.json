@@ -1,0 +1,34 @@
+{
+  "schema": "twingraph.v23_collection_arrangement.v24.r1",
+  "task_version": "sliding_assembly_base_holes_v23",
+  "purpose": "development collection arrangement only; task, acceptance, atomic skills and pose-observation backend remain V23",
+  "runtime_sha256": "4b7247f5356a1cac5e0cf864bf3c9a0f75c5adede159fb5729886921df4f8468",
+  "collector_sha256": "d2e675fff6614eb23ae3a80e835f803e26269861b86383fad9877db4f704965a",
+  "level": "L0",
+  "observation_backend": "mujoco_state_pose",
+  "position_noise_std_m": 0.0,
+  "yaw_noise_std_rad": 0.0,
+  "physical_trial_domain": "online",
+  "proposal_budget_per_layout": 48,
+  "executed_candidates_per_batch": 8,
+  "new_layout_first_pass": [
+    {"seed": 2062, "family": "broad", "split_group": "broad_seed_2062"},
+    {"seed": 2063, "family": "broad", "split_group": "broad_seed_2063"},
+    {"seed": 2064, "family": "broad", "split_group": "broad_seed_2064"},
+    {"seed": 2065, "family": "broad", "split_group": "broad_seed_2065"},
+    {"seed": 3005, "family": "neighborhood", "split_group": "neighborhood_parent_2050"},
+    {"seed": 3006, "family": "neighborhood", "split_group": "neighborhood_parent_2050"},
+    {"seed": 3007, "family": "neighborhood", "split_group": "neighborhood_parent_2050"},
+    {"seed": 3008, "family": "neighborhood", "split_group": "neighborhood_parent_2050"}
+  ],
+  "append_batches": [
+    {"seed": 3000, "family": "neighborhood", "parent_request": "results/v23_first_near_3000/request.json", "candidate_start": 8, "candidate_count": 8},
+    {"seed": 3002, "family": "neighborhood", "parent_request": "results/v23_first_near_3002_retry/request.json", "candidate_start": 8, "candidate_count": 8}
+  ],
+  "selection_rule": "new layouts take the first eight distinct complete plans; append batches regenerate the same 48-proposal order, verify all eight original plan hashes, then take distinct plans 9-16",
+  "selection_uses_outcome": "layout-level development prioritization only for append batches; no candidate-level outcome selection",
+  "reporting": "new-layout first-pass natural coverage uses all eight predeclared new layouts; append batches and replays are separate development statistics",
+  "positive_replay_budget": "for up to three newly mixed pools, replay the first new positive once with the same trial and once with a changed declared physical trial; preserve every repeated label",
+  "no_layout_outcome_filtering": true,
+  "keep_all_negative_pools": true
+}

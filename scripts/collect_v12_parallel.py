@@ -14,13 +14,15 @@ import traceback
 
 def worker(job):
     from simbench.value.system_v12 import rollout, save
-    seed, proposal, directory, domain, level = job
+    seed, proposal, directory, domain, level, backend, position_noise, yaw_noise = job
     path = Path(directory) / "result.json"
     try:
         if path.exists():
             result = json.loads(path.read_text())
         else:
-            result = rollout(seed, proposal, directory, domain=domain, level=level)
+            result = rollout(seed, proposal, directory, domain=domain, level=level,
+                observation_backend=backend, position_noise_std_m=position_noise,
+                yaw_noise_std_rad=yaw_noise)
             result["timing_mode"] = "concurrent_label_collection_not_online_decision_latency"
             save(path, result)
         if not result.get("valid"):
@@ -43,17 +45,28 @@ def main():
     parser.add_argument("--n", type=int, default=48)
     parser.add_argument("--level", choices=("L0", "L1", "L2"), default="L1")
     parser.add_argument("--domain", choices=("train", "development", "online"), default="train")
+    parser.add_argument("--observation-backend", choices=("rgbd_geometry", "mujoco_state_pose"),
+                        default="rgbd_geometry")
+    parser.add_argument("--position-noise-std-m", type=float, default=0.)
+    parser.add_argument("--yaw-noise-std-rad", type=float, default=0.)
     args = parser.parse_args()
     if not 1 <= args.workers <= 20: parser.error("workers must be between 1 and 20")
     source = require_frozen_source()
     for seed in args.seeds:
         started = time.perf_counter()
         root = args.out / f"seed_{seed}" / "collect"
-        collect(seed, root, n=args.n, level=args.level, domain=args.domain, names=["__initialize_only__"])
+        collect(seed, root, n=args.n, level=args.level, domain=args.domain, names=["__initialize_only__"],
+            observation_backend=args.observation_backend,
+            position_noise_std_m=args.position_noise_std_m,
+            yaw_noise_std_rad=args.yaw_noise_std_rad)
         request = json.loads((root / "request.json").read_text())
         if (request["seed"] != seed or request["domain"] != args.domain
                 or request["level"] != args.level or len(request["pool"]) != args.n):
             raise ValueError(f"frozen collection request differs from CLI: {root}")
+        if (request.get("observation_backend", "rgbd_geometry") != args.observation_backend
+                or float(request.get("position_noise_std_m", 0.)) != args.position_noise_std_m
+                or float(request.get("yaw_noise_std_rad", 0.)) != args.yaw_noise_std_rad):
+            raise ValueError(f"frozen observation configuration differs from CLI: {root}")
         request["collection"] = dict(workers=args.workers, process_start="spawn", tasks_per_worker=1,
             collector_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             timing="concurrent physical labels; not sequential online decision timing")
@@ -63,7 +76,8 @@ def main():
             directory = root / "candidates" / proposal["name"]
             path = directory / "result.json"
             if not path.exists():
-                jobs.append((seed, proposal, str(directory), args.domain, args.level))
+                jobs.append((seed, proposal, str(directory), args.domain, args.level,
+                             args.observation_backend, args.position_noise_std_m, args.yaw_noise_std_rad))
                 continue
             result = json.loads(path.read_text())
             graph_path = directory / "input_graph.json"

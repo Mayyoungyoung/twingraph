@@ -13,7 +13,7 @@ from simbench.value import system_v12 as system
 def test_failed_stage_replans_only_at_released_state_without_repeating_prefix(monkeypatch, tmp_path, held):
     choices = {"carriage": {"force": 3.}}
     session = SimpleNamespace(planning_cad={"functional_stroke_minimum_m": .02}, held=held,
-        stage_passes=dict(cleaning_pass=True, assembly_pass=False, functional_test_pass=False,
+        stage_passes=dict(cleaning_pass=True, assembly_pass=False,
                           fixture_capture_pass=False, final_release_and_retraction_pass=False),
         ctx=SimpleNamespace(arm_qpos=np.array(HOME)), artifacts={},
         stage_targets={"carriage": [.105, .085, .824], "handle": [.105, .085, .872]},
@@ -33,7 +33,6 @@ def test_failed_stage_replans_only_at_released_state_without_repeating_prefix(mo
         if len(executed) == 1: raise SkillFailure("tactile grasp was not established")
     monkeypatch.setattr(system, "execute_calls", execute)
     monkeypatch.setattr(system, "observe_boundary", lambda s,stage,done: dict(stage=stage, completed=list(done),held=s.held))
-    monkeypatch.setattr(system, "_stroke", lambda s,n: s.stage_passes.update(functional_test_pass=True))
     import simbench.assembly.skills_v12 as skills
     monkeypatch.setattr(skills, "evaluate_end_stop_fixture", lambda s: (True, {"test":True}))
     monkeypatch.setattr(skills, "evaluate_functional_seat", lambda s,part,target: (True, {"test":True}))
@@ -53,7 +52,7 @@ def test_failed_stage_replans_only_at_released_state_without_repeating_prefix(mo
         assert result.ok and executed == [3.,6.]
         assert commands[0] == (("move",), {"target":"home"})
         assert events[0]["stage"] == "failed_carriage" and "failure" in events[0]
-        assert events[-1]["completed"] == ["cleaning","carriage","stroke","retention"]
+        assert events[-1]["completed"] == ["cleaning","carriage"]
 
 
 @pytest.mark.parametrize("method, expected", [("all_twin",["a","b","c"]),("value_top_k",["b"])])

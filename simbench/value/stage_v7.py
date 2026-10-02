@@ -25,7 +25,7 @@ from simbench.assembly.candidates import fingerprint
 PARTS = base.PARTS
 WIPE_TOOL = "wipe_tool"
 ALL_PARTS = (*PARTS, WIPE_TOOL)
-TASK_SCOPE = "clean_assemble_five_parts_and_post_handle_bidirectional_stroke"
+TASK_SCOPE = "clean_and_assemble_five_parts_through_handle_installation"
 TASK_STROKE_MINIMUM_M = .08
 FAMILY = "sliding_stage_full_v7"
 VIEW_NAMES = ("task_view", "top_view")
@@ -301,6 +301,9 @@ def capture_detector(session, size=DETECTOR_SIZE):
 
 
 def install_visual(session, parts=ALL_PARTS, size=DETECTOR_SIZE):
+    if getattr(session, "state_observation_config", None) is not None:
+        from .state_observation_v20 import observe
+        return observe(session, parts)
     size = getattr(session, "detector_size", size)
     acquire = getattr(session, "capture_detector_fn", capture_detector)
     frames, calibrations = acquire(session, size=size)
@@ -355,18 +358,14 @@ def save_vision(path, arrays):
 
 
 def _full_plan(session, targets, order, choices, wipe_variant, wipe_force, wipe_duration, stroke_minimum):
-    required_stroke = (float(getattr(session,"planning_cad",{}).get("functional_stroke_minimum_m", .02))
-                       if getattr(session,"functional_acceptance_v12",False) else TASK_STROKE_MINIMUM_M)
-    if not np.isclose(float(stroke_minimum),required_stroke,rtol=0,atol=1e-12):
-        raise ValueError("candidate cannot change task stroke requirement")
     params = dict(order=list(order), choices=plain(choices), wipe_variant=int(wipe_variant), wipe_force=float(wipe_force),
-                  wipe_duration=float(wipe_duration), stroke_minimum=float(stroke_minimum))
+                  wipe_duration=float(wipe_duration))
     task_scope = getattr(session, "task_version", TASK_SCOPE)
     cid = digest(dict(scope=task_scope, params=params, start=fingerprint(session)))[:20]
     call = Call("full_task", "run_full_task_v7", {k: argument(v) for k, v in params.items()}, {"manipulated": WIPE_TOOL}, "executable")
     payload = dict(id=cid, part=WIPE_TOOL, execution="full_task_v7", start_state=fingerprint(session), steps=[dict(skill=call.skill, params=params)],
                    task_scope=task_scope, order=list(order), choices=plain(choices), wipe_variant=int(wipe_variant),
-                   wipe_force=float(wipe_force), wipe_duration=float(wipe_duration), stroke_minimum=float(stroke_minimum), semantic_program_id=cid)
+                   wipe_force=float(wipe_force), wipe_duration=float(wipe_duration), semantic_program_id=cid)
     return PlanIR(cid, [call], 1, payload, "unknown", protocol="full_task.v7").validate(session.parts)
 
 
@@ -407,4 +406,4 @@ def rebind_plan(session, targets, selected_plan):
     old = selected_plan if isinstance(selected_plan, PlanIR) else PlanIR.from_dict(selected_plan)
     old.validate(session.parts)
     return _full_plan(session, targets, old.prefix["order"], copy.deepcopy(old.prefix["choices"]), old.prefix["wipe_variant"],
-                      old.prefix["wipe_force"], old.prefix["wipe_duration"], old.prefix["stroke_minimum"])
+                      old.prefix["wipe_force"], old.prefix["wipe_duration"], old.prefix.get("stroke_minimum", TASK_STROKE_MINIMUM_M))

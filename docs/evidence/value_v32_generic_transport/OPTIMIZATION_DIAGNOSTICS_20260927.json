@@ -1,0 +1,527 @@
+{
+  "feature_nodes": 111077,
+  "nonzero_nodes": {
+    "robot_joint_sin_mean": 0,
+    "robot_joint_cos_mean": 0,
+    "robot_joint_known_fraction": 0,
+    "robot_eef_x_m": 0,
+    "robot_eef_y_m": 0,
+    "robot_eef_z_m": 0,
+    "robot_eef_known": 0,
+    "geometry_present": 0,
+    "geometry_pass": 0,
+    "geometry_unknown": 0,
+    "geometry_rejected": 0,
+    "geometry_margin_m": 0,
+    "geometry_margin_known": 0
+  },
+  "constant_features": [
+    "skill_hash_1",
+    "skill_hash_3",
+    "skill_hash_4",
+    "skill_hash_6",
+    "skill_hash_7",
+    "skill_hash_10",
+    "skill_hash_13",
+    "skill_hash_14",
+    "skill_hash_15",
+    "skill_hash_16",
+    "skill_hash_17",
+    "skill_hash_19",
+    "skill_hash_20",
+    "skill_hash_21",
+    "implementation_hash_0",
+    "implementation_hash_5",
+    "implementation_hash_6",
+    "implementation_hash_9",
+    "implementation_hash_11",
+    "implementation_hash_15",
+    "implementation_hash_17",
+    "implementation_hash_18",
+    "implementation_hash_19",
+    "family_hash_1",
+    "family_hash_3",
+    "family_hash_4",
+    "family_hash_6",
+    "family_hash_7",
+    "family_hash_10",
+    "family_hash_13",
+    "family_hash_14",
+    "family_hash_15",
+    "family_hash_16",
+    "family_hash_17",
+    "family_hash_19",
+    "family_hash_20",
+    "family_hash_22",
+    "roles_hash_0",
+    "roles_hash_1",
+    "roles_hash_2",
+    "roles_hash_4",
+    "roles_hash_6",
+    "roles_hash_7",
+    "roles_hash_8",
+    "roles_hash_9",
+    "roles_hash_11",
+    "roles_hash_12",
+    "roles_hash_13",
+    "roles_hash_14",
+    "roles_hash_15",
+    "roles_hash_16",
+    "roles_hash_17",
+    "roles_hash_18",
+    "roles_hash_19",
+    "roles_hash_21",
+    "roles_hash_22",
+    "roles_hash_23",
+    "requirements_hash_0",
+    "requirements_hash_1",
+    "requirements_hash_3",
+    "requirements_hash_5",
+    "requirements_hash_6",
+    "requirements_hash_10",
+    "requirements_hash_16",
+    "requirements_hash_23",
+    "numeric_port_value_hash_0",
+    "numeric_port_value_hash_3",
+    "numeric_port_value_hash_10",
+    "numeric_port_value_hash_19",
+    "numeric_port_value_hash_22",
+    "numeric_port_known_hash_0",
+    "numeric_port_known_hash_7",
+    "numeric_port_known_hash_8",
+    "numeric_port_known_hash_10",
+    "numeric_port_known_hash_11",
+    "numeric_port_known_hash_19",
+    "numeric_port_known_hash_22",
+    "numeric_port_deferred_hash_0",
+    "numeric_port_deferred_hash_1",
+    "numeric_port_deferred_hash_2",
+    "numeric_port_deferred_hash_3",
+    "numeric_port_deferred_hash_4",
+    "numeric_port_deferred_hash_5",
+    "numeric_port_deferred_hash_7",
+    "numeric_port_deferred_hash_8",
+    "numeric_port_deferred_hash_9",
+    "numeric_port_deferred_hash_10",
+    "numeric_port_deferred_hash_11",
+    "numeric_port_deferred_hash_12",
+    "numeric_port_deferred_hash_13",
+    "numeric_port_deferred_hash_14",
+    "numeric_port_deferred_hash_15",
+    "numeric_port_deferred_hash_16",
+    "numeric_port_deferred_hash_17",
+    "numeric_port_deferred_hash_18",
+    "numeric_port_deferred_hash_19",
+    "numeric_port_deferred_hash_20",
+    "numeric_port_deferred_hash_21",
+    "numeric_port_deferred_hash_22",
+    "numeric_port_deferred_hash_23",
+    "categorical_port_hash_0",
+    "categorical_port_hash_7",
+    "categorical_port_hash_8",
+    "categorical_port_hash_21",
+    "state_hash_0",
+    "state_hash_1",
+    "state_hash_3",
+    "state_hash_4",
+    "state_hash_5",
+    "state_hash_6",
+    "state_hash_8",
+    "state_hash_11",
+    "state_hash_12",
+    "state_hash_15",
+    "state_hash_17",
+    "state_hash_18",
+    "state_hash_19",
+    "state_hash_21",
+    "state_hash_22",
+    "goal_hash_0",
+    "goal_hash_1",
+    "goal_hash_2",
+    "goal_hash_3",
+    "goal_hash_4",
+    "goal_hash_5",
+    "goal_hash_6",
+    "goal_hash_7",
+    "goal_hash_8",
+    "goal_hash_9",
+    "goal_hash_10",
+    "goal_hash_11",
+    "goal_hash_12",
+    "goal_hash_13",
+    "goal_hash_14",
+    "goal_hash_15",
+    "goal_hash_16",
+    "goal_hash_17",
+    "goal_hash_18",
+    "goal_hash_19",
+    "goal_hash_20",
+    "goal_hash_21",
+    "goal_hash_22",
+    "goal_hash_23",
+    "node_information",
+    "node_execution",
+    "unknown_port_fraction",
+    "object_fit_residual_m",
+    "robot_joint_sin_mean",
+    "robot_joint_cos_mean",
+    "robot_joint_known_fraction",
+    "robot_eef_x_m",
+    "robot_eef_y_m",
+    "robot_eef_z_m",
+    "robot_eef_known",
+    "geometry_present",
+    "geometry_pass",
+    "geometry_unknown",
+    "geometry_rejected",
+    "geometry_margin_m",
+    "geometry_margin_known"
+  ],
+  "by_mode": {
+    "('train', 'held_insert')": {
+      "samples": 432,
+      "positives": 139
+    },
+    "('train', 'released_push')": {
+      "samples": 368,
+      "positives": 86
+    },
+    "('test', 'held_insert')": {
+      "samples": 57,
+      "positives": 21
+    },
+    "('test', 'released_push')": {
+      "samples": 47,
+      "positives": 19
+    },
+    "('validation', 'held_insert')": {
+      "samples": 58,
+      "positives": 18
+    },
+    "('validation', 'released_push')": {
+      "samples": 38,
+      "positives": 12
+    }
+  },
+  "by_planner": {
+    "('train', 'gpt-6-astra')": {
+      "samples": 136,
+      "positives": 35
+    },
+    "('test', 'gpt-6-astra')": {
+      "samples": 24,
+      "positives": 3
+    },
+    "('validation', 'gpt-6-astra')": {
+      "samples": 24,
+      "positives": 7
+    },
+    "('test', 'gpt-6-sol')": {
+      "samples": 80,
+      "positives": 37
+    },
+    "('train', 'gpt-6-sol')": {
+      "samples": 664,
+      "positives": 190
+    },
+    "('validation', 'gpt-6-sol')": {
+      "samples": 72,
+      "positives": 23
+    }
+  },
+  "total_calls": {
+    "value_top4": 20,
+    "random_top4": 26,
+    "full8": 104
+  },
+  "selected_deployments": [
+    {
+      "seed": 3302,
+      "policy": "full8",
+      "selected": "llm_006",
+      "probability": 0.11714715448734496,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3302,
+      "policy": "random_top4",
+      "selected": "llm_006",
+      "probability": 0.11714715448734496,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3302,
+      "policy": "value_top4",
+      "selected": "llm_007",
+      "probability": 0.8938812474673721,
+      "mode": "released_push",
+      "deployment_success": false
+    },
+    {
+      "seed": 3313,
+      "policy": "full8",
+      "selected": "llm_007",
+      "probability": 0.4764232127311816,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3313,
+      "policy": "random_top4",
+      "selected": "llm_007",
+      "probability": 0.4764232127311816,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3313,
+      "policy": "value_top4",
+      "selected": "llm_007",
+      "probability": 0.4764232127311816,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3317,
+      "policy": "full8",
+      "selected": "llm_004",
+      "probability": 0.9281111427849972,
+      "mode": "held_insert",
+      "deployment_success": false
+    },
+    {
+      "seed": 3317,
+      "policy": "random_top4",
+      "selected": "llm_004",
+      "probability": 0.9281111427849972,
+      "mode": "held_insert",
+      "deployment_success": false
+    },
+    {
+      "seed": 3317,
+      "policy": "value_top4",
+      "selected": "llm_004",
+      "probability": 0.9281111427849972,
+      "mode": "held_insert",
+      "deployment_success": false
+    },
+    {
+      "seed": 3329,
+      "policy": "full8",
+      "selected": "llm_002",
+      "probability": 0.4243868374335462,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3329,
+      "policy": "random_top4",
+      "selected": "llm_003",
+      "probability": 0.3556742241239515,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3329,
+      "policy": "value_top4",
+      "selected": "llm_007",
+      "probability": 0.8730490872586812,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3334,
+      "policy": "full8",
+      "selected": "llm_001",
+      "probability": 0.7210197319508415,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3334,
+      "policy": "random_top4",
+      "selected": "llm_007",
+      "probability": 0.7295948112420647,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3334,
+      "policy": "value_top4",
+      "selected": "llm_003",
+      "probability": 0.9517236652370461,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3341,
+      "policy": "full8",
+      "selected": "llm_003",
+      "probability": 0.7167862412936586,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3341,
+      "policy": "random_top4",
+      "selected": "llm_003",
+      "probability": 0.7167862412936586,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3341,
+      "policy": "value_top4",
+      "selected": "llm_003",
+      "probability": 0.7167862412936586,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3348,
+      "policy": "full8",
+      "selected": "llm_001",
+      "probability": 0.881002754544943,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3348,
+      "policy": "random_top4",
+      "selected": "llm_001",
+      "probability": 0.881002754544943,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3348,
+      "policy": "value_top4",
+      "selected": "llm_001",
+      "probability": 0.881002754544943,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3363,
+      "policy": "full8",
+      "selected": "llm_001",
+      "probability": 0.8628811126744896,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3363,
+      "policy": "random_top4",
+      "selected": "llm_001",
+      "probability": 0.8628811126744896,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3363,
+      "policy": "value_top4",
+      "selected": "llm_001",
+      "probability": 0.8628811126744896,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3372,
+      "policy": "full8",
+      "selected": "llm_002",
+      "probability": 0.7262244975250594,
+      "mode": "held_insert",
+      "deployment_success": false
+    },
+    {
+      "seed": 3372,
+      "policy": "random_top4",
+      "selected": "llm_002",
+      "probability": 0.7262244975250594,
+      "mode": "held_insert",
+      "deployment_success": false
+    },
+    {
+      "seed": 3372,
+      "policy": "value_top4",
+      "selected": "llm_003",
+      "probability": 0.8892941549754916,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3375,
+      "policy": "full8",
+      "selected": "llm_001",
+      "probability": 0.32823353479395373,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3375,
+      "policy": "random_top4",
+      "selected": "llm_007",
+      "probability": 0.5088975873959038,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3375,
+      "policy": "value_top4",
+      "selected": "llm_006",
+      "probability": 0.8721378870325998,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3390,
+      "policy": "full8",
+      "selected": "llm_001",
+      "probability": 0.781453700402667,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3390,
+      "policy": "random_top4",
+      "selected": "llm_003",
+      "probability": 0.3470448083038574,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3390,
+      "policy": "value_top4",
+      "selected": "llm_007",
+      "probability": 0.8173355205812332,
+      "mode": "released_push",
+      "deployment_success": false
+    },
+    {
+      "seed": 3417,
+      "policy": "full8",
+      "selected": "llm_003",
+      "probability": 0.6500046942298305,
+      "mode": "held_insert",
+      "deployment_success": true
+    },
+    {
+      "seed": 3417,
+      "policy": "random_top4",
+      "selected": "llm_007",
+      "probability": 0.8929520433007097,
+      "mode": "released_push",
+      "deployment_success": true
+    },
+    {
+      "seed": 3417,
+      "policy": "value_top4",
+      "selected": "llm_004",
+      "probability": 0.8983847854984539,
+      "mode": "released_push",
+      "deployment_success": true
+    }
+  ]
+}

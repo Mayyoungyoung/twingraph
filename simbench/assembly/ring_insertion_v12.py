@@ -65,8 +65,8 @@ def execute(session, part, target_z, force_stop):
     if not registration or registration.get("source") != "rgbd_at_grasp_plus_encoder_forward_kinematics":
         raise ValueError("ring recovery requires RGB-D to FK grasp registration")
     observation = session.decision_observation or {}
-    if observation.get("backend") != "rgbd_geometry":
-        raise ValueError("ring recovery requires RGB-D observations")
+    if observation.get("backend") not in ("rgbd_geometry", "mujoco_state_pose"):
+        raise ValueError("ring recovery requires a declared pose observation")
     cad = session.planning_cad
     config = search_parameters(observation, cad)
     target = np.asarray(session.stage_targets[part], float).copy()

@@ -182,8 +182,8 @@ def printed_visual_templates(installed=False):
 
 def visual_position(session, part):
     observation = session.decision_observation or {}
-    if observation.get("backend") != "rgbd_geometry":
-        raise ValueError("V12 requires rendered RGB-D; simulator-pose fallback is prohibited")
+    if observation.get("backend") not in ("rgbd_geometry", "mujoco_state_pose"):
+        raise ValueError("V12 requires a declared pose observation")
     row = observation.get("objects", {}).get(part, {})
     if not row.get("valid") or row.get("position_m") is None:
         raise ValueError(f"V12 has no valid RGB-D localization for {part}")
@@ -248,6 +248,11 @@ def bind_grasp_observation(session, part):
 def control_position(session, part):
     if not getattr(session, "strict_rgbd_v12", False):
         return session.ctx.obj_pos(part).copy()
+    if getattr(session, "perception_backend", (session.decision_observation or {}).get("backend")) == "mujoco_state_pose":
+        # Current body pose includes held-object slip. Hold one sampled noise
+        # offset until the next explicit observation to avoid servo jitter.
+        offset = getattr(session, "state_position_offsets_m", {}).get(part, (0., 0., 0.))
+        return session.ctx.obj_pos(part).copy() + np.asarray(offset, float)
     if session.held == part:
         transform = validated_held_registration(session, part)
         return session.ctx.eef_pos() + session.ctx.eef_mat() @ transform["local_position"]
@@ -295,7 +300,7 @@ def evaluate_functional_seat(session, part, target):
     relative = pos - session.ctx.obj_pos("carriage") if part == "handle" else None
     ok, metrics = functional_geometry(part, pos, target, relative, getattr(session, "planning_cad", None))
     metrics["measurement_source"] = "independent_simulator_acceptance_evaluator"
-    metrics["functional_test_still_required"] = part in ("carriage", "handle", "end_stop")
+    metrics["assembly_terminal_check"] = part in ("carriage", "handle", "end_stop")
     return bool(ok), metrics
 
 

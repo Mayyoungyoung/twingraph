@@ -1,0 +1,752 @@
+[
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_broad_2062",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 2062,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 1,
+    "negatives": 7,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_045",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_012",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_021",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_034",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_004",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_003",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_broad_2063",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 2063,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 1,
+    "negatives": 7,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_029",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_034",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_035",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_009",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_025",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_017",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_007",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_046",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_broad_2064",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 2064,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 1,
+    "negatives": 7,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_042",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_009",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_007",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_015",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_029",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_047",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_000",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_008",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_broad_2065",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 2065,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 0,
+    "negatives": 8,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_006",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_040",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_015",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_028",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_046",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_001",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_000",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_near_3005",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 3005,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 0,
+    "negatives": 8,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_041",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_006",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_038",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_047",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_032",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_044",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_003",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_near_3006",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 3006,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 1,
+    "negatives": 7,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_019",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_012",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_035",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_004",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_031",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_017",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_002",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_near_3007",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 3007,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 0,
+    "negatives": 8,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_026",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_027",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_028",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_012",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_000",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_045",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_002",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_020",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_first_near_3008",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 3008,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 2,
+    "negatives": 6,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_036",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_009",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_027",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_044",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_032",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_018",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_039",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_025",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_append_near_3000",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 3000,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 0,
+    "negatives": 8,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_003",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_010",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_031",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_033",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_040",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_016",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_015",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_037",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "schema": "twingraph.sliding_assembly_audit.v23.r1",
+    "root": "results\\v24_append_near_3002",
+    "task_version": "sliding_assembly_base_holes_v23",
+    "seed": 3002,
+    "level": "L0",
+    "noise": {
+      "position_std_m": 0.0,
+      "yaw_std_rad": 0.0
+    },
+    "frozen_candidates": 8,
+    "audited_valid": 8,
+    "positives": 1,
+    "negatives": 7,
+    "complete": true,
+    "errors": [],
+    "rows": [
+      {
+        "name": "grounded_041",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_001",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_036",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_011",
+        "valid": true,
+        "physical_valid": true,
+        "success": true,
+        "errors": []
+      },
+      {
+        "name": "grounded_027",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_029",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_022",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      },
+      {
+        "name": "grounded_039",
+        "valid": true,
+        "physical_valid": true,
+        "success": false,
+        "errors": []
+      }
+    ]
+  }
+]

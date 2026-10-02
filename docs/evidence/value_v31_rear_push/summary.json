@@ -1,0 +1,25 @@
+{
+  "task_version": "sliding_assembly_released_carriage_rear_push_v31",
+  "seed": 2788,
+  "level": "L0",
+  "layout_family": "broad",
+  "domain": "regression",
+  "position_noise_std_m": 0,
+  "yaw_noise_std_rad": 0,
+  "attempted": 16,
+  "valid": 16,
+  "successes": 0,
+  "failure_skill": {
+    "push_carriage": 13,
+    "approach": 3
+  },
+  "runtime_sha256": "e1f45ca16c223cc212c6b8a3030772364e9e45371850966276d34e4fda4d8600",
+  "plan_hashes_consistent": true,
+  "observation_sha256": "32bbd89c315f05c6370d4656f666aa7e93c3ab16fe6aef44e84f26b73f267b87",
+  "raw_result_dirs": [
+    "results\\v31_rear_push_0",
+    "results\\v31_rear_push_4",
+    "results\\v31_rear_push_8",
+    "results\\v31_rear_push_12"
+  ]
+}

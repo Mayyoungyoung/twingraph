@@ -276,6 +276,11 @@ class PlanIR:
                     if "yaw_frame" in args:
                         choices[current]["grasp_yaw_frame"] = args["yaw_frame"]
                 elif current is not None:
+                    if "transport_mode" in self.prefix["choices"].get(current, {}):
+                        if call.skill == "push":
+                            choices[current]["transport_mode"] = "released_push"
+                        elif call.skill == "insert" and current == "carriage":
+                            choices[current]["transport_mode"] = "held_insert"
                     if call.skill=="grasp": choices[current]["force"]=args["force"]
                     if call.skill == "move" and "grasp" in args and "strategy" in args:
                         choices[current]["approach_strategy"] = args["strategy"]
@@ -286,6 +291,7 @@ class PlanIR:
                             and float(args["delta"][0]) == 0 and float(args["delta"][1]) == 0):
                         choices[current]["lift_first_m"] = float(args["delta"][2])
                     if call.skill=="plan_path" and "clearance" in args: choices[current]["clearance"]=args["clearance"]
+                    if call.skill=="plan_path" and "route_style" in args: choices[current]["route_style"]=args["route_style"]
                     if (v12 and call.skill=="plan_path" and "yaw" in args and args["yaw"] is not None
                             and call.arguments.get("target") is not None
                             and call.arguments["target"].source_output=="object_to_eef"):
@@ -295,7 +301,8 @@ class PlanIR:
                     # legacy guarded descent.  Preserve its speed in the
                     # executable semantic reconstruction so a slow/fast pin
                     # candidate cannot be silently collapsed to metadata.
-                    if (call.skill == "plan_path" and args.get("method") == "contact"
+                    if ((call.skill == "plan_path" and args.get("method") in ("contact", "push")
+                            or call.skill == "push")
                             and "speed" in args and (str(current).startswith("pin_") or v12)):
                         choices[current]["speed"] = args["speed"]
                         if v12:
@@ -303,8 +310,9 @@ class PlanIR:
                             for field in ("pin_command_depth_m", "pin_press_extra_m"):
                                 if args.get(field) is not None:
                                     choices[current][field] = args[field]
-                    if v12 and call.skill == "press":
-                        choices[current]["press_force"] = args["force_stop"]
+                    if v12 and (call.skill == "press" or call.skill == "push" and "press_force" in args
+                                or call.skill == "plan_path" and args.get("method") == "push"):
+                        choices[current]["press_force"] = args["force_stop"] if call.skill == "press" else args["press_force"]
             if plain(order)!=self.prefix["order"] or plain(choices)!=self.prefix["choices"]:
                 raise ValueError("program scoring/execution choices disagree")
             return self
@@ -385,6 +393,12 @@ def resolve_argument(arg, session, plan, part=None):
         if grasp["part"] != part:
             raise ValueError("deferred grasp producer object mismatch")
         return np.asarray(grasp["xyz"]) + np.asarray(arg.value)
+    if arg.source_output in {"push_hover", "push_contact", "push_yaw"}:
+        key = {"push_hover": "hover", "push_contact": "contact", "push_yaw": "yaw"}[arg.source_output]
+        pose = session.artifacts["push_pose"]
+        if pose["part"] != part:
+            raise ValueError("push pose is bound to a different object")
+        return copy.deepcopy(pose[key])
     raise ValueError(f"unsupported deferred output {arg.source_output}")
 
 

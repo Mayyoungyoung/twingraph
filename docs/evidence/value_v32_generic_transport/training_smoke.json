@@ -1,0 +1,1 @@
+{"passed": true, "loss": 0.8712770938873291, "samples": 2, "input_dimension": 303, "backpropagation": true, "finite_gradients": true, "scope": "training pipeline smoke only; no generalization claim"}

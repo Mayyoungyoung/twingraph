@@ -15,7 +15,7 @@ def _row(**updates):
 
 def _run(monkeypatch,row):
     monkeypatch.setattr("simbench.assembly.placement_catalog_v13.placement_clearance_catalog",
-                        lambda *a,**k:[deepcopy(row)])
+                        lambda *a,**k:deepcopy(row if isinstance(row,list) else [row]))
     # Limit the contract test to the non-pin branch under test.
     monkeypatch.setattr(planner,"PARTS",("carriage",))
     observation=dict(fixtures={"guide_base":{"valid":True}},assembly_targets={"carriage":{}})
@@ -27,6 +27,16 @@ def test_only_source_target_shell_contact_is_deferred_to_twin(monkeypatch):
     usable,audit=_run(monkeypatch,_row())
     assert audit["carriage"][0]["status"]=="rejected"
     assert usable["carriage"][0]["status"]=="unknown"
+    assert usable["carriage"][0]["deferred_source_target_contact"] is True
+
+
+def test_unknown_diagonal_does_not_hide_deferred_face_grasp(monkeypatch):
+    diagonal=_row(yaw=.7853981633974483,status="unknown",min_clearance_m=.002,
+                  source_body_min_clearance_m=.002,grasp_face_status="unknown")
+    face=_row(yaw=0.,grasp_face_status="inside")
+    usable,_=_run(monkeypatch,[diagonal,face])
+    assert {round(r["yaw"],3) for r in usable["carriage"]}=={0.,.785}
+    assert usable["carriage"][0]["yaw"]==0.
     assert usable["carriage"][0]["deferred_source_target_contact"] is True
 
 

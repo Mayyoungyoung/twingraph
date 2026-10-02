@@ -1,0 +1,13 @@
+{
+  "schema": "twingraph.base_hole_noise_supplement.v23.r1",
+  "task_version": "sliding_assembly_base_holes_v23",
+  "layout_family": "neighborhood",
+  "level": "L0",
+  "seeds": [3000, 3002],
+  "position_noise_std_m": 0.0003,
+  "yaw_noise_std_rad": 0.005235987756,
+  "proposal_budget": 48,
+  "executed_candidates_per_layout": 8,
+  "first_pass_statistic": false,
+  "outcome_dependent_layout_filtering": false
+}

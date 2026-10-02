@@ -11,8 +11,7 @@ import numpy as np
 from .plan import PlanIR
 from .skill_graph import RELATIONS, validate_geometry_conditions, validate_graph
 
-STAGES = ("cleaning", "carriage", "end_stop", "pin_left", "pin_right", "handle",
-          "bidirectional_stroke", "pin_retention")
+STAGES = ("cleaning", "carriage", "end_stop", "pin_left", "pin_right", "handle")
 SCHEMA = "twingraph.graph_stage_ports.v12.r5_object_relative_grasp"
 VALUE_RELATIONS = (*RELATIONS, "phase", "planned_before", "predicted_obstruction", "goal_dependency")
 PART_STAGES = STAGES[1:6]
@@ -155,7 +154,7 @@ def state_plan_interactions(graph, by_stage, order, completed):
         scalar(clearance-sigma if clearance is not None and sigma is not None else None, .01)
         scalar(sigma/max(clearance, 1.e-6) if clearance is not None and sigma is not None else None)
         goal = observation.get("goals", [{}])[0]
-        scalar(goal.get("stroke_minimum_m"), .1)
+        scalar(None, .1)
         scalar(goal.get("pin_minimum_depth_m"), .02)
         for name in ("pin_base_bridge_required", "fixture_capture_required"):
             scalar(float(bool(goal[name])) if name in goal else None)
@@ -312,9 +311,8 @@ Unknown/deferred values have explicit masks. A changed graph must be recompiled.
                 raise ValueError("cleaning envelope and graph disagree")
     obs = assembly["observation"]
     objects = obs["objects"]
-    aliases = {"stroke": "bidirectional_stroke", "retention": "pin_retention"}
-    completed = {aliases.get(s, s) for s in graph.get("completion", {}).get("completed", ())}
-    order = ["cleaning", *plan.prefix["order"], "bidirectional_stroke", "pin_retention"]
+    completed = set(graph.get("completion", {}).get("completed", ()))
+    order = ["cleaning", *plan.prefix["order"]]
     by_stage = {s: [] for s in STAGES}
     owner = {}
     for node in assembly["nodes"]:
@@ -327,7 +325,7 @@ Unknown/deferred values have explicit masks. A changed graph must be recompiled.
     for stage in STAGES:
         row = []
         row.extend(float(stage == s) for s in STAGES)
-        row.extend((order.index(stage) / 7., float(stage in completed), float(stage not in completed)))
+        row.extend((order.index(stage) / (len(STAGES)-1), float(stage in completed), float(stage not in completed)))
         obj = objects.get("wipe_tool" if stage == "cleaning" else stage, {})
         position = obj.get("position")
         valid = bool(obj.get("valid", position is not None))
@@ -406,10 +404,8 @@ Unknown/deferred values have explicit masks. A changed graph must be recompiled.
             if order.index(a) < order.index(b):
                 relations[VALUE_RELATIONS.index("planned_before"), STAGES.index(a), STAGES.index(b)] = 1.
     relations[VALUE_RELATIONS.index("predicted_obstruction")] = obstruction
-    for part in PART_STAGES:
-        relations[VALUE_RELATIONS.index("goal_dependency"), STAGES.index(part), STAGES.index("bidirectional_stroke")] = 1.
-    for part in ("pin_left", "pin_right"):
-        relations[VALUE_RELATIONS.index("goal_dependency"), STAGES.index(part), STAGES.index("pin_retention")] = 1.
+    for part in PART_STAGES[:-1]:
+        relations[VALUE_RELATIONS.index("goal_dependency"), STAGES.index(part), STAGES.index("handle")] = 1.
     relations = np.minimum(relations, 1.)
     x = np.asarray(out, np.float32)
     if not np.isfinite(x).all():
