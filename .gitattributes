@@ -13,4 +13,9 @@
 /experiments/value_v5/** -text
 /docs/evidence/value_v5/** -text
 /models/value/v5/** -text
+# V33 provenance hashes physical source bytes, including original line endings.
+# Keep checkout bytes identical to the audited runtime on 901.
+/simbench/** -text
+/docs/evidence/value_v33_robust_top3/** -text
+/docs/evidence/real_v34/** -text
 /datasets/value/v5/** -text
