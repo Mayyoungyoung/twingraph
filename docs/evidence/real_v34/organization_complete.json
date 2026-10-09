@@ -1,0 +1,247 @@
+{
+  "code": "/home/jia/twingraph/code",
+  "results": "/home/jia/twingraph/experiments/final",
+  "runtime": "/home/jia/twingraph/runtime/twin",
+  "deleted": [
+    {
+      "name": "twingraph-core-baseline-e27afa2",
+      "archive_bytes": 116,
+      "files": 0
+    },
+    {
+      "name": "twingraph-core-r3-fixtures",
+      "archive_bytes": 111,
+      "files": 0
+    },
+    {
+      "name": "twingraph-skill-graph",
+      "archive_bytes": 264213893,
+      "files": 1712
+    },
+    {
+      "name": "twingraph-v11-system-20260921",
+      "archive_bytes": 54169522,
+      "files": 1302
+    },
+    {
+      "name": "twingraph-v12-coverage-dev-r7",
+      "archive_bytes": 8363508,
+      "files": 21
+    },
+    {
+      "name": "twingraph-v12-coverage-dev-r7b",
+      "archive_bytes": 1507678,
+      "files": 100
+    },
+    {
+      "name": "twingraph-v12-r7-pin-dev",
+      "archive_bytes": 12436393,
+      "files": 478
+    },
+    {
+      "name": "twingraph-v12-r7-vision-dev",
+      "archive_bytes": 3392845,
+      "files": 176
+    },
+    {
+      "name": "twingraph-v12-ring-dev",
+      "archive_bytes": 930281,
+      "files": 61
+    },
+    {
+      "name": "twingraph-v12-system-20260921",
+      "archive_bytes": 78736228,
+      "files": 637
+    },
+    {
+      "name": "twingraph-v12-training-failure-audit",
+      "archive_bytes": 128221,
+      "files": 2
+    },
+    {
+      "name": "twingraph-v12-value-r7-tests",
+      "archive_bytes": 113,
+      "files": 0
+    },
+    {
+      "name": "twingraph-v12-white-frozen-r1",
+      "archive_bytes": 21575227,
+      "files": 635
+    },
+    {
+      "name": "twingraph-v12-white-frozen-r2",
+      "archive_bytes": 11581568,
+      "files": 713
+    },
+    {
+      "name": "twingraph-v12-white-frozen-r3",
+      "archive_bytes": 21469995,
+      "files": 432
+    },
+    {
+      "name": "twingraph-v12-wrist-dev-r4",
+      "archive_bytes": 6657453,
+      "files": 44
+    },
+    {
+      "name": "twingraph-v12-wrist-frozen-r5",
+      "archive_bytes": 7376140,
+      "files": 28
+    },
+    {
+      "name": "twingraph-v12-wrist-frozen-r6",
+      "archive_bytes": 79448781,
+      "files": 3664
+    },
+    {
+      "name": "twingraph-v13-mechanism-r1",
+      "archive_bytes": 143169444,
+      "files": 6458
+    },
+    {
+      "name": "twingraph-v13-value-regression-r1",
+      "archive_bytes": 9107903,
+      "files": 3
+    },
+    {
+      "name": "twingraph-v13-value-regression-r2",
+      "archive_bytes": 9144084,
+      "files": 3
+    },
+    {
+      "name": "twingraph-v15-full-system-r1",
+      "archive_bytes": 3488081,
+      "files": 137
+    },
+    {
+      "name": "twingraph-v16-natural-coverage-r1",
+      "archive_bytes": 17586425,
+      "files": 36
+    },
+    {
+      "name": "twingraph-v16-natural-coverage-r2",
+      "archive_bytes": 17305866,
+      "files": 23
+    },
+    {
+      "name": "twingraph-v16-natural-coverage-r3",
+      "archive_bytes": 17306024,
+      "files": 23
+    },
+    {
+      "name": "twingraph-v16-natural-coverage-r4",
+      "archive_bytes": 17307019,
+      "files": 23
+    },
+    {
+      "name": "twingraph-v16-natural-coverage-r5",
+      "archive_bytes": 17307152,
+      "files": 23
+    },
+    {
+      "name": "twingraph-v16-natural-coverage-r6",
+      "archive_bytes": 28628598,
+      "files": 630
+    },
+    {
+      "name": "twingraph-v16-natural-coverage-r7",
+      "archive_bytes": 17468937,
+      "files": 26
+    },
+    {
+      "name": "twingraph-v17a-end-stop-place",
+      "archive_bytes": 67070278,
+      "files": 2439
+    },
+    {
+      "name": "twingraph-v18-atomic-flow",
+      "archive_bytes": 76215973,
+      "files": 5301
+    },
+    {
+      "name": "twingraph-v19-cleaning",
+      "archive_bytes": 9577177,
+      "files": 617
+    },
+    {
+      "name": "twingraph-v20-full-flow",
+      "archive_bytes": 23493159,
+      "files": 1373
+    },
+    {
+      "name": "twingraph-v20-l0-value-r2",
+      "archive_bytes": 110,
+      "files": 0
+    },
+    {
+      "name": "twingraph-v20-next",
+      "archive_bytes": 604256,
+      "files": 42
+    },
+    {
+      "name": "twingraph-v3-venv",
+      "archive_bytes": 102,
+      "files": 0
+    },
+    {
+      "name": "twingraph-v4-20260916",
+      "archive_bytes": 159671946,
+      "files": 514
+    },
+    {
+      "name": "twingraph-v5-20260916",
+      "archive_bytes": 1656017,
+      "files": 22
+    },
+    {
+      "name": "twingraph-v5-formal-20260916",
+      "archive_bytes": 1522935985,
+      "files": 1204
+    },
+    {
+      "name": "twingraph-v5-publication-20260916",
+      "archive_bytes": 720097438,
+      "files": 24
+    },
+    {
+      "name": "twingraph-v6-20260917",
+      "archive_bytes": 6404784846,
+      "files": 4843
+    },
+    {
+      "name": "twingraph-v8-credible-screening",
+      "archive_bytes": 568669127,
+      "files": 52
+    },
+    {
+      "name": "twingraph-v8-py312",
+      "archive_bytes": 103,
+      "files": 0
+    },
+    {
+      "name": "twingraph-v8-results",
+      "archive_bytes": 2199402,
+      "files": 300
+    },
+    {
+      "name": "twingraph-v8-runtime",
+      "archive_bytes": 107394954,
+      "files": 7330
+    },
+    {
+      "name": "twingraph-v8-test-venv",
+      "archive_bytes": 107,
+      "files": 0
+    },
+    {
+      "name": "RAL",
+      "archive_bytes": 201854344,
+      "files": 423
+    },
+    {
+      "name": "RAL_archive",
+      "archive_bytes": 250822530,
+      "files": 1
+    }
+  ]
+}

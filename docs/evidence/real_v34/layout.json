@@ -1,0 +1,187 @@
+{
+  "schema": "twingraph.real_scene.v34",
+  "frame": "twin_world",
+  "measured": false,
+  "layout_input_sha256": "c46e08face2f1a9e52178e98184f88fbdf4873e908693d17154068b0e71b7c1e",
+  "source_frame": "panda_base",
+  "robot": {
+    "T_world_base": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        -0.56
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.8
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "joints_rad": [
+      0.0,
+      -0.55,
+      0.0,
+      -2.25,
+      0.0,
+      1.7,
+      0.7854
+    ],
+    "finger_width_m": 0.08
+  },
+  "table": {
+    "top_z_m": 0.8,
+    "center_xy_m": [
+      -0.21000000000000008,
+      0.0
+    ],
+    "half_size_xy_m": [
+      0.65,
+      0.65
+    ]
+  },
+  "poses": {
+    "guide_base": {
+      "position_m": [
+        0.07499999999999996,
+        0.085,
+        0.812
+      ],
+      "quat_wxyz": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "carriage": {
+      "position_m": [
+        0.01713790586445929,
+        -0.1607175966004979,
+        0.806
+      ],
+      "quat_wxyz": [
+        0.9979104860613227,
+        0.0,
+        0.0,
+        -0.06461162286194873
+      ]
+    },
+    "end_stop": {
+      "position_m": [
+        0.10145630342394363,
+        -0.3014031977342498,
+        0.8180000000000001
+      ],
+      "quat_wxyz": [
+        0.9942282562611121,
+        0.0,
+        0.0,
+        0.10728548108662443
+      ]
+    },
+    "handle": {
+      "position_m": [
+        -0.17165862415248295,
+        -0.1397855558849648,
+        0.808
+      ],
+      "quat_wxyz": [
+        0.9939423392690482,
+        0.0,
+        0.0,
+        0.10990280346002242
+      ]
+    },
+    "pin_left": {
+      "position_m": [
+        -0.36755783156940824,
+        -0.2601794659714776,
+        0.8480000000000001
+      ],
+      "quat_wxyz": [
+        0.9875928976288267,
+        0.0,
+        0.0,
+        -0.15703588301117025
+      ]
+    },
+    "pin_right": {
+      "position_m": [
+        -0.35756459209374203,
+        -0.350630391683547,
+        0.8480000000000001
+      ],
+      "quat_wxyz": [
+        0.9893706277911142,
+        0.0,
+        0.0,
+        -0.14541582054307814
+      ]
+    },
+    "pin_left_holder": {
+      "position_m": [
+        -0.36755783156940824,
+        -0.2601794659714776,
+        0.8190000000000001
+      ],
+      "quat_wxyz": [
+        0.9875928976288267,
+        0.0,
+        0.0,
+        -0.15703588301117025
+      ]
+    },
+    "pin_right_holder": {
+      "position_m": [
+        -0.35756459209374203,
+        -0.350630391683547,
+        0.8190000000000001
+      ],
+      "quat_wxyz": [
+        0.9893706277911142,
+        0.0,
+        0.0,
+        -0.14541582054307814
+      ]
+    },
+    "wipe_tool": {
+      "position_m": [
+        -0.2570040765349231,
+        -0.0549073187024817,
+        0.804
+      ],
+      "quat_wxyz": [
+        0.9987723593799219,
+        0.0,
+        0.0,
+        0.049535584569723776
+      ]
+    }
+  },
+  "uncertainty": {
+    "position_m": 0.002,
+    "orientation_rad": 0.035
+  },
+  "physics": {
+    "calibrated": false,
+    "mass_kg": {},
+    "friction": {},
+    "note": "V33 effective density, friction, compliance and actuator gains remain simulation assumptions until hardware calibration."
+  },
+  "seed": 4000,
+  "source": "Frozen V33 seed 4000 nominal XY/yaw plus CAD-supported resting Z; this is a placement prescription, not a physical measurement."
+}

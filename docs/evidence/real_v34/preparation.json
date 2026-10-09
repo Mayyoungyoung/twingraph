@@ -1,0 +1,29 @@
+{
+  "schema": "twingraph.real_preparation.v34",
+  "candidate_count": 8,
+  "planner": "grounded",
+  "selected": "grounded_018",
+  "validations": [
+    {
+      "candidate": "grounded_018",
+      "valid": true,
+      "success": true,
+      "seconds": 390.20856882911175,
+      "result": "validation/grounded_018/result.json",
+      "result_sha256": "bc1f606ec851b41d77e079875e2cf7584e9863e4f5ed724809d79cc86d105b3a"
+    }
+  ],
+  "request_sha256": "521eddc9f60a73de242c5a1e3a3a6d00dbb48b208122ff52cc42a5b342aaae70",
+  "layout_sha256": "29c57697fab97b1850efcfc79844c2c444230e04eb4ec2785ba0b7678525cd1f",
+  "model_freeze_sha256": "56ba74bc546ce77bc2e895eacdc5d11cb1f8610b53dc76a8e0cb80bacc7114d0",
+  "bridge_source": {
+    "script_sha256": "007127261e2e4a48ac8cef5b1b6e418ccf2b0f852a0a789d623710bd36a2d9d0",
+    "script_file": "source_snapshot/prepare_real_experiment_v34.py",
+    "provenance_file": "bridge_source_provenance.json",
+    "provenance_sha256": "1572e8228a4fd4d81d92fa77d2faf79660c5e2563c6e0be8c6e74710fff21401"
+  },
+  "measured_layout": false,
+  "hardware_executed": false,
+  "hardware_executable": false,
+  "phase": "twin_validated"
+}

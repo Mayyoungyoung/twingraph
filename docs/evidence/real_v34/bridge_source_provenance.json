@@ -1,0 +1,9 @@
+{
+  "schema": "twingraph.real_bridge_source.v34",
+  "script_sha256": "007127261e2e4a48ac8cef5b1b6e418ccf2b0f852a0a789d623710bd36a2d9d0",
+  "script_file": "source_snapshot/prepare_real_experiment_v34.py",
+  "import_source_path": "/home/jia/twingraph/code/scripts/prepare_real_experiment_v34.py",
+  "capture_scope": "bridge script loaded by this process",
+  "frozen_runtime_modified": false,
+  "captured_at_unix_s": 1791516666.531783
+}

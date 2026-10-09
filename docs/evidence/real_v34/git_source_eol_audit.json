@@ -1,0 +1,1082 @@
+[
+  {
+    "file": "simbench/assembly/__init__.py",
+    "only_crlf": true,
+    "working_sha256": "4640da374fade0ef4fa12a035cc20f9d43688c6a9e23f4aa6cb46037d9fb1ae6",
+    "git_sha256": "1850c036633f2a4b21471a9f2f2c0ee779731976b782541e741972578e0cd188"
+  },
+  {
+    "file": "simbench/assembly/atomic_demo.py",
+    "only_crlf": true,
+    "working_sha256": "528459c7991b486509285def115be9e98e67b0ca0039d6d8cc771043a81a49f3",
+    "git_sha256": "0abaf2518a2b22bc0d188a256da8f708a12a388ea96539e26ea7774aed203308"
+  },
+  {
+    "file": "simbench/assembly/atomic_demos.py",
+    "only_crlf": true,
+    "working_sha256": "3b766c0b595880c244b4cd0a3f16c4c2e94e4143d43682e2ee24a5b9d8f7e8ea",
+    "git_sha256": "391e097961f399d8a569b91a5d047662a6815be1e13284bf7ce9c8a29bf5bd9b"
+  },
+  {
+    "file": "simbench/assembly/candidate_demo.py",
+    "only_crlf": true,
+    "working_sha256": "2e72d51ae5fc6e1ca94a73685c9e775300b4cd53f7186fdff90a022ae071aac2",
+    "git_sha256": "b5d37ba14aac11878de1be709da1618d5668c5989009cf0477074083d5e12215"
+  },
+  {
+    "file": "simbench/assembly/candidates.py",
+    "only_crlf": true,
+    "working_sha256": "1785503bfafe63803bccc9e590fa240b1b1203db4912ddbed85c496820f63573",
+    "git_sha256": "89fab238a2b99e5664527021e74b71fe73b730d70f8348715c2cc91a235a024f"
+  },
+  {
+    "file": "simbench/assembly/contracts.py",
+    "only_crlf": true,
+    "working_sha256": "ca3b582cb3c068afa48f8f79e53f18800127eb573ae09e1db01b2e5382630bd2",
+    "git_sha256": "319341170394fedd9aa5ad49620396f5689c16307572bd15fbc1207e8037f3b4"
+  },
+  {
+    "file": "simbench/assembly/control.py",
+    "only_crlf": true,
+    "working_sha256": "68a26278e12c21f15102828763c67487ef46bbbade731eb6edb22e8067c2c6e3",
+    "git_sha256": "798a21ddd7b489f46ca34fe7aaa56cb2deb22803afb7d8382b10cdfc483e9faf"
+  },
+  {
+    "file": "simbench/assembly/deliver_demos.py",
+    "only_crlf": true,
+    "working_sha256": "0c40efce22fdfe2dffa2529e82388a2bcda5d4d8688ab287d28b963e26fc7ae5",
+    "git_sha256": "ade67e20928c7e1dc2771ad6fd372a544b60e921d57fb63453a32251c55bab6b"
+  },
+  {
+    "file": "simbench/assembly/demo_scenes.py",
+    "only_crlf": true,
+    "working_sha256": "00f6dc777218b0d7b834ea11778e57e6ef41da7b5da4a6e33b3771873eba18a2",
+    "git_sha256": "8cf36e84a087455ed4995daefa9fe36169a6344972a87bbfa7a33d762183d4dd"
+  },
+  {
+    "file": "simbench/assembly/demo_visuals.py",
+    "only_crlf": true,
+    "working_sha256": "3407b222ab1c26d9fe1d1aacec3048a3372401ebffdc43896d7f1525fc92e9e5",
+    "git_sha256": "11cc0e7017d4c643227de77252923e976b4aa20a484da5788c2fba815c36f6c2"
+  },
+  {
+    "file": "simbench/assembly/end_stop_seating_v12.py",
+    "only_crlf": true,
+    "working_sha256": "c536a13c991e28ea08ef04dae2375303c3d19c63e0a932cc11731f6750a97756",
+    "git_sha256": "98ff34c66c2fc7f5e711d39e7d43f7177b5c148abdcfed88ca9a6abc974b9de9"
+  },
+  {
+    "file": "simbench/assembly/evaluate.py",
+    "only_crlf": true,
+    "working_sha256": "b14bf525347c38efe8afac3852342a1cb674c9bf76571677358bba0d40b81286",
+    "git_sha256": "aa12ff187d9c774760a6c3d122badf722759da22abe5fa266110f8f11218cd9a"
+  },
+  {
+    "file": "simbench/assembly/full_demos.py",
+    "only_crlf": true,
+    "working_sha256": "1124afd7302eab51257a4bac877587adb26e713b9e7a3637f2f98bbb3daf55d8",
+    "git_sha256": "9657e66e7ccb3ad44ec50e3d3aa1d145b96a7a855ff48358aef0a09cbdb249a0"
+  },
+  {
+    "file": "simbench/assembly/graph.py",
+    "only_crlf": true,
+    "working_sha256": "21b96d82e29da8214834cc53817173bd4373d5466bc4178514eaf7bc0a6e19dd",
+    "git_sha256": "3977f44aadf48cf5822f93e0238053fd415b1c30eec89a320597f29831345dcc"
+  },
+  {
+    "file": "simbench/assembly/graph_figure.py",
+    "only_crlf": true,
+    "working_sha256": "9d592b7fc8a3431f5077c33d4bb620dc55c2d18835bd570df2720bf27d5016bd",
+    "git_sha256": "c7c131accbaa6d107a122597b04179cef9100a43010badb2f311f96bb68c6745"
+  },
+  {
+    "file": "simbench/assembly/grasp_v12.py",
+    "only_crlf": true,
+    "working_sha256": "6ec4d915a88a6c0fbc059f75470a3fb63ca382d47d753db7db2a59badcbd1f5b",
+    "git_sha256": "9cebfb1830b7de80e162d629bd81cf219f7681f07329388d790005367bc1d72e"
+  },
+  {
+    "file": "simbench/assembly/gripper_clearance_v12.py",
+    "only_crlf": true,
+    "working_sha256": "afb4adb87f4ffda3d7329b956ef5c86a94843d0f12ec31f1c313187e4198a030",
+    "git_sha256": "68ddc22479c3f165898e52df7cbc133a28f9300f9e8af16162c0634bb57da073"
+  },
+  {
+    "file": "simbench/assembly/interfaces.py",
+    "only_crlf": true,
+    "working_sha256": "73c023f0828fbeaffb9dc175b7231a825c9cc332a0f464b77a21eb459a0966b7",
+    "git_sha256": "5c631ba4af47d85d22e460d0f09f5c50feef05099d7b4256c5807a8a60fea3b0"
+  },
+  {
+    "file": "simbench/assembly/learning.py",
+    "only_crlf": true,
+    "working_sha256": "bf9139e5a863523c49745cf0b5560f91ba3447ff71c755fdde55c43fe14670b0",
+    "git_sha256": "b1604b236bb8e48c1725c161e7b6e0aa33eae9b0da5b6a7ec7503a2996c9d575"
+  },
+  {
+    "file": "simbench/assembly/library.py",
+    "only_crlf": true,
+    "working_sha256": "2971296d90f82c3c65fbcd9ce6cc8b7e5e1917a0808e6a28e25efab65f2d9262",
+    "git_sha256": "d85cc4055795640ae5871d6e4d5ed90315cfc7d80d4f2a5dbb1013f1bbe6c36a"
+  },
+  {
+    "file": "simbench/assembly/placement_catalog_v13.py",
+    "only_crlf": true,
+    "working_sha256": "b854ec471a1f0e8ba435023ba31db8c02601c1668ce448494c5ef9f33b487bdb",
+    "git_sha256": "fa134a46f46a1a43d5495b61b3d88b0170c6839aa2227b04a08ccefaf9e3ab0f"
+  },
+  {
+    "file": "simbench/assembly/ports.py",
+    "only_crlf": true,
+    "working_sha256": "d5744e847fc2e4e7e1a4313944ca94ad7b18bcdffd64ddf882183323e10ba2ad",
+    "git_sha256": "60e5f01c256f7bd570864f468f5c4490565fe54f635c72f5a654228a581ddbbe"
+  },
+  {
+    "file": "simbench/assembly/printed_kit.py",
+    "only_crlf": true,
+    "working_sha256": "2e76bd7cf7e1ec507234b77ce9ff0bbef50ee92c9d0d26d2c766cef2861c7f25",
+    "git_sha256": "74f9b47d952bf9b5b9a7c059e38ac71f604ef74782a0f3545976fff575518528"
+  },
+  {
+    "file": "simbench/assembly/recording.py",
+    "only_crlf": true,
+    "working_sha256": "c1ea15fe1dd27be1b33baee0b657068afebb284fb41013f5c04f99a8392fdc91",
+    "git_sha256": "621515bd91f13127735c002724517ede3e80c655c4a10e2fa2f20e960c0c3795"
+  },
+  {
+    "file": "simbench/assembly/ring_insertion_v12.py",
+    "only_crlf": true,
+    "working_sha256": "379f9ba5efb4520b99891f1d694037cbc6f7799c952d8cdce1aa64549fcb0fa6",
+    "git_sha256": "30a33e2cd1352f63da17b443d1a8e2493d0fc9d7f43dd37d599c050e8d6eb197"
+  },
+  {
+    "file": "simbench/assembly/scene.py",
+    "only_crlf": true,
+    "working_sha256": "0cae5bc7f5115c9d3edefc0d3bed09b67ea252d728118090a0061d5c4dbecdfe",
+    "git_sha256": "c71ca5fd29dbc98c1692531243277e89ef9e762b84a967892bb156ada6bc218f"
+  },
+  {
+    "file": "simbench/assembly/sensor_learning_v12.py",
+    "only_crlf": true,
+    "working_sha256": "2d8c5b6d00cf01daa10e9f8a9241e6b556693f38200c48937bef0eaec5abb2cf",
+    "git_sha256": "ca0c7f61e88b279354e42da9303bb5628791a743a5c4268528581826501f0862"
+  },
+  {
+    "file": "simbench/assembly/skills_v12.py",
+    "only_crlf": true,
+    "working_sha256": "d6016623135d8ff28d1651036000e99552f958b3f538350603a44fc10af7382b",
+    "git_sha256": "da6e7929b3ec61a3c3daa564877af32fd6515c61320dfce582f4b0e339657377"
+  },
+  {
+    "file": "simbench/assembly/standalone_demos.py",
+    "only_crlf": true,
+    "working_sha256": "b1b401147a5345f9964facdac60b4b070296fbdc6c19fd73220552259a6fb8e8",
+    "git_sha256": "d3b236b4856ca60ee80cb48cad06845d72bc390866ac733430ef6087dd0792c4"
+  },
+  {
+    "file": "simbench/assembly/tabletop.xml",
+    "only_crlf": true,
+    "working_sha256": "d5ff5c2b2def2032852fdead920d94fad3b9a20ba7596d2783d7a3e8b312432f",
+    "git_sha256": "162b2958ecefa37c61e2a3cb1075c1decbcaf78f04f28c2fe3bd30844e771134"
+  },
+  {
+    "file": "simbench/assembly/task.py",
+    "only_crlf": true,
+    "working_sha256": "7a9e33641969c094f9218af86e41fa303582a815b8f54cf089c6bed472b2aa91",
+    "git_sha256": "7f1e5d73aa331a276b3733c4ba486c571e72b6e87e7e69c63b09e550dc562897"
+  },
+  {
+    "file": "simbench/assembly/wiping.py",
+    "only_crlf": true,
+    "working_sha256": "5511381d360afa47bbc8f5d09f5d5cc0c2c673f46f25f2c82b8b921dff567dc2",
+    "git_sha256": "163b6da9810de3fba725ac94394412b595092b40c42f34ef9f9ea56df97aa71b"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/finger_0.obj",
+    "only_crlf": true,
+    "working_sha256": "07478de3ac3f20a03c6aaae6e1162241cd40c2626f869f8b6300214b84e39993",
+    "git_sha256": "215098c0fcdf7192f6c503a37cf49e3efecf8a9e1320f02b17c5584d89cc5b2c"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/finger_1.obj",
+    "only_crlf": true,
+    "working_sha256": "723674cdfa74e3c502d83d695e76db713679d0209899e5dfb0cb7fc99ca883c0",
+    "git_sha256": "cf239e9aca26bba09dbbf1c544c47d87cfc9a2f0637c8bb786af750b6d4eca44"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/hand_0.obj",
+    "only_crlf": true,
+    "working_sha256": "6108861e452533528ede1f96ac849b2b82464709241de9d060f7811542f22cb5",
+    "git_sha256": "b94aab901086f85df04c019b30f43bf9aa23a7ad0443ec80a8c14662a41cabd2"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/hand_1.obj",
+    "only_crlf": true,
+    "working_sha256": "20aefc64bec54c4435c488a841836f90c68f8d049c955878734fa8e58cbca303",
+    "git_sha256": "cd76f7494bb314406a1819c46eb826ee254894f87235714f604a470653d9badb"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/hand_2.obj",
+    "only_crlf": true,
+    "working_sha256": "0030f19e5401af70f3d3e2d495657122f5ad5b4ed80123fac54eb1de1a57e7aa",
+    "git_sha256": "e0f44a71712afa5b98eb20355eff17763d3e2e19f459b2bef19abed3727e64b3"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/hand_3.obj",
+    "only_crlf": true,
+    "working_sha256": "45d8b5e2dd8538ababdf7e595e5b3a3c47c5275da0148281bafcbb33cf0292d8",
+    "git_sha256": "a431a06d99e88a1b322b3122a01424ee7704daeaad0bc343b90b9604f014ad0c"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/hand_4.obj",
+    "only_crlf": true,
+    "working_sha256": "04b433d44ab6d0c35022ad20bc101eaa5817cf7eca4cc53995e16fd0f0bc2199",
+    "git_sha256": "21f96ef6a8de082e41b1ea9834f1043de359e5d60305541bcb63539581f53bff"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_0.obj",
+    "only_crlf": true,
+    "working_sha256": "b27078c9e1feb6eaea65df4210e63cec26055407f438fb6c651cd2a26ecc944b",
+    "git_sha256": "6b9f41a4c203540daaeb7a33cc3d0d6c6a32dc8bba187074eeaf97b3e36b3f9c"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_1.obj",
+    "only_crlf": true,
+    "working_sha256": "cd41413866654b119cd940bd7e53d6bd1b600bce57cbb2b3a66cf50cf01d5e3e",
+    "git_sha256": "57673d2ee2a9db2e10c8986ae57c56a7c39c012b60fd26d7d8549553b664a5ed"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_10.obj",
+    "only_crlf": true,
+    "working_sha256": "7a55588817ce6381a9e7f7dd67a1a6a80f453ebfb9047afed34062dc6ee05b92",
+    "git_sha256": "c9198b9d8534d628d097b0f2b239bb30343353182df098ce0d9db6bc13326848"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_11.obj",
+    "only_crlf": true,
+    "working_sha256": "05699cd6c858814fe0509ef723f588e01126128a5809e44f8bea04341e6f7320",
+    "git_sha256": "f0adec78d6677b7799d25121981270e8bfe119b5c18d08a91ee37a54ad75f65c"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_2.obj",
+    "only_crlf": true,
+    "working_sha256": "1546699b6ae8ba13bc3a881f455d9b6967b7d66b61a17c91e502067e8dbcb3f0",
+    "git_sha256": "1ca435a2a87a9608a146a47955724d43dd7ce10fc3dd3018800aa98f8ba86e05"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_3.obj",
+    "only_crlf": true,
+    "working_sha256": "a7d5778cf2e5c4b2e6d947a7cafc538d211365469457138f41535ca67531f54d",
+    "git_sha256": "3e9c6334d2b3b47944af3458ee5f20519abc20fe7ee23063bb53405ccab28046"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_4.obj",
+    "only_crlf": true,
+    "working_sha256": "a5c22dd5ca62ca2347c9dead46fd0a2083cec1ca6b014d4f45b6a2bf72662c14",
+    "git_sha256": "215d25789704936120f119c0bc1cc7f68516dd3f8f1df61457b71acac3873f26"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_5.obj",
+    "only_crlf": true,
+    "working_sha256": "85b08f6c19abf49b894e3e5c9cd646acd29cef723019cbd885f1b397af9243fa",
+    "git_sha256": "9361b104e93743045107aa5b15fb1a0835ba9c1f355aae71f56403cf6a9c33f6"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_7.obj",
+    "only_crlf": true,
+    "working_sha256": "c4bb67ddf29f5510789e1c9e21b8dc41280ad00858d1a5d13ccba5519ef14aec",
+    "git_sha256": "2dc0b8ebbbc80e4c065d71e195adbc384f673438641fac82b07b801b4d2837cb"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_8.obj",
+    "only_crlf": true,
+    "working_sha256": "658bd4effeb44b10c62e8f74eb1a71bb5d3d42dc72d7f64215dca4401a834cbc",
+    "git_sha256": "3b8c436999db5586b8eb47bed2b0aa7de6993868b2681b4c04246eeac42fdb7a"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link0_9.obj",
+    "only_crlf": true,
+    "working_sha256": "546794c9e0fbdfff309ddbe94bbdf92186370935de7cf9ba62c5f0ba4e897500",
+    "git_sha256": "45178f97d2b5da6bce11f610212c4ef7d08c73db33a4fc38e1b7f66b93d023f5"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link1.obj",
+    "only_crlf": true,
+    "working_sha256": "e471edf2075a419213365285144b8759e6b6f7178b1bd556cc0afdc2ebb72153",
+    "git_sha256": "51091e776b16babdbe2f3849b5c041f921d1f11dd94ac19a0f1c81abf496fbae"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link2.obj",
+    "only_crlf": true,
+    "working_sha256": "61d778ec01a499a5ab08e3cd81bfa7d05614120474921f4e484aa8eac062b554",
+    "git_sha256": "5c9f8e715de52c3eb71b475de35993b3b96081e02abea9f28c414768877fc59b"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link3_0.obj",
+    "only_crlf": true,
+    "working_sha256": "bf3ee138bed84e9df7820ab7346ea2673bef7b081d49393574f778e5b05e668f",
+    "git_sha256": "ce2da87f51708e11b189249d41401065dabe89a06e251185a06cef4d5ff27178"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link3_1.obj",
+    "only_crlf": true,
+    "working_sha256": "d58142af5e93ed0960f0c170b10b29dc30a8869bccaca7575dbb284bb8c24e64",
+    "git_sha256": "2880b7753a7173f38fa87ee21da4dfc7fa7be46fbe07bac5aef9e128513cb118"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link3_2.obj",
+    "only_crlf": true,
+    "working_sha256": "06a3150f719582233cfbc1741072597081c701e30defcb62b244fb7c3efb1ee6",
+    "git_sha256": "670cff81ae84693769ca4ae658c154cf909d81167e7c8d22b70ea977f2504efa"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link3_3.obj",
+    "only_crlf": true,
+    "working_sha256": "8d2a7b47309d0375d9ffa116a90d9ff92d7cf90c94ce4db3f24f62bb6ef49c76",
+    "git_sha256": "30ede0c812efd0e0b767d134a4eae0b84e0fa407bb6325a5a555e0569b3a3ffd"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link4_0.obj",
+    "only_crlf": true,
+    "working_sha256": "fbddcbda74b9fb5052a0591fcf377cef2acee8fa2ff8638982309284aea34c88",
+    "git_sha256": "443bf6d178177cf347951ecf107ccd10ca444e605e375b67304579e5f948806f"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link4_1.obj",
+    "only_crlf": true,
+    "working_sha256": "ed6edd7072e74d6b3b1ba7508256aa01950066d74d945836f20f4afe990a76b3",
+    "git_sha256": "ca935ec7cc8b3f0e86aa079c76b0b3bf593b1e9830bab0fa7131ac51577c74f0"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link4_2.obj",
+    "only_crlf": true,
+    "working_sha256": "1e09136da7bb325651bba4e0951af946eb650233654583c3ec194a63ce30bf97",
+    "git_sha256": "c89caf26d379c35bb9e191ee2d91d09ab29ecc792b48d8bc10b39e5b38222175"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link4_3.obj",
+    "only_crlf": true,
+    "working_sha256": "ff7084c63cbf3240a382f33dc6f2284a11652e670bc22a07f11448eb56fd0dc3",
+    "git_sha256": "1495d17f45bdb230cf58b0beef9da4e8c9cfe76a3d2d38da89017efe5e093136"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link5_0.obj",
+    "only_crlf": true,
+    "working_sha256": "4fb4ea24fc8c83e2a0aaa30cf0336b5e66935892e8b10e48b9118fbc38c4f85c",
+    "git_sha256": "a3238b8f2af0f2eb66d9fe63dc5d41ac52d5d38507241b5ed10e3cb019ab3e71"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link5_1.obj",
+    "only_crlf": true,
+    "working_sha256": "961b25796b301896979a946c90a301ff3d871e4b005e1d061c3280b929e60f1d",
+    "git_sha256": "9d994bbf83ec241e301b5197a6846da13f2a4a0582edb2c0f76962c5549649d6"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link5_2.obj",
+    "only_crlf": true,
+    "working_sha256": "ed5e8dc11b90a72904d5d5aeedf2c230b2970b9556184799dc9d30b1ef5aa1af",
+    "git_sha256": "83b4ffe9f772cd7fe182e98640650eebc899aaf01842656574b0416c90dd40a4"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_0.obj",
+    "only_crlf": true,
+    "working_sha256": "902cf514cd7f601de754d60aef8bf03abfb6cc2de2ea87ae21f716a24b0bec93",
+    "git_sha256": "0504c70ebf1b284ee8faae7dcb896b8830bc672a6552015dd5dbd121fa031fb9"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_1.obj",
+    "only_crlf": true,
+    "working_sha256": "57f55c5a1ecd4290de49e629ff65f58247a5adeeefbff167954dbde4daea7045",
+    "git_sha256": "45f7ca77695198b6d86ec2417ad4e42e6275044f0f96266699ee8e1057757ac1"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_10.obj",
+    "only_crlf": true,
+    "working_sha256": "a002320736e73707e998d61e9fa8cd85a2f350b06e57a36d72b2f73b5a7026d9",
+    "git_sha256": "365f26c21d10332cab8d8704645cb46930c30b3085956f2d097498c793f24db4"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_11.obj",
+    "only_crlf": true,
+    "working_sha256": "9ce6c90aa16a0f6a7c93870e0e7768af2d8a16ef46758b4547e855f9f6d9cf3f",
+    "git_sha256": "8ae61e08b3ad064f25bbf03b22e59cc15d65883b5a7ce92711aff29df2493901"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_12.obj",
+    "only_crlf": true,
+    "working_sha256": "619f03b4c218c2d3c12fa0a69a632038da3ee0a94770c31d2067a86e15565ae2",
+    "git_sha256": "f28d1bfd62b0244ffd19fb35fe9edefdf583d3c9167db944e87185d919e1d021"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_13.obj",
+    "only_crlf": true,
+    "working_sha256": "23bb4d531b4f0564a49cd639b8421218d4bfdb6fca25f49747d6456cf8efbbb8",
+    "git_sha256": "0a55fa92dccb261d07200e6565fca4c850fd17f0c1ecf38821c0b97d51796c7d"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_14.obj",
+    "only_crlf": true,
+    "working_sha256": "ebdd009a84f1d8a29efa22703811bab0db78a911f978a52708cf948d7c9f8f5b",
+    "git_sha256": "750ae3ee4781e62e3a045c662195247b03f6642b05aa93104f08258e5f6eba26"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_15.obj",
+    "only_crlf": true,
+    "working_sha256": "b18583b353d7c565d6ce8b972ba76afda8b5849dc79c7489e3ab9870e9b2e452",
+    "git_sha256": "5999c1c2497a004a7c4bbe034cdf13744f839d85ae7a11b1bc386c48a3e642e6"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_16.obj",
+    "only_crlf": true,
+    "working_sha256": "94aa55fe21b990c76d294ad48683b96838822808392d82f4cad9ab11d9bc4c6d",
+    "git_sha256": "551d7a8b37c53e7a152d008b4e36992e5b5abe74a4be18b57ee6319c27def09f"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_2.obj",
+    "only_crlf": true,
+    "working_sha256": "ad4aa11e1b824ddd58b5ebb5bd60d5391fe2f6c566f5e7250e106df1b81e8447",
+    "git_sha256": "e54eee4d8232947ee8af65afd5a067e09dac2da6e7e585cb1dccb65496457da0"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_3.obj",
+    "only_crlf": true,
+    "working_sha256": "93d42375fd8b9e307de87fc93985c466d5e7d41fff2ffb3bef8e405fcd845888",
+    "git_sha256": "d4f6a25ef32fa1fa4734146981994ee760232cb077c80fea6487d78a077c7f27"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_4.obj",
+    "only_crlf": true,
+    "working_sha256": "7c5593a873b4faded71ffd218853f0ede03878be3af0cea993d8dc8f79736e4b",
+    "git_sha256": "be353480fe71d46f7a96f0a3cbb7e112caaf8d88368826f321a36a253c8749b2"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_5.obj",
+    "only_crlf": true,
+    "working_sha256": "fb8860a3ed1840f563b1ecf06de31daa1941a2cecaad348f893c7c183beb0096",
+    "git_sha256": "7c87664623c3e1a6cb330db273227a69626dc5e53b4caff1d4ee7911eb3340c6"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_6.obj",
+    "only_crlf": true,
+    "working_sha256": "7842cd39a2ab542e2af46d21b9c2b4a6e13060b716b6c6a3ce9079cce8acd0af",
+    "git_sha256": "8fbc031e0d07b795ebf99115c75223141caaba317cab569159f3d477a7821681"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_7.obj",
+    "only_crlf": true,
+    "working_sha256": "bb49ae82f8ea91ad854b5409379a5773f7c9b63baf3ceac229a569d7ccd1dba4",
+    "git_sha256": "7dc5ebb799fe281aab27d6e84e7a4efa0a8e42da2369ec83de3ea3f206f62d73"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_8.obj",
+    "only_crlf": true,
+    "working_sha256": "95e21cf52f75de64a112111cc72026a88a2ad28127b0e8249264c13212ad0c21",
+    "git_sha256": "e3f77381817a341030f9dcc4c4aa7c559f80411b453fd87eb0fefecca82151bf"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link6_9.obj",
+    "only_crlf": true,
+    "working_sha256": "a6e914bfbe305dc26995e54043b70a70ef41654903d23efb9eb395da5dbe5540",
+    "git_sha256": "25a56ea9b02a03b6cb5a81f31c54f54d0185e1a0b3937c37e4289d896e50215a"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_0.obj",
+    "only_crlf": true,
+    "working_sha256": "6c45c2d72bee4b9f76a7cb8ce495095f66837522362381ef7dd8332fd6504d37",
+    "git_sha256": "04586b0bde011715cfc22072ac72fe0717eb4d4817bcf665987ce6cd88eb2b93"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_1.obj",
+    "only_crlf": true,
+    "working_sha256": "09bac69cc6ebf22cf0b7b41e5d5e5c94be1ab986b59e59dc01fa0891cfa4c70a",
+    "git_sha256": "c3f72289f394c9d6749a4a327fb11f05b203c37c95032c92f28019b40ebe7e00"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_2.obj",
+    "only_crlf": true,
+    "working_sha256": "8a49b056e21f69b8e3ef512d4106d9c76e81357473c718bec29bc0e27595a3b8",
+    "git_sha256": "d2faecedb304d0989040d082410378dc949dbbda23bd18c05134f08aae984db5"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_3.obj",
+    "only_crlf": true,
+    "working_sha256": "ef63541f12b2b440f0ad6b11dc0fbec1447a0da030fad827cb18e8ca8cd2043e",
+    "git_sha256": "b62d87c4d4bdb7b281ed341d347c39dad0e50bf36aed8ac11d050073701d5f70"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_4.obj",
+    "only_crlf": true,
+    "working_sha256": "c7b273306967759cf197247486197ab12ded1b92d13112b185fb25e4202503c5",
+    "git_sha256": "cb78ccb61fd4ad6c7bff4c4d2e6cb41e1964a5a3e1a28e67c0c6202371cfc018"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_5.obj",
+    "only_crlf": true,
+    "working_sha256": "83733d3b94caf2a61f752942ca9dc7cf6cf403bb4f4ab953c24157c240dae92c",
+    "git_sha256": "099071d3090b51471ba52f4f90814fd3089f4975d196e4d488117073d0bfe491"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_6.obj",
+    "only_crlf": true,
+    "working_sha256": "6c4f4d7528eb4b5dbd4be1e0c7dbd5b83e44ef14c9991d4e67bd6d8e1e23cf04",
+    "git_sha256": "99469e2d95ab74ce0292f2f16954c87a8a7dc16652e62e970fe37c94330a81bb"
+  },
+  {
+    "file": "simbench/assets/panda/menagerie/link7_7.obj",
+    "only_crlf": true,
+    "working_sha256": "69f1a8efeaf8c4f8ef7c3265981ac5b1d03faa8d9e07c5b22d9628afae16bf41",
+    "git_sha256": "426c3db8a19373f3dc73d4bec672e948121b2914c10e2e7b9c7ea80643a19e54"
+  },
+  {
+    "file": "simbench/assets/panda/panda.xml",
+    "only_crlf": true,
+    "working_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+    "git_sha256": "d9d6b9cd688490a3528f6903dc7ced21c407d1c4c4b076812ef6fdc442104366"
+  },
+  {
+    "file": "simbench/assets/printed_kit_v0_1/provenance/build_models.py",
+    "only_crlf": true,
+    "working_sha256": "4d390c34f7f15f90a731ba9f5197e2aa6a922160e32b1cb865bad90b1e29f5d8",
+    "git_sha256": "f6a56ec0fb4346b43c28086e3e150cb740b5961e8ddaf7b3e62fb16d341c357d"
+  },
+  {
+    "file": "simbench/configs/planner_v11.json",
+    "only_crlf": true,
+    "working_sha256": "b1282848af1a1f0ee2cda7bfc890a07fbf71e29df16532564609cee43b56f36a",
+    "git_sha256": "3183c24fe01113d9e0a9878c1a4832332c8baa416dd49c0b0d9821ed4cffb84f"
+  },
+  {
+    "file": "simbench/configs/value_v12_data_split.json",
+    "only_crlf": true,
+    "working_sha256": "9913db0a72dcf4e10046dd709552ee037f2151d8e1596f090a4a03d0e7f93a31",
+    "git_sha256": "946b0d661295048e91447b06a07a194a087f16e4d5a2a8fa96f35cd40006bde2"
+  },
+  {
+    "file": "simbench/configs/value_v15_full_system.json",
+    "only_crlf": true,
+    "working_sha256": "29740408754e6fdf0476fde3ebee7a715433930970690097869a8e5792d2f6af",
+    "git_sha256": "6a46b088f1c90937a46ec22626615cc92b3e0968fcee86d9aafc496a61415dca"
+  },
+  {
+    "file": "simbench/core/sim_context.py",
+    "only_crlf": true,
+    "working_sha256": "c434a588482745c9108e7ed271484edcb7290d49f6a5ab26d8643e116559fdf5",
+    "git_sha256": "13462d5744d3025a442edb6855041e8a1395a3b3f7da3e938929f310037378ac"
+  },
+  {
+    "file": "simbench/tests/test_atomic_interface.py",
+    "only_crlf": true,
+    "working_sha256": "dd86527194627cf2e1f15ec6ead4cca33a13b0abbfe4a23950cbdad6b20bcd77",
+    "git_sha256": "05f74a40017ae89c8e2c07380cf45bc03228615b726338cfce15749efb60b6b4"
+  },
+  {
+    "file": "simbench/tests/test_contract_candidates.py",
+    "only_crlf": true,
+    "working_sha256": "2e5d5720b30ba582baec5d5c555e25803d40469cd60bc99608cd3e487386b213",
+    "git_sha256": "c00cc54594425abdb8f0ef9e9518e4fad0cf24d9d57c2a7fcc0d9f1bee0a6aac"
+  },
+  {
+    "file": "simbench/tests/test_materialized_graph.py",
+    "only_crlf": true,
+    "working_sha256": "28aa4fb4060a306ebda2f0676ef9803ffa77a05b1ed264f478c7029b302482ce",
+    "git_sha256": "4f4a644b1e41ae8e439c1fb48a6f40891529fc5b01c25d2dfb87494b9e275cfa"
+  },
+  {
+    "file": "simbench/tests/test_plan_value.py",
+    "only_crlf": true,
+    "working_sha256": "d5bdfb2ab2bb40b48e48dfdc0227d3f939169390d06dc9b568f922f9f1543092",
+    "git_sha256": "ba7c722a828d639692d8094d0df52f7eb891f9ec926cbd1a4c35812562569968"
+  },
+  {
+    "file": "simbench/tests/test_program_input_v5.py",
+    "only_crlf": true,
+    "working_sha256": "a3070ebea82973a7af31d4b58a4e0dcf583f582aebec874322832457bae53885",
+    "git_sha256": "c0a74b31ba0d8a35cadeb2a546465b00baf0b99642820e37b7ae23049888eab2"
+  },
+  {
+    "file": "simbench/tests/test_replay.py",
+    "only_crlf": true,
+    "working_sha256": "ab6c5829f1a5db8fc6b83bc0b6888228bce798caa358d5b78c52dd79c6d8cfcb",
+    "git_sha256": "c172ef7835030d45c712f299cfced5212c6999a405f46d27698cd7319059822a"
+  },
+  {
+    "file": "simbench/tests/test_schema_learning.py",
+    "only_crlf": true,
+    "working_sha256": "3b7bb8b78fb9ee6ec40bc4182c8787a2b9cf3bec8c1bbb4d5cd61fedada1df4e",
+    "git_sha256": "19db96da3b41b422e652fe3866c92e82504cf682b4158afbe21b13ada6ed24c4"
+  },
+  {
+    "file": "simbench/tests/test_skill_graph_value.py",
+    "only_crlf": true,
+    "working_sha256": "1c6306c57b08c057cfa3486906c4ad20cea2a37e93d023fb94fe955b8e9dc03f",
+    "git_sha256": "3d2e0b1b35ff2fd01decd732e9713c3abb58652f6e421d20243704ae2880264b"
+  },
+  {
+    "file": "simbench/tests/test_stage_assembly.py",
+    "only_crlf": true,
+    "working_sha256": "cdf2c7ed01eeae7dca8f8e6784ec47661e35a7ab9d3043745637cf32b63eb0b3",
+    "git_sha256": "752b1589e6ea6e17644ad960f370dbd5855259a774bfa93451e7004ea3ef36b1"
+  },
+  {
+    "file": "simbench/tests/test_stage_v5.py",
+    "only_crlf": true,
+    "working_sha256": "c92f44e3c83e037a1b20a33aeed059a54256ac7ed702771dd2c45234a9885247",
+    "git_sha256": "f97f75d7b30fb12ff813dc949c6e2ebacdefa4766a782983965f7d4bf52bd662"
+  },
+  {
+    "file": "simbench/tests/test_standalone_demos.py",
+    "only_crlf": true,
+    "working_sha256": "4b21497f5c941898959a2783165badab31b6a4f2caa453b41dd8517206c2be03",
+    "git_sha256": "7587dee4fca0fb891ccc544ba4a970d018328259d60235c997894d95fe8b79c5"
+  },
+  {
+    "file": "simbench/tests/test_tabletop.py",
+    "only_crlf": true,
+    "working_sha256": "6e996de18637698344a83d769cdfa5cea4a734d8b1f528534a24dabafe843366",
+    "git_sha256": "16165d3b4a810efeb99242b96e0b00dca00756281baf1de51e1cf4f4867077e6"
+  },
+  {
+    "file": "simbench/tests/test_value_v2.py",
+    "only_crlf": true,
+    "working_sha256": "49671c99f421f943201d4e25565ee7709c254baf112404627206b0deae3ea470",
+    "git_sha256": "44e130087fa00165b763487b54130efb14896f74545e826a1b56efaeafad157f"
+  },
+  {
+    "file": "simbench/tests/test_value_v4_metrics.py",
+    "only_crlf": true,
+    "working_sha256": "75db23366b020285ddd986532b24a868e0b7b9444b1b1ab4e99174f7b3008539",
+    "git_sha256": "1ab255903eb4a3d1b1b796724c08a2d80a301351acc47c9be1d40f62ea63cd08"
+  },
+  {
+    "file": "simbench/tests/test_value_v5_checkpoint_relocation.py",
+    "only_crlf": true,
+    "working_sha256": "3c10184b390730337232a04cd67563b9f9189e41d83a09fc947121f6c6082dfc",
+    "git_sha256": "0dcb4e2516d0a2abc2ed62440361888824b3c8cbd6fea0e8cb5e81afbfcd4f8e"
+  },
+  {
+    "file": "simbench/tests/test_value_v5_data.py",
+    "only_crlf": true,
+    "working_sha256": "d86e62aedee35229aa83cc87dfbea1624d981aef1ca057b2b1296212031328b2",
+    "git_sha256": "ad3f31355e22ecfabd47b364d6d5949372cce41843d99956c46ac7c6c4fa0f15"
+  },
+  {
+    "file": "simbench/tests/test_value_v5_export.py",
+    "only_crlf": true,
+    "working_sha256": "484da9c5c903061f4457a7d845e7e34e1fedc471420f14ff4d76d17416560b97",
+    "git_sha256": "8df278fd045968b61ae858b7bf0c36f73d85e84c04554ebc89f7ecedd98202b4"
+  },
+  {
+    "file": "simbench/tests/test_value_v5_metrics.py",
+    "only_crlf": true,
+    "working_sha256": "dd4451b74a2d91fb7b712e9c3fd0b5db71721d27a02ba68fe91a80a181189eff",
+    "git_sha256": "c0bdf27475148325d0c100c57d6bab6e64c7f3eb42d00ecdaa6a84df0bb99d2e"
+  },
+  {
+    "file": "simbench/tests/test_value_v6.py",
+    "only_crlf": true,
+    "working_sha256": "7fe67c46d5a3f823848d3f3fb0a06758b5574ed12a5cbcd3a295d7e350def9a3",
+    "git_sha256": "b3b82af70e2041c7bd38af24d6c4e69fa18bb9229d25f82c3115a067509dc7f1"
+  },
+  {
+    "file": "simbench/tests/test_wiping.py",
+    "only_crlf": true,
+    "working_sha256": "9bb5a13396d35476b24a21b30bb2331e54b489386e06bed8d6dd3e8706437ee9",
+    "git_sha256": "942b37d2fe492c78ce7aee8b008db275b80b95c64a24144223941827e21c8723"
+  },
+  {
+    "file": "simbench/value/__init__.py",
+    "only_crlf": true,
+    "working_sha256": "1ecddb58b59ba3df658e3da89d36f3abc6b0dafb33686d277af8eb10784bcdb0",
+    "git_sha256": "8b6202643254ac2fb2c07dba3f801e540a49d8d87925161ed87497f47ccd03f7"
+  },
+  {
+    "file": "simbench/value/cad_rgbd_v12.py",
+    "only_crlf": true,
+    "working_sha256": "ffd45a3442f89836f9fe8a40b98633629d01c54eb1c5c6518edac5fa908cf6cc",
+    "git_sha256": "9c4f659f7196ca6990c96ccd492176afcb7602a8fa52dae79229e37070065249"
+  },
+  {
+    "file": "simbench/value/cleaning.py",
+    "only_crlf": true,
+    "working_sha256": "c2502344b64b7b9d669a789034ee3b74fb46f8b7390ee6714acfa5f001f780af",
+    "git_sha256": "15fc7fa87fc219aa748d665a147a167651c0f33f79b60b4a14c3854dfc65f662"
+  },
+  {
+    "file": "simbench/value/collect.py",
+    "only_crlf": true,
+    "working_sha256": "5c89a8947b04827d873142ad8149d5b2d32fe915e8aecd27e16b18a30c1f990c",
+    "git_sha256": "c92334cd129aee29a722a660122701de80776b80a1d2f149116d4fc62ae68a21"
+  },
+  {
+    "file": "simbench/value/collect_v5.py",
+    "only_crlf": true,
+    "working_sha256": "cd2472bda1c975bbe66ed69b2fc506052e9c83c8e5bbc0479774b9a50cb33ef9",
+    "git_sha256": "88cb913beae2e5fb4ea1cf7855a984904a2e126b938cd4bd32770b0d672688aa"
+  },
+  {
+    "file": "simbench/value/collect_v6.py",
+    "only_crlf": true,
+    "working_sha256": "cb571c866d9022c78d6e905994e12d500c1d74da5e7d7254e4ab3197e9120c69",
+    "git_sha256": "b3b3114ed565084ac186efef8845b23dc736f89f2dc7c280c724c5f0810aaaaa"
+  },
+  {
+    "file": "simbench/value/collect_v7.py",
+    "only_crlf": true,
+    "working_sha256": "b7a65912fc7cbb1f2f864346501a9b87b71f9e01cb7c6b5171c1c2f6be286635",
+    "git_sha256": "45e4333c18ab0603e86c96ebf2a408eda5fb6493798785fbf2b7e1e575731799"
+  },
+  {
+    "file": "simbench/value/dataset.py",
+    "only_crlf": true,
+    "working_sha256": "523d675b20b19d67529ade5b4f9e409f06b9c4cb5f2e9ee9b17a6a8e1981ed52",
+    "git_sha256": "5cf40871655a4f22527cadb5183dbe8b343b67a9342bc5e9e1acef9ad1bfce33"
+  },
+  {
+    "file": "simbench/value/decision.py",
+    "only_crlf": true,
+    "working_sha256": "f86c0203450b3ab540330942e8c526f1e110fbcb2ecd95f45ed109ec792c872b",
+    "git_sha256": "7796a139da845637f011ea64eaea29ab59e3babf27b66a56c9dad83fd61a1836"
+  },
+  {
+    "file": "simbench/value/encode.py",
+    "only_crlf": true,
+    "working_sha256": "fd6ec59a57a96c74676b647f88f397f86d51c4138e58275704a1179f0441daa3",
+    "git_sha256": "dcade9ce21c8a36a1161e33fbc91dad6ff277de9a92e02a71b8e84ea721fd5b4"
+  },
+  {
+    "file": "simbench/value/evaluate.py",
+    "only_crlf": true,
+    "working_sha256": "b83226fbaeac5eb6134bd1188c04146332a10bcf1d2cc1f4334e77f1a2db2d1b",
+    "git_sha256": "c114b98b0f29fe93c43e7888764c8a82291ffcc71ce12fc02dcc4142a515fc5c"
+  },
+  {
+    "file": "simbench/value/full_task_v7.py",
+    "only_crlf": true,
+    "working_sha256": "b2aaa11f085dea58faa99a8b5eb1ea38d6eb34402346c7ccaa70c2ce35dfbc88",
+    "git_sha256": "9cd3173941b9fdbe1fe2be22cd804da93afc35a64bb61d65d587991c56c23af6"
+  },
+  {
+    "file": "simbench/value/generic_graph_value_v15.py",
+    "only_crlf": true,
+    "working_sha256": "ef1ab197eb278934522a4a83a73d6e749361fbf56f340429d6d89993a7c0f1c8",
+    "git_sha256": "37a308af6e28da36d513cdb8dd033a0100ac8dab67d6f38161116069be391a11"
+  },
+  {
+    "file": "simbench/value/goal_check.py",
+    "only_crlf": true,
+    "working_sha256": "1e628b16fef20502e1bee9435bfe7b86a4131e5d0c7cc3ac0bf2e494b917b07d",
+    "git_sha256": "317247e046f9efc91095e0ffd3391460640f0defc21b49c3f6b4bfb67c415602"
+  },
+  {
+    "file": "simbench/value/graph_encode.py",
+    "only_crlf": true,
+    "working_sha256": "cdaca14ba3d11f98410a6dd9edddf1179d9b900b36ef83212b591c56d6c0743c",
+    "git_sha256": "399cf11467ca3c207d8753e8e4de2f150b2cbf4d2f55b1b742c622f2bd65a0cc"
+  },
+  {
+    "file": "simbench/value/graph_learning.py",
+    "only_crlf": true,
+    "working_sha256": "22e4392ed5c65315a22822aab0900c31b7457db5662133780eac25a0c74a3132",
+    "git_sha256": "de7a434a45e43882ad32f43ff3e054a5d65a8e63a00f35bd8eb9c5681e4f639a"
+  },
+  {
+    "file": "simbench/value/graph_network.py",
+    "only_crlf": true,
+    "working_sha256": "22851d14178ed0db15e8d487a3436457bb5c77fa28613df2e85f23501c489c39",
+    "git_sha256": "80e665de8a02322c836fe2dba14034447e7c34074d7c3dd7af784f110f719edb"
+  },
+  {
+    "file": "simbench/value/graph_rank.py",
+    "only_crlf": true,
+    "working_sha256": "d998d49bdf28791bff2f5181646129cf3717c21073407253454b7dd06812cdba",
+    "git_sha256": "0d7b677b58a0e078da5be58c6823c133daab481fd3f1c42be5baee8d3e03f59f"
+  },
+  {
+    "file": "simbench/value/graph_value_v12.py",
+    "only_crlf": true,
+    "working_sha256": "1c819039b2166915cc1715e820a7bdc349bbcfa31c48e6d82af6aec722ea7ed2",
+    "git_sha256": "a380e9e622134b4f3a990c9922d750c0ab9f5cbb4d81703c0f0d1db3505f35af"
+  },
+  {
+    "file": "simbench/value/losses.py",
+    "only_crlf": true,
+    "working_sha256": "37397a2d143656a140c57f2d9b000945c954be8f282bc4f8718dc002489afbaa",
+    "git_sha256": "97533df01494561cb321ab6d1184d11cd72ddbee8db224e2790afb46c2e07f6e"
+  },
+  {
+    "file": "simbench/value/network.py",
+    "only_crlf": true,
+    "working_sha256": "d1f7eff783675a77a6091e82515f6551ac15776918f509e685ded38587c185fd",
+    "git_sha256": "a57a5c38511469f44c156f8875c85fd00095b221aa3188de1f2004c75857cf34"
+  },
+  {
+    "file": "simbench/value/observation.py",
+    "only_crlf": true,
+    "working_sha256": "4e935c4da9704e4e7183cc784ee7a12c5448ed173e914957574a4dcc0a266b65",
+    "git_sha256": "5cacc1489d9415d34edb9f167498d5d6517f2f0b7f86b0312dde48421a96dff3"
+  },
+  {
+    "file": "simbench/value/physical.py",
+    "only_crlf": true,
+    "working_sha256": "2025b4d7ad24a3585dcc718a66881b3cf5ea281bb835b73a517d47237ddd7e71",
+    "git_sha256": "f4c276c09680a8cc81dbd9e4499a9ef7eb5e8de8c2cc41f42849a0a6d27e0907"
+  },
+  {
+    "file": "simbench/value/physical_v6.py",
+    "only_crlf": true,
+    "working_sha256": "e64ad20eb466f2f2d8c71aacdbd9e9a98ba76248886fc0a21e6c95fc4ab6ca5d",
+    "git_sha256": "e4e3798d3c89287a51acd674e80f388113f25ddb03f97497beda54a58777bd7e"
+  },
+  {
+    "file": "simbench/value/pin_contact_v12.py",
+    "only_crlf": true,
+    "working_sha256": "03c9d99fca40d9fdc611273b33c2ffa3d44201ffb3a5e5dd536653f33d5b55b6",
+    "git_sha256": "6c0b7f76e5c2500061b4bf464ba6b40f4efbe73f0606f6a0d53e14ea85a34478"
+  },
+  {
+    "file": "simbench/value/pin_geometry.py",
+    "only_crlf": true,
+    "working_sha256": "733a59f3c07763ab7051d5e7dd4ef9cd6e2deb7b51ab399935b50836c901e36f",
+    "git_sha256": "602cd4d5fa734c8a8f4fe3506927bf20dbfee9f7378fd0b96da0c99480a1cbcd"
+  },
+  {
+    "file": "simbench/value/planner_v11.py",
+    "only_crlf": true,
+    "working_sha256": "10a289e11d726c51ffdbe4110be959b608d8a811ef693b6a88e1e042560e4c9f",
+    "git_sha256": "823e21880cd60fa3e190fe227c886165bcedb61eeb3784dc7ea7cfa577ba9afa"
+  },
+  {
+    "file": "simbench/value/planner_v12.py",
+    "only_crlf": true,
+    "working_sha256": "17608279ef45d4c2e38ecd69ec3b771168339a2dc9774b757f99874a7ddd392e",
+    "git_sha256": "d75696e7631e13529a89195a8194fb28d1e9d796ab90668b2280f01af3b56d5e"
+  },
+  {
+    "file": "simbench/value/port_pool.py",
+    "only_crlf": true,
+    "working_sha256": "d5f2d9c87c8cae428c05624ac77e90ff464ea992702f1b045464ba32f8e2b79d",
+    "git_sha256": "1df766ca54a8f0cfcd0ab18da5a7be8703426206a0a4bfb31f83ba5ba02ae558"
+  },
+  {
+    "file": "simbench/value/program_audit.py",
+    "only_crlf": true,
+    "working_sha256": "98bed8c95bf3b9d49b3a1dea328d736064189c0c2a0f7f19e4f48c1884795880",
+    "git_sha256": "033eaddc5f6752758123a9d3a792829d9440c49363dbac10fb41d5d82b3c61a0"
+  },
+  {
+    "file": "simbench/value/program_input_v5.py",
+    "only_crlf": true,
+    "working_sha256": "eaae489837a26e19453c246512100158706ca5dca6f5cf35fc92f3b0c9459043",
+    "git_sha256": "e56607c20e41b4bb028d6ecb6024c0219556354907031aabd017d47c37287cdc"
+  },
+  {
+    "file": "simbench/value/provenance_v12.py",
+    "only_crlf": true,
+    "working_sha256": "25d989513d45bd9b48ef2b70d4bbff925182e8f6f4f77d132f5c1a0798041d91",
+    "git_sha256": "e2ed7795230c0c2a9ceb5d78b28752061a4db70a54dd46292e91b3790ccca457"
+  },
+  {
+    "file": "simbench/value/rank.py",
+    "only_crlf": true,
+    "working_sha256": "b97adebaaa74dd362af12619991a8e435c661c060f5be2716f4f5a16aecd7fa5",
+    "git_sha256": "08ebd4c63b871dd667df51db803fa51aa7aefd364ccdf3bf157c2a688d5ce7c1"
+  },
+  {
+    "file": "simbench/value/realsense_v12.py",
+    "only_crlf": true,
+    "working_sha256": "ecf4a52d301a87d712c5a7b3c715e53de12e872b998eaef92d5f85c4a95fe514",
+    "git_sha256": "21dbb0ecc168ed528b0b145ed85c7761b55f803bf4788ad694af72563a508df0"
+  },
+  {
+    "file": "simbench/value/research_checks.py",
+    "only_crlf": true,
+    "working_sha256": "2880c136ff0002334841d6b4986877565c81cca2e46c7a72293f45bd9940da90",
+    "git_sha256": "d48e84d729e6e9e6935322c43a9abd2cb533312345f21278a76ad2fcf5ef327c"
+  },
+  {
+    "file": "simbench/value/research_collect.py",
+    "only_crlf": true,
+    "working_sha256": "8bc00860c28052c6e7ebabfcf1da0a094eebaac3a11455380f91d8a9d76ccaea",
+    "git_sha256": "3a72551f391987005e73dcfd690c45cc5dc3f2f923f0a419ce4eb0b666016ee5"
+  },
+  {
+    "file": "simbench/value/research_decision.py",
+    "only_crlf": true,
+    "working_sha256": "b76db6b168f0b0db950b2af77832456464abeae8a8682a9340dc50d1f8ef41b1",
+    "git_sha256": "543614b41dfe41cdfa8d07393880ef27378cbb7f036894f5a21a294d67491fd5"
+  },
+  {
+    "file": "simbench/value/research_evaluate.py",
+    "only_crlf": true,
+    "working_sha256": "db1b149b65637b88680558a09150e950e6425718ac5f95a37bd5892987a5491a",
+    "git_sha256": "8596e7c64c752c53079140b2a7b9e88d10b668907089bf08a526d4380c62bfe8"
+  },
+  {
+    "file": "simbench/value/research_learning.py",
+    "only_crlf": true,
+    "working_sha256": "60cfcea02a3d1f577f6af42c39707e42b2a0f445da0125a513978d1b8618f113",
+    "git_sha256": "49fb72a05ef61ea71bb6b85b0270c68deebba4cd7069f23e703c071ce1cb3e98"
+  },
+  {
+    "file": "simbench/value/research_rank.py",
+    "only_crlf": true,
+    "working_sha256": "cd81893796454597f4b857ac5e98b998641ce7e9191b9ecc22dd358d49455216",
+    "git_sha256": "c8378b9fe3030b323bb46e1215a5c27b6f0bce95d3e04ce8e530640ca2560b16"
+  },
+  {
+    "file": "simbench/value/research_scenarios.py",
+    "only_crlf": true,
+    "working_sha256": "223d58663850867559ba41aae27e610368a43177e43f895de0cabc656c2aa6c8",
+    "git_sha256": "7c695da5505810ee1f302a8efdb121dcef6f463edea3b97d46c4aef35af073a4"
+  },
+  {
+    "file": "simbench/value/rgbd_perception.py",
+    "only_crlf": true,
+    "working_sha256": "ebf4c78c3e484ec301759d993be73e1e3ee1e4b2d2eb31bf9c2930f6a25f993e",
+    "git_sha256": "7aaed94279877848b703023de888ea442833c54a5d35fc552a2f9172e14a5e28"
+  },
+  {
+    "file": "simbench/value/scenarios.py",
+    "only_crlf": true,
+    "working_sha256": "f25b43e45855f6f64daa31a74292ae7755cbbda4e4e7cbc4cdb886f9a1eebf80",
+    "git_sha256": "f6dc1dfb1969fcb557c12057e17bcf591d21789f90b1e0e2297ecd3a2b31cdd0"
+  },
+  {
+    "file": "simbench/value/schema_collect.py",
+    "only_crlf": true,
+    "working_sha256": "9e252a302eebc846019cb1005c9b4fc5f852559c5f596b17d7cf3622550c6fe4",
+    "git_sha256": "a815b6a2f6792efd2c282d3f4a295adc251aef29d1613914a7327abd0e804311"
+  },
+  {
+    "file": "simbench/value/schema_learning.py",
+    "only_crlf": true,
+    "working_sha256": "cce67c848f14e0eee30a29789b9d1b9805d4910a10d2a3241c92ac0888c11443",
+    "git_sha256": "8f09fc4c14cdd722dc36127ecf91c301e3f943d4f2e69502b621636423b4a744"
+  },
+  {
+    "file": "simbench/value/schema_rank.py",
+    "only_crlf": true,
+    "working_sha256": "7eca704b4022931e2e12f48cbcb33c6545207e3a5389b9efea23b1ebc1d64c44",
+    "git_sha256": "1efa954994f024e8f89e7ff8be2cc40f5f669eb0b50ec372e896a1e989b1f11d"
+  },
+  {
+    "file": "simbench/value/stage_assembly.py",
+    "only_crlf": true,
+    "working_sha256": "8318cf0968a304cf64597026aa65dd1bd331afaa8c9a90bc59a4048804ab4fc5",
+    "git_sha256": "1b6dff9138c6cd68922d2af43627b65fd80db9ae42bbb5241155da4d76467a79"
+  },
+  {
+    "file": "simbench/value/stage_v12.py",
+    "only_crlf": true,
+    "working_sha256": "587e54d862084e2b3db6bfe88fe073a5540f110505ed81926612325667d9717e",
+    "git_sha256": "b4d791baddcbfe288a828befca9b79b020d9f3b3df28805ad3ff3b36d3325ae0"
+  },
+  {
+    "file": "simbench/value/stage_v5.py",
+    "only_crlf": true,
+    "working_sha256": "7d793550e6db52d0cbbba827b23ec76ab33b10dccd31a130c12ff2ffb6f45d6e",
+    "git_sha256": "132c291b14b686f5df3f4063a8c940b4f7f4cd3d64e6ff53e395ef36e2d84627"
+  },
+  {
+    "file": "simbench/value/stage_v6.py",
+    "only_crlf": true,
+    "working_sha256": "fe72c890b7c74f14f21c0a72f2e7ffd79683d1adb2af84550b92edc6090f5a34",
+    "git_sha256": "2b14de9659006472287858321dcfe985c5cace5645693fed14f258aa2c06121b"
+  },
+  {
+    "file": "simbench/value/stage_v7.py",
+    "only_crlf": true,
+    "working_sha256": "286c834ae09cff742a0309d4f6f9917254ba13b538f51938c8423f4cf3d9b9a6",
+    "git_sha256": "85c232e7f88be7c1ba94d8782f6ed27177ab65a96963d8cfa72cb034d4e44984"
+  },
+  {
+    "file": "simbench/value/stage_v9.py",
+    "only_crlf": true,
+    "working_sha256": "9089031c46e9c2ff2133755c583be0bff8800f952ca4e0ac1f32a9eac2f5b129",
+    "git_sha256": "2f08b8485f1b8f9a375e5376c230f03b5723288de95af853096f83759cec8839"
+  },
+  {
+    "file": "simbench/value/supply_layout_v13.py",
+    "only_crlf": true,
+    "working_sha256": "f8c55dfe6f4221648704d7573c268338c8c69c05db196d56e516bf44509f26c9",
+    "git_sha256": "6af65e6f0bc28bed9267d65a1adf659b194b8b2ac4fe7a14c0ee5b3bc1c155eb"
+  },
+  {
+    "file": "simbench/value/system_v11.py",
+    "only_crlf": true,
+    "working_sha256": "2813df94a877fd3fad0d0799bea4ec483f9f946ea68dd7ebe18e5cbb6314901d",
+    "git_sha256": "5fd3c095527aead98ca337ab4a53d07c53dc25e74774ceeaf58cb25bcee80a21"
+  },
+  {
+    "file": "simbench/value/system_v12.py",
+    "only_crlf": true,
+    "working_sha256": "f40976251fab03191866a1d7da0a8e87f8dd6f23267f3f1ed79af3ac19e3ecba",
+    "git_sha256": "01689e47b3ecc9f2d05f6bb7bf806c706a289553ce7a6acf376a896dd67995b0"
+  },
+  {
+    "file": "simbench/value/system_v5.py",
+    "only_crlf": true,
+    "working_sha256": "d59109a59b4d88cdff545b47ca06cb58b42d60756546291a44010693d0cf6223",
+    "git_sha256": "a2486c754bed510139dfe28da6e9d2ae06a2e10f9f41746f98bc5531df959e75"
+  },
+  {
+    "file": "simbench/value/train.py",
+    "only_crlf": true,
+    "working_sha256": "e5013741cb9b6c87cb1cf9938f9de93a52afcb6ffd2e362365bdcec222ff6c0e",
+    "git_sha256": "6d92e9badd14b00c2e91ad679775de85ddca13511b4d127440ac21c75e0ed43b"
+  },
+  {
+    "file": "simbench/value/v10_candidates.py",
+    "only_crlf": true,
+    "working_sha256": "419d73d3222ee51614ea39db5370c2e09a21220113742a52dbc9ba49117b7cde",
+    "git_sha256": "6b4b7a9e86b9d38a20c928e34aa1daafbaf16890e9a8ec4547c3f924526b1d84"
+  },
+  {
+    "file": "simbench/value/v9_candidates.py",
+    "only_crlf": true,
+    "working_sha256": "934b0beb24741bc22adf20af6397eb2e84623739557a506ab9685c3294cbf1ce",
+    "git_sha256": "73f5a101a8b5224d459d3b7c99b7278d3a50d49c5326132e467a8668385a13dd"
+  },
+  {
+    "file": "simbench/value/validation.py",
+    "only_crlf": true,
+    "working_sha256": "31a6fc5beef664053c145ed15dc486990463300bf4b6ee854d981f41d69618e4",
+    "git_sha256": "e95d4b38af61ae6897444a0645919deed1886935de4be2abf4d1d96dce93f38a"
+  },
+  {
+    "file": "simbench/value/value_v12.py",
+    "only_crlf": true,
+    "working_sha256": "a84bef7275bddb2825e280f8f2e629800136a0ce18465617764a0c5b0d23c4ea",
+    "git_sha256": "b6e19480306ae293b4ae7af3a3524b903f7fd3dbb0391a9621e3565f35aac541"
+  },
+  {
+    "file": "simbench/value/value_v5.py",
+    "only_crlf": true,
+    "working_sha256": "60a1ce58a8638b6eb3ff6ac5cf8ee24fb6b333743b54fa77361c0000503896b3",
+    "git_sha256": "ed5d658c68a02bd891468640bd04579c674d3bbd5cd4b41dcef649469e559aa7"
+  },
+  {
+    "file": "simbench/value/value_v6.py",
+    "only_crlf": true,
+    "working_sha256": "e0a0067e42dbb5a162fcac5e5b073b59d0c590bff66c7d83a757d50b0840a5a3",
+    "git_sha256": "361ac923fef8917efb89447ef765a8cfa709ff34f3debdaa3bdd96545cbd2c14"
+  },
+  {
+    "file": "simbench/value/video_v7.py",
+    "only_crlf": true,
+    "working_sha256": "7498a8b961b66fc95539466e73f57e07f5505ef053d80cf23066bbc670d1f1ad",
+    "git_sha256": "17bfc7b6c968c760730941b058171fb731fc0711f820d0d11638a7a04b831a04"
+  },
+  {
+    "file": "simbench/value/vision.py",
+    "only_crlf": true,
+    "working_sha256": "10be3b41d98e21b39c81383dc6186826fc389fdce4bda58f4ad0e374d8da7519",
+    "git_sha256": "1d5f07208473e467c1df9db8fa876f58e238a4acc8f5404cbb898f5255fa2b8b"
+  },
+  {
+    "file": "simbench/value/wrist_rgbd_v12.py",
+    "only_crlf": true,
+    "working_sha256": "58b1210cd737600daed40c4aaaae011468ef72b88626fde67fefad47052af017",
+    "git_sha256": "dae9852ebda69da794eb7db91d274081d8dabf0c2f38aa81517fa00b2cbdf825"
+  }
+]

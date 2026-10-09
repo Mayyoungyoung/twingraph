@@ -1,0 +1,5225 @@
+{
+  "name": "grounded_018",
+  "proposal": {
+    "name": "grounded_018",
+    "source": "codex_symbolic_plan_with_observed_geometry_catalog_v13",
+    "rationale": "observed-scene geometry alternatives and uncertainty-conditioned contact parameters",
+    "order": [
+      "carriage",
+      "end_stop",
+      "pin_left",
+      "pin_right",
+      "handle"
+    ],
+    "choices": {
+      "carriage": {
+        "yaw": 1.5707963267948966,
+        "height": 0.007,
+        "clearance": 0.9872894594106564,
+        "force": 9.0,
+        "speed": 0.019752186588921285,
+        "force_limit": 18.0,
+        "press_force": 1.503487569953111,
+        "placement_yaw": 1.5707963267948966,
+        "width": 0.044,
+        "center_offset": [
+          0.0,
+          -0.012,
+          0.0
+        ],
+        "grasp_yaw_frame": "object",
+        "transport_mode": "held_insert"
+      },
+      "end_stop": {
+        "yaw": 0.0,
+        "height": 0.007,
+        "clearance": 0.9777894594106563,
+        "force": 6.153061224489795,
+        "speed": 0.00632069970845481,
+        "press_force": 1.1363567786629758,
+        "placement_yaw": 0.0,
+        "width": 0.026,
+        "center_offset": [
+          0.008,
+          0.0,
+          0.0
+        ],
+        "grasp_yaw_frame": "object",
+        "approach_strategy": "joint_checked_v10"
+      },
+      "pin_left": {
+        "yaw": 0.0,
+        "height": 0.007,
+        "clearance": 0.9837894594106563,
+        "force": 9.0,
+        "speed": 0.00632069970845481,
+        "force_limit": 17.849330715690854,
+        "press_force": 2.7039717239582775,
+        "placement_yaw": 1.5707963267948966,
+        "pin_command_depth_m": 0.043000000000000003,
+        "pin_press_extra_m": 0.0,
+        "lift_first_m": 0.08
+      },
+      "pin_right": {
+        "yaw": 1.5707963267948966,
+        "height": 0.007,
+        "clearance": 0.9837894594106563,
+        "force": 9.0,
+        "speed": 0.00632069970845481,
+        "force_limit": 17.849330715690854,
+        "press_force": 1.0306774964725598,
+        "placement_yaw": 1.5707963267948966,
+        "pin_command_depth_m": 0.043000000000000003,
+        "pin_press_extra_m": 0.0,
+        "approach_strategy": "joint_checked_v10",
+        "lift_first_m": 0.08
+      },
+      "handle": {
+        "yaw": 1.5707963267948966,
+        "height": 0.007,
+        "clearance": 0.9612894594106564,
+        "force": 2.666089965397924,
+        "speed": 0.00632069970845481,
+        "press_force": 3.543698591681999,
+        "placement_yaw": 1.5707963267948966,
+        "width": 0.042,
+        "center_offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "grasp_yaw_frame": "object"
+      }
+    },
+    "stroke_minimum": 0.02,
+    "necessary_geometry": {
+      "carriage": {
+        "part": "carriage",
+        "yaw": 1.5707963267948966,
+        "height": 0.007,
+        "placement_yaw": 1.5707963267948966,
+        "grasp_center_offset_body_m": [
+          0.0,
+          -0.012,
+          0.0
+        ],
+        "status": "unknown",
+        "reason": "conservative source target/gripper contact deferred to physical twin; all sampled environment/receiver geometry is nonpenetrating",
+        "min_clearance_m": -0.005804326945787565,
+        "required_clearance_m": 0.003,
+        "executable_parameters_available": true,
+        "known": true,
+        "source_grasp_ik_checked": false,
+        "source_full_shell_approach_withdrawal_check_required": true,
+        "source_pose_yaw_rad": -0.12931331811505403,
+        "target_pose_yaw_rad": 0.0,
+        "source_axis_offset_rad": 1.5707963267948966,
+        "goal_orientation_residual_rad": 6.426772152931595e-17,
+        "grasp_face_status": "inside",
+        "grasp_width_m": 0.044,
+        "pad_face_axial_overlap_m": 0.0104,
+        "source_body_geometry_available": true,
+        "source_body_checked": true,
+        "source_body_checked_phases": [
+          "source_approach",
+          "source_close"
+        ],
+        "source_body_min_raw_clearance_m": -0.005804326945787565,
+        "source_body_min_clearance_m": -0.005804326945787565,
+        "source_body_min_mujoco_clearance_m": -0.005804326945787565,
+        "source_body_invalid_grasp_face_contact": false,
+        "environment_min_clearance_m": 0.003462471253940509,
+        "source_body_pad_box_method": "analytic OBB intersection/separation from original pad corners and unchanged CAD; native distances retained as diagnostics",
+        "source_body_intentional_pad_pair_count": 18,
+        "source_body_withdrawal_policy": "rigid grasp preserves checked gripper/object transform; no stale-source self query during withdrawal; attachment and retention unverified",
+        "planned_predecessors": [],
+        "source_receivers": [
+          "end_stop",
+          "guide_base"
+        ],
+        "future_receivers": [
+          "end_stop",
+          "guide_base"
+        ],
+        "source_receiver_pose_modes": {
+          "guide_base": "observed",
+          "end_stop": "observed"
+        },
+        "future_receiver_pose_modes": {
+          "guide_base": "observed",
+          "end_stop": "observed"
+        },
+        "sampled_worst_phase": "source_close",
+        "worst_pairs": [
+          {
+            "geoms": [
+              "carriage_boss",
+              "finger2_collision"
+            ],
+            "distance_m": -0.005804326945787565,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.004192182037181549,
+              -0.16650522084701574,
+              0.8411219319577434
+            ],
+            "intentional_grasp_pad_pair": false
+          },
+          {
+            "geoms": [
+              "carriage_boss",
+              "finger1_collision"
+            ],
+            "distance_m": -0.005732646717166102,
+            "shell_involved": true,
+            "contact_world_m": [
+              0.036235922815392466,
+              -0.17227797303950296,
+              0.8411567657501829
+            ],
+            "intentional_grasp_pad_pair": false
+          },
+          {
+            "geoms": [
+              "handle_post",
+              "hand_collision"
+            ],
+            "distance_m": 0.003148455438235283,
+            "shell_involved": true,
+            "contact_world_m": [
+              0.016612973145116762,
+              -0.16510571901912832,
+              0.8729815712261616
+            ],
+            "intentional_grasp_pad_pair": false
+          },
+          {
+            "geoms": [
+              "carriage_bridge",
+              "finger2_collision"
+            ],
+            "distance_m": 0.01411434565440814,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.005332390160496883,
+              -0.16487201271319157,
+              0.8247053055982256
+            ],
+            "intentional_grasp_pad_pair": false
+          }
+        ],
+        "samples": 345,
+        "sampled_phases": [
+          "descent",
+          "opening",
+          "rail_entry_hover",
+          "rail_push",
+          "retraction",
+          "seat",
+          "source_approach",
+          "source_close",
+          "source_withdrawal"
+        ],
+        "sample_step_m": 0.002,
+        "source_eef_m": [
+          0.01559047150149482,
+          -0.17261740797999428,
+          0.8399829565938731
+        ],
+        "target_eef_m": [
+          0.105,
+          0.073,
+          0.8580000000000001
+        ],
+        "geometry_provenance": {
+          "source": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          },
+          "future": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          },
+          "source_body": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          }
+        },
+        "limitations": "discrete CAD necessary query; source-body approach/closure checked when its CAD exists; transfer IK, continuous sweep, robot self-collision, held-part/environment collision, physical contact and grasp retention remain unverified",
+        "original_status": "rejected",
+        "deferred_source_target_contact": true,
+        "necessary_geometry_pass": false,
+        "evaluated_world_yaw_rad": 1.4414830086798425,
+        "grasp_yaw_frame": "object"
+      },
+      "end_stop": {
+        "part": "end_stop",
+        "yaw": 0.0,
+        "height": 0.007,
+        "placement_yaw": 0.0,
+        "grasp_center_offset_body_m": [
+          0.008,
+          0.0,
+          0.0
+        ],
+        "status": "unknown",
+        "reason": "conservative source target/gripper contact deferred to physical twin; all sampled environment/receiver geometry is nonpenetrating",
+        "min_clearance_m": -0.005842684936275735,
+        "required_clearance_m": 0.003,
+        "executable_parameters_available": true,
+        "known": true,
+        "source_grasp_ik_checked": false,
+        "source_full_shell_approach_withdrawal_check_required": true,
+        "source_pose_yaw_rad": 0.21498417741225095,
+        "target_pose_yaw_rad": 0.0,
+        "source_axis_offset_rad": 0.0,
+        "goal_orientation_residual_rad": 6.821321707391561e-06,
+        "grasp_face_status": "inside",
+        "grasp_width_m": 0.026,
+        "pad_face_axial_overlap_m": 0.0054000525304937486,
+        "source_body_geometry_available": true,
+        "source_body_checked": true,
+        "source_body_checked_phases": [
+          "source_approach",
+          "source_close"
+        ],
+        "source_body_min_raw_clearance_m": -0.005842684936275735,
+        "source_body_min_clearance_m": -0.005842684936275735,
+        "source_body_min_mujoco_clearance_m": -0.005842684936275735,
+        "source_body_invalid_grasp_face_contact": false,
+        "environment_min_clearance_m": 0.02,
+        "source_body_pad_box_method": "analytic OBB intersection/separation from original pad corners and unchanged CAD; native distances retained as diagnostics",
+        "source_body_intentional_pad_pair_count": 0,
+        "source_body_withdrawal_policy": "rigid grasp preserves checked gripper/object transform; no stale-source self query during withdrawal; attachment and retention unverified",
+        "planned_predecessors": [
+          "carriage"
+        ],
+        "source_receivers": [
+          "carriage",
+          "guide_base"
+        ],
+        "future_receivers": [
+          "carriage",
+          "guide_base"
+        ],
+        "source_receiver_pose_modes": {
+          "guide_base": "observed",
+          "carriage": "predicted_mated"
+        },
+        "future_receiver_pose_modes": {
+          "guide_base": "observed",
+          "carriage": "predicted_mated"
+        },
+        "sampled_worst_phase": "source_close",
+        "worst_pairs": [
+          {
+            "geoms": [
+              "stop_boss",
+              "finger2_collision"
+            ],
+            "distance_m": -0.005842684936275735,
+            "shell_involved": true,
+            "contact_world_m": [
+              0.10512766534519015,
+              -0.2872692061200495,
+              0.8484214397077838
+            ],
+            "intentional_grasp_pad_pair": false
+          },
+          {
+            "geoms": [
+              "stop_boss",
+              "finger1_collision"
+            ],
+            "distance_m": -0.005797186642182834,
+            "shell_involved": true,
+            "contact_world_m": [
+              0.10886301939552281,
+              -0.31310352519169793,
+              0.8484018544058936
+            ],
+            "intentional_grasp_pad_pair": false
+          },
+          {
+            "geoms": [
+              "finger2_pad_collision",
+              "stop_boss"
+            ],
+            "distance_m": -6.856427526430453e-10,
+            "shell_involved": false,
+            "contact_world_m": [
+              0.10355119541031058,
+              -0.2922454884671532,
+              0.846299397426501
+            ],
+            "declared_face_support": false,
+            "distance_method": "analytic_OBB_SAT_same_original_pad_and_CAD_box",
+            "native_contact_distances_m": [
+              -3.4282136579436227e-10,
+              -3.4281551940361804e-10,
+              7.791302919594911e-11,
+              7.791303096518603e-11
+            ],
+            "intentional_grasp_pad_pair": false
+          },
+          {
+            "geoms": [
+              "finger1_pad_collision",
+              "stop_boss"
+            ],
+            "distance_m": -1.5582577068962156e-10,
+            "shell_involved": false,
+            "contact_world_m": [
+              0.10717783889995955,
+              -0.30885414455363375,
+              0.846299397426501
+            ],
+            "declared_face_support": false,
+            "distance_method": "analytic_OBB_SAT_same_original_pad_and_CAD_box",
+            "native_contact_distances_m": [
+              -1.5582572200634193e-10,
+              -1.5582571864791518e-10,
+              6.856307475474417e-10,
+              6.856424401488856e-10
+            ],
+            "intentional_grasp_pad_pair": false
+          }
+        ],
+        "samples": 257,
+        "sampled_phases": [
+          "descent",
+          "guarded_seat",
+          "opening",
+          "retraction",
+          "source_approach",
+          "source_close",
+          "source_withdrawal"
+        ],
+        "sample_step_m": 0.002,
+        "source_eef_m": [
+          0.10927245966968985,
+          -0.2996964840714038,
+          0.8479993977379783
+        ],
+        "target_eef_m": [
+          -0.00899979541393696,
+          0.08499999532522237,
+          0.865999945442969
+        ],
+        "geometry_provenance": {
+          "source": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          },
+          "future": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          },
+          "source_body": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          }
+        },
+        "limitations": "discrete CAD necessary query; source-body approach/closure checked when its CAD exists; transfer IK, continuous sweep, robot self-collision, held-part/environment collision, physical contact and grasp retention remain unverified",
+        "original_status": "rejected",
+        "deferred_source_target_contact": true,
+        "necessary_geometry_pass": false,
+        "evaluated_world_yaw_rad": 0.21498417741225098,
+        "grasp_yaw_frame": "object"
+      },
+      "pin_left": {
+        "part": "pin_left",
+        "yaw": 0.0,
+        "height": 0.007,
+        "placement_yaw": 1.5707963267948966,
+        "pin_command_depth_m": 0.043000000000000003,
+        "pin_press_extra_m": 0.0,
+        "min_clearance_m": 0.006518636156539968,
+        "required_clearance_m": 0.003,
+        "status": "necessary_pass",
+        "reason": "sampled future full-gripper clearance necessary condition passed",
+        "known": true,
+        "goal_source": "predicted future mating pose from observed base and unchanged CAD; not an observed installed stop",
+        "source_grasp_ik_checked": false,
+        "source_full_shell_approach_withdrawal_check_required": true,
+        "checked_receivers": [
+          "end_stop",
+          "guide_base"
+        ],
+        "other_installed_parts_checked": false,
+        "pin_base_bridge_required": true,
+        "minimum_final_depth_m": 0.042,
+        "gravity_completion_required": false,
+        "head_pad_axial_overlap_m": 0.004400000000000001,
+        "hole_entry_m": [
+          -0.017,
+          0.053000000000000005,
+          0.8540000000000001
+        ],
+        "axis": [
+          -0.0,
+          -0.0,
+          -1.0
+        ],
+        "sampled_worst_phase": "insertion",
+        "worst_pairs": [
+          {
+            "geoms": [
+              "stop_0_2",
+              "finger2_collision"
+            ],
+            "distance_m": 0.006518636156539968,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.028390296174504143,
+              0.05966144137889316,
+              0.8589552458215584
+            ]
+          },
+          {
+            "geoms": [
+              "stop_2_2",
+              "finger1_collision"
+            ],
+            "distance_m": 0.006821042576875023,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.005571902978788705,
+              0.05993074195349516,
+              0.8590168016800104
+            ]
+          },
+          {
+            "geoms": [
+              "stop_boss",
+              "finger2_collision"
+            ],
+            "distance_m": 0.006999162049732725,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.027325673775795062,
+              0.06726263494104075,
+              0.8677887897967322
+            ]
+          },
+          {
+            "geoms": [
+              "stop_boss",
+              "finger1_collision"
+            ],
+            "distance_m": 0.00715710497973103,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.006705911856713135,
+              0.06727977665857303,
+              0.868077203910051
+            ]
+          }
+        ],
+        "samples": 58,
+        "source_pin_axis_world": [
+          -0.00010037589832508865,
+          -0.00015658343315708536,
+          0.9999999827031536
+        ],
+        "gripper_geometry_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+        "limitations": "near-upright down(yaw) grasp; discrete base/stop CAD query; carriage, other pins and full-scene safety require separate checks; not physical feasibility proof"
+      },
+      "pin_right": {
+        "part": "pin_right",
+        "yaw": 1.5707963267948966,
+        "height": 0.007,
+        "placement_yaw": 1.5707963267948966,
+        "pin_command_depth_m": 0.043000000000000003,
+        "pin_press_extra_m": 0.0,
+        "min_clearance_m": 0.00651863615653956,
+        "required_clearance_m": 0.003,
+        "status": "necessary_pass",
+        "reason": "sampled future full-gripper clearance necessary condition passed",
+        "known": true,
+        "goal_source": "predicted future mating pose from observed base and unchanged CAD; not an observed installed stop",
+        "source_grasp_ik_checked": false,
+        "source_full_shell_approach_withdrawal_check_required": true,
+        "checked_receivers": [
+          "end_stop",
+          "guide_base"
+        ],
+        "other_installed_parts_checked": false,
+        "pin_base_bridge_required": true,
+        "minimum_final_depth_m": 0.042,
+        "gravity_completion_required": false,
+        "head_pad_axial_overlap_m": 0.004400000000000001,
+        "hole_entry_m": [
+          -0.017,
+          0.117,
+          0.8540000000000001
+        ],
+        "axis": [
+          -0.0,
+          -0.0,
+          -1.0
+        ],
+        "sampled_worst_phase": "insertion",
+        "worst_pairs": [
+          {
+            "geoms": [
+              "stop_2_2",
+              "finger1_collision"
+            ],
+            "distance_m": 0.00651863615653956,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.005609703825495872,
+              0.11033855862110689,
+              0.8589552458215586
+            ]
+          },
+          {
+            "geoms": [
+              "stop_0_2",
+              "finger2_collision"
+            ],
+            "distance_m": 0.006821042576875318,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.02842809702121133,
+              0.11006925804650486,
+              0.8590168016800102
+            ]
+          },
+          {
+            "geoms": [
+              "stop_boss",
+              "finger1_collision"
+            ],
+            "distance_m": 0.006999162049733764,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.006674326224204935,
+              0.10273736505895922,
+              0.8677887897967322
+            ]
+          },
+          {
+            "geoms": [
+              "stop_boss",
+              "finger2_collision"
+            ],
+            "distance_m": 0.0071571049797309605,
+            "shell_involved": true,
+            "contact_world_m": [
+              -0.027294088143286876,
+              0.10272022334142693,
+              0.8680772039100513
+            ]
+          }
+        ],
+        "samples": 58,
+        "source_pin_axis_world": [
+          -2.079722388080258e-05,
+          -0.0001861681442441499,
+          0.9999999824544487
+        ],
+        "gripper_geometry_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+        "limitations": "near-upright down(yaw) grasp; discrete base/stop CAD query; carriage, other pins and full-scene safety require separate checks; not physical feasibility proof"
+      },
+      "handle": {
+        "part": "handle",
+        "yaw": 1.5707963267948966,
+        "height": 0.007,
+        "placement_yaw": 1.5707963267948966,
+        "grasp_center_offset_body_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "status": "unknown",
+        "reason": "receiver CAD missing: pin_left; receiver CAD missing: pin_right; source body CAD missing: handle; self-clearance unverified",
+        "min_clearance_m": 0.004953316805674965,
+        "required_clearance_m": 0.003,
+        "executable_parameters_available": true,
+        "known": false,
+        "source_grasp_ik_checked": false,
+        "source_full_shell_approach_withdrawal_check_required": true,
+        "source_pose_yaw_rad": 0.22026442540020497,
+        "target_pose_yaw_rad": 0.0,
+        "source_axis_offset_rad": 1.5707963267948966,
+        "goal_orientation_residual_rad": 1.4152860997523324e-07,
+        "grasp_face_status": "inside",
+        "grasp_width_m": 0.042,
+        "pad_face_axial_overlap_m": 0.005399998534830502,
+        "source_body_geometry_available": false,
+        "source_body_checked": false,
+        "source_body_checked_phases": [],
+        "source_body_min_raw_clearance_m": null,
+        "source_body_min_clearance_m": null,
+        "source_body_min_mujoco_clearance_m": null,
+        "source_body_invalid_grasp_face_contact": false,
+        "environment_min_clearance_m": 0.004953316805674965,
+        "source_body_pad_box_method": "analytic OBB intersection/separation from original pad corners and unchanged CAD; native distances retained as diagnostics",
+        "source_body_intentional_pad_pair_count": 0,
+        "source_body_withdrawal_policy": "rigid grasp preserves checked gripper/object transform; no stale-source self query during withdrawal; attachment and retention unverified",
+        "planned_predecessors": [
+          "carriage",
+          "end_stop",
+          "pin_left",
+          "pin_right"
+        ],
+        "source_receivers": [
+          "carriage",
+          "end_stop",
+          "guide_base"
+        ],
+        "future_receivers": [
+          "carriage",
+          "end_stop",
+          "guide_base"
+        ],
+        "source_receiver_pose_modes": {
+          "guide_base": "observed",
+          "end_stop": "predicted_mated",
+          "carriage": "predicted_mated"
+        },
+        "future_receiver_pose_modes": {
+          "guide_base": "observed",
+          "end_stop": "predicted_mated",
+          "carriage": "predicted_mated"
+        },
+        "sampled_worst_phase": "guarded_seat",
+        "worst_pairs": [
+          {
+            "geoms": [
+              "carriage_boss",
+              "finger1_collision"
+            ],
+            "distance_m": 0.004953316805674965,
+            "shell_involved": true,
+            "contact_world_m": [
+              0.12571692615338823,
+              0.08060163205399887,
+              0.8684206563614792
+            ]
+          },
+          {
+            "geoms": [
+              "carriage_boss",
+              "finger2_collision"
+            ],
+            "distance_m": 0.004953317544084427,
+            "shell_involved": true,
+            "contact_world_m": [
+              0.08428307306906022,
+              0.08939836930476797,
+              0.8684206563043739
+            ]
+          },
+          {
+            "geoms": [
+              "finger1_pad_collision",
+              "carriage_boss"
+            ],
+            "distance_m": 0.010599999999999856,
+            "shell_involved": false,
+            "contact_world_m": [
+              0.127,
+              0.07700000065923293,
+              0.8693
+            ]
+          },
+          {
+            "geoms": [
+              "finger1_pad_collision",
+              "carriage_boss"
+            ],
+            "distance_m": 0.010599999999999856,
+            "shell_involved": false,
+            "contact_world_m": [
+              0.127,
+              0.09300000065923295,
+              0.8693
+            ]
+          }
+        ],
+        "samples": 197,
+        "sampled_phases": [
+          "descent",
+          "guarded_seat",
+          "opening",
+          "retraction",
+          "source_approach",
+          "source_close",
+          "source_withdrawal"
+        ],
+        "sample_step_m": 0.002,
+        "source_eef_m": [
+          -0.17165881646797276,
+          -0.13978561847105583,
+          0.814999962683919
+        ],
+        "target_eef_m": [
+          0.10499999926047382,
+          0.08500000065923294,
+          0.879
+        ],
+        "geometry_provenance": {
+          "source": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          },
+          "future": {
+            "panda_xml_sha256": "453700e382bac0e34d28a69cfeec431265b780ee505599af44b7ca81883309fb",
+            "mesh_sha256": {
+              "hand": "94493e94f30fe940f2c8ca2f155c3bbe67bbff406d3edf5e261670d2f0f6e2ed",
+              "finger": "2d07a740392f3b9b0816f65d64fff9927d3d57c897870fc4b6ff9c56fff3a0c8"
+            },
+            "original_masks": {
+              "hand_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger1_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              },
+              "finger2_pad_collision": {
+                "contype": 1,
+                "conaffinity": 1
+              }
+            },
+            "shell_policy": "unscaled original collision-mesh convex hulls plus original pads",
+            "no_simulation_steps": true,
+            "pose_source": "caller-provided RGB-D or explicitly declared calibration"
+          }
+        },
+        "limitations": "discrete CAD necessary query; source-body approach/closure checked when its CAD exists; transfer IK, continuous sweep, robot self-collision, held-part/environment collision, physical contact and grasp retention remain unverified",
+        "evaluated_world_yaw_rad": 1.7910607521951016,
+        "grasp_yaw_frame": "object"
+      }
+    }
+  },
+  "complete_candidate_plan_ir": {
+    "id": "5736684c45041e70afe0",
+    "calls": [
+      {
+        "id": "complete_assembly",
+        "skill": "run_sliding_assembly_v23",
+        "arguments": {
+          "order": {
+            "value": [
+              "carriage",
+              "end_stop",
+              "pin_left",
+              "pin_right",
+              "handle"
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "choices": {
+            "value": {
+              "carriage": {
+                "yaw": 1.5707963267948966,
+                "height": 0.007,
+                "clearance": 0.9872894594106564,
+                "force": 9.0,
+                "speed": 0.019752186588921285,
+                "force_limit": 18.0,
+                "press_force": 1.503487569953111,
+                "placement_yaw": 1.5707963267948966,
+                "width": 0.044,
+                "center_offset": [
+                  0.0,
+                  -0.012,
+                  0.0
+                ],
+                "grasp_yaw_frame": "object",
+                "transport_mode": "held_insert"
+              },
+              "end_stop": {
+                "yaw": 0.0,
+                "height": 0.007,
+                "clearance": 0.9777894594106563,
+                "force": 6.153061224489795,
+                "speed": 0.00632069970845481,
+                "press_force": 1.1363567786629758,
+                "placement_yaw": 0.0,
+                "width": 0.026,
+                "center_offset": [
+                  0.008,
+                  0.0,
+                  0.0
+                ],
+                "grasp_yaw_frame": "object",
+                "approach_strategy": "joint_checked_v10"
+              },
+              "pin_left": {
+                "yaw": 0.0,
+                "height": 0.007,
+                "clearance": 0.9837894594106563,
+                "force": 9.0,
+                "speed": 0.00632069970845481,
+                "force_limit": 17.849330715690854,
+                "press_force": 2.7039717239582775,
+                "placement_yaw": 1.5707963267948966,
+                "pin_command_depth_m": 0.043000000000000003,
+                "pin_press_extra_m": 0.0,
+                "lift_first_m": 0.08
+              },
+              "pin_right": {
+                "yaw": 1.5707963267948966,
+                "height": 0.007,
+                "clearance": 0.9837894594106563,
+                "force": 9.0,
+                "speed": 0.00632069970845481,
+                "force_limit": 17.849330715690854,
+                "press_force": 1.0306774964725598,
+                "placement_yaw": 1.5707963267948966,
+                "pin_command_depth_m": 0.043000000000000003,
+                "pin_press_extra_m": 0.0,
+                "approach_strategy": "joint_checked_v10",
+                "lift_first_m": 0.08
+              },
+              "handle": {
+                "yaw": 1.5707963267948966,
+                "height": 0.007,
+                "clearance": 0.9612894594106564,
+                "force": 2.666089965397924,
+                "speed": 0.00632069970845481,
+                "press_force": 3.543698591681999,
+                "placement_yaw": 1.5707963267948966,
+                "width": 0.042,
+                "center_offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "grasp_yaw_frame": "object"
+              }
+            },
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "pin_press_budget_policy": {
+            "value": "remaining_distance_v28",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {},
+        "kind": "executable"
+      }
+    ],
+    "boundary": 1,
+    "prefix": {
+      "id": "5736684c45041e70afe0",
+      "execution": "program",
+      "start_state": "e4265958ba6728e8ca3223690c8ce24ff25b8089d0778f9277edb917890460fd",
+      "task_scope": "sliding_assembly_generic_transport_handle_terminal_v32",
+      "steps": [
+        {
+          "skill": "run_sliding_assembly_v23",
+          "params": {
+            "order": [
+              "carriage",
+              "end_stop",
+              "pin_left",
+              "pin_right",
+              "handle"
+            ],
+            "choices": {
+              "carriage": {
+                "yaw": 1.5707963267948966,
+                "height": 0.007,
+                "clearance": 0.9872894594106564,
+                "force": 9.0,
+                "speed": 0.019752186588921285,
+                "force_limit": 18.0,
+                "press_force": 1.503487569953111,
+                "placement_yaw": 1.5707963267948966,
+                "width": 0.044,
+                "center_offset": [
+                  0.0,
+                  -0.012,
+                  0.0
+                ],
+                "grasp_yaw_frame": "object",
+                "transport_mode": "held_insert"
+              },
+              "end_stop": {
+                "yaw": 0.0,
+                "height": 0.007,
+                "clearance": 0.9777894594106563,
+                "force": 6.153061224489795,
+                "speed": 0.00632069970845481,
+                "press_force": 1.1363567786629758,
+                "placement_yaw": 0.0,
+                "width": 0.026,
+                "center_offset": [
+                  0.008,
+                  0.0,
+                  0.0
+                ],
+                "grasp_yaw_frame": "object",
+                "approach_strategy": "joint_checked_v10"
+              },
+              "pin_left": {
+                "yaw": 0.0,
+                "height": 0.007,
+                "clearance": 0.9837894594106563,
+                "force": 9.0,
+                "speed": 0.00632069970845481,
+                "force_limit": 17.849330715690854,
+                "press_force": 2.7039717239582775,
+                "placement_yaw": 1.5707963267948966,
+                "pin_command_depth_m": 0.043000000000000003,
+                "pin_press_extra_m": 0.0,
+                "lift_first_m": 0.08
+              },
+              "pin_right": {
+                "yaw": 1.5707963267948966,
+                "height": 0.007,
+                "clearance": 0.9837894594106563,
+                "force": 9.0,
+                "speed": 0.00632069970845481,
+                "force_limit": 17.849330715690854,
+                "press_force": 1.0306774964725598,
+                "placement_yaw": 1.5707963267948966,
+                "pin_command_depth_m": 0.043000000000000003,
+                "pin_press_extra_m": 0.0,
+                "approach_strategy": "joint_checked_v10",
+                "lift_first_m": 0.08
+              },
+              "handle": {
+                "yaw": 1.5707963267948966,
+                "height": 0.007,
+                "clearance": 0.9612894594106564,
+                "force": 2.666089965397924,
+                "speed": 0.00632069970845481,
+                "press_force": 3.543698591681999,
+                "placement_yaw": 1.5707963267948966,
+                "width": 0.042,
+                "center_offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "grasp_yaw_frame": "object"
+              }
+            },
+            "pin_press_budget_policy": "remaining_distance_v28"
+          }
+        }
+      ],
+      "order": [
+        "carriage",
+        "end_stop",
+        "pin_left",
+        "pin_right",
+        "handle"
+      ],
+      "choices": {
+        "carriage": {
+          "yaw": 1.5707963267948966,
+          "height": 0.007,
+          "clearance": 0.9872894594106564,
+          "force": 9.0,
+          "speed": 0.019752186588921285,
+          "force_limit": 18.0,
+          "press_force": 1.503487569953111,
+          "placement_yaw": 1.5707963267948966,
+          "width": 0.044,
+          "center_offset": [
+            0.0,
+            -0.012,
+            0.0
+          ],
+          "grasp_yaw_frame": "object",
+          "transport_mode": "held_insert"
+        },
+        "end_stop": {
+          "yaw": 0.0,
+          "height": 0.007,
+          "clearance": 0.9777894594106563,
+          "force": 6.153061224489795,
+          "speed": 0.00632069970845481,
+          "press_force": 1.1363567786629758,
+          "placement_yaw": 0.0,
+          "width": 0.026,
+          "center_offset": [
+            0.008,
+            0.0,
+            0.0
+          ],
+          "grasp_yaw_frame": "object",
+          "approach_strategy": "joint_checked_v10"
+        },
+        "pin_left": {
+          "yaw": 0.0,
+          "height": 0.007,
+          "clearance": 0.9837894594106563,
+          "force": 9.0,
+          "speed": 0.00632069970845481,
+          "force_limit": 17.849330715690854,
+          "press_force": 2.7039717239582775,
+          "placement_yaw": 1.5707963267948966,
+          "pin_command_depth_m": 0.043000000000000003,
+          "pin_press_extra_m": 0.0,
+          "lift_first_m": 0.08
+        },
+        "pin_right": {
+          "yaw": 1.5707963267948966,
+          "height": 0.007,
+          "clearance": 0.9837894594106563,
+          "force": 9.0,
+          "speed": 0.00632069970845481,
+          "force_limit": 17.849330715690854,
+          "press_force": 1.0306774964725598,
+          "placement_yaw": 1.5707963267948966,
+          "pin_command_depth_m": 0.043000000000000003,
+          "pin_press_extra_m": 0.0,
+          "approach_strategy": "joint_checked_v10",
+          "lift_first_m": 0.08
+        },
+        "handle": {
+          "yaw": 1.5707963267948966,
+          "height": 0.007,
+          "clearance": 0.9612894594106564,
+          "force": 2.666089965397924,
+          "speed": 0.00632069970845481,
+          "press_force": 3.543698591681999,
+          "placement_yaw": 1.5707963267948966,
+          "width": 0.042,
+          "center_offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "grasp_yaw_frame": "object"
+        }
+      },
+      "controller_contract": "stagewise feedback-bound atomic assembly; planner chooses held insertion or released rear push; fresh carriage pose before handle planning; handle installation is terminal; pin press budget remaining_distance_v28"
+    },
+    "status": "unknown",
+    "schema": "twingraph.plan.v1",
+    "protocol": "atomic.program.v1"
+  },
+  "plan_sha256": "ed2df6420c9f039da5378850195207119f1e42d6be25d2d8ab0a421dec320a1b",
+  "assembly_plan_ir": {
+    "id": "68e6086b4468698130e4",
+    "calls": [
+      {
+        "id": "stage0_0",
+        "skill": "detect",
+        "arguments": {
+          "required_parts": {
+            "value": [
+              "carriage"
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_1",
+        "skill": "estimate_pose",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_2",
+        "skill": "estimate_grasp",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaws": {
+            "value": [
+              1.5707963267948966
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "object",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "height_offset": {
+            "value": 0.007,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "center_offset": {
+            "value": [
+              0.0,
+              -0.012,
+              0.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "object",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaw_frame": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "width": {
+            "value": 0.044,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_3",
+        "skill": "select_grasp",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_4",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage0_3",
+            "source_output": "grasp_hover"
+          },
+          "yaw": {
+            "value": null,
+            "kind": "scalar",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "rad",
+            "source_call": "stage0_3",
+            "source_output": "grasp_yaw"
+          },
+          "clearance": {
+            "value": 0.9872894594106564,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_5",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_6",
+        "skill": "move",
+        "arguments": {
+          "grasp": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_7",
+        "skill": "grasp",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "force": {
+            "value": 9.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_8",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage0_9",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_10",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              -0.08,
+              0.085,
+              0.8540000000000001
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage0_9",
+            "source_output": "object_to_eef"
+          },
+          "yaw": {
+            "value": 1.5707963267948966,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "clearance": {
+            "value": 0.9872894594106564,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_11",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_12",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              -0.03
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_13",
+        "skill": "move",
+        "arguments": {
+          "reference": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.08,
+              0.085,
+              0.8255
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_14",
+        "skill": "plan_path",
+        "arguments": {
+          "method": {
+            "value": "contact",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8255
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "axis": {
+            "value": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "1",
+            "source_call": null,
+            "source_output": null
+          },
+          "speed": {
+            "value": 0.019752186588921285,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m/s",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_limit": {
+            "value": 18.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_15",
+        "skill": "insert",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_16",
+        "skill": "press",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target_z": {
+            "value": 0.8240000000000001,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_stop": {
+            "value": 1.503487569953111,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_17",
+        "skill": "place",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8240000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.003,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "settle": {
+            "value": 0.35,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "s",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_18",
+        "skill": "move",
+        "arguments": {
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage0_19",
+        "skill": "inspect",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8240000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.006,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage0_20",
+        "skill": "move",
+        "arguments": {
+          "target": {
+            "value": "home",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_0",
+        "skill": "detect",
+        "arguments": {
+          "required_parts": {
+            "value": [
+              "end_stop"
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_1",
+        "skill": "estimate_pose",
+        "arguments": {
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_2",
+        "skill": "estimate_grasp",
+        "arguments": {
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaws": {
+            "value": [
+              0.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "object",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "height_offset": {
+            "value": 0.007,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "center_offset": {
+            "value": [
+              0.008,
+              0.0,
+              0.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "object",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaw_frame": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "width": {
+            "value": 0.026,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_3",
+        "skill": "select_grasp",
+        "arguments": {
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_4",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage1_3",
+            "source_output": "grasp_hover"
+          },
+          "yaw": {
+            "value": null,
+            "kind": "scalar",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "rad",
+            "source_call": "stage1_3",
+            "source_output": "grasp_yaw"
+          },
+          "clearance": {
+            "value": 0.9777894594106563,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_5",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_6",
+        "skill": "move",
+        "arguments": {
+          "grasp": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "strategy": {
+            "value": "joint_checked_v10",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_7",
+        "skill": "grasp",
+        "arguments": {
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "force": {
+            "value": 6.153061224489795,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_8",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage1_9",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_10",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              -0.017,
+              0.085,
+              0.8810000000000001
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage1_9",
+            "source_output": "object_to_eef"
+          },
+          "yaw": {
+            "value": 0.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "clearance": {
+            "value": 0.9777894594106563,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_11",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_12",
+        "skill": "plan_path",
+        "arguments": {
+          "method": {
+            "value": "cartesian",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.085,
+              0.8460000000000001
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage1_9",
+            "source_output": "object_to_eef"
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_13",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "linear",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "space": {
+            "value": "cartesian",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_14",
+        "skill": "move",
+        "arguments": {
+          "reference": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.085,
+              0.8460000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_15",
+        "skill": "move",
+        "arguments": {
+          "mode": {
+            "value": "guarded",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target_z": {
+            "value": 0.8360000000000001,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_stop": {
+            "value": 1.1363567786629758,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          },
+          "speed": {
+            "value": 0.00632069970845481,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m/s",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_16",
+        "skill": "press",
+        "arguments": {
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target_z": {
+            "value": 0.8360000000000001,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_stop": {
+            "value": 1.1363567786629758,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_17",
+        "skill": "place",
+        "arguments": {
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.085,
+              0.8360000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.003,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "settle": {
+            "value": 0.35,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "s",
+            "source_call": null,
+            "source_output": null
+          },
+          "acceptance": {
+            "value": "stable_supported",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_18",
+        "skill": "move",
+        "arguments": {
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage1_19",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "stable_supported",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "end_stop",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.085,
+              0.8360000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "end_stop"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage2_0",
+        "skill": "detect",
+        "arguments": {
+          "required_parts": {
+            "value": [
+              "pin_left"
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_1",
+        "skill": "estimate_pose",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_2",
+        "skill": "estimate_grasp",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaws": {
+            "value": [
+              0.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "world",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "height_offset": {
+            "value": 0.007,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_3",
+        "skill": "select_grasp",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_4",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage2_3",
+            "source_output": "grasp_hover"
+          },
+          "yaw": {
+            "value": 0.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "clearance": {
+            "value": 0.9837894594106563,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_5",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_6",
+        "skill": "move",
+        "arguments": {
+          "grasp": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_7",
+        "skill": "grasp",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "force": {
+            "value": 9.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_8",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage2_9",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.08
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_10",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.020000000000000004
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_11",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              -0.017,
+              0.053000000000000005,
+              0.9460000000000002
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage2_10",
+            "source_output": "object_to_eef"
+          },
+          "yaw": {
+            "value": 1.5707963267948966,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "clearance": {
+            "value": 0.9837894594106563,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_12",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_13",
+        "skill": "move",
+        "arguments": {
+          "reference": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.053000000000000005,
+              0.9110000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_14",
+        "skill": "plan_path",
+        "arguments": {
+          "method": {
+            "value": "contact",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.053000000000000005,
+              0.8580000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "axis": {
+            "value": [
+              -0.0,
+              -0.0,
+              -1.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "1",
+            "source_call": null,
+            "source_output": null
+          },
+          "speed": {
+            "value": 0.00632069970845481,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m/s",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_limit": {
+            "value": 17.849330715690854,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          },
+          "pin_command_depth_m": {
+            "value": 0.043000000000000003,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "pin_press_extra_m": {
+            "value": 0.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "hole_entry_m": {
+            "value": [
+              -0.017,
+              0.053000000000000005,
+              0.8540000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_15",
+        "skill": "insert",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "strategy": {
+            "value": "learned",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "max_steps": {
+            "value": 1000,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_16",
+        "skill": "press",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target_z": {
+            "value": 0.8580000000000001,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_stop": {
+            "value": 2.7039717239582775,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_17",
+        "skill": "place",
+        "arguments": {
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.053000000000000005,
+              0.8580000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.0025,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "settle": {
+            "value": 0.35,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "s",
+            "source_call": null,
+            "source_output": null
+          },
+          "acceptance": {
+            "value": "pin_inserted",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_18",
+        "skill": "move",
+        "arguments": {
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage2_19",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "pin_joint",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "phase": {
+            "value": "inserted_after_release",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage2_20",
+        "skill": "move",
+        "arguments": {
+          "target": {
+            "value": "home",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_0",
+        "skill": "detect",
+        "arguments": {
+          "required_parts": {
+            "value": [
+              "pin_right"
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_1",
+        "skill": "estimate_pose",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_2",
+        "skill": "estimate_grasp",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaws": {
+            "value": [
+              1.5707963267948966
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "world",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "height_offset": {
+            "value": 0.007,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_3",
+        "skill": "select_grasp",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_4",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage3_3",
+            "source_output": "grasp_hover"
+          },
+          "yaw": {
+            "value": 1.5707963267948966,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "clearance": {
+            "value": 0.9837894594106563,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_5",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_6",
+        "skill": "move",
+        "arguments": {
+          "grasp": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "strategy": {
+            "value": "joint_checked_v10",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_7",
+        "skill": "grasp",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "force": {
+            "value": 9.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_8",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage3_9",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.08
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_10",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.020000000000000004
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_11",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              -0.017,
+              0.117,
+              0.9460000000000002
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage3_10",
+            "source_output": "object_to_eef"
+          },
+          "yaw": {
+            "value": 1.5707963267948966,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "clearance": {
+            "value": 0.9837894594106563,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_12",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_13",
+        "skill": "move",
+        "arguments": {
+          "reference": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.117,
+              0.9110000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_14",
+        "skill": "plan_path",
+        "arguments": {
+          "method": {
+            "value": "contact",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.117,
+              0.8580000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "axis": {
+            "value": [
+              -0.0,
+              -0.0,
+              -1.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "1",
+            "source_call": null,
+            "source_output": null
+          },
+          "speed": {
+            "value": 0.00632069970845481,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m/s",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_limit": {
+            "value": 17.849330715690854,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          },
+          "pin_command_depth_m": {
+            "value": 0.043000000000000003,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "pin_press_extra_m": {
+            "value": 0.0,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "hole_entry_m": {
+            "value": [
+              -0.017,
+              0.117,
+              0.8540000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_15",
+        "skill": "insert",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "strategy": {
+            "value": "learned",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "max_steps": {
+            "value": 1000,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_16",
+        "skill": "press",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target_z": {
+            "value": 0.8580000000000001,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_stop": {
+            "value": 1.0306774964725598,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_17",
+        "skill": "place",
+        "arguments": {
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              -0.017,
+              0.117,
+              0.8580000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.0025,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "settle": {
+            "value": 0.35,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "s",
+            "source_call": null,
+            "source_output": null
+          },
+          "acceptance": {
+            "value": "pin_inserted",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_18",
+        "skill": "move",
+        "arguments": {
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage3_19",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "pin_joint",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "phase": {
+            "value": "inserted_after_release",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage3_20",
+        "skill": "move",
+        "arguments": {
+          "target": {
+            "value": "home",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_0",
+        "skill": "detect",
+        "arguments": {
+          "required_parts": {
+            "value": [
+              "handle"
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_1",
+        "skill": "estimate_pose",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_2",
+        "skill": "estimate_grasp",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaws": {
+            "value": [
+              1.5707963267948966
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "object",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "height_offset": {
+            "value": 0.007,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "center_offset": {
+            "value": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "kind": "vector",
+            "status": "known",
+            "frame": "object",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "yaw_frame": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "width": {
+            "value": 0.042,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_3",
+        "skill": "select_grasp",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_4",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage4_3",
+            "source_output": "grasp_hover"
+          },
+          "yaw": {
+            "value": null,
+            "kind": "scalar",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "rad",
+            "source_call": "stage4_3",
+            "source_output": "grasp_yaw"
+          },
+          "clearance": {
+            "value": 0.9612894594106564,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_5",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_6",
+        "skill": "move",
+        "arguments": {
+          "grasp": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_7",
+        "skill": "grasp",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "force": {
+            "value": 2.666089965397924,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_8",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "grasp",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage4_9",
+        "skill": "move",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_10",
+        "skill": "plan_path",
+        "arguments": {
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.9170000000000001
+            ],
+            "kind": "position",
+            "status": "deferred",
+            "frame": "world",
+            "unit": "m",
+            "source_call": "stage4_9",
+            "source_output": "object_to_eef"
+          },
+          "yaw": {
+            "value": 1.5707963267948966,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "rad",
+            "source_call": null,
+            "source_output": null
+          },
+          "clearance": {
+            "value": 0.9612894594106564,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_11",
+        "skill": "move",
+        "arguments": {
+          "path": {
+            "value": "transfer",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_12",
+        "skill": "move",
+        "arguments": {
+          "reference": {
+            "value": "object",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8950000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_13",
+        "skill": "move",
+        "arguments": {
+          "mode": {
+            "value": "guarded",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target_z": {
+            "value": 0.8720000000000001,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_stop": {
+            "value": 3.543698591681999,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          },
+          "speed": {
+            "value": 0.00632069970845481,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m/s",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_14",
+        "skill": "press",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target_z": {
+            "value": 0.8720000000000001,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "force_stop": {
+            "value": 3.543698591681999,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "N",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_15",
+        "skill": "place",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8720000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.003,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "settle": {
+            "value": 0.35,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "s",
+            "source_call": null,
+            "source_output": null
+          },
+          "acceptance": {
+            "value": "pose",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_16",
+        "skill": "move",
+        "arguments": {
+          "delta": {
+            "value": [
+              0,
+              0,
+              0.1
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "stage4_17",
+        "skill": "inspect",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8720000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.0015,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "stage4_18",
+        "skill": "move",
+        "arguments": {
+          "target": {
+            "value": "home",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "executable"
+      },
+      {
+        "id": "accept_carriage",
+        "skill": "inspect",
+        "arguments": {
+          "part": {
+            "value": "carriage",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8240000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.0015,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "carriage"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "accept_pin_left",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "pin_joint",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_left",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "phase": {
+            "value": "inserted_after_release",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_left"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "accept_pin_right",
+        "skill": "inspect",
+        "arguments": {
+          "what": {
+            "value": "pin_joint",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "part": {
+            "value": "pin_right",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "phase": {
+            "value": "inserted_after_release",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "pin_right"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "accept_handle",
+        "skill": "inspect",
+        "arguments": {
+          "part": {
+            "value": "handle",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          },
+          "target": {
+            "value": [
+              0.105,
+              0.085,
+              0.8720000000000001
+            ],
+            "kind": "position",
+            "status": "known",
+            "frame": "world",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          },
+          "tol": {
+            "value": 0.0015,
+            "kind": "scalar",
+            "status": "known",
+            "frame": "",
+            "unit": "m",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {
+          "manipulated": "handle"
+        },
+        "kind": "checker"
+      },
+      {
+        "id": "final_home",
+        "skill": "move",
+        "arguments": {
+          "target": {
+            "value": "home",
+            "kind": "category",
+            "status": "known",
+            "frame": "",
+            "unit": "",
+            "source_call": null,
+            "source_output": null
+          }
+        },
+        "roles": {},
+        "kind": "executable"
+      }
+    ],
+    "boundary": 10,
+    "prefix": {
+      "id": "68e6086b4468698130e4",
+      "part": "carriage",
+      "execution": "program",
+      "start_state": "e4265958ba6728e8ca3223690c8ce24ff25b8089d0778f9277edb917890460fd",
+      "steps": [
+        {
+          "skill": "detect",
+          "params": {
+            "required_parts": [
+              "carriage"
+            ]
+          }
+        },
+        {
+          "skill": "estimate_pose",
+          "params": {
+            "part": "carriage"
+          }
+        },
+        {
+          "skill": "estimate_grasp",
+          "params": {
+            "part": "carriage",
+            "yaws": [
+              1.5707963267948966
+            ],
+            "height_offset": 0.007,
+            "center_offset": [
+              0.0,
+              -0.012,
+              0.0
+            ],
+            "yaw_frame": "object",
+            "width": 0.044
+          }
+        },
+        {
+          "skill": "select_grasp",
+          "params": {
+            "part": "carriage"
+          }
+        },
+        {
+          "skill": "plan_path",
+          "params": {
+            "target": [
+              0,
+              0,
+              0.1
+            ],
+            "yaw": null,
+            "clearance": 0.9872894594106564
+          }
+        },
+        {
+          "skill": "move",
+          "params": {
+            "path": "transfer"
+          }
+        },
+        {
+          "skill": "move",
+          "params": {
+            "grasp": "grasp",
+            "part": "carriage"
+          }
+        },
+        {
+          "skill": "grasp",
+          "params": {
+            "part": "carriage",
+            "force": 9.0
+          }
+        },
+        {
+          "skill": "inspect",
+          "params": {
+            "what": "grasp",
+            "part": "carriage"
+          }
+        },
+        {
+          "skill": "move",
+          "params": {
+            "part": "carriage",
+            "delta": [
+              0,
+              0,
+              0.1
+            ]
+          }
+        }
+      ],
+      "order": [
+        "carriage",
+        "end_stop",
+        "pin_left",
+        "pin_right",
+        "handle"
+      ],
+      "choices": {
+        "carriage": {
+          "yaw": 1.5707963267948966,
+          "height": 0.007,
+          "clearance": 0.9872894594106564,
+          "force": 9.0,
+          "speed": 0.019752186588921285,
+          "force_limit": 18.0,
+          "press_force": 1.503487569953111,
+          "placement_yaw": 1.5707963267948966,
+          "width": 0.044,
+          "center_offset": [
+            0.0,
+            -0.012,
+            0.0
+          ],
+          "grasp_yaw_frame": "object",
+          "transport_mode": "held_insert"
+        },
+        "end_stop": {
+          "yaw": 0.0,
+          "height": 0.007,
+          "clearance": 0.9777894594106563,
+          "force": 6.153061224489795,
+          "speed": 0.00632069970845481,
+          "press_force": 1.1363567786629758,
+          "placement_yaw": 0.0,
+          "width": 0.026,
+          "center_offset": [
+            0.008,
+            0.0,
+            0.0
+          ],
+          "grasp_yaw_frame": "object",
+          "approach_strategy": "joint_checked_v10"
+        },
+        "pin_left": {
+          "yaw": 0.0,
+          "height": 0.007,
+          "clearance": 0.9837894594106563,
+          "force": 9.0,
+          "speed": 0.00632069970845481,
+          "force_limit": 17.849330715690854,
+          "press_force": 2.7039717239582775,
+          "placement_yaw": 1.5707963267948966,
+          "pin_command_depth_m": 0.043000000000000003,
+          "pin_press_extra_m": 0.0,
+          "lift_first_m": 0.08
+        },
+        "pin_right": {
+          "yaw": 1.5707963267948966,
+          "height": 0.007,
+          "clearance": 0.9837894594106563,
+          "force": 9.0,
+          "speed": 0.00632069970845481,
+          "force_limit": 17.849330715690854,
+          "press_force": 1.0306774964725598,
+          "placement_yaw": 1.5707963267948966,
+          "pin_command_depth_m": 0.043000000000000003,
+          "pin_press_extra_m": 0.0,
+          "approach_strategy": "joint_checked_v10",
+          "lift_first_m": 0.08
+        },
+        "handle": {
+          "yaw": 1.5707963267948966,
+          "height": 0.007,
+          "clearance": 0.9612894594106564,
+          "force": 2.666089965397924,
+          "speed": 0.00632069970845481,
+          "press_force": 3.543698591681999,
+          "placement_yaw": 1.5707963267948966,
+          "width": 0.042,
+          "center_offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "grasp_yaw_frame": "object"
+        }
+      },
+      "task_scope": "assemble_five_parts_from_supplies_and_release_no_stroke_test",
+      "initial_route_index": 0,
+      "targets": {
+        "carriage": [
+          0.105,
+          0.085,
+          0.8240000000000001
+        ],
+        "end_stop": [
+          -0.017,
+          0.085,
+          0.8360000000000001
+        ],
+        "handle": [
+          0.105,
+          0.085,
+          0.8720000000000001
+        ],
+        "pin_left": [
+          -0.017,
+          0.053000000000000005,
+          0.8590000000000001
+        ],
+        "pin_right": [
+          -0.017,
+          0.117,
+          0.8590000000000001
+        ]
+      },
+      "semantic_program_id": "2326a3da7652bf26396fe53d76a963bd8ea1985039620ddc9529809c001c4b56",
+      "task_precedence": [
+        [
+          "carriage",
+          "end_stop"
+        ],
+        [
+          "end_stop",
+          "pin_left"
+        ],
+        [
+          "end_stop",
+          "pin_right"
+        ],
+        [
+          "pin_left",
+          "handle"
+        ],
+        [
+          "pin_right",
+          "handle"
+        ]
+      ],
+      "completed_parts": [],
+      "cost": 0.0,
+      "skill_version": "feedback.v12"
+    },
+    "status": "unknown",
+    "schema": "twingraph.plan.v1",
+    "protocol": "assembly.program.feedback.v2"
+  },
+  "assembly_plan_sha256": "b51ae47ed3394a548277f7ae8194ba691edb43dad63b807c58f38512e364cf65"
+}

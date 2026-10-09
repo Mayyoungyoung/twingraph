@@ -1,0 +1,87 @@
+[
+  {
+    "source": "/home/jia/twingraph/code/approach_diagnostic.log",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/approach_diagnostic.log",
+    "bytes": 3552
+  },
+  {
+    "source": "/home/jia/twingraph/code/bulk.log",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/bulk.log",
+    "bytes": 1710636
+  },
+  {
+    "source": "/home/jia/twingraph/code/bulk_process.json",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/bulk_process.json",
+    "bytes": 211
+  },
+  {
+    "source": "/home/jia/twingraph/code/demo_videos_v33_20261002_nohup.log",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/demo_videos_v33_20261002_nohup.log",
+    "bytes": 0
+  },
+  {
+    "source": "/home/jia/twingraph/code/readiness.log",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/readiness.log",
+    "bytes": 92733
+  },
+  {
+    "source": "/home/jia/twingraph/code/readiness_process.json",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/readiness_process.json",
+    "bytes": 191
+  },
+  {
+    "source": "/home/jia/twingraph/code/resume_20260927.log",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/resume_20260927.log",
+    "bytes": 926003
+  },
+  {
+    "source": "/home/jia/twingraph/code/resume_process.json",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/resume_process.json",
+    "bytes": 384
+  },
+  {
+    "source": "/home/jia/twingraph/code/value_evaluation_resume_process.json",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/value_evaluation_resume_process.json",
+    "bytes": 301
+  },
+  {
+    "source": "/home/jia/twingraph/code/value_pipeline_process.json",
+    "destination": "/home/jia/twingraph/experiments/final/metadata/value_pipeline_process.json",
+    "bytes": 361
+  },
+  {
+    "source": "/home/jia/twingraph/code/dataset_1000_snapshot.tar.gz",
+    "destination": "/home/jia/twingraph/experiments/final/snapshots/dataset_1000_snapshot.tar.gz",
+    "bytes": 428821506
+  },
+  {
+    "source": "/home/jia/twingraph/code/readiness_snapshot.tar.gz",
+    "destination": "/home/jia/twingraph/experiments/final/snapshots/readiness_snapshot.tar.gz",
+    "bytes": 8865988
+  },
+  {
+    "source": "/home/jia/twingraph/code/v32_value_training_20260927.tar.gz",
+    "destination": "/home/jia/twingraph/experiments/final/snapshots/v32_value_training_20260927.tar.gz",
+    "bytes": 94600278
+  },
+  {
+    "source": "/home/jia/v32_runtime.tar.gz",
+    "destination": "/home/jia/twingraph/experiments/historical/import_archives/v32_runtime.tar.gz",
+    "bytes": 6242668
+  },
+  {
+    "source": "/home/jia/value-v4-base.tar",
+    "destination": "/home/jia/twingraph/experiments/historical/import_archives/value-v4-base.tar",
+    "bytes": 0
+  },
+  {
+    "source": "/home/jia/r7b_integration_dev.tar.gz",
+    "destination": "/home/jia/twingraph/experiments/historical/import_archives/r7b_integration_dev.tar.gz",
+    "bytes": 8099762
+  },
+  {
+    "source": "/home/jia/v8-runtime.tar.gz",
+    "destination": "/home/jia/twingraph/experiments/historical/import_archives/v8-runtime.tar.gz",
+    "bytes": 6258764
+  }
+]

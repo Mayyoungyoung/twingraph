@@ -1,0 +1,79 @@
+{
+  "schema": "twingraph.real_scene.v34",
+  "frame": "panda_base",
+  "measured": false,
+  "seed": 4000,
+  "units": "m",
+  "source": "Frozen V33 seed 4000 nominal XY/yaw plus CAD-supported resting Z; this is a placement prescription, not a physical measurement.",
+  "robot": {
+    "T_world_base": [[1, 0, 0, -0.56], [0, 1, 0, 0], [0, 0, 1, 0.8], [0, 0, 0, 1]],
+    "joints_rad": [0, -0.55, 0, -2.25, 0, 1.7, 0.7854],
+    "finger_width_m": 0.08,
+    "state_measured": false,
+    "state_note": "Nominal simulation HOME; replace joints and gripper width with the actual initial Panda state before a hardware-bound twin run."
+  },
+  "table": {
+    "top_z_m": 0.0,
+    "center_xy_m": [0.35, 0.0],
+    "half_size_xy_m": [0.65, 0.65],
+    "mounting_plane_is_table_top": true
+  },
+  "poses": {
+    "guide_base": {"position_m": [0.635, 0.085, 0.012], "quat_wxyz": [1, 0, 0, 0]},
+    "carriage": {"position_m": [0.5771379058644593, -0.1607175966004979, 0.006], "quat_wxyz": [0.9979104860613227, 0, 0, -0.06461162286194871]},
+    "end_stop": {"position_m": [0.6614563034239437, -0.3014031977342498, 0.018], "quat_wxyz": [0.9942282562611121, 0, 0, 0.10728548108662443]},
+    "handle": {"position_m": [0.3883413758475171, -0.1397855558849648, 0.008], "quat_wxyz": [0.9939423392690482, 0, 0, 0.10990280346002242]},
+    "pin_left": {"position_m": [0.1924421684305918, -0.2601794659714776, 0.048], "quat_wxyz": [0.9875928976288266, 0, 0, -0.1570358830111702]},
+    "pin_right": {"position_m": [0.2024354079062580, -0.3506303916835470, 0.048], "quat_wxyz": [0.9893706277911142, 0, 0, -0.1454158205430781]},
+    "pin_left_holder": {"position_m": [0.1924421684305918, -0.2601794659714776, 0.019], "quat_wxyz": [0.9875928976288266, 0, 0, -0.1570358830111702]},
+    "pin_right_holder": {"position_m": [0.2024354079062580, -0.3506303916835470, 0.019], "quat_wxyz": [0.9893706277911142, 0, 0, -0.1454158205430781]},
+    "wipe_tool": {"position_m": [0.3029959234650770, -0.0549073187024817, 0.004], "quat_wxyz": [0.9987723593799218, 0, 0, 0.04953558456972376]}
+  },
+  "uncertainty": {
+    "position_m": 0.002,
+    "orientation_rad": 0.035,
+    "measured": false,
+    "note": "Illustrative planning uncertainty only; replace with measured registration/placement uncertainty."
+  },
+  "physics": {
+    "calibrated": false,
+    "mass_kg": {},
+    "friction": {},
+    "note": "V33 effective density, friction, compliance and actuator gains remain simulation assumptions until hardware calibration."
+  },
+  "fixture": {
+    "spacer_height_m": 0.006,
+    "base_cad_bottom_position_m": [0.635, 0.085, 0.006],
+    "note": "V33 fixes guide_base on a passive nest 6 mm above the table. If directly on the table, guide_base body z is 0.006 and all assembly targets are 6 mm lower."
+  },
+  "assembly_reference": {
+    "frame": "panda_base",
+    "positions_are": "CAD body origins; not gripper TCP commands",
+    "carriage": {"position_m": [0.665, 0.085, 0.024], "quat_wxyz": [1, 0, 0, 0]},
+    "end_stop": {"position_m": [0.543, 0.085, 0.036], "quat_wxyz": [1, 0, 0, 0]},
+    "handle": {"position_m": [0.665, 0.085, 0.072], "quat_wxyz": [1, 0, 0, 0], "execution_rebinding": "Reobserve the seated carriage before locating its post."},
+    "pin_left": {"minimum_bridge_body_position_m": [0.543, 0.053, 0.059], "head_seated_body_position_m": [0.543, 0.053, 0.055], "hole_entry_position_m": [0.543, 0.053, 0.054], "minimum_total_depth_m": 0.042, "head_seated_total_depth_m": 0.046},
+    "pin_right": {"minimum_bridge_body_position_m": [0.543, 0.117, 0.059], "head_seated_body_position_m": [0.543, 0.117, 0.055], "hole_entry_position_m": [0.543, 0.117, 0.054], "minimum_total_depth_m": 0.042, "head_seated_total_depth_m": 0.046},
+    "rail": {"entry_position_m": [0.48, 0.085, 0.024], "entry_approach_position_m": [0.48, 0.085, 0.054], "axis": [1, 0, 0]},
+    "note": "Static CAD references only. The runtime must verify contact, grasp retention and current receiver registration; pin references are not unconditional descent commands."
+  },
+  "cad": {
+    "guide_base": {"dimensions_m": [0.236, 0.10046, 0.034], "body_bottom_z_m": -0.006, "stl_to_body_z_m": -0.006},
+    "carriage": {"dimensions_m": [0.054, 0.046, 0.068], "body_bottom_z_m": -0.006, "grasp_height_offset_m": 0.027, "reference_grasp_width_m": 0.028},
+    "end_stop": {"dimensions_m": [0.024, 0.086, 0.049], "body_bottom_z_m": -0.018, "grasp_height_offset_m": 0.023, "reference_grasp_width_m": 0.026},
+    "handle": {"dimensions_m": [0.042, 0.0419953, 0.016], "body_bottom_z_m": -0.008, "grasp_height_offset_m": 0.0, "reference_grasp_width_m": 0.042},
+    "pin_left": {"dimensions_m": [0.018, 0.017998, 0.061], "body_bottom_z_m": -0.048, "stl_to_body_z_m": 0.013, "stl_orientation_note": "Rotate the head-down print STL 180 degrees around X before translating into the runtime body frame.", "grasp_height_offset_m": 0.006, "reference_grasp_width_m": 0.018},
+    "pin_right": {"dimensions_m": [0.018, 0.017998, 0.061], "body_bottom_z_m": -0.048, "stl_to_body_z_m": 0.013, "grasp_height_offset_m": 0.006, "reference_grasp_width_m": 0.018},
+    "pin_left_holder": {"dimensions_m": [0.020, 0.0199978, 0.038], "body_bottom_z_m": -0.019},
+    "pin_right_holder": {"dimensions_m": [0.020, 0.0199978, 0.038], "body_bottom_z_m": -0.019},
+    "wipe_tool": {"dimensions_m": [0.036, 0.028, 0.065], "rigid_body_bottom_z_m": 0.004, "foam_thickness_m": 0.008, "foam_body_bottom_z_m": -0.004, "grasp_height_offset_m": 0.047, "reference_grasp_width_m": 0.028}
+  },
+  "provenance": {
+    "runtime_sha256": "42a1eda6fe8996d4312daa40c0855795c6e9142d7911427195d14bd306fd65be",
+    "frozen_request": "results/v33_test_top3_20260927/seed_4000/request.json",
+    "geometry_manifest": "results/v33_test_top3_20260927/seed_4000/planning/geometry_manifest.json",
+    "panda_model": "simbench/assets/panda/panda.xml",
+    "selection": "The first predeclared V33 test seed, chosen as a placement example. No success claim transfers to hardware.",
+    "nominal_z_policy": "CAD-supported static placement; no 1 mm initialization drop gap and no simulated compliance penetration."
+  }
+}
